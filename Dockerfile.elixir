@@ -1,0 +1,22 @@
+FROM elixir:1.18-alpine
+
+RUN apk add --no-cache \
+    git \
+    build-base \
+    && mix local.hex --force \
+    && mix local.rebar --force
+
+WORKDIR /app
+
+RUN mix archive.install hex igniter_new --force
+
+## this is required for erlexec
+ENV SHELL=/bin/sh
+
+COPY . erlang_red
+
+RUN mix igniter.new test_app --install erlang_red@path:../erlang_red
+
+#RUN mix igniter.new test_app --install erlang_red .
+
+#CMD ["mix", "run", "--no-halt"]
