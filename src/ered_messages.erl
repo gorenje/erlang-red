@@ -111,7 +111,9 @@ convert_to_integer(V) ->
 %% handle a Buffer "bin" type and convert it to a binary list.
 -spec jsbuffer_to_binary(String :: binary()) -> Bin :: binary().
 jsbuffer_to_binary(Value) ->
-    list_to_binary([convert_to_integer(V) rem 256 || V <- json:decode(Value)]).
+    {ok, Lst} = erl_binarytypeparser:to_list(Value),
+    list_to_binary([floor(abs(V)) rem 256 || V <- Lst]).
+
 
 %%
 %% these are from the trigger node
