@@ -16104,11 +16104,11 @@ RED.stack = (function() {
             expand: function () {
                 var that = this;
                 RED.editor.editBuffer({
-                    value: this.value(),
+                    value: this.value().replace(/\t/g, "\n"),
                     stateId: RED.editor.generateViewStateId("typedInput", that, "bin"),
                     focus: true,
-                    complete: function (v) {
-                        that.value(v);
+                    complete: function (binaryEditorValue,v2,textEditor) {
+                        that.value(textEditor.getValue().replace(/\n/g, "\t"));
                     }
                 })
             }
