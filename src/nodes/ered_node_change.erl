@@ -97,8 +97,6 @@ do_change_str({ok, Prop}, {ok, FromStr}, {ok, ToStr}, Msg) ->
 
 %%
 %%
-do_set_value(Prop, Value, <<"bin">>, Msg, _NodeDef) ->
-    set_prop_value(Prop, jsbuffer_to_binary(Value), Msg);
 do_set_value(Prop, Value, <<"num">>, Msg, _NodeDef) ->
     set_prop_value(Prop, convert_to_num(Value), Msg);
 do_set_value(Prop, _Value, <<"date">>, Msg, _NodeDef) ->
@@ -117,6 +115,18 @@ do_set_value(Prop, Value, <<"msg">>, Msg, _NodeDef) ->
             set_prop_value(Prop, Val, Msg);
         _ ->
             set_prop_value(Prop, <<>>, Msg)
+    end;
+do_set_value(Prop, Value, <<"bin">>, Msg, NodeDef) ->
+    case jsbuffer_to_binary(Value) of
+        {ok, Val} ->
+            set_prop_value(Prop, Val, Msg);
+        {error, Error} ->
+            unsupported(
+                NodeDef,
+                Msg,
+                jstr("buffer string: ~p in ~p", [Error, Value])
+            ),
+            Msg
     end;
 do_set_value(Prop, Value, <<"jsonata">>, Msg, NodeDef) ->
     %% "t": "set",

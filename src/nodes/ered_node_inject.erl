@@ -120,8 +120,6 @@ handle_msg(_, NodeDef) ->
 
 %%
 %%
-value_for_proptype(<<"bin">>, Val, Prop, _NodeDef, Msg) ->
-    set_prop_value(Prop, jsbuffer_to_binary(Val), Msg);
 value_for_proptype(<<"date">>, _Val, Prop, _NodeDef, Msg) ->
     set_prop_value(Prop, timestamp(), Msg);
 value_for_proptype(<<"json">>, Val, Prop, _NodeDef, Msg) ->
@@ -138,6 +136,18 @@ value_for_proptype(<<"msg">>, Val, Prop, _NodeDef, Msg) ->
             set_prop_value(Prop, Value, Msg);
         _ ->
             set_prop_value(Prop, <<>>, Msg)
+    end;
+value_for_proptype(<<"bin">>, Value, Prop, NodeDef, Msg) ->
+    case jsbuffer_to_binary(Value) of
+        {ok, Val} ->
+            set_prop_value(Prop, Val, Msg);
+        {error, Error} ->
+            unsupported(
+                NodeDef,
+                Msg,
+                jstr("buffer string: ~p in ~p", [Error, Value])
+            ),
+            Msg
     end;
 value_for_proptype(<<"jsonata">>, Val, Prop, NodeDef, Msg) ->
     case erlang_red_jsonata:execute(Val, Msg) of

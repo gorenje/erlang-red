@@ -109,10 +109,16 @@ convert_to_integer(V) ->
 
 %%
 %% handle a Buffer "bin" type and convert it to a binary list.
--spec jsbuffer_to_binary(String :: binary()) -> Bin :: binary().
+-spec jsbuffer_to_binary(
+        String :: binary()
+       ) -> {ok, Bin :: binary()} | {error, Error :: tuple()}.
 jsbuffer_to_binary(Value) ->
-    {ok, Lst} = erl_binarytypeparser:to_list(Value),
-    list_to_binary([floor(abs(V)) rem 256 || V <- Lst]).
+    case erl_binarytypeparser:to_list(Value) of
+        {ok, Lst} ->
+            {ok, list_to_binary([floor(abs(V)) rem 256 || V <- Lst])};
+        {error, {_LineNum, _Module, Error}, _} ->
+            {error, Error}
+    end.
 
 
 %%
