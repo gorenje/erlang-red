@@ -1306,9 +1306,31 @@ var RED = (function() {
         $("#red-ui-main-container").show();
 
         // add Erlang support to monaco
-        monaco.languages.register( { id: 'erlang'})
-        MonacoAceTokenizer.registerRulesForLanguage('erlang',
-                         new MonacoAceTokenizer.erlangDefinition.default)
+        monaco.languages.register({id: 'erlang'})
+
+        let rules = new MonacoAceTokenizer.erlangDefinition.default
+
+        MonacoAceTokenizer.registerRulesForLanguage('erlang', rules);
+
+        // somehow comments aren't highlighted in monaco editor in erlang,
+        // this doesn't help either but it's here.
+        monaco.languages.setLanguageConfiguration('erlang', {
+            comments: {
+                lineComment: '%%'
+            }
+        });
+
+        // the following works but then the MonacoAceTokenizer stops working,
+        // i.e. only the comments are highlighted
+        /*
+          monaco.languages.setMonarchTokensProvider('erlang',
+                           {
+                               tokenizer: {
+                                   comment: [ [/^%.+$/, "comment"] ]
+                               }
+                           })
+        */
+
 
         loadPluginList();
     }
