@@ -5,13 +5,10 @@ build-docker-container:
 	docker build -f Dockerfile.dev -t erlang-shell .
 
 start-docker-shell: build-docker-container
-	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data \
-            --hostname erlang-red -p 9090:8080 -w /code --rm erlang-shell bash
+	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data --hostname erlang-red -p 9090:8080 -w /code --rm erlang-shell bash
 
 start-docker-shell-raspberry: build-docker-container
-	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data \
-            --device=/dev/i2c-1 --hostname erlang-red-raspberry \
-            --publish 9090:8080 -w /code --rm erlang-shell bash
+	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data --device=/dev/i2c-1 --hostname erlang-red-raspberry --publish 9090:8080 -w /code --rm erlang-shell bash
 
 enter-docker-shell:
 	docker exec -it $$(docker ps -f ancestor=erlang-shell -q) bash
