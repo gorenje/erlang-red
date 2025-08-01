@@ -178,15 +178,24 @@ match_value_on_msg(_, _, _, _, _, _) ->
 %%
 %%
 eql_msg_op(Prop, SrcVal, <<"bin">>, ReqVal, _Msg) ->
-    case is_same(jsbuffer_to_binary(ReqVal), SrcVal) of
-        true ->
-            true;
-        _ ->
+    case jsbuffer_to_binary(ReqVal) of
+        {ok, Val} ->
+            case is_same(Val, SrcVal) of
+                true ->
+                    true;
+                _ ->
+                    {failed,
+                     jstr(
+                       "Prop '~p':~n~nExp:~n~n'~p'~n~nWas:~n~n'~p'~n~n",
+                       [Prop, jsbuffer_to_binary(ReqVal), SrcVal]
+                      )}
+            end;
+        {error, Error} ->
             {failed,
-                jstr(
-                    "Prop '~p':~n~nExp:~n~n'~p'~n~nWas:~n~n'~p'~n~n",
-                    [Prop, jsbuffer_to_binary(ReqVal), SrcVal]
-                )}
+             jstr(
+               "Prop '~p':~n~nNot parsable:~n~n~p~n~nError:~n~n~p~n~n",
+               [Prop, ReqVal, Error]
+              )}
     end;
 eql_msg_op(Prop, SrcVal, <<"json">>, ReqVal, _Msg) ->
     DecodedVal = decode_json(ReqVal),
