@@ -47,22 +47,25 @@
     create_outgoing_msg/1
 ]).
 
-start(#{
+start(
+    #{
         <<"payloadType">> := <<"msg">>,
         <<"busno">> := BusNo,
         <<"address">> := Address,
         <<"command">> := Command,
         <<"count">> := Count
-       } = NodeDef,
-      _WsName
+    } = NodeDef,
+    _WsName
 ) ->
-    ered_node:start(NodeDef#{
-        '_device' => obtain_device(BusNo),
-        '_cmdbyte' => convert_to_num(Command),
-        '_address' => convert_to_num(Address),
-        '_bytecount' => convert_to_num(Count)
-    }, ?MODULE);
-
+    ered_node:start(
+        NodeDef#{
+            '_device' => obtain_device(BusNo),
+            '_cmdbyte' => convert_to_num(Command),
+            '_address' => convert_to_num(Address),
+            '_bytecount' => convert_to_num(Count)
+        },
+        ?MODULE
+    );
 start(NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "payload type"),
     ered_node:start(NodeDef, ered_node_ignore).
@@ -73,27 +76,29 @@ handle_event(_, NodeDef) ->
     NodeDef.
 
 handle_msg(
-  {incoming,
-   #{
-     ?GetPayload,
-     <<"command">> := MsgCmdByte
-    } = Msg},
-  #{'_device' := Ref,
-    '_cmdbyte' := _CmdByte,
-    '_address' := Addr} = NodeDef
+    {incoming,
+        #{
+            ?GetPayload,
+            <<"command">> := MsgCmdByte
+        } = Msg},
+    #{
+        '_device' := Ref,
+        '_cmdbyte' := _CmdByte,
+        '_address' := Addr
+    } = NodeDef
 ) when is_integer(MsgCmdByte) ->
     write_payload(Ref, Addr, MsgCmdByte, Payload),
     {handled, NodeDef, Msg};
-
 handle_msg(
-  {incoming, #{?GetPayload} = Msg},
-  #{'_device' := Ref,
-    '_cmdbyte' := CmdByte,
-    '_address' := Addr} = NodeDef
+    {incoming, #{?GetPayload} = Msg},
+    #{
+        '_device' := Ref,
+        '_cmdbyte' := CmdByte,
+        '_address' := Addr
+    } = NodeDef
 ) ->
     write_payload(Ref, Addr, CmdByte, Payload),
     {handled, NodeDef, Msg};
-
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
@@ -106,6 +111,6 @@ write_payload(Ref, Addr, CmdByte, Payload) when is_list(Payload) ->
 
 obtain_device(BusNo) ->
     {ok, Ref} = 'Elixir.Circuits.I2C':open(
-                  list_to_binary(io_lib:format("i2c-~s", [BusNo]))
+        list_to_binary(io_lib:format("i2c-~s", [BusNo]))
     ),
     Ref.

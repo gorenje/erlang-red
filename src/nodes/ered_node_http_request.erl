@@ -26,38 +26,39 @@
     unsupported/3
 ]).
 
-
 %%
 %%
-start(#{
+start(
+    #{
         <<"headers">> := [],
         <<"method">> := <<"use">>
-       } = NodeDef,
-      _WsName
+    } = NodeDef,
+    _WsName
 ) ->
     ered_node:start(NodeDef, ?MODULE);
-start(#{
+start(
+    #{
         <<"headers">> := [],
         <<"method">> := <<"GET">>,
         <<"paytoqs">> := <<"ignore">>
-       } = NodeDef,
-      _WsName
+    } = NodeDef,
+    _WsName
 ) ->
     ered_node:start(NodeDef, ?MODULE);
-start(#{
+start(
+    #{
         <<"headers">> := [],
         <<"method">> := <<"POST">>
-       } = NodeDef,
-      _WsName
+    } = NodeDef,
+    _WsName
 ) ->
     ered_node:start(NodeDef, ?MODULE);
-
 start(NodeDef, WsName) ->
     unsupported(
-      NodeDef,
-      {websocket, WsName},
-      "header definitions, payload as querystring not " ++
-          "supported. Only POST and GET supported."
+        NodeDef,
+        {websocket, WsName},
+        "header definitions, payload as querystring not " ++
+            "supported. Only POST and GET supported."
     ),
     ered_node:start(NodeDef, ered_node_ignore).
 
@@ -114,8 +115,10 @@ handle_msg(_, NodeDef) ->
 %%
 headers_to_map(Headers) ->
     %% convert keys to binary and then the header list to a map
-    maps:from_list([{list_to_binary(K), list_to_binary(V)}
-                    || {K,V} <- Headers]).
+    maps:from_list([
+        {list_to_binary(K), list_to_binary(V)}
+     || {K, V} <- Headers
+    ]).
 
 unsupported_headers_warnings(NodeDef, Msg) ->
     case
@@ -179,13 +182,13 @@ perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
     end;
 perform_request(<<"GET">> = Method, Url, _NodeDef, #{?GetWsName} = _Msg) ->
     httpc:request(
-      mth_to_atom(Method),
-      {Url, [
-             {"Cookie", io_lib:format("wsname=~s", [WsName])}
-            ]},
-      [],
-      []
-     );
+        mth_to_atom(Method),
+        {Url, [
+            {"Cookie", io_lib:format("wsname=~s", [WsName])}
+        ]},
+        [],
+        []
+    );
 perform_request(_Method, _Url, NodeDef, Msg) ->
     unsupported(NodeDef, Msg, "unsupported method"),
     {error, unsupported_method}.
