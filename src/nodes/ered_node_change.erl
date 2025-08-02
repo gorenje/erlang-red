@@ -138,13 +138,13 @@ do_set_value(Prop, Value, <<"jsonata">>, Msg, NodeDef) ->
         {ok, Result} ->
             set_prop_value(Prop, Result, Msg);
         {error, Error} ->
-            unsupported(
-                NodeDef,
-                Msg,
-                jstr("jsonata term: ~p", [Error])
-            ),
+            unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
             Msg;
-        {exception, ErrMsg} ->
+        {unsupported, Error} ->
+            post_exception_or_debug(NodeDef, Msg, Error),
+            throw(dont_send_message);
+        {exception, {E, M, S}} ->
+            ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
             throw(dont_send_message)
     end;

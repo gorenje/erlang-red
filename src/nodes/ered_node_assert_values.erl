@@ -177,6 +177,26 @@ match_value_on_msg(_, _, _, _, _, _) ->
 
 %%
 %%
+eql_msg_op(Prop, SrcVal, <<"jsonata">>, ReqVal, Msg) ->
+    case erlang_red_jsonata:execute(ReqVal, Msg) of
+        {ok, Result} ->
+            case is_same(Result, SrcVal) of
+                true ->
+                    true;
+                _ ->
+                    {failed,
+                        jstr(
+                            "Prop '~p'~n~nJsota: ~p~n~nExp:~n~n'~p'~n~nWas:~n~n'~p'",
+                            [Prop, ReqVal, Result, SrcVal]
+                        )}
+            end;
+        {error, Error} ->
+            {failed, Error};
+        {unsupported, Error} ->
+            {failed, Error};
+        {exception, {E, M, S}} ->
+            {failed, M}
+    end;
 eql_msg_op(Prop, SrcVal, <<"bin">>, ReqVal, _Msg) ->
     case jsbuffer_to_binary(ReqVal) of
         {ok, Val} ->
@@ -185,17 +205,17 @@ eql_msg_op(Prop, SrcVal, <<"bin">>, ReqVal, _Msg) ->
                     true;
                 _ ->
                     {failed,
-                     jstr(
-                       "Prop '~p':~n~nExp:~n~n'~p'~n~nWas:~n~n'~p'~n~n",
-                       [Prop, jsbuffer_to_binary(ReqVal), SrcVal]
-                      )}
+                        jstr(
+                            "Prop '~p':~n~nExp:~n~n'~p'~n~nWas:~n~n'~p'~n~n",
+                            [Prop, jsbuffer_to_binary(ReqVal), SrcVal]
+                        )}
             end;
         {error, Error} ->
             {failed,
-             jstr(
-               "Prop '~p':~n~nNot parsable:~n~n~p~n~nError:~n~n~p~n~n",
-               [Prop, ReqVal, Error]
-              )}
+                jstr(
+                    "Prop '~p':~n~nNot parsable:~n~n~p~n~nError:~n~n~p~n~n",
+                    [Prop, ReqVal, Error]
+                )}
     end;
 eql_msg_op(Prop, SrcVal, <<"json">>, ReqVal, _Msg) ->
     DecodedVal = decode_json(ReqVal),

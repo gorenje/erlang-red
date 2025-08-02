@@ -132,8 +132,10 @@ obtain_operator_value(<<"jsonata">>, OpVal, Msg) ->
             {ok, Result};
         {error, Error} ->
             {error, jstr("jsonata term: ~p", [Error])};
-        {exception, ErrMsg} ->
-            {exception, ErrMsg}
+        {unsupported, Error} ->
+            {exception, Error};
+        {exception, {_E, M, _S}} ->
+            {exception, M}
     end;
 obtain_operator_value(<<"num">>, OpVal, _Msg) ->
     {ok, convert_to_num(OpVal)};
@@ -529,8 +531,10 @@ obtain_compare_to_value({ok, <<"jsonata">>}, {ok, PropName}, Msg) ->
             {ok, Result};
         {error, Error} ->
             {error, jstr("jsonata term: ~p", [Error])};
-        {exception, ErrMsg} ->
-            {exception, ErrMsg}
+        {unsupported, Error} ->
+            {exception, Error};
+        {exception, {_E, M, _S}} ->
+            {exception, M}
     end;
 obtain_compare_to_value({ok, PropType}, {ok, PropName}, _Msg) ->
     {unsupported,

@@ -40,17 +40,26 @@ jsonata_eval_or_error_msg(Jsonata, Msg) ->
         {ok, Result} ->
             Result;
         {error, Error} ->
+            %% TODO replace with proper logging
             io:format(
                 "JSONATA ERROR: [~p] ==> [~p]~n",
                 [Jsonata, Error]
             ),
             jstr("jsonata error: ~p", [Jsonata]);
-        {exception, Error} ->
+        {unsupported, Error} ->
+            %% TODO replace with proper logging
             io:format(
-                "JSONATA EXCEP: [~p] ==> [~p]~n",
+                "JSONATA Unsupported: ~p ==> [~p]~n",
                 [Jsonata, Error]
             ),
-            jstr("jsonata error: ~p", [Jsonata])
+            jstr("jsonata unsupported: ~p", [Error]);
+        {exception, {E, M, S}} ->
+            %% TODO replace with proper logging
+            io:format(
+                "JSONATA EXCEP:~n~n~p~n~nCaused:~n~n~p~n~n~p~n~n~p~n",
+                [Jsonata, E, M, S]
+            ),
+            jstr("jsonata exception: ~p", [M])
     end.
 
 %%
@@ -110,8 +119,8 @@ convert_to_integer(V) ->
 %%
 %% handle a Buffer "bin" type and convert it to a binary list.
 -spec jsbuffer_to_binary(
-        String :: binary()
-       ) -> {ok, Bin :: binary()} | {error, Error :: tuple()}.
+    String :: binary()
+) -> {ok, Bin :: binary()} | {error, Error :: tuple()}.
 jsbuffer_to_binary(Value) ->
     case erl_binarytypeparser:to_list(Value) of
         {ok, Lst} ->
@@ -119,7 +128,6 @@ jsbuffer_to_binary(Value) ->
         {error, {_LineNum, _Module, Error}, _} ->
             {error, Error}
     end.
-
 
 %%
 %% these are from the trigger node
@@ -182,7 +190,7 @@ encoder(Other, Encode) when is_binary(Other) ->
         json:encode_value(Other, Encode)
     catch
         error:E:S ->
-            io:format("Json Encoding Error ~p ~p~n", [ E, S ] ),
+            io:format("Json Encoding Error ~p ~p~n", [E, S]),
             json:encode_value(binary_to_list(Other), Encode)
     end;
 encoder(Other, Encode) ->

@@ -121,7 +121,10 @@ get_filename(
         {error, Error} ->
             unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
             {error, Error};
-        {exception, ErrMsg} ->
+        {unsupported, Error} ->
+            unsupported(NodeDef, Msg, jstr("jsonata unsupported: ~p", [Error])),
+            {error, Error};
+        {exception, {_E, ErrMsg, _S}} ->
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
             {error, ErrMsg}
     end;
