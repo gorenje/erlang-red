@@ -30,6 +30,13 @@ Online Example
 
 Sample [MQTT Broker](https://ered.fly.dev/erlang-red?tstid=dc897f402c53697f) with [explanation](https://flows.red-erik.org/f/dc897f402c53697f).
 
+Embedding
+---
+
+Many thanks to [@joaohf](https://erlangforums.com/u/joaohf/summary) there is a Erlang-Red [recipe](https://meta-erlang.github.io/blog/2025/07/27/index/) for [Yocto project](https://www.yoctoproject.org).
+
+Also I did a quick experiment with a [Raspberry Pi 4](Embedding.md) to get the [I2C](https://flows.red-erik.org/f/ea246f68766c8632) nodes working. That wasn't "true" embedding since Erlang-Red was running in a docker container on a Raspberry running a debian distribution!
+
 Breadboard Programming
 ---
 
@@ -40,7 +47,6 @@ What are some tools for *software* prototyping? Besides AI and VScode. Software 
 A [telnet session](https://flows.red-erik.org/f/bff27e059752cb60) flow describes how breadboard programming can be done using Erlang-Red. That flow *prototypes* a possible *software* solution starting with a simple concurrent approach until a first final approach is found. All solutions are testable and usable - instantly and all solutions build on previous solutions - simply copy and paste the flows. That's prototyping.
 
 Implementation of the [MQTT specs](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) to create an [MQTT broker](https://flows.red-erik.org/f/dc897f402c53697f) in Erlang-Red. The broker is created as a flow and at the same time, a client is created using the Erlang-Red MQTT nodes so that the broker implementation can be tested. Again a breadboard: thing of the MQTT nodes as an [oscilloscope](https://en.wikipedia.org/wiki/Oscilloscope) testing the voltage!
-
 
 Development Strategy
 ---
