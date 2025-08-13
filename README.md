@@ -74,6 +74,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 
 | Node | Comment | Example Flow |
 | ---- | ------- | ------------ |
+| [binary](src/nodes/ered_node_binary.erl) | parser and match binary data using [Packet]() definitions. | [Flow](https://flows.red-erik.org/f/fbd5864f413917b8) |
 | [catch](src/nodes/ered_node_catch.erl) | catches exception of selected nodes and of entire flows but not groups | [Flow](https://flows.red-erik.org/f/71f65246c742cfc9) |
 | [change](src/nodes/ered_node_change.erl) | supports many operators but not all. JSONata in basic form is also supported. | [Flow](https://flows.red-erik.org/f/12572f9ac11e1786) |
 | [complete](src/nodes/ered_node_complete.erl) | is available and can be used on certain nodes, not all | [Flow](https://flows.red-erik.org/f/b723353a316fa50e) |
@@ -99,6 +100,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 | [mqtt in](src/nodes/ered_node_mqtt_in.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [mqtt out](src/nodes/ered_node_mqtt_out.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [noop](src/nodes/ered_node_noop.erl) | doing nothing is very much supported | [Flow](https://flows.red-erik.org/f/2c5903c9e50d0648) |
+| [sort](src/nodes/ered_node_sort.erl) | basic sort function implemented | [Flow](https://flows.red-erik.org/f/b7ebaf91f4d66ab3) |
 | [split](src/nodes/ered_node_split.erl) | splitting arrays into individual messages is supported, string, buffers and objects aren't. | [Flow](https://flows.red-erik.org/f/b1430ea37ba7cc19) |
 | [status](src/nodes/ered_node_status.erl) | working | [Flow](https://flows.red-erik.org/f/a916165378c446e3) |
 | [switch](src/nodes/ered_node_switch.erl) | most operators work along with basic JSONata expressions  | [Flow](https://flows.red-erik.org/f/3edda6bd788f88c2) |
