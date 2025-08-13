@@ -37,6 +37,16 @@
     map_keys_to_lists/1
 ]).
 
+doit(Prop, <<"msg">>, Template, <<"plain">>, <<"base64">>, Msg) ->
+    {ok, set_prop_value(Prop, base64:decode(binary_to_list(Template)), Msg)};
+doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"base64">>, Msg) ->
+    MustachedRendered = bbmustache:render(Template, map_keys_to_lists(Msg)),
+    {ok,
+        set_prop_value(
+            Prop,
+            base64:decode(binary_to_list(MustachedRendered)),
+            Msg
+        )};
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"str">>, Msg) ->
     {ok, set_prop_value(Prop, Template, Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"str">>, Msg) ->
