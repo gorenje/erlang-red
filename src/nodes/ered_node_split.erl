@@ -100,13 +100,13 @@ route_and_handle_val(Val, NodeDef, Msg) when is_list(Val) ->
     %% any list is an array.
     %% TODO: distinguish between string (which is a list) and an array
     %% TODO: which is also a list in Erlang.
-    split_array(Val, 0, erlang:length(Val), NodeDef, Msg);
+    split_array(Val, 0, erlang:length(Val), generate_id(), NodeDef, Msg);
 route_and_handle_val(Val, NodeDef, Msg) ->
     unsupported(NodeDef, Msg, jstr("value type ~p", [Val])).
 
 %%
 %%
-split_array([], _Cnt, _TotalLength, NodeDef, Msg) ->
+split_array([], _Cnt, _TotalLength, _PartsId, NodeDef, Msg) ->
     %% last value was already sent - could send an extra "complete msg"
     %% here but I don't think the split node does that.
     %%
@@ -119,23 +119,23 @@ split_array([], _Cnt, _TotalLength, NodeDef, Msg) ->
     %% logically speaking, the split node *completed* with the original
     %% message and has *initiated* the last message.
     post_completed(NodeDef, Msg);
-split_array([Val | MoreVals], Cnt, TotalCnt, NodeDef, Msg) ->
+split_array([Val | MoreVals], Cnt, TotalCnt, PartsId, NodeDef, Msg) ->
     Msg2 = Msg#{
         '_msgid' => generate_id(),
-        <<"parts">> => generate_array_part(Cnt, TotalCnt),
+        <<"parts">> => generate_array_part(Cnt, TotalCnt, PartsId),
         ?AddPayload(Val)
     },
 
     send_msg_to_connected_nodes(NodeDef, Msg2),
-    split_array(MoreVals, Cnt + 1, TotalCnt, NodeDef, Msg).
+    split_array(MoreVals, Cnt + 1, TotalCnt, PartsId, NodeDef, Msg).
 
 %%
 %%
 %% erlfmt:ignore because of alignment
-generate_array_part(Cnt,TotalCnt) ->
+generate_array_part(Cnt,TotalCnt, PartsId) ->
     %% index starts from zero so the last element will have Cnt == TotalCnt-1
     #{
-      <<"id">>    => generate_id(),
+      <<"id">>    => PartsId,
       <<"type">>  => <<"array">>, %% TODO figure out what this means
       <<"len">>   => 1,           %% TODO figure out what this means
       <<"count">> => TotalCnt,
