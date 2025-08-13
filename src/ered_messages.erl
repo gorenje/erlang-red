@@ -98,7 +98,11 @@ convert_to_num(V) when is_list(V) ->
             {error, jstr("Value '~p' not number: ~p", [V, Reason])};
         {ok, Number} ->
             Number
-    end.
+    end;
+convert_to_num(V) when is_bitstring(V) ->
+    BitLength = bit_size(V),
+    <<Num:BitLength/integer>> = V,
+    Num.
 
 %%
 %% Used by Buffer fields that convert integerst to binary values.
@@ -190,6 +194,7 @@ encoder(Other, Encode) when is_binary(Other) ->
         json:encode_value(Other, Encode)
     catch
         error:E:S ->
+            io:format("Json Encoding Error for [~p]~n", [Other]),
             io:format("Json Encoding Error ~p ~p~n", [E, S]),
             json:encode_value(binary_to_list(Other), Encode)
     end;

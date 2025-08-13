@@ -132,9 +132,9 @@ errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) ->
 
 %%
 %%
-clear_status_after_one_sec(WsName, NodeId) ->
+clear_status_after_one_sec(WsName, NodeDef) ->
     timer:sleep(1000),
-    node_status_clear(WsName, NodeId).
+    node_status_clear(WsName, NodeDef).
 
 install_compiled_module_code(NodeId, ModuleName, Binary) ->
     {module, ModuleName} = code:load_binary(ModuleName, [], Binary),

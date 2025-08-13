@@ -194,7 +194,7 @@ eql_msg_op(Prop, SrcVal, <<"jsonata">>, ReqVal, Msg) ->
             {failed, Error};
         {unsupported, Error} ->
             {failed, Error};
-        {exception, {E, M, S}} ->
+        {exception, {_E, M, _S}} ->
             {failed, M}
     end;
 eql_msg_op(Prop, SrcVal, <<"bin">>, ReqVal, _Msg) ->

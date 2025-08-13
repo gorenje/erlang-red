@@ -1,5 +1,6 @@
 -module(ered_node_debug).
 
+-include("ered_nodes.hrl").
 -behaviour(ered_node).
 
 -export([start/2]).
@@ -31,11 +32,9 @@
 %% }
 
 -import(ered_nodered_comm, [
-    debug/3,
     node_status/5,
     send_to_debug_sidebar/2,
-    unsupported/3,
-    ws_from/1
+    unsupported/3
 ]).
 -import(ered_nodes, [
     get_prop_value_from_map/2,
@@ -113,29 +112,29 @@ handle_status_setting(
         <<"statusType">> := <<"msg">>,
         <<"statusVal">> := PropName
     } = NodeDef,
-    Msg
+    #{?GetWsName} = Msg
 ) ->
     Val = retrieve_prop_value(PropName, Msg),
-    node_status(ws_from(Msg), NodeDef, Val, "grey", "dot");
+    node_status(WsName, NodeDef, Val, "grey", "dot");
 handle_status_setting(
     #{
         <<"tostatus">> := true,
         <<"statusType">> := <<"counter">>,
         '_mc_incoming' := Cnt
     } = NodeDef,
-    Msg
+    #{?GetWsName} = _Msg
 ) ->
-    node_status(ws_from(Msg), NodeDef, Cnt, "blue", "ring");
+    node_status(WsName, NodeDef, Cnt, "blue", "ring");
 handle_status_setting(
     #{
         <<"tostatus">> := true,
         <<"statusType">> := <<"jsonata">>,
         <<"statusVal">> := Jsonata
     } = NodeDef,
-    Msg
+    #{?GetWsName} = Msg
 ) ->
     Status = jsonata_eval_or_error_msg(Jsonata, Msg),
-    node_status(ws_from(Msg), NodeDef, Status, "blue", "ring");
+    node_status(WsName, NodeDef, Status, "blue", "ring");
 handle_status_setting(
     #{
         <<"tostatus">> := true,
