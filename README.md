@@ -324,6 +324,17 @@ Much thanks to
 - [@Maria-12648430](https://erlangforums.com/u/maria-12648430/summary) for debugging my initial attempt to create a gen_server for nodes.
 - [@joergen7](https://github.com/joergen7) for the Erlang insights and explaining dialyzer to me and the importance of clean code
 
+License Smorgasbord
+---
+
+This offers multi-licensing smorgasbord to pick the license that best meets your needs:
+
+- if you wish to do evil and are not concerned with the impact of your behaviour (probably because you gain a financial reward from said behaviour), then you want to using the [apache-2](LICENSE.ap2) license.
+
+- if your concerned about the impact of closed source software and the erosion of the commons of shared knowledge, then you might consider the [gpl](LICENSE.gpl) license
+
+- if you're planning to do good, for example, for educational purposes and provide others with the knowledge to make informed decisions, then you might want to consider the [don't do evil](LICENSE.dde) license
+
 Human Intelligence
 ---
 
