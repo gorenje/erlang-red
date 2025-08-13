@@ -65,6 +65,9 @@
         "watch.svg",
         "white-globe.svg"
     ],
+    "node-red-contrib-binary": [
+        "parser-binary.png"
+    ],
     "node-red-contrib-i2c": [],
     "node-red-node-markdown": [
         "parser-markdown.png"

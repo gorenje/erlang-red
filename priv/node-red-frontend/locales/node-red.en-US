@@ -954,7 +954,8 @@
             "property": "Property",
             "syntax": "Format",
             "template": "Template",
-            "yaml": "Parsed YAML"
+            "yaml": "Parsed YAML",
+            "base64": "Decoded Base64"
         },
         "template": "template",
         "templatevalue": "This is the payload: {{payload}} !"

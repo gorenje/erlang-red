@@ -10944,7 +10944,7 @@ RED.utils = (function() {
                 error = opt ? valid : RED._("validator.errors.invalid-prop");
             }
         } else if (propertyType === 'num') {
-            if (!/^NaN$|^[+-]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?$|^[+-]?(0b|0B)[01]+$|^[+-]?(0o|0O)[0-7]+$|^[+-]?(0x|0X)[0-9a-fA-F]+$/.test(propertyValue)) {
+            if (!/^NaN$|^[+-]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?$|^[+-]?(0b|0B)[01][01_]*$|^[+-]?(0o|0O)[0-7][0-7_]*$|^[+-]?(0x|0X)[0-9a-fA-F][0-9a-fA-F_]*$/.test(propertyValue)) {
                 error = RED._("validator.errors.invalid-num");
             }
         } else if (propertyType === 'jsonata') {

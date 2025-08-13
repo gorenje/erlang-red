@@ -294,6 +294,7 @@
     "@gregoriusrippenstein/node-red-contrib-introspection/sendflow": {},
     "@gregoriusrippenstein/node-red-contrib-introspection/sink": {},
     "@gregoriusrippenstein/node-red-scratchpad/scratchpad": {},
+    "node-red-contrib-binary/binary": {},
     "node-red-contrib-i2c/i2c": {},
     "node-red-node-markdown/markdown": {}
 }

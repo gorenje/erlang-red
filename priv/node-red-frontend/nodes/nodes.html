@@ -4679,6 +4679,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             <option value="str" data-i18n="template.label.plain"></option>
             <option value="json" data-i18n="template.label.json"></option>
             <option value="yaml" data-i18n="template.label.yaml"></option>
+            <option value="base64" data-i18n="template.label.base64"></option>
         </select>
     </div>
 
@@ -14972,43 +14973,95 @@ Functionality:
    <p>Scratch input for development.</p>
 </script>
 
-<!-- --- [red-module:node-red-node-markdown/markdown] --- -->
-
-<script type="text/html" data-template-name="markdown">
+<!-- --- [red-module:node-red-contrib-binary/binary] --- -->
+<script type="text/html" data-template-name="binary">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
+        <input type="text" id="node-input-property" style="width:70%;"/>
+    </div>
+    <div class="form-row">
+        <label for="node-input-pattern"><i class="fa fa-exchange"></i> Pattern</label>
+        <textarea id="node-input-pattern" rows="18" cols="40" autofocus style="vertical-align:top; width:75%; resize:none">
     </div>
 </script>
 
 
 
 <script type="text/javascript">
-    RED.nodes.registerType('markdown',{
-        category: 'parser',
-        color:"#DEBD5C",
+    RED.nodes.registerType("binary", {
+        category: "parser",
+        color: "#DEBD5C",
         defaults: {
-            name: {value:""}
+            name: { value:"" },
+            property: { value:"payload",required:true },
+            pattern: {
+                value: "",
+                required: true,
+                validate:RED.validators.regex(/^(-?)([xbl])(\d+)([fa]?)(.*)$/m)
+            }
         },
-        inputs:1,
-        outputs:1,
-        icon: "parser-markdown.png",
+        inputs: 1,
+        outputs: 1,
+        icon: "parser-binary.png",
         label: function() {
-            return this.name||"markdown";
+            return this.name || "binary";
         },
         labelStyle: function() {
-            return this.name?"node_label_italic":"";
+            return this.name ? "node_label_italic" : "";
+        },
+        inputLabels: function() {
+            return `msg.${this.property}`;
+        },
+        oneditprepare: function() {
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+            $("#node-input-property").typedInput({default:'msg',types:['msg']});
         }
     });
 </script>
-<script type="text/html" data-help-name="markdown">
-    <p>A function that converts the <code>msg.payload</code> in markdown format to html.</p>
-    <p>If the input is a string it converts it to html.</p>
-    <p>All other message types are ignored.</p>
-    <p>Uses the markdown-it library - You can see a demo
-        <a href="https://markdown-it.github.io/">here</a>.</p>
-    <p>It is configured with html, linkify and typographer options turned on.</p>
+<script type="text/html" data-help-name="binary">
+    <p>A parser that takes the <code>msg.payload</code> and converts it to/from binary data. <b>Pattern</b> specifies the binary format.</p>
+    <p>If the input is a buffer it tries to parse it and creates a javascript object.</p>
+    <p>If the input is a javascript object it tries to serialize it and creates a buffer.</p>
+    <p>The pattern language is defined by the underlying <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">packet</a> library.</p>
+    <h3>Quick ref</h3>
+    <ul>
+        <li>b16 - big endian integer 16 bits (2 bytes)</li>
+        <li>l32 - little endian integer 32 bits (4 bytes)</li>
+        <li>x16 - ignore next 16 bits (2 bytes)</li>
+        <li>-b8 - signed integer 8 bits (1 byte)</li>
+        <li>b64f - big endian double float - IEEE 754</li>
+        <li>l32f - little endian single float</li>
 
+        <li>l128a - 128 bits (16 byte array)</li>
+        <li>b8z - zero (0x00) terminated byte array</li>
+        <li>b16{b3,x6,-b7} - 16 bits, structured as 3 bits, ignore 6, signed 7 bit int</li>
+    </ul>
+    See the <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">ref doc</a> for more patterns.
+    <h3>Example</h3>
+    <p>The pattern is setup as a comma separated set of fields, the binary side first and the json field name second.</p>
+    <p><code>x8,  b8 => len,  l24a => id,  b8[4] => tag,  b8 => status,  b16 => volt,  b16 => temp,  b8 => hum,  b8 => crc,  x8</code></p>
+    <p>This would create an object like:</p>
+    <pre>{
+    len: 13,
+    id: [0x12,0x34,0x56],
+    tag: [0xde,0xad,0xbe,0xef]],
+    status: 0,
+    volt: 3600,
+    temp: 236,
+    hum: 79,
+    crc: 114
+}</pre>
+    <p>from a buffer like <code>7e0d123456deadbeef000e1000ec4f7203</code></p>
+    <p>You can also add the <code>str</code> transform to convert to and from strings, for example:</p>
+    <pre>b8[4]|str("ascii")</pre>
+    <p>will convert the 4 bytes into 4 ascii characters.</p>
+    <p><b>Note</b>: the pattern does not cope well with extraneous spaces.
 </script>
 <!-- --- [red-module:node-red-contrib-i2c/i2c] --- -->
 
@@ -15206,4 +15259,42 @@ Functionality:
     <p>address <b>0</b> means that you will broadcast to all I2C-units on the I2C bus.</p>
     <p>The <b>Send bytes</b> is used to set the number of bytes that will be used when the payload is a number.</p>
     <p>The <b>payload</b> and <b>msg.payload</b> can be a Buffer, Array, String or Integer.</p>
+</script>
+<!-- --- [red-module:node-red-node-markdown/markdown] --- -->
+
+<script type="text/html" data-template-name="markdown">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+
+
+<script type="text/javascript">
+    RED.nodes.registerType('markdown',{
+        category: 'parser',
+        color:"#DEBD5C",
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "parser-markdown.png",
+        label: function() {
+            return this.name||"markdown";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+<script type="text/html" data-help-name="markdown">
+    <p>A function that converts the <code>msg.payload</code> in markdown format to html.</p>
+    <p>If the input is a string it converts it to html.</p>
+    <p>All other message types are ignored.</p>
+    <p>Uses the markdown-it library - You can see a demo
+        <a href="https://markdown-it.github.io/">here</a>.</p>
+    <p>It is configured with html, linkify and typographer options turned on.</p>
+
 </script>

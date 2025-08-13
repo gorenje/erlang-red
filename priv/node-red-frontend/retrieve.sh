@@ -106,6 +106,7 @@ done
 #curl -s "${NODERED_URL}/debug/view/debug-utils.js?_=${CBSTMP}" -o debug/view/debug-utils.js
 
 #curl -s "${NODERED_URL}/nodes?_=${CBSTMP}" -H 'Accept: text/html' > nodes/nodes.html
+#curl -s "${NODERED_URL}/plugins?_=${CBSTMP}" -H 'Accept: text/html' > plugins/plugins.html
 
 LoCaLeS="en-US en-GB en de-DE de fr ja ko pt-BR ru zh-CN zh-TW"
 
@@ -131,11 +132,10 @@ for typ in nodes plugins ; do
     echo "==> ${typ}/${typ}.json"
     curl -s "${NODERED_URL}/${typ}?_=${CBSTMP}" -H 'Accept: application/json' | $PyTHON .py/json_pretty.py > ${typ}/${typ}.json
 
-    if [ "${typ}" != "nodes" ] ; then
-      echo "==> ${typ}/${typ}.html"
-      curl -s "${NODERED_URL}/${typ}?_=${CBSTMP}" -H 'Accept: text/html' > ${typ}/${typ}.html
-    fi
-
+    # if [ "${typ}" != "nodes" ] ; then
+    #   echo "==> ${typ}/${typ}.html"
+    #   curl -s "${NODERED_URL}/${typ}?_=${CBSTMP}" -H 'Accept: text/html' > ${typ}/${typ}.html
+    # fi
 done
 
 for lcls in editor infotips node-red jsonata ; do

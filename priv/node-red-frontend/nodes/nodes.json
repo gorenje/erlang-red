@@ -745,5 +745,17 @@
         ],
         "user": false,
         "version": "0.9.0"
+    },
+    {
+        "enabled": true,
+        "id": "node-red-contrib-binary/binary",
+        "local": true,
+        "module": "node-red-contrib-binary",
+        "name": "binary",
+        "types": [
+            "binary"
+        ],
+        "user": false,
+        "version": "0.1.3"
     }
 ]
