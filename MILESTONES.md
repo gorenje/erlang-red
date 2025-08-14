@@ -1,5 +1,46 @@
 Milestones
 ---
+*Milestone Eight - m8*
+
+1. Moved type parsers out to own repository
+
+    With [commit](https://github.com/gorenje/erlang-red/commit/2fd3f7ed6154db45a9a0bd880846cca7191780c3), moved type parsers (for number, binary/buffer fields and attribute access) to a new [repository](https://github.com/gorenje/erlang-red-type-parsers) for reuse in other projects and reducing the code base size.
+
+    Also defines the responsibilities of the parsers and the node code.
+
+2. New Nodes: Sort, Binary and I2C
+
+    Node-RED [Binary node](https://flows.nodered.org/node/node-red-contrib-binary) implements a [Packet](https://bigeasy.github.io/packet) definition language to make it simpler and universal. This node is now part of Erlang-Red and was used to implement [PNG image](https://flows.red-erik.org/f/fbd5864f413917b8) parsing.
+
+    Using a more universal binary definition, especially one that is defined in Node-RED, makes flow code more portable and neutral than using Erlang specific binary matching. See the [forum discussion](https://erlangforums.com/t/binary-packet-definition-languages/4957) for more details. Perhaps other meta-description specifications use [kaitai](https://github.com/kaitai-io) would have been better however the point has been made.
+
+    The Packet parser [implementation](https://github.com/gorenje/erlang-red-type-parsers?tab=readme-ov-file#4-packet-type-parser) is outsourced to the parser repository and was extended to including reference of values defined in matching the binary format. This allows for chunks to define lengths and these chunks to be read in one cycle.
+
+    Created an initial sort node implementation including a number of unit test flows to demonstrate the nodes features: [sort by parts.index](https://flows.red-erik.org/f/5f6929bb3374b782) and [sorting array of objects](https://flows.red-erik.org/f/b7ebaf91f4d66ab3).
+
+    Using the [circuits_i2c](https://github.com/gorenje/erlang-red-elixir-helpers/commit/ace25e4663d930f7addd550b06b20522dfcbd629) Elixir library to implement a basic set of i2c nodes. This was then used to interact with a [Scroll pHAT](https://flows.red-erik.org/f/ea246f68766c8632) LED PCB. This was a flow was inspired by the same functionality for [Node-RED](https://flowhub.org/f/81d46dabe68094e4).
+
+3. Embedding on Raspberry Pi
+
+    Erlang-Red embedded on a Raspberry Pi 4, admittedly using docker and the docker hub [image](https://hub.docker.com/r/gorenje/erlang-red) but it worked. The goal was to control the [Scroll pHAT](https://flows.red-erik.org/f/ea246f68766c8632) via the I2C bus using the I2C node.
+
+4. Diverging from Node-RED flow editor
+
+    Along with modifying the defaults for the switch and debug nodes, I now added base64 decoding to Template node. This makes using binary data in flow tests simpler. Binary data can be encoded in base64 and then decoded by the template node before being passed through flows.
+
+    Another minor modification was allowing underscores in the definition of hex and octal and binary values. This was inspired by the reading the [specs](https://github.com/kaitai-io/kaitai_struct_formats) of kaitai format descriptions. A good source of various binary formats.
+
+5. License Smorgasbord
+
+    Using a [trifecta](https://github.com/gorenje/erlang-red/commit/3fee6ff49ff4a5c99713935e9b7ee17d84ca1990) of licenses so that everyone can pick and choose which license they wish to use. Of course, this is comment on the fact that open source software has been a battle of software license and which project can use the most permissive license.
+
+    Its a pity that GitHub does not have a indication of innovation or novelty when rating codebases on their site. Instead the first factors are documentation, licenses and activity:
+
+    ![quality](.images/project-quality.png)
+
+    As if activity is an indication of quality, it's an incentive to add more features and bugs so that projects need constant maintenance to keep working. Using the activity as a measure of project quality ensures the opposite and also ensures that projects are never completed.
+
+
 *Milestone Seven - m7*
 
 Code Name: The Non-Plural Milestone.
