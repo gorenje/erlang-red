@@ -75,6 +75,22 @@ start(
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef2, ered_node_ignore)
     end;
+start(
+    #{
+        <<"mode">> := <<"auto">>
+    } = NodeDef,
+    WsName
+) ->
+    %% automatic is the same as custom mode with zero count, useparts set to
+    %% true, creating an array and propety is payload on msg.
+    start(NodeDef#{
+        <<"mode">> => <<"custom">>,
+        <<"build">> => <<"array">>,
+        <<"count">> => <<"0">>,
+        <<"useparts">> => true,
+        <<"propertyType">> => <<"msg">>,
+        <<"property">> => <<"payload">>
+    }, WsName);
 start(NodeDef, WsName) ->
     ErrMsg = jstr("Node Config ~p", [NodeDef]),
     unsupported(NodeDef, {websocket, WsName}, ErrMsg),
