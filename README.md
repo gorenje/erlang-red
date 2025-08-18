@@ -37,6 +37,7 @@ Many thanks to [@joaohf](https://erlangforums.com/u/joaohf/summary) there is a E
 
 Also I did a quick experiment with a [Raspberry Pi 4](Embedding.md) to get the [I2C](https://flows.red-erik.org/f/ea246f68766c8632) nodes working. That wasn't "true" embedding since Erlang-Red was running in a docker container on a Raspberry running a debian distribution!
 
+
 Breadboard Programming
 ---
 
@@ -74,6 +75,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 
 | Node | Comment | Example Flow |
 | ---- | ------- | ------------ |
+| [batch](src/nodes/ered_node_batch.erl) | Mark messages as belonging to a batch and buffer messages until batches are completed. | [Flow](https://flows.red-erik.org/f/1658196c31549916) |
 | [binary](src/nodes/ered_node_binary.erl) | parser and match binary data using [Packet]() definitions. | [Flow](https://flows.red-erik.org/f/fbd5864f413917b8) |
 | [catch](src/nodes/ered_node_catch.erl) | catches exception of selected nodes and of entire flows but not groups | [Flow](https://flows.red-erik.org/f/71f65246c742cfc9) |
 | [change](src/nodes/ered_node_change.erl) | supports many operators but not all. JSONata in basic form is also supported. | [Flow](https://flows.red-erik.org/f/12572f9ac11e1786) |
@@ -169,25 +171,28 @@ Test
 Development
 ---
 
-    $ rebar3 shell --apps erlang_red
+    rebar3 shell --apps erlang_red
 
 Open the Node-RED visual flow editor in a browser:
 
-    $ open -a Firefox http://localhost:9090/node-red
+    open -a Firefox http://localhost:9090/node-red
 
-Docker
+Local development with Docker
 ---
 
 I use docker to develop this so for me, the following works:
 
-    prompt$ git clone git@github.com:gorenje/erlang-red.git
-    prompt$ cd erlang-red
-    prompt$ docker run -it -v $(pwd)/erlang-red:/code -p 9090:8080 -w /code --rm erlang bash
-    docker> rebar3 shell --apps erlang_red
+    git clone git@github.com:gorenje/erlang-red.git
+    cd erlang-red
+
+    docker run -it -v $(pwd)/erlang-red:/code -v $(pwd)/data:/data -p 8080:8080 -w /code --rm erlang bash
+
+    ## inside docker shell:
+    rebar3 shell --apps erlang_red
 
 Then from the docker host machine, open a browser:
 
-    prompt$ open -a Firefox http://localhost:9090/node-red
+    open -a Firefox http://localhost:8080/node-red
 
 That should display the Node-RED visual editor.
 

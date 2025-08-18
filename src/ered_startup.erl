@@ -290,8 +290,8 @@ node_type_to_module(Type, _) ->
 %% some node types map to the same module, i.e. ered_node_ignore.
 %%
 %% erlfmt:ignore alignment.
-node_type_to_module(NodeDef) when is_map(NodeDef) ->
-    node_type_to_module(maps:get(<<"type">>,NodeDef));
+node_type_to_module(#{<<"type">> := Type} = NodeDef) when is_map(NodeDef) ->
+    node_type_to_module(Type);
 node_type_to_module(<<"inject">>)            -> ered_node_inject;
 node_type_to_module(<<"switch">>)            -> ered_node_switch;
 node_type_to_module(<<"debug">>)             -> ered_node_debug;
@@ -339,6 +339,7 @@ node_type_to_module(<<"file">>)              -> ered_node_file;
 node_type_to_module(<<"i2c out">>)           -> ered_node_i2c_out;
 node_type_to_module(<<"binary">>)            -> ered_node_binary;
 node_type_to_module(<<"sort">>)              -> ered_node_sort;
+node_type_to_module(<<"batch">>)             -> ered_node_batch;
 %%
 %% Assert nodes for testing functionality of the nodes. These are the first
 %% Node-RED and Erlang-RED nodes - they have implmentations for both because
