@@ -270,16 +270,12 @@ bad_routing(#{<<"id">> := _NodeId} = NodeDef, Type, #{'_ws' := WsName} = Msg) ->
         "dot"
     ),
     bad_routing(NodeDef, Type, maps:remove('_ws', Msg));
-bad_routing(NodeDef, Type, Msg) ->
+bad_routing(#{<<"id">> := NdId, <<"type">> := NdType} = NodeDef, MsgType, Msg) ->
     this_should_not_happen(
         NodeDef,
         io_lib:format(
-            "Unhandled message type [~p] ~n~nNode: [~p, ~p]~n~nMsg: ~p\n",
-            [
-                Type,
-                maps:get(<<"id">>, NodeDef),
-                maps:get(<<"type">>, NodeDef),
-                Msg
-            ]
+            "Unhandled message type [~p] ~n~nNode: [~p, ~p]~n~n" ++
+              "Msg: ~p~n~nNode:~p~n",
+            [MsgType, NdId, NdType, Msg, NodeDef]
         )
     ).
