@@ -38,7 +38,7 @@
 
 %%
 %%
-start(_,_) ->
+start(_, _) ->
     throw(should_not_be_called).
 
 %%
@@ -49,17 +49,16 @@ handle_event(_, NodeDef) ->
 %%
 %%
 handle_msg(
-     {incoming, #{<<"complete">> := true} = Msg},
-     NodeDef
+    {incoming, #{<<"complete">> := true} = Msg},
+    NodeDef
 ) ->
     handle_complete_msg(Msg, NodeDef);
-
 %%
 handle_msg(
     {incoming,
-     #{
-       <<"parts">> := #{<<"count">> := PartsCount}
-      } = Msg},
+        #{
+            <<"parts">> := #{<<"count">> := PartsCount}
+        } = Msg},
     #{
         '_store' := Store,
         '_count' := Count
@@ -69,12 +68,11 @@ handle_msg(
     %% have arrived, if so then send out the parts/messages. If not, it's
     %% back to the daily grind.
     NodeDef2 = have_all_parts_arrived(
-                 NodeDef,
-                 Store ++ [Msg],
-                 convert_to_int(PartsCount)
-                ),
+        NodeDef,
+        Store ++ [Msg],
+        convert_to_int(PartsCount)
+    ),
     {handled, NodeDef2, dont_send_complete_msg};
-
 handle_msg(
     {incoming, Msg},
     #{
@@ -108,7 +106,7 @@ handle_msg(_, NodeDef) ->
 handle_complete_msg(
     #{
         <<"parts">> := #{<<"id">> := IdStr}
-     } = Msg,
+    } = Msg,
     #{
         '_store' := Store
     } = NodeDef
@@ -140,16 +138,14 @@ handle_complete_msg(
     NodeDef2 = send_out_collected_messages(NodeDef, Store ++ [Msg]),
     {handled, NodeDef2, dont_send_complete_msg}.
 
-
-
 %%
 %%
 have_all_parts_arrived(
-  NodeDef, AllMsgs, Count
+    NodeDef, AllMsgs, Count
 ) when length(AllMsgs) =:= Count ->
     send_out_collected_messages(NodeDef, AllMsgs);
-have_all_parts_arrived(NodeDef,AllMsgs,_Count) ->
-    NodeDef#{ '_store' => AllMsgs }.
+have_all_parts_arrived(NodeDef, AllMsgs, _Count) ->
+    NodeDef#{'_store' => AllMsgs}.
 
 %%
 %%

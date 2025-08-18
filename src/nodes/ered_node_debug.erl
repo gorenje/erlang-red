@@ -49,11 +49,12 @@
 %%
 %%
 start(
-  #{<<"tostatus">> := true,
-    <<"statusType">> := <<"counter">>,
-    <<"active">> := true
-   } = NodeDef,
-  WsName
+    #{
+        <<"tostatus">> := true,
+        <<"statusType">> := <<"counter">>,
+        <<"active">> := true
+    } = NodeDef,
+    WsName
 ) ->
     node_status(WsName, NodeDef, 0, "blue", "ring"),
     ered_node:start(NodeDef, ?MODULE);

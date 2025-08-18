@@ -275,7 +275,7 @@ bad_routing(#{<<"id">> := NdId, <<"type">> := NdType} = NodeDef, MsgType, Msg) -
         NodeDef,
         io_lib:format(
             "Unhandled message type [~p] ~n~nNode: [~p, ~p]~n~n" ++
-              "Msg: ~p~n~nNode:~p~n",
+                "Msg: ~p~n~nNode:~p~n",
             [MsgType, NdId, NdType, Msg, NodeDef]
         )
     ).

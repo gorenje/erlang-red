@@ -74,7 +74,9 @@ start(#{<<"rules">> := Rules} = NodeDef, WsName) ->
         {Errors, _} ->
             ErrMsg = jstr("JSONata Errors ~p", [Errors]),
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
-            node_status(WsName, NodeDef, "jsonata compile failed", "red", "dot"),
+            node_status(
+                WsName, NodeDef, "jsonata compile failed", "red", "dot"
+            ),
             ered_node:start(NodeDef, ered_node_ignore)
     end;
 start(NodeDef, WsName) ->
@@ -101,7 +103,6 @@ handle_msg({incoming, Msg}, NodeDef) ->
     end;
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
-
 
 %%
 %% ---------- helpers
@@ -199,12 +200,12 @@ do_set_value(Prop, Value, <<"bin">>, Msg, NodeDef) ->
             Msg
     end;
 do_set_value(
-  Prop,
-  Func,
-  <<"jsonata">>,
-  Msg,
-  NodeDef
- ) ->
+    Prop,
+    Func,
+    <<"jsonata">>,
+    Msg,
+    NodeDef
+) ->
     %% "t": "set",
     %% "p": "payload",
     %% "pt": "msg",
@@ -223,27 +224,11 @@ do_set_value(
                 ),
             post_exception_or_debug(NodeDef, Msg, Error),
             throw(dont_send_message);
-
         E:M:S ->
             ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
             throw(dont_send_message)
     end;
-
-    %% case erlang_red_jsonata:execute(Value, Msg) of
-    %%     {ok, Result} ->
-    %%         set_prop_value(Prop, Result, Msg);
-    %%     {error, Error} ->
-    %%         unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
-    %%         Msg;
-    %%     {unsupported, Error} ->
-    %%         post_exception_or_debug(NodeDef, Msg, Error),
-    %%         throw(dont_send_message);
-    %%     {exception, {E, M, S}} ->
-    %%         ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
-    %%         post_exception_or_debug(NodeDef, Msg, ErrMsg),
-    %%         throw(dont_send_message)
-    %% end;
 do_set_value(_, _, Tot, Msg, NodeDef) ->
     unsupported(NodeDef, Msg, jstr("set ToT: ~p", [Tot])),
     Msg.
@@ -321,28 +306,35 @@ replace_jsonatas_with_functions(Rules, JSONataCache) ->
 replace_jsonatas_with_functions([], _JSONataCache, Acc) ->
     lists:reverse(Acc);
 replace_jsonatas_with_functions(
-  [ #{ <<"to">> := JSONata, <<"tot">> := <<"jsonata">>} = Whole | Rest],
-  JSONataCache,
-  Acc
+    [#{<<"to">> := JSONata, <<"tot">> := <<"jsonata">>} = Whole | Rest],
+    JSONataCache,
+    Acc
 ) ->
     replace_jsonatas_with_functions(
-      Rest,
-      JSONataCache,
-      [Whole#{<<"to">> =>
-                  ered_jsonata_compiler:find_function_for_stanza(JSONata,
-                                                                 JSONataCache)}
-      | Acc]);
+        Rest,
+        JSONataCache,
+        [
+            Whole#{
+                <<"to">> =>
+                    ered_jsonata_compiler:find_function_for_stanza(
+                        JSONata,
+                        JSONataCache
+                    )
+            }
+            | Acc
+        ]
+    );
 replace_jsonatas_with_functions([Rule | Rest], C, Acc) ->
     replace_jsonatas_with_functions(Rest, C, [Rule | Acc]).
 
 %%
 %%
 retrieve_jsonatas(Rules) ->
-    retrieve_jsonatas(Rules,[]).
+    retrieve_jsonatas(Rules, []).
 
-retrieve_jsonatas([],Acc) ->
+retrieve_jsonatas([], Acc) ->
     Acc;
 retrieve_jsonatas([#{<<"to">> := S, <<"tot">> := <<"jsonata">>} | Rest], Acc) ->
-    retrieve_jsonatas(Rest, [S|Acc]);
-retrieve_jsonatas([_Rule|Rest], Acc) ->
+    retrieve_jsonatas(Rest, [S | Acc]);
+retrieve_jsonatas([_Rule | Rest], Acc) ->
     retrieve_jsonatas(Rest, Acc).
