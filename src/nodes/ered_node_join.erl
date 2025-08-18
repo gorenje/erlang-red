@@ -38,6 +38,7 @@
     send_msg_to_connected_nodes/2
 ]).
 -import(ered_nodered_comm, [
+    node_status/5,
     unsupported/3
 ]).
 -import(ered_message_exchange, [
@@ -53,11 +54,13 @@ start(#{<<"timeout">> := Timeout} = NodeDef, WsName) when Timeout =/= <<>> ->
     ErrMsg = jstr("Timeout ~p", [NodeDef]),
     unsupported(NodeDef, {websocket, WsName}, ErrMsg),
     ered_node:start(NodeDef, ered_node_ignore);
+
 start(
     #{
         <<"mode">> := <<"custom">>,
         <<"build">> := <<"array">>,
-        <<"count">> := Count
+        <<"count">> := Count,
+        <<"useparts">> := true
     } = NodeDef,
     WsName
 ) ->
@@ -68,6 +71,31 @@ start(
                     '_store' => [],
                     '_count' => convert_to_int(Count)
                 },
+                ered_node_join_useparts
+            );
+        {false, NodeDef2} ->
+            ErrMsg = jstr("Node Config ~p", [NodeDef]),
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+            ered_node:start(NodeDef2, ered_node_ignore)
+    end;
+
+start(
+    #{
+        <<"mode">> := <<"custom">>,
+        <<"build">> := <<"array">>,
+        <<"count">> := Count,
+        <<"useparts">> := false
+    } = NodeDef,
+    WsName
+) ->
+    case setup_custom(NodeDef) of
+        {ok, NodeDef2} ->
+            ered_node:start(
+                NodeDef2#{
+                    '_store' => [],
+                    '_count' => convert_to_int(Count),
+                    '_togo' => convert_to_int(Count)
+                },
                 ?MODULE
             );
         {false, NodeDef2} ->
@@ -75,6 +103,9 @@ start(
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef2, ered_node_ignore)
     end;
+
+
+%%
 start(
     #{
         <<"mode">> := <<"auto">>
@@ -104,84 +135,31 @@ handle_event(_, NodeDef) ->
 %%
 %%
 handle_msg(
-    {incoming, #{<<"complete">> := true} = Msg},
-    #{
-        '_store' := Store,
-        <<"useparts">> := false
-    } = NodeDef
-) ->
-    NodeDef2 = send_out_collected_messages(NodeDef, [Msg | Store]),
-    {handled, NodeDef2, dont_send_complete_msg};
-handle_msg(
-    {incoming,
-        #{
-            <<"complete">> := true,
-            <<"parts">> := #{<<"id">> := IdStr}
-        } = Msg},
-    #{
-        '_store' := Store,
-        <<"useparts">> := true
-    } = NodeDef
-) ->
-    {WithId, WithoutId} = divide_and_conquer(IdStr, [Msg | Store]),
-
-    send_out_collected_messages(NodeDef, lists:reverse(WithId)),
-
-    {handled, NodeDef#{'_store' => WithoutId}, dont_send_complete_msg};
-handle_msg(
-    {incoming, #{<<"complete">> := true} = Msg},
-    #{
-        '_store' := Store,
-        '_count' := Count,
-        <<"useparts">> := true
-    } = NodeDef
-) when Count =< 0 ->
-    {WithId, WithoutId} = divide_and_conquer_no_idstr([Msg | Store]),
-
-    send_out_collected_messages(NodeDef, lists:reverse(WithoutId)),
-
-    {handled, NodeDef#{'_store' => WithId}, dont_send_complete_msg};
-handle_msg(
-    {incoming, #{<<"complete">> := true} = Msg},
-    #{
-        '_store' := Store,
-        '_count' := Count,
-        <<"useparts">> := true
-    } = NodeDef
-) when Count > 0 ->
-    NodeDef2 = send_out_collected_messages(NodeDef, [Msg | Store]),
-    {handled, NodeDef2, dont_send_complete_msg};
-handle_msg(
-    {incoming, Msg},
-    #{
-        '_store' := Store,
-        '_count' := Count,
-        <<"useparts">> := true
-    } = NodeDef
-) when Count =< 0 ->
-    %% No count set, but using parts - so we have to check whether all parts
-    %% have arrived, if so then send out the parts/messages. If not, it's
-    %% back to the daily grind.
-    NodeDef2 = have_all_parts_arrived(NodeDef, [Msg | Store]),
-    {handled, NodeDef2, dont_send_complete_msg};
-handle_msg(
-    {incoming, Msg},
-    #{
-        '_store' := Store,
-        '_count' := Count
-    } = NodeDef
-) when Count > 0, length(Store) =:= (Count - 1) ->
-    NodeDef2 = send_out_collected_messages(NodeDef, [Msg | Store]),
-    {handled, NodeDef2, dont_send_complete_msg};
-%%
-%% If we make it here, then just store the message and move on.
-handle_msg(
-    {incoming, Msg},
+     {incoming, #{<<"complete">> := true} = Msg},
     #{
         '_store' := Store
     } = NodeDef
 ) ->
-    {handled, NodeDef#{'_store' => [Msg | Store]}, dont_send_complete_msg};
+    NodeDef2 = send_out_collected_messages(NodeDef, Msg, Store ++ [Msg]),
+    {handled, NodeDef2, dont_send_complete_msg};
+
+handle_msg(
+    {incoming, Msg},
+    #{
+        '_store' := Store,
+        '_togo' := ToGo
+    } = NodeDef
+) ->
+    NewToGo = ToGo - 1,
+    Nd2 =
+        case NewToGo of
+            0 ->
+                send_out_collected_messages(NodeDef, Msg, Store ++ [Msg]);
+            _ ->
+                NodeDef#{'_store' => Store ++ [Msg], '_togo' => NewToGo}
+        end,
+
+    {handled, Nd2, dont_send_complete_msg};
 %%
 %%
 handle_msg(_, NodeDef) ->
@@ -193,41 +171,28 @@ handle_msg(_, NodeDef) ->
 
 %%
 %%
-have_all_parts_arrived(
-    NodeDef,
-    [#{<<"parts">> := #{<<"count">> := Count}} | _] = AllMsgs
-) ->
-    have_all_parts_arrived(
-        NodeDef,
-        AllMsgs,
-        length(AllMsgs) =:= convert_to_int(Count)
-    );
-have_all_parts_arrived(#{'_store' := Store} = NodeDef, [LastMsg | _]) ->
-    NodeDef#{'_store' => [LastMsg | Store]}.
-%%
-have_all_parts_arrived(#{'_store' := Store} = NodeDef, [LastMsg | _], false) ->
-    NodeDef#{'_store' => [LastMsg | Store]};
-have_all_parts_arrived(NodeDef, AllMsgs, true) ->
-    send_out_collected_messages(NodeDef, AllMsgs).
-
-%%
-%%
 send_out_collected_messages(
     #{<<"propertyType">> := <<"full">>} = NodeDef,
+    Msg,
     Store
 ) ->
-    AllMsgs = sort_messages(NodeDef, Store),
-    send_out_collected_messages(NodeDef, AllMsgs, AllMsgs);
+    send_out_collected_messages(NodeDef, Msg, Store, Store);
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
+    Msg,
     Store
 ) ->
-    AllMsgs = sort_messages(NodeDef, Store),
-    Lst2 = [retrieve_prop_value(PropName, Msg) || Msg <- AllMsgs],
-    send_out_collected_messages(NodeDef, AllMsgs, Lst2).
+    Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
+    send_out_collected_messages(NodeDef, Msg, Store, Lst2).
 
 %%
-send_out_collected_messages(NodeDef, AllMsgs, PayloadForNodes) ->
+send_out_collected_messages(
+  #{'_count' := Count} = NodeDef, Msg, AllMsgs, PayloadForNodes)
+->
+    %% retrieve the latest message and use that as a basis for sending out
+    %% these messages - TODO perhaps this is wrong but will do for now.
+    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
+
     %% now that we are ready to send out our message, we are completed
     %% with the message that make up that message (!!) so those
     %% messages should be sent to a complete node - if there is one
@@ -235,13 +200,8 @@ send_out_collected_messages(NodeDef, AllMsgs, PayloadForNodes) ->
     %%   https://discourse.nodered.org/t/complete-node-msg-before-or-after-computation/96648/5
     [post_completed(NodeDef, M) || M <- AllMsgs],
 
-    %% retrieve the latest message and use that as a basis for sending out
-    %% these messages - TODO perhaps this is wrong but will do for now.
-    [Msg | _] = lists:reverse(AllMsgs),
-    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
-
     %% reset the store, ready to receive more messages
-    NodeDef#{'_store' => []}.
+    NodeDef#{'_store' => [], '_togo' => Count}.
 
 %%
 %%
@@ -274,55 +234,3 @@ setup_custom(
     {ok, NodeDef};
 setup_custom(NodeDef) ->
     {false, NodeDef}.
-
-%%
-%%
-%% parts_sort_funct( #{ <<"parts">> := #{ <<"index">> := IndxA } },
-%%                   #{ <<"parts">> := #{ <<"index">> := IndxB } } ) ->
-%%     convert_to_int(IndxA) < convert_to_int(IndxB);
-%% parts_sort_funct(_,_) ->
-%%     true.
-
-sort_messages(#{<<"useparts">> := true}, AllMsgs) ->
-    lists:reverse(AllMsgs);
-%% see test #5cf6aec7d688fce4 but ordering is by receivership not index.
-%% lists:sort(fun parts_sort_funct/2, AllMsgs);
-sort_messages(#{<<"useparts">> := false}, AllMsgs) ->
-    lists:reverse(AllMsgs).
-
-%%
-%%
-divide_and_conquer(IdStr, Store) ->
-    divide_and_conquer(IdStr, Store, [], []).
-
-divide_and_conquer(_IdStr, [], AccWithId, AccNotId) ->
-    {AccWithId, AccNotId};
-divide_and_conquer(
-    IdStr,
-    [#{<<"parts">> := #{<<"id">> := IdStr}} = Msg | Rest],
-    AccWithId,
-    AccNotId
-) ->
-    divide_and_conquer(IdStr, Rest, [Msg | AccWithId], AccNotId);
-divide_and_conquer(IdStr, [Msg | Rest], AccWithId, AccNotId) ->
-    divide_and_conquer(IdStr, Rest, AccWithId, [Msg | AccNotId]).
-
-%%
-%%
-divide_and_conquer_no_idstr(Store) ->
-    divide_and_conquer_no_idstr(Store, [], []).
-
-divide_and_conquer_no_idstr([], AccWithId, AccWithoutId) ->
-    {AccWithId, AccWithoutId};
-divide_and_conquer_no_idstr(
-    [#{<<"parts">> := #{<<"id">> := _IdStr}} = Msg | Rest],
-    AccWithId,
-    AccWithoutId
-) ->
-    divide_and_conquer_no_idstr(Rest, [Msg | AccWithId], AccWithoutId);
-divide_and_conquer_no_idstr(
-    [Msg | Rest],
-    AccWithId,
-    AccWithoutId
-) ->
-    divide_and_conquer_no_idstr(Rest, AccWithId, [Msg | AccWithoutId]).
