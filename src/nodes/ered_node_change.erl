@@ -11,9 +11,40 @@
 %% the flow and global contexts. It has many possible features and this
 %% implementation only implements a small subset
 %%
-
+%%
+%% {
+%%    "id": "c96b74e7b2e444e7",
+%%    "type": "change",
+%%    "z": "866410b56fa42447",
+%%    "g": "5e6c5aa86609cf42",
+%%    "name": "alter _msgid",
+%%    "rules": [
+%%        {
+%%            "t": "set",
+%%            "p": "payload",
+%%            "pt": "msg",
+%%            "to": "counter",
+%%            "tot": "msg"
+%%        },
+%%        {
+%%            "t": "set",
+%%            "p": "counter",
+%%            "pt": "msg",
+%%            "to": "$$.counter + 1",
+%%            "tot": "jsonata"
+%%        },
+%%        {
+%%            "t": "set",
+%%            "p": "'_msgid'",
+%%            "pt": "msg",
+%%            "to": "$string($substring( $pad( $formatBase($random() * 100000, 16), 4, '0'),0,4) & \t$substring( $pad( $formatBase($random() * 100000, 16), 4, '0'),0,4) & \t$substring( $pad( $formatBase($random() * 100000, 16), 4, '0'),0,4) & \t$substring( $pad( $formatBase($random() * 100000, 16), 4, '0'),0,4))",
+%%            "tot": "jsonata"
+%%        }
+%%
+%%
 -import(ered_nodered_comm, [
     post_exception_or_debug/3,
+    node_status/5,
     unsupported/3
 ]).
 -import(ered_nodes, [
@@ -33,9 +64,48 @@
 
 %%
 %%
-start(NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ?MODULE).
+start(#{<<"rules">> := Rules} = NodeDef, WsName) ->
+    %% Pre-compile all JSONata stanzas and error out the node if something
+    %% does not compile.
+    case ered_jsonata_compiler:compile_stanzas(retrieve_jsonatas(Rules)) of
+        {[], Cache} ->
+            Rules2 = replace_jsonatas_with_functions(Rules, Cache),
+            ered_node:start(NodeDef#{<<"rules">> => Rules2}, ?MODULE);
+        {Errors, _} ->
+            ErrMsg = jstr("JSONata Errors ~p", [Errors]),
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+            node_status(WsName, NodeDef, "jsonata compile failed", "red", "dot"),
+            ered_node:start(NodeDef, ered_node_ignore)
+    end;
+start(NodeDef, WsName) ->
+    ErrMsg = jstr("Node Config ~p", [NodeDef]),
+    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+    ered_node:start(NodeDef, ered_node_ignore).
 
+%%
+%%
+handle_event(_, NodeDef) ->
+    NodeDef.
+
+%%
+%%
+handle_msg({incoming, Msg}, NodeDef) ->
+    {ok, Rules} = maps:find(<<"rules">>, NodeDef),
+    try
+        Msg2 = handle_rules(Rules, Msg, NodeDef),
+        send_msg_to_connected_nodes(NodeDef, Msg2),
+        {handled, NodeDef, Msg2}
+    catch
+        throw:dont_send_message ->
+            {handled, NodeDef, dont_send_complete_msg}
+    end;
+handle_msg(_, NodeDef) ->
+    {unhandled, NodeDef}.
+
+
+%%
+%% ---------- helpers
+%%
 do_move({ok, <<"msg">>}, {ok, <<"msg">>}, {ok, FromProp}, {ok, ToProp}, Msg, _) ->
     case get_prop({ok, FromProp}, Msg) of
         {ok, Val, _} ->
@@ -128,26 +198,52 @@ do_set_value(Prop, Value, <<"bin">>, Msg, NodeDef) ->
             ),
             Msg
     end;
-do_set_value(Prop, Value, <<"jsonata">>, Msg, NodeDef) ->
+do_set_value(
+  Prop,
+  Func,
+  <<"jsonata">>,
+  Msg,
+  NodeDef
+ ) ->
     %% "t": "set",
     %% "p": "payload",
     %% "pt": "msg",
     %% "to": "$count($$.payload)",
     %% "tot": "jsonata"
-    case erlang_red_jsonata:execute(Value, Msg) of
-        {ok, Result} ->
-            set_prop_value(Prop, Result, Msg);
-        {error, Error} ->
-            unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
-            Msg;
-        {unsupported, Error} ->
+    try
+        set_prop_value(Prop, Func(Msg), Msg)
+    catch
+        error:jsonata_unsupported:Stacktrace ->
+            [H | _] = Stacktrace,
+            Error =
+                list_to_binary(
+                    io_lib:format(
+                        "jsonata unsupported function: ~p", element(3, H)
+                    )
+                ),
             post_exception_or_debug(NodeDef, Msg, Error),
             throw(dont_send_message);
-        {exception, {E, M, S}} ->
+
+        E:M:S ->
             ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
             throw(dont_send_message)
     end;
+
+    %% case erlang_red_jsonata:execute(Value, Msg) of
+    %%     {ok, Result} ->
+    %%         set_prop_value(Prop, Result, Msg);
+    %%     {error, Error} ->
+    %%         unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
+    %%         Msg;
+    %%     {unsupported, Error} ->
+    %%         post_exception_or_debug(NodeDef, Msg, Error),
+    %%         throw(dont_send_message);
+    %%     {exception, {E, M, S}} ->
+    %%         ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
+    %%         post_exception_or_debug(NodeDef, Msg, ErrMsg),
+    %%         throw(dont_send_message)
+    %% end;
 do_set_value(_, _, Tot, Msg, NodeDef) ->
     unsupported(NodeDef, Msg, jstr("set ToT: ~p", [Tot])),
     Msg.
@@ -219,20 +315,34 @@ handle_rule(_, Rule, Msg, NodeDef) ->
 
 %%
 %%
-handle_event(_, NodeDef) ->
-    NodeDef.
+replace_jsonatas_with_functions(Rules, JSONataCache) ->
+    replace_jsonatas_with_functions(Rules, JSONataCache, []).
+
+replace_jsonatas_with_functions([], _JSONataCache, Acc) ->
+    lists:reverse(Acc);
+replace_jsonatas_with_functions(
+  [ #{ <<"to">> := JSONata, <<"tot">> := <<"jsonata">>} = Whole | Rest],
+  JSONataCache,
+  Acc
+) ->
+    replace_jsonatas_with_functions(
+      Rest,
+      JSONataCache,
+      [Whole#{<<"to">> =>
+                  ered_jsonata_compiler:find_function_for_stanza(JSONata,
+                                                                 JSONataCache)}
+      | Acc]);
+replace_jsonatas_with_functions([Rule | Rest], C, Acc) ->
+    replace_jsonatas_with_functions(Rest, C, [Rule | Acc]).
 
 %%
 %%
-handle_msg({incoming, Msg}, NodeDef) ->
-    {ok, Rules} = maps:find(<<"rules">>, NodeDef),
-    try
-        Msg2 = handle_rules(Rules, Msg, NodeDef),
-        send_msg_to_connected_nodes(NodeDef, Msg2),
-        {handled, NodeDef, Msg2}
-    catch
-        throw:dont_send_message ->
-            {handled, NodeDef, dont_send_complete_msg}
-    end;
-handle_msg(_, NodeDef) ->
-    {unhandled, NodeDef}.
+retrieve_jsonatas(Rules) ->
+    retrieve_jsonatas(Rules,[]).
+
+retrieve_jsonatas([],Acc) ->
+    Acc;
+retrieve_jsonatas([#{<<"to">> := S, <<"tot">> := <<"jsonata">>} | Rest], Acc) ->
+    retrieve_jsonatas(Rest, [S|Acc]);
+retrieve_jsonatas([_Rule|Rest], Acc) ->
+    retrieve_jsonatas(Rest, Acc).
