@@ -41,21 +41,26 @@
     retrieve_prop_value/2
 ]).
 
-start(#{
+start(
+    #{
         <<"mode">> := <<"count">>,
         <<"count">> := Count,
         <<"overlap">> := 0,
         <<"honourParts">> := false
-       } = NodeDef,
-      WsName
+    } = NodeDef,
+    WsName
 ) ->
     CountInt = convert_to_integer(Count),
     case CountInt > 0 of
         true ->
-            ered_node:start(NodeDef#{
-                '_count' => CountInt,
-                '_current_batch' => []
-            }, ?MODULE);
+            ered_node:start(
+                NodeDef#{
+                    '_current_batch' => undefined,
+                    '_count' => CountInt,
+                    '_togo' => CountInt
+                },
+                ?MODULE
+            );
         _ ->
             ErrMsg = jstr("Count is not positive ~p", [NodeDef]),
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
@@ -68,83 +73,99 @@ start(NodeDef, WsName) ->
 
 %%
 %%
+handle_event({registered, _WsName, MyPid}, NodeDef) ->
+    Tab = ets:new(
+        list_to_atom(pid_to_list(MyPid)),
+        [ordered_set, private, {write_concurrency, true}]
+    ),
+    NodeDef#{'_current_batch' => Tab};
 handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
 %%
 handle_msg(
-  {incoming,
-   #{
-     '_msgid' := MsgId
-    } = Msg
-  },
-  #{
-     '_current_batch' := Batch,
-     '_count' := Count
-   } = NodeDef
-) when length(Batch) =:= 0 ->
+    {incoming,
+        #{
+            '_msgid' := MsgId
+        } = Msg},
+    #{
+        '_current_batch' := Store,
+        '_count' := Count,
+        '_togo' := Togo
+    } = NodeDef
+) when Togo =:= Count ->
     %% First message of a new batch, use the message ID to identify
     %% the entire batch.
     Msg2 = Msg#{
         <<"parts">> => #{
-          <<"id">> => MsgId,
-          <<"index">> => 0,
-          <<"count">> => Count
+            <<"id">> => MsgId,
+            <<"index">> => 0,
+            <<"count">> => Count
         }
     },
+
+    true = ets:insert(Store, {Togo, term_to_binary(Msg2)}),
 
     %% Check whether we have completed the batch. This has to be done here
     %% because if there are no more messages and this message just complete
     %% the batch, then we need to send it out now. This happens if Count == 1.
     NodeDef2 = send_out_completed_batch(NodeDef#{
         '_current_batch_id' => MsgId,
-        '_current_batch' => [Msg2]
+        '_togo' => Togo - 1
     }),
 
     {handled, NodeDef2, dont_send_complete_msg};
-
 handle_msg(
-  {incoming, Msg},
-  #{
-     '_current_batch_id' := BatchId,
-     '_current_batch' := Batch,
-     '_count' := Count
-  } = NodeDef
+    {incoming, Msg},
+    #{
+        '_current_batch_id' := BatchId,
+        '_current_batch' := Store,
+        '_count' := Count,
+        '_togo' := Togo
+    } = NodeDef
 ) ->
     Msg2 = Msg#{
         <<"parts">> => #{
-          <<"id">> => BatchId,
-          <<"index">> => length(Batch),
-          <<"count">> => Count
+            <<"id">> => BatchId,
+            <<"index">> => (Count - Togo),
+            <<"count">> => Count
         }
     },
 
+    true = ets:insert(Store, {Togo, term_to_binary(Msg2)}),
+
     NodeDef2 = send_out_completed_batch(NodeDef#{
-        '_current_batch' => [Msg2 | Batch]
+        '_togo' => Togo - 1
     }),
 
     {handled, NodeDef2, dont_send_complete_msg};
-
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
-
 
 %%
 %% --------------------- Helpers
 %%
 
 send_out_completed_batch(
-  #{ '_count' := Count,
-     '_current_batch' := Batch
-   } = NodeDef
- ) when Count =:= length(Batch) ->
-    Fun = fun(Msg) ->
-                  send_msg_to_connected_nodes(NodeDef, Msg),
-                  post_completed(NodeDef, Msg)
-          end,
-    [Fun(M) || M <- lists:reverse(Batch)],
+    #{
+        '_count' := Count,
+        '_current_batch' := Store,
+        '_togo' := 0
+    } = NodeDef
+) ->
+    SendAndPostCompleted = fun(Msg) ->
+        send_msg_to_connected_nodes(NodeDef, Msg),
+        post_completed(NodeDef, Msg)
+    end,
 
-    NodeDef#{'_current_batch' => []};
+    Batch = ets:foldl(
+        fun({_, M}, Acc) -> [binary_to_term(M) | Acc] end, [], Store
+    ),
+    ets:delete_all_objects(Store),
+
+    [SendAndPostCompleted(Msg) || Msg <- Batch],
+
+    NodeDef#{'_togo' => Count};
 send_out_completed_batch(NodeDef) ->
     NodeDef.

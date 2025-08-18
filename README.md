@@ -328,6 +328,7 @@ Much thanks to
 - [@joaohf](https://erlangforums.com/u/joaohf/summary) many tips on coding Erlang and structuring an Erlang project, and
 - [@Maria-12648430](https://erlangforums.com/u/maria-12648430/summary) for debugging my initial attempt to create a gen_server for nodes.
 - [@joergen7](https://github.com/joergen7) for the Erlang insights and explaining dialyzer to me and the importance of clean code
+- [@vkatsuba](https://erlangforums.com/u/vkatsuba/summary) for the [great tips](https://erlangforums.com/t/efficient-storage-using-lists/4988/4?u=gorenje) on using ETS tables for buffering messages
 
 License Smorgasbord
 ---

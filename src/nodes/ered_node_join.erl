@@ -54,7 +54,6 @@ start(#{<<"timeout">> := Timeout} = NodeDef, WsName) when Timeout =/= <<>> ->
     ErrMsg = jstr("Timeout ~p", [NodeDef]),
     unsupported(NodeDef, {websocket, WsName}, ErrMsg),
     ered_node:start(NodeDef, ered_node_ignore);
-
 start(
     #{
         <<"mode">> := <<"custom">>,
@@ -78,7 +77,6 @@ start(
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef2, ered_node_ignore)
     end;
-
 start(
     #{
         <<"mode">> := <<"custom">>,
@@ -90,9 +88,11 @@ start(
 ) ->
     case setup_custom(NodeDef) of
         {ok, NodeDef2} ->
+            %% _store is defined by the registered event because we use
+            %% an ETS table per process not per module.
             ered_node:start(
                 NodeDef2#{
-                    '_store' => [],
+                    '_store' => undefined,
                     '_count' => convert_to_int(Count),
                     '_togo' => convert_to_int(Count)
                 },
@@ -103,8 +103,6 @@ start(
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef2, ered_node_ignore)
     end;
-
-
 %%
 start(
     #{
@@ -114,14 +112,17 @@ start(
 ) ->
     %% automatic is the same as custom mode with zero count, useparts set to
     %% true, creating an array and propety is payload on msg.
-    start(NodeDef#{
-        <<"mode">> => <<"custom">>,
-        <<"build">> => <<"array">>,
-        <<"count">> => <<"0">>,
-        <<"useparts">> => true,
-        <<"propertyType">> => <<"msg">>,
-        <<"property">> => <<"payload">>
-    }, WsName);
+    start(
+        NodeDef#{
+            <<"mode">> => <<"custom">>,
+            <<"build">> => <<"array">>,
+            <<"count">> => <<"0">>,
+            <<"useparts">> => true,
+            <<"propertyType">> => <<"msg">>,
+            <<"property">> => <<"payload">>
+        },
+        WsName
+    );
 start(NodeDef, WsName) ->
     ErrMsg = jstr("Node Config ~p", [NodeDef]),
     unsupported(NodeDef, {websocket, WsName}, ErrMsg),
@@ -129,20 +130,30 @@ start(NodeDef, WsName) ->
 
 %%
 %%
+handle_event({registered, _WsName, MyPid}, NodeDef) ->
+    Tab = ets:new(
+        list_to_atom(pid_to_list(MyPid)),
+        [ordered_set, private, {write_concurrency, true}]
+    ),
+    NodeDef#{'_store' => Tab};
 handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
 %%
 handle_msg(
-     {incoming, #{<<"complete">> := true} = Msg},
+    {incoming, #{<<"complete">> := true} = Msg},
     #{
-        '_store' := Store
+        '_store' := Store,
+        '_togo' := ToGo
     } = NodeDef
 ) ->
-    NodeDef2 = send_out_collected_messages(NodeDef, Msg, Store ++ [Msg]),
+    NewToGo = ToGo - 1,
+    true = ets:insert(Store, {NewToGo, term_to_binary(Msg)}),
+    Batch = ets:foldl(fun({_, M}, Acc) -> [M | Acc] end, [], Store),
+    ets:delete_all_objects(Store),
+    NodeDef2 = send_out_collected_messages(NodeDef, Msg, Batch),
     {handled, NodeDef2, dont_send_complete_msg};
-
 handle_msg(
     {incoming, Msg},
     #{
@@ -151,15 +162,19 @@ handle_msg(
     } = NodeDef
 ) ->
     NewToGo = ToGo - 1,
-    Nd2 =
+    true = ets:insert(Store, {NewToGo, term_to_binary(Msg)}),
+
+    NodeDef2 =
         case NewToGo of
             0 ->
-                send_out_collected_messages(NodeDef, Msg, Store ++ [Msg]);
+                Batch = ets:foldl(fun({_, M}, Acc) -> [M | Acc] end, [], Store),
+                ets:delete_all_objects(Store),
+                send_out_collected_messages(NodeDef, Msg, Batch);
             _ ->
-                NodeDef#{'_store' => Store ++ [Msg], '_togo' => NewToGo}
+                NodeDef#{'_togo' => NewToGo}
         end,
 
-    {handled, Nd2, dont_send_complete_msg};
+    {handled, NodeDef2, dont_send_complete_msg};
 %%
 %%
 handle_msg(_, NodeDef) ->
@@ -174,21 +189,23 @@ handle_msg(_, NodeDef) ->
 send_out_collected_messages(
     #{<<"propertyType">> := <<"full">>} = NodeDef,
     Msg,
-    Store
+    RevStore
 ) ->
+    Store = [binary_to_term(M) || M <- RevStore],
     send_out_collected_messages(NodeDef, Msg, Store, Store);
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
     Msg,
-    Store
+    RevStore
 ) ->
+    Store = [binary_to_term(M) || M <- RevStore],
     Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
     send_out_collected_messages(NodeDef, Msg, Store, Lst2).
 
 %%
 send_out_collected_messages(
-  #{'_count' := Count} = NodeDef, Msg, AllMsgs, PayloadForNodes)
-->
+    #{'_count' := Count} = NodeDef, Msg, AllMsgs, PayloadForNodes
+) ->
     %% retrieve the latest message and use that as a basis for sending out
     %% these messages - TODO perhaps this is wrong but will do for now.
     send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
@@ -201,7 +218,7 @@ send_out_collected_messages(
     [post_completed(NodeDef, M) || M <- AllMsgs],
 
     %% reset the store, ready to receive more messages
-    NodeDef#{'_store' => [], '_togo' => Count}.
+    NodeDef#{'_togo' => Count}.
 
 %%
 %%
