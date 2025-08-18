@@ -73,9 +73,9 @@ start(NodeDef, WsName) ->
 
 %%
 %%
-handle_event({registered, _WsName, MyPid}, NodeDef) ->
+handle_event({registered, _WsName, _MyPid}, NodeDef) ->
     Tab = ets:new(
-        list_to_atom(pid_to_list(MyPid)),
+        message_store,
         [ordered_set, private, {write_concurrency, true}]
     ),
     NodeDef#{'_current_batch' => Tab};
