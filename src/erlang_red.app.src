@@ -1,6 +1,6 @@
 {application, erlang_red, [
     {description, "Breadboard programming w/ Erlang inspired by Node-RED"},
-    {vsn, "0.2.4"},
+    {vsn, "0.2.5"},
     {registered, [erlang_red_sup]},
     {applications, [
         kernel,
