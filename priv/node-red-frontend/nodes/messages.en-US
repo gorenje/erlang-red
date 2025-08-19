@@ -164,8 +164,11 @@
     "@gregoriusrippenstein/erlang-red-unittest/ut-assert-success": {
         "ut-assert-success": {
             "label": {
+                "count": "Msg Count",
+                "failed": "assert failed",
                 "statusset": "Status Set",
-                "succeed": "assert succeed"
+                "succeed": "assert succeed",
+                "unsupported": "Unsupported"
             },
             "status": {
                 "timeout": "No more time to waiting",

@@ -862,8 +862,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             tosidebar: {value:true},
             console: {value:false},
             tostatus: {value:false},
-            complete: {value:"true", required:true},
-            targetType: {value:"full"},
+            complete: {value:"false", required:true},
+            targetType: {value:undefined},
             statusVal: {value:""},
             statusType: {value:"auto"}
         },
@@ -3757,7 +3757,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                     return true;
                 }
             },
-            checkall: {value:"false", required:true},
+            checkall: {value:"true", required:true},
             repair: {value:false},
             outputs: {value:1}
         },
@@ -13289,6 +13289,13 @@ Failures will still be sent to the debug panel however the node status will rema
       name: {
         value:"",
       },
+      count: {
+        value: 1,
+        required: true,
+        validate: function(v) {
+          return v == "" || parseInt(v) > 0
+        }
+      }
     },
 
     paletteLabel: "Assert True",
@@ -13297,7 +13304,14 @@ Failures will still be sent to the debug panel however the node status will rema
     outputs: 0,
 
     label: function() {
-      return (this.name || this._def.paletteLabel);
+      let label = `${this.name || this._def.paletteLabel}`
+
+      if ( this.count == "") { this.count = 1 }
+
+      if ( this.count > 1  ) {
+        label = `${label}: ${this.count}`
+      }
+      return label;
     },
 
     labelStyle: function() {
@@ -13305,18 +13319,21 @@ Failures will still be sent to the debug panel however the node status will rema
     },
 
     onpaletteadd: function() {
+      if (!this.count || this.count == "") { this.count = 1 }
     },
 
     onpaletteremove: function() {
     },
 
     oneditprepare: function() {
+      if (!this.count || this.count == "")  { this.count = 1 }
     },
 
     oneditcancel: function() {
     },
 
     oneditsave: function() {
+      if (!this.count || this.count == "")  { this.count = 1 }
     },
 
     oneditresize: function(size) {
@@ -13332,6 +13349,11 @@ Failures will still be sent to the debug panel however the node status will rema
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-count" data-i18n="ut-assert-success.label.count"></label>
+    <input type="number" id="node-input-count" data-i18n="[placeholder]ut-assert-success.placeholder.count" style="width: 100px;"></input>
   </div>
 </script>
 <script type="text/html" data-help-name="ut-assert-success">
