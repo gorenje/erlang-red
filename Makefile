@@ -58,7 +58,7 @@ check-testflows:
        grep -v 499288ab4007ac6a | grep -v b8e2ad1371ddb546 | \
        grep -v c562c43e69bcf0af | grep -v f346d45c81f595e5 | \
        grep -v 777bee1d06741240 | grep -v 9d3f5506aa810b22 | \
-       grep -v 05a47f94321ed67e || true
+       grep -v 05a47f94321ed67e | grep -v 9e03cf744fc6f35f || true
 
 ## http://1194online.com/
 tcp-beacon:
