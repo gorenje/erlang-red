@@ -74,6 +74,9 @@ handle_call({being_supervised, _WsName} = Msg, _From, {Module, NodeDef}) ->
     NodeDef2 = Module:handle_event(Msg, NodeDef#{?SetBeingSupervised}),
     {reply, ok, {Module, NodeDef2}};
 handle_call({registered, _WsName, _Pid} = Msg, _From, {Module, NodeDef}) ->
+    %% seed each processes random number generator - used in the JSONata
+    %% $random() call.
+    rand:seed(default),
     NodeDef2 = Module:handle_event(Msg, NodeDef),
     {reply, NodeDef2, {Module, NodeDef2}};
 handle_call(Msg, _From, {Module, NodeDef}) ->
