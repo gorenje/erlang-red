@@ -51,9 +51,15 @@
 %%
 %%
 start(#{<<"timeout">> := Timeout} = NodeDef, WsName) when Timeout =/= <<>> ->
+    %% TODO the simplest implementation of the timeout would be to start
+    %% TODO a timer in the registered event and have the timer send the process
+    %% TODO a regular complete message to empty the buffer.
     ErrMsg = jstr("Timeout ~p", [NodeDef]),
     unsupported(NodeDef, {websocket, WsName}, ErrMsg),
     ered_node:start(NodeDef, ered_node_ignore);
+%%
+%% consider parts attribute on messages
+%%
 start(
     #{
         <<"mode">> := <<"custom">>,
@@ -63,20 +69,36 @@ start(
     } = NodeDef,
     WsName
 ) ->
-    case setup_custom(NodeDef) of
+    case check_property_type(NodeDef) of
         {ok, NodeDef2} ->
-            ered_node:start(
-                NodeDef2#{
-                    '_store' => [],
-                    '_count' => convert_to_int(Count)
-                },
-                ered_node_join_useparts
-            );
+            IntCount = convert_to_int(Count),
+            case IntCount > 0 of
+                true ->
+                    ered_node:start(
+                        NodeDef2#{
+                            '_store' => [],
+                            '_count' => IntCount,
+                            '_togo' => IntCount
+                        },
+                        ered_node_join_useparts
+                    );
+                false ->
+                    ered_node:start(
+                        NodeDef2#{
+                            '_store' => undefiend
+                        },
+                        ered_node_join_useparts_no_count
+                    )
+            end;
         {false, NodeDef2} ->
             ErrMsg = jstr("Node Config ~p", [NodeDef]),
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef2, ered_node_ignore)
     end;
+%%
+%% ignore parts attribute on messages and check the count value. Count must be
+%% non-negative and non-zero.
+%%
 start(
     #{
         <<"mode">> := <<"custom">>,
@@ -86,18 +108,30 @@ start(
     } = NodeDef,
     WsName
 ) ->
-    case setup_custom(NodeDef) of
+    case check_property_type(NodeDef) of
         {ok, NodeDef2} ->
             %% _store is defined by the registered event because we use
             %% an ETS table per process not per module.
-            ered_node:start(
-                NodeDef2#{
-                    '_store' => undefined,
-                    '_count' => convert_to_int(Count),
-                    '_togo' => convert_to_int(Count)
-                },
-                ?MODULE
-            );
+            IntCount = convert_to_int(Count),
+            case IntCount > 0 of
+                true ->
+                    ered_node:start(
+                        NodeDef2#{
+                            '_store' => undefined,
+                            '_count' => IntCount,
+                            '_togo' => IntCount
+                        },
+                        ?MODULE
+                    );
+                false ->
+                    ered_node:start(
+                        NodeDef2#{
+                            '_store' => undefined,
+                            '_counter' => 0
+                        },
+                        ered_node_join_no_count
+                    )
+            end;
         {false, NodeDef2} ->
             ErrMsg = jstr("Node Config ~p", [NodeDef]),
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
@@ -131,11 +165,11 @@ start(NodeDef, WsName) ->
 %%
 %%
 handle_event({registered, _WsName, _MyPid}, NodeDef) ->
-    Tab = ets:new(
+    Store = ets:new(
         message_store,
         [ordered_set, private, {write_concurrency, true}]
     ),
-    NodeDef#{'_store' => Tab};
+    NodeDef#{'_store' => Store};
 handle_event(_, NodeDef) ->
     NodeDef.
 
@@ -242,12 +276,12 @@ convert_to_int(Val) ->
 
 %%
 %%
-setup_custom(
+check_property_type(
     #{<<"propertyType">> := PropType, <<"useparts">> := UseParts} = NodeDef
 ) when
     (PropType =:= <<"full">> orelse PropType =:= <<"msg">>) andalso
         (UseParts =:= true orelse UseParts =:= false)
 ->
     {ok, NodeDef};
-setup_custom(NodeDef) ->
+check_property_type(NodeDef) ->
     {false, NodeDef}.
