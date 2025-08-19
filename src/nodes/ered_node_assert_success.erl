@@ -54,7 +54,7 @@ handle_event(
                 NodeDef,
                 io_lib:format(
                     "Assert Error: Msg Count not matched [~p](~p) ~b != ~b\n",
-                    [TypeStr, IdStr, MsgCount, ExpMsgCountInt]
+                    [TypeStr, IdStr, ExpMsgCountInt, MsgCount]
                 )
             ),
 
