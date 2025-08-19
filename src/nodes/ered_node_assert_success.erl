@@ -16,15 +16,17 @@
 %%
 
 -import(ered_nodes, [
-    %% Needed for ?BASE_DATA
     get_prop_value_from_map/2,
-    %% Needed for ?BASE_DATA
     get_prop_value_from_map/3,
+    jstr/2,
     this_should_not_happen/2
 ]).
 -import(ered_nodered_comm, [
     debug/3,
     node_status/5
+]).
+-import(ered_messages, [
+    convert_to_integer/1
 ]).
 
 %%
@@ -34,26 +36,76 @@ start(NodeDef, _WsName) ->
 
 %%
 %%
-%% erlfmt:ignore equals and arrows should line up here.
 handle_event(
-  {stop, WsName},
-  #{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef
+    {stop, WsName},
+    #{
+        <<"id">> := IdStr,
+        <<"type">> := TypeStr,
+        <<"count">> := ExpMsgCount,
+        '_mc_incoming' := MsgCount
+    } = NodeDef
 ) ->
-    case maps:find('_mc_incoming',NodeDef) of
-        {ok,0} ->
+    ExpMsgCountInt = convert_to_integer(ExpMsgCount),
+    case ExpMsgCountInt of
+        MsgCount ->
+            ?NodeStatus("assert succeed", "green", "ring");
+        _ ->
             this_should_not_happen(
-              NodeDef,
-              io_lib:format("Assert Error: Node was not reached [~p](~p)\n",
-                            [TypeStr,IdStr])
+                NodeDef,
+                io_lib:format(
+                    "Assert Error: Msg Count not matched [~p](~p) ~b != ~b\n",
+                    [TypeStr, IdStr, MsgCount, ExpMsgCountInt]
+                )
             ),
 
             D = ?BASE_DATA,
 
             Data = D#{
-               <<"_alias">> => IdStr,
-               <<"topic">>  => <<"">>,
-               <<"msg">>    => <<"Assert Success Not Reached">>,
-               <<"format">> => <<"string">>
+                <<"_alias">> => IdStr,
+                <<"topic">> => <<"">>,
+                <<"format">> => <<"string">>,
+                <<"msg">> => jstr(
+                    "Assert Success Msg Count Not Matched ~p != ~p",
+                    [ExpMsgCountInt, MsgCount]
+                )
+            },
+
+            debug(WsName, Data, error),
+            ?NodeStatus(
+                jstr(
+                    "assert failed: mc ~p != ~p",
+                    [ExpMsgCountInt, MsgCount]
+                ),
+                "red",
+                "dot"
+            )
+    end,
+    NodeDef;
+handle_event(
+    {stop, WsName},
+    #{
+        <<"id">> := IdStr,
+        <<"type">> := TypeStr,
+        '_mc_incoming' := MsgCount
+    } = NodeDef
+) ->
+    case MsgCount of
+        0 ->
+            this_should_not_happen(
+                NodeDef,
+                io_lib:format(
+                    "Assert Error: Node was not reached [~p](~p)\n",
+                    [TypeStr, IdStr]
+                )
+            ),
+
+            D = ?BASE_DATA,
+
+            Data = D#{
+                <<"_alias">> => IdStr,
+                <<"topic">> => <<"">>,
+                <<"msg">> => <<"Assert Success Not Reached">>,
+                <<"format">> => <<"string">>
             },
 
             debug(WsName, Data, error),
@@ -62,7 +114,6 @@ handle_event(
             ?NodeStatus("assert succeed", "green", "ring")
     end,
     NodeDef;
-
 handle_event(_, NodeDef) ->
     NodeDef.
 
