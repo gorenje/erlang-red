@@ -76,9 +76,8 @@ start(
                 true ->
                     ered_node:start(
                         NodeDef2#{
-                            '_store' => [],
-                            '_count' => IntCount,
-                            '_togo' => IntCount
+                            '_store' => undefined,
+                            '_count' => IntCount
                         },
                         ered_node_join_useparts
                     );

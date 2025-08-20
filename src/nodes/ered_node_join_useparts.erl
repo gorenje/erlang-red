@@ -16,10 +16,8 @@
 %% Because this is a node configuration that can not be altered by a message,
 %% it is safe to switch modules on flow start time.
 %%
-%% The main difference between the two implementations is the handling
-%% of a message with complete set to true - this node decides which messages
-%% to send based on the messages parts ids. A complete with a parts.id set
-%% will only complete the corresponding message with the same parts.id.
+%% This is the basic the same as the ered_node_join_useparts_no_count but with
+%% a non-negative count value that overrides the parts attribute on a message.
 %%
 
 -import(ered_nodes, [
@@ -43,55 +41,69 @@ start(_, _) ->
 
 %%
 %%
+handle_event({registered, _WsName, _MyPid}, NodeDef) ->
+    Store = ets:new(
+        message_store,
+        [duplicate_bag, private, {write_concurrency, false}]
+    ),
+    NodeDef#{'_store' => Store};
 handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
 %%
-handle_msg(
-    {incoming, #{<<"complete">> := true} = Msg},
-    NodeDef
-) ->
-    handle_complete_msg(Msg, NodeDef);
-%%
+%% --- complete = true messages
 handle_msg(
     {incoming,
         #{
-            <<"parts">> := #{<<"count">> := PartsCount}
+            <<"complete">> := true,
+            <<"parts">> := #{
+                <<"id">> := IdStr
+            }
         } = Msg},
     #{
-        '_store' := Store,
-        '_count' := Count
-    } = NodeDef
-) when Count =< 0 ->
-    %% No count set, but using parts - so we have to check whether all parts
-    %% have arrived, if so then send out the parts/messages. If not, it's
-    %% back to the daily grind.
-    NodeDef2 = have_all_parts_arrived(
-        NodeDef,
-        Store ++ [Msg],
-        convert_to_int(PartsCount)
-    ),
-    {handled, NodeDef2, dont_send_complete_msg};
+      '_store' := Store
+     } = NodeDef
+) ->
+    true = ets:insert(Store, {IdStr, term_to_binary(Msg)}),
+    NodeDef2 = have_all_parts_arrived(NodeDef, Msg, IdStr, true),
+    check_store_size_against_count(NodeDef2, Msg);
 handle_msg(
-    {incoming, Msg},
-    #{
-        '_store' := Store,
-        '_count' := Count
-    } = NodeDef
-) when Count > 0, length(Store) =:= (Count - 1) ->
-    %% This message completes the store.
-    NodeDef2 = send_out_collected_messages(NodeDef, Store ++ [Msg]),
-    {handled, NodeDef2, dont_send_complete_msg};
+    {incoming,
+        #{
+            <<"complete">> := true
+        } = Msg},
+    #{'_store' := Store} = NodeDef
+) ->
+    true = ets:insert(Store, {<<>>, term_to_binary(Msg)}),
+    NodeDef2 = have_all_parts_arrived(NodeDef, Msg, all, true),
+    check_store_size_against_count(NodeDef2, Msg);
 %%
-%% If we make it here, then just store the message and move on.
+%% --- messages without complete but parts attribute
+handle_msg(
+    {incoming,
+        #{
+            <<"parts">> := #{
+                <<"id">> := PartsId
+            }
+        } = Msg},
+    #{
+        '_store' := Store
+    } = NodeDef
+) ->
+    true = ets:insert(Store, {PartsId, term_to_binary(Msg)}),
+    check_store_size_against_count(NodeDef, Msg);
+%%
+%% If we make it here, then just store the message and move on. There
+%% is no parts and no complete on the message.
 handle_msg(
     {incoming, Msg},
     #{
         '_store' := Store
     } = NodeDef
 ) ->
-    {handled, NodeDef#{'_store' => Store ++ [Msg]}, dont_send_complete_msg};
+    true = ets:insert(Store, {<<>>, term_to_binary(Msg)}),
+    check_store_size_against_count(NodeDef, Msg);
 %%
 %%
 handle_msg(_, NodeDef) ->
@@ -103,69 +115,76 @@ handle_msg(_, NodeDef) ->
 
 %%
 %%
-handle_complete_msg(
-    #{
-        <<"parts">> := #{<<"id">> := IdStr}
-    } = Msg,
-    #{
-        '_store' := Store
-    } = NodeDef
+check_store_size_against_count(
+  #{
+     '_store' := Store,
+     '_count' := Count
+   } = NodeDef,
+  Msg
 ) ->
-    {WithId, WithoutId} = divide_and_conquer(IdStr, Store ++ [Msg]),
+    {size, Size} = lists:keyfind(size, 1, ets:info(Store)),
+    check_store_size_against_count(Size, Count, Store, NodeDef, Msg).
 
-    send_out_collected_messages(NodeDef, WithId),
+check_store_size_against_count(Count, Count, Store, NodeDef, Msg) ->
+    %% There are now Count messages in the Store, pop them off and
+    %% send them out!
+    Batch = ets:foldl(
+              fun({_, M}, Acc) -> [binary_to_term(M) | Acc] end,
+              [],
+              Store
+    ),
+    ets:delete_all_objects(Store),
+    NodeDef2 = send_out_collected_messages(NodeDef, Msg, Batch),
+    {handled, NodeDef2, dont_send_complete_msg};
 
-    {handled, NodeDef#{'_store' => WithoutId}, dont_send_complete_msg};
-handle_complete_msg(
-    Msg,
-    #{
-        '_store' := Store,
-        '_count' := Count
-    } = NodeDef
-) when Count =< 0 ->
-    {WithId, WithoutId} = divide_and_conquer_no_idstr(Store ++ [Msg]),
-
-    send_out_collected_messages(NodeDef, WithoutId),
-
-    {handled, NodeDef#{'_store' => WithId}, dont_send_complete_msg};
-handle_complete_msg(
-    Msg,
-    #{
-        '_store' := Store,
-        '_count' := Count
-    } = NodeDef
-) when Count > 0 ->
-    NodeDef2 = send_out_collected_messages(NodeDef, Store ++ [Msg]),
-    {handled, NodeDef2, dont_send_complete_msg}.
+check_store_size_against_count(_Size, _Count, _Store, NodeDef, _Msg) ->
+    {handled, NodeDef, dont_send_complete_msg}.
 
 %%
 %%
 have_all_parts_arrived(
-    NodeDef, AllMsgs, Count
-) when length(AllMsgs) =:= Count ->
-    send_out_collected_messages(NodeDef, AllMsgs);
-have_all_parts_arrived(NodeDef, AllMsgs, _Count) ->
-    NodeDef#{'_store' => AllMsgs}.
+    #{'_store' := Store} = NodeDef, Msg, all, true
+) ->
+    %% Send out all buffered messages, regardless of parts id or message id
+    {handled, NodeDef2, _} =
+        check_store_size_against_count(1, 1, Store, NodeDef, Msg),
+    NodeDef2;
+
+have_all_parts_arrived(
+    #{'_store' := Store} = NodeDef, Msg, PartsId, true
+) ->
+    AllMsgs = lists:foldl(
+        fun({_, M}, Acc) -> [binary_to_term(M) | Acc] end,
+        [],
+        ets:select(Store, [{{PartsId, '_'}, [], ['$_']}])
+    ),
+
+    ets:select_delete(Store, [{{PartsId, '_'}, [], [true]}]),
+
+    send_out_collected_messages(NodeDef, Msg, lists:reverse(AllMsgs));
+have_all_parts_arrived(NodeDef, _, _, _) ->
+    NodeDef.
 
 %%
 %%
 send_out_collected_messages(
     #{<<"propertyType">> := <<"full">>} = NodeDef,
+    Msg,
     Store
 ) ->
-    send_out_collected_messages(NodeDef, Store, Store);
+    send_out_collected_messages(NodeDef, Msg, Store, Store);
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
+    Msg,
     Store
 ) ->
-    Lst2 = [retrieve_prop_value(PropName, Msg) || Msg <- Store],
-    send_out_collected_messages(NodeDef, Store, Lst2).
+    Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
+    send_out_collected_messages(NodeDef, Msg, Store, Lst2).
 
 %%
-send_out_collected_messages(NodeDef, AllMsgs, PayloadForNodes) ->
+send_out_collected_messages(NodeDef, Msg, AllMsgs, PayloadForNodes) ->
     %% retrieve the latest message and use that as a basis for sending out
     %% these messages - TODO perhaps this is wrong but will do for now.
-    [Msg | _] = AllMsgs,
     send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
 
     %% now that we are ready to send out our message, we are completed
@@ -176,61 +195,4 @@ send_out_collected_messages(NodeDef, AllMsgs, PayloadForNodes) ->
     [post_completed(NodeDef, M) || M <- AllMsgs],
 
     %% reset the store, ready to receive more messages
-    NodeDef#{'_store' => []}.
-
-%%
-%%
-convert_to_int(Val) when is_integer(Val) ->
-    Val;
-convert_to_int(Val) when is_float(Val) ->
-    erlang:element(1, string:to_integer(io_lib:format("~p", [Val])));
-convert_to_int(Val) ->
-    case string:to_float(Val) of
-        {error, _} ->
-            case string:to_integer(Val) of
-                {error, _} ->
-                    -1;
-                {V, _} ->
-                    V
-            end;
-        {V, _} ->
-            %% V is now a float and the guard 'is_float' will catch it now
-            convert_to_int(V)
-    end.
-
-%%
-%%
-divide_and_conquer(IdStr, Store) ->
-    divide_and_conquer(IdStr, Store, [], []).
-
-divide_and_conquer(_IdStr, [], AccWithId, AccNotId) ->
-    {AccWithId, AccNotId};
-divide_and_conquer(
-    IdStr,
-    [#{<<"parts">> := #{<<"id">> := IdStr}} = Msg | Rest],
-    AccWithId,
-    AccNotId
-) ->
-    divide_and_conquer(IdStr, Rest, AccWithId ++ [Msg], AccNotId);
-divide_and_conquer(IdStr, [Msg | Rest], AccWithId, AccNotId) ->
-    divide_and_conquer(IdStr, Rest, AccWithId, AccNotId ++ [Msg]).
-
-%%
-%%
-divide_and_conquer_no_idstr(Store) ->
-    divide_and_conquer_no_idstr(Store, [], []).
-
-divide_and_conquer_no_idstr([], AccWithId, AccWithoutId) ->
-    {AccWithId, AccWithoutId};
-divide_and_conquer_no_idstr(
-    [#{<<"parts">> := #{<<"id">> := _IdStr}} = Msg | Rest],
-    AccWithId,
-    AccWithoutId
-) ->
-    divide_and_conquer_no_idstr(Rest, AccWithId ++ [Msg], AccWithoutId);
-divide_and_conquer_no_idstr(
-    [Msg | Rest],
-    AccWithId,
-    AccWithoutId
-) ->
-    divide_and_conquer_no_idstr(Rest, AccWithId, AccWithoutId ++ [Msg]).
+    NodeDef.
