@@ -143,8 +143,16 @@ obtain_operator_value(<<"str">>, OpVal, _Msg) ->
     {ok, OpVal};
 obtain_operator_value(<<"bool">>, OpVal, _Msg) ->
     {ok, OpVal};
-obtain_operator_value(OpType, _OpVal, _Msg) ->
-    {unsupported, jstr("unsupported operator type: ~p", [OpType])}.
+obtain_operator_value(<<"msg">>, OpVal, Msg) ->
+    case get_prop({ok, OpVal}, Msg) of
+        {ok, Val, _} ->
+            {ok, Val};
+        _ ->
+            {error, jstr("value not found on msg: ~p", [OpVal])}
+    end;
+obtain_operator_value(OpType, OpVal, _Msg) ->
+    {unsupported, jstr("unsupported operator type: ~p --> V: ~p",
+                       [OpType, OpVal])}.
 
 %%
 %%
