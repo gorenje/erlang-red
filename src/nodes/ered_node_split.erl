@@ -53,14 +53,15 @@
 ]).
 
 -import(ered_messages, [
+    convert_to_integer/1,
     get_prop/2,
     retrieve_prop_value/2
 ]).
 
 %%
 %%
-start(NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ?MODULE).
+start(#{<<"arraySplt">> := V} = NodeDef, _WsName) ->
+    ered_node:start(NodeDef#{<<"arraySplt">> => convert_to_integer(V)}, ?MODULE).
 
 %%
 %%
@@ -87,20 +88,62 @@ handle_msg(_, NodeDef) ->
 %%
 %% ------------------- Helpers
 %%
+%% this can either be "string" or ["string","string","string"], i.e,
+%% a string or an array. Turns out to be a rather difficult thing to
+%% distinguish between the two. So for now make the assumption that
+%% any list is an array.
+%% TODO: distinguish between string (which is a list) and an array
+%% TODO: which is also a list in Erlang.
 route_and_handle_val(Val, NodeDef, Msg) when is_atom(Val) ->
     unsupported(NodeDef, Msg, "splitting the atom");
 route_and_handle_val(Val, NodeDef, Msg) when is_binary(Val) ->
     %% binary isn't the same as a NodeJS buffer - this is also something that
     %% needs revisiting.
     unsupported(NodeDef, Msg, "split operation");
-route_and_handle_val(Val, NodeDef, Msg) when is_list(Val) ->
-    %% this can either be "string" or ["string","string","string"], i.e,
-    %% a string or an array. Turns out to be a rather difficult thing to
-    %% distinguish between the two. So for now make the assumption that
-    %% any list is an array.
-    %% TODO: distinguish between string (which is a list) and an array
-    %% TODO: which is also a list in Erlang.
+route_and_handle_val(
+  Val,
+  #{
+    <<"arraySpltType">> := <<"len">>,
+    <<"arraySplt">> := 0,
+    <<"splt">> := SearchPattern
+   } = NodeDef,
+  Msg
+) when is_list(Val) ->
+    %% split string by character string
+    NewLst =
+        case SearchPattern of
+            <<"\\n">> ->
+                string:split(Val, "\n", all);
+            _ ->
+                string:split(Val, binary_to_list(SearchPattern), all)
+        end,
+
+    split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
+route_and_handle_val(
+  Val,
+  #{
+    <<"arraySpltType">> := <<"len">>,
+    <<"arraySplt">> := 1
+   } = NodeDef,
+  Msg
+) when is_list(Val) ->
+    %% split by fixed length
     split_array(Val, 0, erlang:length(Val), generate_id(), NodeDef, Msg);
+route_and_handle_val(
+  Val,
+  #{
+    <<"arraySpltType">> := <<"len">>,
+    <<"arraySplt">> := Length
+   } = NodeDef,
+  Msg
+) when is_list(Val) ->
+    %% split by fixed length
+    IntLength = convert_to_integer(Length),
+    NewLst = lists:foldr(fun(E, []) -> [[E]];
+                 (E, [H|RAcc]) when length(H) < IntLength -> [[E|H]|RAcc] ;
+                 (E, [H|RAcc]) -> [[E],[H]|RAcc]
+              end, [], Val),
+    split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
 route_and_handle_val(Val, NodeDef, Msg) ->
     unsupported(NodeDef, Msg, jstr("value type ~p", [Val])).
 
