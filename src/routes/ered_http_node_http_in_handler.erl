@@ -141,7 +141,11 @@ info({reply, StatusCode, Headers, WsName, Body}, Req, State) ->
         atom_to_list(WsName),
         Req
     ),
-    cowboy_req:reply(StatusCode, Headers, Body, Req2),
+
+    cowboy_req:reply(StatusCode, Headers#{
+        <<"x-powered-by">> => <<"Erlang-Red, github.com/gorenje/erlang-red">>
+    }, Body, Req2),
+
     {stop, Req2, State};
 info(_Msg, Req, State) ->
     {ok, Req, State, hibernate}.
