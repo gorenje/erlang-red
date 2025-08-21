@@ -46,7 +46,7 @@ handle_event(
         '_mc_incoming' := MsgCount
     } = NodeDef
 ) when MsgCount > 0 ->
-    ?NodeStatus("assert succeed", "green", "ring");
+    ?NodeStatus(jstr("assert succeed: mc ~b",[MsgCount]), "green", "ring");
 %%
 handle_event(
     {stop, WsName},
