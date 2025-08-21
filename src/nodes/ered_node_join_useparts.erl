@@ -62,8 +62,8 @@ handle_msg(
             }
         } = Msg},
     #{
-      '_store' := Store
-     } = NodeDef
+        '_store' := Store
+    } = NodeDef
 ) ->
     true = ets:insert(Store, {IdStr, term_to_binary(Msg)}),
     NodeDef2 = have_all_parts_arrived(NodeDef, Msg, IdStr, true),
@@ -116,11 +116,11 @@ handle_msg(_, NodeDef) ->
 %%
 %%
 check_store_size_against_count(
-  #{
-     '_store' := Store,
-     '_count' := Count
-   } = NodeDef,
-  Msg
+    #{
+        '_store' := Store,
+        '_count' := Count
+    } = NodeDef,
+    Msg
 ) ->
     {size, Size} = lists:keyfind(size, 1, ets:info(Store)),
     check_store_size_against_count(Size, Count, Store, NodeDef, Msg).
@@ -129,14 +129,13 @@ check_store_size_against_count(Count, Count, Store, NodeDef, Msg) ->
     %% There are now Count messages in the Store, pop them off and
     %% send them out!
     Batch = ets:foldl(
-              fun({_, M}, Acc) -> [binary_to_term(M) | Acc] end,
-              [],
-              Store
+        fun({_, M}, Acc) -> [binary_to_term(M) | Acc] end,
+        [],
+        Store
     ),
     ets:delete_all_objects(Store),
     NodeDef2 = send_out_collected_messages(NodeDef, Msg, Batch),
     {handled, NodeDef2, dont_send_complete_msg};
-
 check_store_size_against_count(_Size, _Count, _Store, NodeDef, _Msg) ->
     {handled, NodeDef, dont_send_complete_msg}.
 
@@ -149,7 +148,6 @@ have_all_parts_arrived(
     {handled, NodeDef2, _} =
         check_store_size_against_count(1, 1, Store, NodeDef, Msg),
     NodeDef2;
-
 have_all_parts_arrived(
     #{'_store' := Store} = NodeDef, Msg, PartsId, true
 ) ->

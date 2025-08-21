@@ -151,8 +151,11 @@ obtain_operator_value(<<"msg">>, OpVal, Msg) ->
             {error, jstr("value not found on msg: ~p", [OpVal])}
     end;
 obtain_operator_value(OpType, OpVal, _Msg) ->
-    {unsupported, jstr("unsupported operator type: ~p --> V: ~p",
-                       [OpType, OpVal])}.
+    {unsupported,
+        jstr(
+            "unsupported operator type: ~p --> V: ~p",
+            [OpType, OpVal]
+        )}.
 
 %%
 %%
