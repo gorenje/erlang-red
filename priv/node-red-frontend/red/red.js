@@ -1320,6 +1320,8 @@ var RED = (function() {
             }
         });
 
+
+
         // the following works but then the MonacoAceTokenizer stops working,
         // i.e. only the comments are highlighted
         /*
@@ -1333,6 +1335,11 @@ var RED = (function() {
 
 
         loadPluginList();
+
+        setTimeout( () => {
+            /* deploy and loaded test or flow to the server */
+            RED.actions.invoke("core:deploy-flows")
+        },1500);
     }
 
 
