@@ -61,7 +61,9 @@
 %%
 %%
 start(#{<<"arraySplt">> := V} = NodeDef, _WsName) ->
-    ered_node:start(NodeDef#{<<"arraySplt">> => convert_to_integer(V)}, ?MODULE).
+    ered_node:start(
+        NodeDef#{<<"arraySplt">> => convert_to_integer(V)}, ?MODULE
+    ).
 
 %%
 %%
@@ -96,20 +98,50 @@ handle_msg(_, NodeDef) ->
 %% TODO: which is also a list in Erlang.
 route_and_handle_val(Val, NodeDef, Msg) when is_atom(Val) ->
     unsupported(NodeDef, Msg, "splitting the atom");
-route_and_handle_val(Val, NodeDef, Msg) when is_binary(Val) ->
+%%
+%% Binary splitting by fixed length.
+%%
+route_and_handle_val(
+    Val,
+    #{
+        <<"arraySpltType">> := <<"len">>,
+        <<"arraySplt">> := 0
+    } = NodeDef,
+    Msg
+) when is_binary(Val) ->
     %% binary isn't the same as a NodeJS buffer - this is also something that
     %% needs revisiting.
-    unsupported(NodeDef, Msg, "split operation");
+    unsupported(NodeDef, Msg, "binary split operation");
 route_and_handle_val(
-  Val,
-  #{
-    <<"arraySpltType">> := <<"len">>,
-    <<"arraySplt">> := 0,
-    <<"splt">> := SearchPattern
-   } = NodeDef,
-  Msg
+    Val,
+    #{
+        <<"arraySpltType">> := <<"len">>,
+        <<"arraySplt">> := Length
+    } = NodeDef,
+    Msg
+) when is_binary(Val), Length > 0 ->
+    %% binary isn't the same as a NodeJS buffer - this is also something that
+    %% needs revisiting.
+    MatchIngFunc = fun
+        (<<Packet:Length/bytes, Rest/bits>>) -> {Packet, Rest};
+        (<<Rest/bits>>) -> {Rest, <<>>}
+    end,
+    NewLst = split_binary_into_list(MatchIngFunc, Val),
+    split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
+%%
+%% List values
+%%
+route_and_handle_val(
+    Val,
+    #{
+        <<"arraySpltType">> := <<"len">>,
+        <<"arraySplt">> := 0,
+        <<"splt">> := SearchPattern
+    } = NodeDef,
+    Msg
 ) when is_list(Val) ->
-    %% split string by character string
+    %% If arraySplt is zero, then we assume this is a string-based split on
+    %% splt pattern
     NewLst =
         case SearchPattern of
             <<"\\n">> ->
@@ -119,31 +151,41 @@ route_and_handle_val(
         end,
 
     split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
+%%
 route_and_handle_val(
-  Val,
-  #{
-    <<"arraySpltType">> := <<"len">>,
-    <<"arraySplt">> := 1
-   } = NodeDef,
-  Msg
+    Val,
+    #{
+        <<"arraySpltType">> := <<"len">>,
+        <<"arraySplt">> := 1
+    } = NodeDef,
+    Msg
 ) when is_list(Val) ->
-    %% split by fixed length
+    %% if arraySplt is one, then just split the array as is
     split_array(Val, 0, erlang:length(Val), generate_id(), NodeDef, Msg);
+%%
 route_and_handle_val(
-  Val,
-  #{
-    <<"arraySpltType">> := <<"len">>,
-    <<"arraySplt">> := Length
-   } = NodeDef,
-  Msg
+    Val,
+    #{
+        <<"arraySpltType">> := <<"len">>,
+        <<"arraySplt">> := Length
+    } = NodeDef,
+    Msg
 ) when is_list(Val) ->
     %% split by fixed length
     IntLength = convert_to_integer(Length),
-    NewLst = lists:foldr(fun(E, []) -> [[E]];
-                 (E, [H|RAcc]) when length(H) < IntLength -> [[E|H]|RAcc] ;
-                 (E, [H|RAcc]) -> [[E],[H]|RAcc]
-              end, [], Val),
+    NewLst = lists:foldr(
+        fun
+            (E, []) -> [[E]];
+            (E, [H | RAcc]) when length(H) < IntLength -> [[E | H] | RAcc];
+            (E, [H | RAcc]) -> [[E], [H] | RAcc]
+        end,
+        [],
+        Val
+    ),
     split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
+%%
+%% everything else is unsupported. Thank you for caring.
+%%
 route_and_handle_val(Val, NodeDef, Msg) ->
     unsupported(NodeDef, Msg, jstr("value type ~p", [Val])).
 
@@ -184,3 +226,16 @@ generate_array_part(Cnt,TotalCnt, PartsId) ->
       <<"count">> => TotalCnt,
       <<"index">> => Cnt
      }.
+
+%%
+%%
+split_binary_into_list(_MatchFunc, <<>>) ->
+    [];
+split_binary_into_list(MatchFunc, Binary) ->
+    split_binary_into_list(MatchFunc, Binary, []).
+%%
+split_binary_into_list(_MatchFunc, <<>>, Acc) ->
+    lists:reverse(Acc);
+split_binary_into_list(MatchFunc, Binary, Acc) ->
+    {Packet, Rest} = MatchFunc(Binary),
+    split_binary_into_list(MatchFunc, Rest, [Packet | Acc]).
