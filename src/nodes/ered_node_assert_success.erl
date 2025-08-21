@@ -31,10 +31,38 @@
 
 %%
 %%
+start(#{<<"count">> := C} = NodeDef, _WsName) ->
+    ered_node:start(NodeDef#{<<"count">> => convert_to_integer(C)}, ?MODULE);
 start(NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ?MODULE).
+    ered_node:start(NodeDef#{<<"count">> => 1}, ?MODULE).
 
 %%
+%% Test has completed, msg count expected was zero
+%%
+handle_event(
+    {stop, WsName},
+    #{
+        <<"count">> := 0,
+        '_mc_incoming' := MsgCount
+    } = NodeDef
+) when MsgCount > 0 ->
+    ?NodeStatus("assert succeed", "green", "ring");
+%%
+handle_event(
+    {stop, WsName},
+    #{
+        <<"count">> := 0
+    } = NodeDef
+) ->
+    this_should_not_happen(
+      NodeDef,
+      io_lib:format(
+        "Assert Error: No message received when at least one was required", []
+       )
+     ),
+    ?NodeStatus("assert failed", "red", "dot");
+%%
+%% Expected message count > 0
 %%
 handle_event(
     {stop, WsName},
@@ -44,9 +72,8 @@ handle_event(
         <<"count">> := ExpMsgCount,
         '_mc_incoming' := MsgCount
     } = NodeDef
-) ->
-    ExpMsgCountInt = convert_to_integer(ExpMsgCount),
-    case ExpMsgCountInt of
+) when ExpMsgCount > 0 ->
+    case ExpMsgCount of
         MsgCount ->
             ?NodeStatus("assert succeed", "green", "ring");
         _ ->
@@ -54,7 +81,7 @@ handle_event(
                 NodeDef,
                 io_lib:format(
                     "Assert Error: Msg Count not matched [~p](~p) ~b != ~b\n",
-                    [TypeStr, IdStr, ExpMsgCountInt, MsgCount]
+                    [TypeStr, IdStr, ExpMsgCount, MsgCount]
                 )
             ),
 
@@ -66,7 +93,7 @@ handle_event(
                 <<"format">> => <<"string">>,
                 <<"msg">> => jstr(
                     "Assert Success Msg Count Not Matched ~p != ~p",
-                    [ExpMsgCountInt, MsgCount]
+                    [ExpMsgCount, MsgCount]
                 )
             },
 
@@ -74,46 +101,30 @@ handle_event(
             ?NodeStatus(
                 jstr(
                     "assert failed: mc ~p != ~p",
-                    [ExpMsgCountInt, MsgCount]
+                    [ExpMsgCount, MsgCount]
                 ),
                 "red",
                 "dot"
             )
     end,
     NodeDef;
+
+%%
+%% What? How did we get here! Unhandled stop event.
+%%
 handle_event(
     {stop, WsName},
-    #{
-        <<"id">> := IdStr,
-        <<"type">> := TypeStr,
-        '_mc_incoming' := MsgCount
-    } = NodeDef
+    NodeDef
 ) ->
-    case MsgCount of
-        0 ->
-            this_should_not_happen(
-                NodeDef,
-                io_lib:format(
-                    "Assert Error: Node was not reached [~p](~p)\n",
-                    [TypeStr, IdStr]
-                )
-            ),
+    this_should_not_happen(
+      NodeDef,
+      io_lib:format(
+        "Assert Error: failed",
+        []
+       )
+     ),
+    ?NodeStatus("assert failed", "red", "dot");
 
-            D = ?BASE_DATA,
-
-            Data = D#{
-                <<"_alias">> => IdStr,
-                <<"topic">> => <<"">>,
-                <<"msg">> => <<"Assert Success Not Reached">>,
-                <<"format">> => <<"string">>
-            },
-
-            debug(WsName, Data, error),
-            ?NodeStatus("assert failed", "red", "dot");
-        _ ->
-            ?NodeStatus("assert succeed", "green", "ring")
-    end,
-    NodeDef;
 handle_event(_, NodeDef) ->
     NodeDef.
 
