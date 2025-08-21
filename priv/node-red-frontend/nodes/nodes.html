@@ -3181,7 +3181,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         category: 'function',
         defaults: {
             name: {value:"_DEFAULT_"},
-            func: {value:"%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    Msg\n%% end.\n"},
+            func: {value:"%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n"},
             outputs: {value:1},
             timeout:{value:RED.settings.functionTimeout || 0},
             noerr: {value:0,required:true,
@@ -13293,7 +13293,7 @@ Failures will still be sent to the debug panel however the node status will rema
         value: 1,
         required: true,
         validate: function(v) {
-          return v == "" || parseInt(v) > 0
+          return v == "" || parseInt(v) > -1
         }
       }
     },
