@@ -12,14 +12,16 @@
 
 push_nodeid_onto_stack([], Stack, _FileName) ->
     Stack;
-push_nodeid_onto_stack([NodeDef | T], Stack, FileName) ->
-    {ok, NodeId} = maps:find(id, NodeDef),
-    case maps:find(NodeId, Stack) of
-        {ok, Val} ->
-            Stack2 = maps:put(NodeId, [FileName | Val], Stack);
-        _ ->
-            Stack2 = maps:put(NodeId, [FileName], Stack)
-    end,
+push_nodeid_onto_stack(
+  [#{<<"id">> := NodeId} = _NodeDef | T], Stack, FileName
+) ->
+    Stack2 =
+        case maps:find(NodeId, Stack) of
+            {ok, Val} ->
+                Stack#{NodeId => [FileName | Val]};
+            _ ->
+                Stack#{NodeId => [FileName]}
+        end,
     push_nodeid_onto_stack(T, Stack2, FileName).
 
 map_of_nodeids([], Map) ->
@@ -32,7 +34,7 @@ map_of_nodeids([FileName | FileNames], Stack) ->
 %%
 %% Any array with two or more entries is a duplicate, so match for arrays
 %% that contain exactly one filename.
-is_duplicate({_, [_ | []]}) ->
+is_duplicate({_, [_SingleFileName | []]}) ->
     false;
 is_duplicate({_, _}) ->
     true.
@@ -45,11 +47,15 @@ duplicates([H | T], Acc) ->
         _ -> duplicates(T, Acc)
     end.
 
+
+%%
+%% Scan each file and collect all IDs. Each ID should only appear in one
+%% filename, if that is not the case, then this test fails.
 ensure_universally_unique_nodeids_test() ->
     {_Cnt, FileNames} = filelib:fold_files(
-        "priv/testflows",
+        code:priv_dir(erlang_red) ++ "/testflows/",
         "",
-        false,
+        true,
         fun(Fname, Acc) ->
             {element(1, Acc) + 1, [Fname | element(2, Acc)]}
         end,
@@ -57,6 +63,8 @@ ensure_universally_unique_nodeids_test() ->
     ),
 
     MapOfNodeIds = map_of_nodeids(FileNames, #{}),
+
+    ?assertNotEqual(#{}, MapOfNodeIds),
 
     List = duplicates(maps:to_list(MapOfNodeIds), []),
 
