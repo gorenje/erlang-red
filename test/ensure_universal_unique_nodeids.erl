@@ -13,7 +13,7 @@
 push_nodeid_onto_stack([], Stack, _FileName) ->
     Stack;
 push_nodeid_onto_stack(
-  [#{<<"id">> := NodeId} = _NodeDef | T], Stack, FileName
+    [#{<<"id">> := NodeId} = _NodeDef | T], Stack, FileName
 ) ->
     Stack2 =
         case maps:find(NodeId, Stack) of
@@ -46,7 +46,6 @@ duplicates([H | T], Acc) ->
         true -> duplicates(T, [H | Acc]);
         _ -> duplicates(T, Acc)
     end.
-
 
 %%
 %% Scan each file and collect all IDs. Each ID should only appear in one
