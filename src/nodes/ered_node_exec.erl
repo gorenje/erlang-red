@@ -73,10 +73,6 @@
     node_status(ws_from(Msg), NodeDef, "Killed", "red", "dot")
 ).
 
-start(#{<<"useSpawn">> := <<"false">>} = NodeDef, WsName) ->
-    ErrMsg = jstr("node config: execMode not supported. ~p", [NodeDef]),
-    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
-    ered_node:start(NodeDef, ered_node_ignore);
 start(NodeDef, _WsName) ->
     ered_node:start(NodeDef#{'_process_list' => []}, ?MODULE).
 
@@ -89,14 +85,13 @@ handle_event(_, NodeDef) ->
 %%
 %%
 handle_msg(
-  {exec_process_died,
-   #{
-     <<"payload">> := #{<<"pid">> := MachPid, <<"code">> := StatusCode}
-    } = Msg
-  },
-  #{
-    '_process_list' := ProcessList
-   } = NodeDef
+    {exec_process_died,
+        #{
+            <<"payload">> := #{<<"pid">> := MachPid, <<"code">> := StatusCode}
+        } = Msg},
+    #{
+        '_process_list' := ProcessList
+    } = NodeDef
 ) ->
     node_status_clear(ws_from(Msg), NodeDef),
 
@@ -154,17 +149,18 @@ start_command_running(<<>>, Msg, NodeDef) ->
     ),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     NodeDef;
-start_command_running(Cmd, Msg, NodeDef) ->
+start_command_running(
+    Cmd,
+    Msg,
     #{
         <<"wires">> := Wires,
         <<"useSpawn">> := UseSpawn,
         <<"append">> := Append,
         <<"addpay">> := AddPayload,
         '_process_list' := ProcessList
-    } = NodeDef,
-
+    } = NodeDef
+) ->
     Opts = #{
-        spawn => to_bool(UseSpawn),
         append => Append,
         timeout => convert_to_num(
             get_prop_value_from_map(<<"timer">>, NodeDef, <<"-1">>)
@@ -188,13 +184,25 @@ start_command_running(Cmd, Msg, NodeDef) ->
                 " " ++ any_to_list(retrieve_prop_value(PropName, Msg))
         end,
 
-    {ok, ExecPid} = ered_exec_manager:start(
-        self(),
-        Wires,
-        any_to_list(Cmd) ++ AddPayloadStr ++ AppendStr,
-        Msg,
-        Opts
-    ),
+    {ok, ExecPid} =
+        case UseSpawn of
+            <<"true">> ->
+                ered_exec_manager_async:start(
+                    self(),
+                    Wires,
+                    any_to_list(Cmd) ++ AddPayloadStr ++ AppendStr,
+                    Msg,
+                    Opts
+                );
+            <<"false">> ->
+                ered_exec_manager_sync:start(
+                    self(),
+                    Wires,
+                    any_to_list(Cmd) ++ AddPayloadStr ++ AppendStr,
+                    Msg,
+                    Opts
+                )
+        end,
 
     MachPid = gen_server:call(ExecPid, run_command),
 
