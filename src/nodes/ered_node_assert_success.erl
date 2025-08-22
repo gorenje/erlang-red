@@ -46,7 +46,7 @@ handle_event(
         '_mc_incoming' := MsgCount
     } = NodeDef
 ) when MsgCount > 0 ->
-    ?NodeStatus(jstr("assert succeed: mc ~b",[MsgCount]), "green", "ring");
+    ?NodeStatus(jstr("assert succeed: mc ~b", [MsgCount]), "green", "ring");
 %%
 handle_event(
     {stop, WsName},
@@ -55,11 +55,12 @@ handle_event(
     } = NodeDef
 ) ->
     this_should_not_happen(
-      NodeDef,
-      io_lib:format(
-        "Assert Error: No message received when at least one was required", []
-       )
-     ),
+        NodeDef,
+        io_lib:format(
+            "Assert Error: No message received when at least one was required",
+            []
+        )
+    ),
     ?NodeStatus("assert failed", "red", "dot");
 %%
 %% Expected message count > 0
@@ -108,7 +109,6 @@ handle_event(
             )
     end,
     NodeDef;
-
 %%
 %% What? How did we get here! Unhandled stop event.
 %%
@@ -117,14 +117,13 @@ handle_event(
     NodeDef
 ) ->
     this_should_not_happen(
-      NodeDef,
-      io_lib:format(
-        "Assert Error: failed",
-        []
-       )
-     ),
+        NodeDef,
+        io_lib:format(
+            "Assert Error: failed",
+            []
+        )
+    ),
     ?NodeStatus("assert failed", "red", "dot");
-
 handle_event(_, NodeDef) ->
     NodeDef.
 

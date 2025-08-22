@@ -169,19 +169,32 @@ terminate(_, _State) ->
 
 %%
 %%
-perform_func_code(NodeDef, Msg, From) ->
+perform_func_code(#{<<"wires">> := Wires} = NodeDef, Msg, From) ->
     case maps:find(<<"func">>, NodeDef) of
         {ok, <<>>} ->
             ?POST_MISSING_CODE(<<"empty function code, doing nothing">>);
         {ok, Code} ->
+            %% TODO allow for context to be stored in the NodeDef hash
+            %% TODO this would allow function nodes to store data between
+            %% TODO messages, node context store.
+            %% TODO However this does not work in the current implementation
+            %% TODO because this execution is done asynchronisely - the NodeDef
+            %% TODO is sent back with the func_completed_with message however
+            %% TODO in the meantime another message has triggered another
+            %% TODO execution. So the context is mixed and inconsistent.
+            %% TODO it would require modifying the function node to wait for
+            %% TODO completion of the function. This is would be a slowdown.
+            %% TODO So leave it as is until a better solution is found.
             NewMsg = execute_sync(
-                io_lib:format("fun(NodeDef,Msg) -> ~n ~s ~n end.", [Code]),
-                NodeDef,
-                Msg
-            ),
+                       io_lib:format(
+                         "fun(NodeDef,Msg) -> ~n ~s ~n end.", [Code]
+                        ),
+                       NodeDef,
+                       Msg
+                      ),
 
             case
-                send_message_on_ports(maps:get(<<"wires">>, NodeDef), NewMsg)
+                send_message_on_ports(Wires, NewMsg)
             of
                 unacceptable_response ->
                     Msg2 = Msg#{failed_content => NewMsg},

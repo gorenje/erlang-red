@@ -3,6 +3,7 @@
 -include("ered_nodes.hrl").
 
 -export([
+    any_to_list/1,
     convert_to_num/1,
     convert_to_integer/1,
     convert_units_to_milliseconds/2,
@@ -311,13 +312,13 @@ map_keys_to_binary(Map) ->
 
 %%
 %%
-key_to_list(V) when is_binary(V) ->
+any_to_list(V) when is_binary(V) ->
     erlang:binary_to_list(V);
-key_to_list(V) when is_atom(V) ->
+any_to_list(V) when is_atom(V) ->
     erlang:atom_to_list(V);
-key_to_list(V) when is_list(V) ->
+any_to_list(V) when is_list(V) ->
     V;
-key_to_list(V) ->
+any_to_list(V) ->
     V.
 
 %%
@@ -325,7 +326,7 @@ key_to_list(V) ->
 map_keys_to_lists(Map) ->
     maps:from_list(
         lists:map(
-            fun({D, E}) -> {key_to_list(D), E} end,
+            fun({D, E}) -> {any_to_list(D), E} end,
             maps:to_list(Map)
         )
     ).

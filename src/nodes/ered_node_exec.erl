@@ -54,6 +54,8 @@
 -import(ered_messages, [
     convert_to_num/1,
     convert_units_to_milliseconds/2,
+    any_to_list/1,
+    retrieve_prop_value/2,
     to_bool/1
 ]).
 
@@ -71,8 +73,12 @@
     node_status(ws_from(Msg), NodeDef, "Killed", "red", "dot")
 ).
 
+start(#{<<"useSpawn">> := <<"false">>} = NodeDef, WsName) ->
+    ErrMsg = jstr("node config: execMode not supported. ~p", [NodeDef]),
+    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+    ered_node:start(NodeDef, ered_node_ignore);
 start(NodeDef, _WsName) ->
-    ered_node:start(maps:put('_process_list', [], NodeDef), ?MODULE).
+    ered_node:start(NodeDef#{'_process_list' => []}, ?MODULE).
 
 %%
 %%
@@ -82,47 +88,46 @@ handle_event(_, NodeDef) ->
 
 %%
 %%
-handle_msg({exec_process_died, Msg}, NodeDef) ->
-    ProcessList = maps:get('_process_list', NodeDef),
-    MachPid = maps:get(<<"pid">>, maps:get(<<"payload">>, Msg)),
-    StatusCode = maps:get(<<"code">>, maps:get(<<"payload">>, Msg)),
-
+handle_msg(
+  {exec_process_died,
+   #{
+     <<"payload">> := #{<<"pid">> := MachPid, <<"code">> := StatusCode}
+    } = Msg
+  },
+  #{
+    '_process_list' := ProcessList
+   } = NodeDef
+) ->
     node_status_clear(ws_from(Msg), NodeDef),
 
     StatusCode > 0 andalso ?STATUSKILLED,
 
     %% trigger a post completed message
     {handled,
-        maps:put(
-            '_process_list',
-            lists:keydelete(MachPid, 1, ProcessList),
-            NodeDef
-        ),
+        NodeDef#{'_process_list' => lists:keydelete(MachPid, 1, ProcessList)},
         Msg};
 handle_msg({incoming, Msg}, NodeDef) ->
     case maps:find(<<"kill">>, Msg) of
         {ok, Signal} ->
             %% kill a command
             %% Signal is something like SIGINT, SIGTERM, ...
+            #{'_process_list' := ProcessList} = NodeDef,
             Tuple =
                 case maps:find(<<"pid">>, Msg) of
                     {ok, MachPid} ->
                         %% this returns false if key is not found.
-                        lists:keyfind(
-                            convert_to_num(MachPid),
-                            1,
-                            maps:get('_process_list', NodeDef)
-                        );
+                        lists:keyfind(convert_to_num(MachPid), 1, ProcessList);
                     _ ->
                         %% If Pid is not specified and there is more than
                         %% one process running, then ignore the kill request.
-                        case maps:get('_process_list', NodeDef) of
+                        case ProcessList of
                             [H | []] ->
                                 H;
                             _ ->
                                 false
                         end
                 end,
+
             case Tuple of
                 false ->
                     {handled, NodeDef, Msg};
@@ -132,22 +137,16 @@ handle_msg({incoming, Msg}, NodeDef) ->
             end;
         _ ->
             %% execute a command
-            case to_bool(maps:get(<<"useSpawn">>, NodeDef)) of
-                true ->
-                    {handled, start_command_running(Msg, NodeDef),
-                        dont_send_complete_msg};
-                false ->
-                    unsupported(NodeDef, Msg, "exec mode"),
-                    {handled, NodeDef, dont_send_complete_msg}
-            end
+            {handled, start_command_running(Msg, NodeDef),
+                dont_send_complete_msg}
     end;
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
 %%
 %%
-start_command_running(Msg, NodeDef) ->
-    start_command_running(maps:get(<<"command">>, NodeDef), Msg, NodeDef).
+start_command_running(Msg, #{<<"command">> := CmdStr} = NodeDef) ->
+    start_command_running(CmdStr, Msg, NodeDef).
 
 start_command_running(<<>>, Msg, NodeDef) ->
     ErrMsg = jstr(
@@ -156,37 +155,49 @@ start_command_running(<<>>, Msg, NodeDef) ->
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     NodeDef;
 start_command_running(Cmd, Msg, NodeDef) ->
-    Wires = maps:get(<<"wires">>, NodeDef),
+    #{
+        <<"wires">> := Wires,
+        <<"useSpawn">> := UseSpawn,
+        <<"append">> := Append,
+        <<"addpay">> := AddPayload,
+        '_process_list' := ProcessList
+    } = NodeDef,
 
     Opts = #{
-        spawn => to_bool(maps:get(<<"useSpawn">>, NodeDef)),
-        append => maps:get(<<"append">>, NodeDef),
+        spawn => to_bool(UseSpawn),
+        append => Append,
         timeout => convert_to_num(
             get_prop_value_from_map(<<"timer">>, NodeDef, <<"-1">>)
         ),
-        addpayload => maps:get(<<"addpay">>, NodeDef)
+        addpayload => AddPayload
     },
 
-    case maps:get(<<"append">>, NodeDef) of
-        <<"">> ->
-            ok;
-        _ ->
-            unsupported(NodeDef, Msg, "append value, will be ignored")
-    end,
+    AppendStr =
+        case Append of
+            <<"">> ->
+                "";
+            _ ->
+                " " ++ binary_to_list(Append)
+        end,
 
-    case maps:get(<<"addpay">>, NodeDef) of
-        <<"">> ->
-            ok;
-        _ ->
-            unsupported(NodeDef, Msg, "add payload value, will be ignored")
-    end,
+    AddPayloadStr =
+        case AddPayload of
+            <<"">> ->
+                "";
+            PropName ->
+                " " ++ any_to_list(retrieve_prop_value(PropName, Msg))
+        end,
 
-    {ok, ExecPid} = ered_exec_manager:start(self(), Wires, Cmd, Msg, Opts),
-
-    ProcessList = maps:get('_process_list', NodeDef),
+    {ok, ExecPid} = ered_exec_manager:start(
+        self(),
+        Wires,
+        any_to_list(Cmd) ++ AddPayloadStr ++ AppendStr,
+        Msg,
+        Opts
+    ),
 
     MachPid = gen_server:call(ExecPid, run_command),
 
     ?PIDSTATUS(integer_to_binary(MachPid)),
 
-    maps:put('_process_list', [{MachPid, ExecPid}] ++ ProcessList, NodeDef).
+    NodeDef#{'_process_list' => [{MachPid, ExecPid}] ++ ProcessList}.
