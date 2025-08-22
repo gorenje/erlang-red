@@ -58,24 +58,25 @@ start(
     } = NodeDef,
     WsName
 ) ->
-    case 'Elixir.Circuits.I2C':open(
+    case
+        'Elixir.Circuits.I2C':open(
             list_to_binary(io_lib:format("i2c-~s", [BusNo]))
-    ) of
+        )
+    of
         {ok, Ref} ->
             ered_node:start(
-              NodeDef#{
-                       '_device' => Ref,
-                       '_cmdbyte' => convert_to_num(Command),
-                       '_address' => convert_to_num(Address),
-                       '_bytecount' => convert_to_num(Count)
-                      },
-              ?MODULE
-             );
+                NodeDef#{
+                    '_device' => Ref,
+                    '_cmdbyte' => convert_to_num(Command),
+                    '_address' => convert_to_num(Address),
+                    '_bytecount' => convert_to_num(Count)
+                },
+                ?MODULE
+            );
         {error, Msg} ->
             post_exception_or_debug(NodeDef, #{?SetWsName}, Msg),
             ered_node:start(NodeDef, ered_node_ignore)
     end;
-
 start(NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "payload type"),
     ered_node:start(NodeDef, ered_node_ignore).

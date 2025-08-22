@@ -142,9 +142,15 @@ info({reply, StatusCode, Headers, WsName, Body}, Req, State) ->
         Req
     ),
 
-    cowboy_req:reply(StatusCode, Headers#{
-        <<"x-powered-by">> => <<"Erlang-Red, github.com/gorenje/erlang-red">>
-    }, Body, Req2),
+    cowboy_req:reply(
+        StatusCode,
+        Headers#{
+            <<"x-powered-by">> =>
+                <<"Erlang-Red, github.com/gorenje/erlang-red">>
+        },
+        Body,
+        Req2
+    ),
 
     {stop, Req2, State};
 info(_Msg, Req, State) ->

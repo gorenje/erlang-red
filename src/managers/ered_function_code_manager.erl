@@ -186,16 +186,14 @@ perform_func_code(#{<<"wires">> := Wires} = NodeDef, Msg, From) ->
             %% TODO completion of the function. This is would be a slowdown.
             %% TODO So leave it as is until a better solution is found.
             NewMsg = execute_sync(
-                       io_lib:format(
-                         "fun(NodeDef,Msg) -> ~n ~s ~n end.", [Code]
-                        ),
-                       NodeDef,
-                       Msg
-                      ),
+                io_lib:format(
+                    "fun(NodeDef,Msg) -> ~n ~s ~n end.", [Code]
+                ),
+                NodeDef,
+                Msg
+            ),
 
-            case
-                send_message_on_ports(Wires, NewMsg)
-            of
+            case send_message_on_ports(Wires, NewMsg) of
                 unacceptable_response ->
                     Msg2 = Msg#{failed_content => NewMsg},
                     post_exception_or_debug(

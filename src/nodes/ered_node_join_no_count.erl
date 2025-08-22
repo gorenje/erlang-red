@@ -41,7 +41,7 @@ start(_, _) ->
 %%
 handle_event({registered, _WsName, _MyPid}, NodeDef) ->
     Store = ets:new(
-        message_store,
+        ered_node_join_store_no_count,
         [ordered_set, private, {write_concurrency, true}]
     ),
     NodeDef#{'_store' => Store};
