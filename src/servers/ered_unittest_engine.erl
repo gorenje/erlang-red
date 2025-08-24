@@ -18,13 +18,13 @@
 %% These aren't exported to be used external, these are "internal" exports.
 -export([
     not_happen_loop/2,
-    run_test_on_another_planet/3
+    run_test_on_another_planet/4
 ]).
 
 %%
 %%
 -import(ered_flows, [
-    compute_timeout/1,
+    compute_timeout/2,
     is_test_case_pending/1,
     parse_flow_file/1,
     should_keep_flow_running/1
@@ -66,6 +66,52 @@ handle_cast(stop, State) ->
 handle_cast(_Msg, Store) ->
     {noreply, Store}.
 
+handle_info({start_test, FlowId, WsName}, State) ->
+    spawn(
+        ?MODULE,
+        run_test_on_another_planet,
+        [FlowId, WsName, false, false]
+    ),
+    {noreply, State};
+handle_info({start_test, FlowId, WsName, IgnPendingFlag}, State) ->
+    spawn(
+        ?MODULE,
+        run_test_on_another_planet,
+        [FlowId, WsName, IgnPendingFlag, false]
+    ),
+    {noreply, State};
+handle_info(
+    {start_test_with_timeout, FlowId, WsName, IgnPendingFlag, Timeout},
+    State
+) ->
+    spawn(
+        ?MODULE,
+        run_test_on_another_planet,
+        [FlowId, WsName, IgnPendingFlag, Timeout]
+    ),
+    {noreply, State};
+handle_info(stop, ErrorStore) ->
+    gen_server:cast(?MODULE, stop),
+    {noreply, ErrorStore};
+handle_info(_Msg, ErrorStore) ->
+    {noreply, ErrorStore}.
+
+code_change(_OldVersion, ErrorStore, _Extra) ->
+    {ok, ErrorStore}.
+
+stop() ->
+    gen_server:cast(?MODULE, stop).
+
+%%
+%%
+terminate(normal, _State) ->
+    ok;
+terminate(Event, _State) ->
+    io:format("Unittest engine terminated with {{{ ~p }}}~n", [Event]),
+    ok.
+
+%%
+%% -------------------- helpers
 %%
 %%
 stop_all_pids([], _) ->
@@ -126,35 +172,9 @@ dump_errors_onto_nodered([{NodeId, Msg} | T], FlowId, WsName) ->
     debug(WsName, debug_string(NodeId, FlowId, Msg), notice),
     dump_errors_onto_nodered(T, FlowId, WsName).
 
-handle_info({start_test, FlowId, WsName}, State) ->
-    spawn(?MODULE, run_test_on_another_planet, [FlowId, WsName, false]),
-    {noreply, State};
-handle_info({start_test, FlowId, WsName, IgnPendingFlag}, State) ->
-    spawn(?MODULE, run_test_on_another_planet, [FlowId, WsName, IgnPendingFlag]),
-    {noreply, State};
-handle_info(stop, ErrorStore) ->
-    gen_server:cast(?MODULE, stop),
-    {noreply, ErrorStore};
-handle_info(_Msg, ErrorStore) ->
-    {noreply, ErrorStore}.
-
-code_change(_OldVersion, ErrorStore, _Extra) ->
-    {ok, ErrorStore}.
-
-stop() ->
-    gen_server:cast(?MODULE, stop).
-
-%%
-%%
-terminate(normal, _State) ->
-    ok;
-terminate(Event, _State) ->
-    io:format("Unittest engine terminated with {{{ ~p }}}~n", [Event]),
-    ok.
-
 %%
 %% respect the pending flag on a flow test
-run_test_on_another_planet(FlowId, WsName, false) ->
+run_test_on_another_planet(FlowId, WsName, false, DefaultTimeout) ->
     ered_error_store:reset_errors(FlowId),
 
     case ered_flow_store_server:get_filename(FlowId) of
@@ -167,12 +187,12 @@ run_test_on_another_planet(FlowId, WsName, false) ->
                 true ->
                     unittest_result(WsName, FlowId, pending);
                 false ->
-                    run_the_test(FlowId, WsName, Ary)
+                    run_the_test(FlowId, WsName, Ary, DefaultTimeout)
             end
     end;
 %%
 %% ignore the pending flag of a flow tests
-run_test_on_another_planet(FlowId, WsName, true) ->
+run_test_on_another_planet(FlowId, WsName, true, DefaultTimeout) ->
     ered_error_store:reset_errors(FlowId),
 
     case ered_flow_store_server:get_filename(FlowId) of
@@ -181,12 +201,12 @@ run_test_on_another_planet(FlowId, WsName, true) ->
         FileName ->
             Ary = parse_flow_file(FileName),
 
-            run_the_test(FlowId, WsName, Ary)
+            run_the_test(FlowId, WsName, Ary, DefaultTimeout)
     end.
 
 %%
 %% Run the test disregarding the pending flag of the test flow.
-run_the_test(FlowId, WsName, Ary) ->
+run_the_test(FlowId, WsName, Ary, DefaultTimeout) ->
     case should_keep_flow_running(Ary) of
         true ->
             create_pids_for_nodes(Ary, WsName);
@@ -222,7 +242,7 @@ run_the_test(FlowId, WsName, Ary) ->
 
             %% give the messages time to propagate through the
             %% test flow
-            timer:sleep(compute_timeout(Ary)),
+            timer:sleep(compute_timeout(Ary, DefaultTimeout)),
 
             %% stop all nodes. Probably better would be to checking
             %% the message queues of the nodes and if all are empty
