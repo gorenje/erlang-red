@@ -24,6 +24,9 @@
     send_msg_on/2
 ]).
 
+-define(CMD, element(5, State)).
+-define(MACHPID, element(9, State)).
+-define(TIMEOUT, maps:get(timeout, element(7, State))).
 -define(STDOUTWIRES, element(2, State)).
 -define(STDERRWIRES, element(3, State)).
 -define(DONEWIRES, element(4, State)).
@@ -31,9 +34,6 @@
 -define(MSG, begin
     element(6, State)
 end).
--define(CMD, element(5, State)).
--define(MACHPID, element(9, State)).
--define(TIMEOUT, maps:get(timeout, element(7, State))).
 
 % erlfmt:ignore alignment
 start(NodePid, Wires, Cmd, Msg, Opts) ->
@@ -96,16 +96,14 @@ handle_info({'DOWN', MachPid, process, _ErlangPid, Status}, State) ->
     Status2 =
         case Status of
             normal ->
-                #{<<"pid">> => MachPid, <<"code">> => 0};
+                #{<<"code">> => 0};
             {exit_status, Num} ->
-                #{<<"pid">> => MachPid, <<"code">> => Num};
+                #{<<"code">> => Num};
             _ ->
-                io:format("ExecMgs: Unknown Status: ~p~n", [Status]),
-                #{
-                    <<"pid">> => MachPid,
-                    <<"code">> => jstr("Unknown: ~p", [Status])
-                }
-        end,
+                #{<<"code">> => jstr("Unknown: ~p", [Status])}
+        end#{
+            <<"pid">> => MachPid
+        },
     gen_server:cast(
         ?NODEPID, {exec_process_died, ?MSG#{<<"payload">> => Status2}}
     ),

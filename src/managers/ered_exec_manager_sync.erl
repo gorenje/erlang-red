@@ -25,17 +25,6 @@
     send_msg_on/2
 ]).
 
--define(CMD, maps:get(command, State)).
--define(MACHPID, maps:get(machinepid, State)).
--define(TIMEOUT, maps:get(timeout, maps:get(options, State))).
--define(STDOUTWIRES, maps:get(stdoutwires, State)).
--define(STDERRWIRES, maps:get(stderrwires, State)).
--define(DONEWIRES, maps:get(donewires, State)).
--define(NODEPID, maps:get(nodepid, State)).
--define(MSG, begin
-    maps:get(message, State)
-end).
-
 -define(ToPayload(Buffer), list_to_binary(lists:reverse(Buffer))).
 
 % erlfmt:ignore alignment
@@ -71,81 +60,57 @@ init([State]) ->
 
 %%
 %%
-handle_call({kill_command, Signal}, _From, State) ->
-    exec:kill(?MACHPID, sig_to_num(binary_to_atom(Signal))),
+handle_call({kill_command, Signal}, _From, #{machinepid := MachPid} = State) ->
+    exec:kill(MachPid, sig_to_num(binary_to_atom(Signal))),
     {reply, ok, State};
-handle_call(run_command, _From, #{buffers := Buffer} = State) ->
-    {ok, Pid, MachPid} = exec:run(?CMD, [stdout, stderr, monitor]),
+handle_call(
+    run_command,
+    _From,
+    #{
+        buffers := Buffer,
+        command := Cmd,
+        options := #{timeout := Timeout}
+    } = State
+) ->
+    {ok, Pid, MachPid} = exec:run(Cmd, [stdout, stderr, monitor]),
 
     ThisPid = self(),
     Ref =
-        ?TIMEOUT > 0 andalso
+        Timeout > 0 andalso
             timer:apply_after(
-                ?TIMEOUT * 1000,
+                Timeout * 1000,
                 fun() ->
                     %% We send out the messages here because the message queue
-                    %% might be flooded with a command like "yes no" and any
-                    %% messages will not get through. So this time out handler
-                    %% sends the content we have and kills and deletes everything
-                    %% else.
+                    %% might be flooded by a command similar to "yes no" and any
+                    %% messages will not get through. So sending a timeout
+                    %% message would just be queued behind many thousands
+                    %% of "output" messages.
+                    %%
+                    %% Hence this time out handler sends the content we have and
+                    %% kills and deletes everything else.
                     %%
                     %% But if the process has already completed, then we have
-                    %% already sent the messages, so this does not need to happen.
+                    %% already sent the messages, so this does not need to
+                    %% happen.
                     case exec:pid(MachPid) of
                         undefined ->
-                            ok;
+                            ignore;
                         {error, _} ->
-                            ok;
+                            ignore;
                         _ ->
                             exec:kill(MachPid, sig_to_num('SIGTERM')),
 
                             %% Has the ETS table disappeared because the process
                             %% has already completed? Then don't resend the data.
-                            case lists:member(Buffer, ets:all()) of
-                                true ->
-                                    [{stdout, StdoutBuffer}] =
-                                        ets:lookup(Buffer, stdout),
-                                    send_msg_on(
-                                        ?STDOUTWIRES,
-                                        ?MSG#{
-                                            <<"payload">> =>
-                                                ?ToPayload(StdoutBuffer)
-                                        }
-                                    ),
+                            lists:member(Buffer, ets:all()) andalso
+                                push_out_stdout_stderr(State),
 
-                                    [{stderr, StderrBuffer}] =
-                                        ets:lookup(Buffer, stderr),
-                                    send_msg_on(
-                                        ?STDERRWIRES,
-                                        ?MSG#{
-                                            <<"payload">> =>
-                                                ?ToPayload(StderrBuffer)
-                                        }
-                                    );
-                                _ ->
-                                    ok
-                            end,
-
-                            gen_server:cast(
-                                ?NODEPID,
-                                {exec_process_died, ?MSG#{
-                                    <<"payload">> => #{
-                                        <<"pid">> => MachPid,
-                                        <<"code">> => 9
-                                    }
-                                }}
-                            ),
-
-                            send_msg_on(
-                                ?DONEWIRES,
-                                ?MSG#{
-                                    <<"payload">> => #{
-                                        <<"pid">> => MachPid,
-                                        <<"code">> => 9
-                                    }
-                                }
+                            post_off_done(
+                                #{<<"pid">> => MachPid, <<"code">> => 15},
+                                State
                             )
                     end,
+
                     erlang:exit(ThisPid, timeout)
                 end
             ),
@@ -167,16 +132,16 @@ handle_cast(Msg, State) ->
 
 %%
 %% Process exits here.
-handle_info({timeout, _, 'TIMEOUT'}, State) ->
-    io:format("TIMOUT!!!!IN~n", []),
-    exec:kill(?MACHPID, sig_to_num('SIGTERM')),
+handle_info({timeout, _, 'TIMEOUT'}, #{machinepid := MachPid} = State) ->
+    exec:kill(MachPid, sig_to_num('SIGTERM')),
     %% give the process 1 second to die else kill it.
     erlang:start_timer(1000, self(), 'TIMEOUT-KILL'),
     {noreply, State};
-handle_info({timeout, _, 'TIMEOUT-KILL'}, State) ->
-    io:format("TIMOUT KILGIN~n", []),
-    exec:kill(?MACHPID, sig_to_num('SIGKILL')),
+handle_info({timeout, _, 'TIMEOUT-KILL'}, #{machinepid := MachPid} = State) ->
+    exec:kill(MachPid, sig_to_num('SIGKILL')),
     {noreply, State};
+%%
+%%
 handle_info(
     {'DOWN', MachPid, process, _ErlangPid, Status},
     #{buffers := Buffer, timer := TimerRef} = State
@@ -188,30 +153,21 @@ handle_info(
             ok
     end,
 
+    lists:member(Buffer, ets:all()) andalso push_out_stdout_stderr(State),
+
     Status2 =
         case Status of
             normal ->
-                #{<<"pid">> => MachPid, <<"code">> => 0};
+                #{<<"code">> => 0};
             {exit_status, Num} ->
-                #{<<"pid">> => MachPid, <<"code">> => Num};
+                #{<<"code">> => Num};
             _ ->
-                io:format("ExecMgs: Unknown Status: ~p~n", [Status]),
-                #{
-                    <<"pid">> => MachPid,
-                    <<"code">> => jstr("Unknown: ~p", [Status])
-                }
-        end,
+                #{<<"code">> => jstr("Unknown: ~p", [Status])}
+        end#{
+            <<"pid">> => MachPid
+        },
 
-    gen_server:cast(
-        ?NODEPID, {exec_process_died, ?MSG#{<<"payload">> => Status2}}
-    ),
-    send_msg_on(?DONEWIRES, ?MSG#{<<"payload">> => Status2}),
-
-    [{stdout, StdoutBuffer}] = ets:lookup(Buffer, stdout),
-    send_msg_on(?STDOUTWIRES, ?MSG#{<<"payload">> => ?ToPayload(StdoutBuffer)}),
-
-    [{stderr, StderrBuffer}] = ets:lookup(Buffer, stderr),
-    send_msg_on(?STDERRWIRES, ?MSG#{<<"payload">> => ?ToPayload(StderrBuffer)}),
+    post_off_done(Status2, State),
 
     {stop, normal, State};
 %%
@@ -245,6 +201,37 @@ terminate(normal, _State) ->
 terminate(Event, _State) ->
     io:format("Exec manager terminated with {{{ ~p }}}~n", [Event]),
     ok.
+
+%%
+%% ------------------ helpers
+%%
+push_out_stdout_stderr(
+    #{
+        message := Msg,
+        buffers := Buffer,
+        stdoutwires := StdoutWires,
+        stderrwires := StderrWires
+    } = _State
+) ->
+    [{stdout, StdoutBuffer}] = ets:lookup(Buffer, stdout),
+    send_msg_on(StdoutWires, Msg#{<<"payload">> => ?ToPayload(StdoutBuffer)}),
+
+    [{stderr, StderrBuffer}] = ets:lookup(Buffer, stderr),
+    send_msg_on(StderrWires, Msg#{<<"payload">> => ?ToPayload(StderrBuffer)}).
+
+post_off_done(
+    PidAndErrorCode,
+    #{
+        message := Msg,
+        nodepid := NodePid,
+        donewires := DoneWires
+    } = _State
+) ->
+    gen_server:cast(
+        NodePid,
+        {exec_process_died, Msg#{<<"payload">> => PidAndErrorCode}}
+    ),
+    send_msg_on(DoneWires, Msg#{<<"payload">> => PidAndErrorCode}).
 
 %%
 %%
