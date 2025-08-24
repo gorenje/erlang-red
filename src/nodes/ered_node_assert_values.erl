@@ -421,8 +421,10 @@ handle_msg({incoming, Msg}, NodeDef) ->
     %% not a 'maps:get'
     case maps:find(<<"ignore_failure_if_succeed">>, NodeDef) of
         {ok, true} ->
-            #{'_success_count' := SuccCnt,
-              '_failures' := FailureLst} = NodeDef,
+            #{
+                '_success_count' := SuccCnt,
+                '_failures' := FailureLst
+            } = NodeDef,
             #{<<"assert_failures">> := Failures} = Msg2,
 
             {handled,

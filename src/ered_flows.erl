@@ -34,7 +34,6 @@ find_tab_env_ary([NodeDef = #{<<"type">> := <<"tab">>} | _T]) ->
 find_tab_env_ary([_H | T]) ->
     find_tab_env_ary(T).
 
-
 %%
 %%
 tab_name_or_filename([], FileName) ->
@@ -70,8 +69,8 @@ obtain_timeout([], false) ->
 obtain_timeout([], DefaultTimeout) ->
     DefaultTimeout;
 obtain_timeout(
-  [#{<<"value">> := V, <<"name">> := <<"ERED_TIMEOUT">>} | _T],
-  _DefaultTimeout
+    [#{<<"value">> := V, <<"name">> := <<"ERED_TIMEOUT">>} | _T],
+    _DefaultTimeout
 ) ->
     element(1, string:to_integer(V)) * 1000;
 obtain_timeout([_H | T], DefaultTimeout) ->

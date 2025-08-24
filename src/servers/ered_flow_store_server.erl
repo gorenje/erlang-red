@@ -62,11 +62,18 @@ init([]) ->
 handle_call({all_flow_ids}, _From, FlowStore) ->
     %% sort flow ids by timeout
     AllFlowIds =
-        lists:map(fun ({V,_}) -> V end,
-                  lists:sort(
-                    fun({_, #{timeout := V1}},
-                        {_, #{timeout := V2}}) -> V1 > V2 end,
-                maps:to_list(FlowStore))),
+        lists:map(
+            fun({V, _}) -> V end,
+            lists:sort(
+                fun(
+                    {_, #{timeout := V1}},
+                    {_, #{timeout := V2}}
+                ) ->
+                    V1 > V2
+                end,
+                maps:to_list(FlowStore)
+            )
+        ),
 
     {reply, AllFlowIds, FlowStore};
 handle_call({update_all}, _From, _FlowStore) ->
