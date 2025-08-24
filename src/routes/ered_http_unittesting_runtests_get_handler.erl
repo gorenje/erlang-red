@@ -28,7 +28,7 @@ handle_response(Req, State) ->
     WsName = websocket_name_from_request(Req),
     Query = cowboy_req:parse_qs(Req),
 
-    TestPendingTests =
+    AlsoTestPendingTests =
         case lists:keyfind(<<"testpend">>, 1, Query) of
             false ->
                 false;
@@ -45,11 +45,15 @@ handle_response(Req, State) ->
             {<<"{}">>, Req, State};
         <<"all">> ->
             AllFlowIds = ered_flow_store_server:all_flow_ids(),
-            [
-                ered_unittest_engine !
-                    {start_test, FlowId, WsName, TestPendingTests}
-             || FlowId <- AllFlowIds
-            ],
+
+            timer:apply_after(500, fun() ->
+                trigger_tests_in_groups_of(
+                    AllFlowIds,
+                    WsName,
+                    AlsoTestPendingTests,
+                    50
+                )
+            end),
 
             {
                 json:encode(#{
@@ -61,7 +65,8 @@ handle_response(Req, State) ->
             };
         FlowId ->
             ered_unittest_engine !
-                {start_test, FlowId, WsName, TestPendingTests},
+                {start_test_with_timeout, FlowId, WsName, AlsoTestPendingTests,
+                    2222},
             {json:encode(#{status => ok, todo => 1}), Req, State}
     end.
 
@@ -73,3 +78,28 @@ format_error(Reason, Req) ->
         ],
         Req
     }.
+
+%%
+%% ---------------------- helpers
+%%
+trigger_tests_in_groups_of(AllFlowIds, WsName, TstPdn, GroupSize) ->
+    trigger_tests_in_groups_of(
+        AllFlowIds, WsName, TstPdn, GroupSize, GroupSize
+    ).
+
+trigger_tests_in_groups_of([], _WsName, _TstPdn, _GroupSize, _Cnt) ->
+    done;
+trigger_tests_in_groups_of(FlowIds, WsName, TstPdn, GroupSize, 0) ->
+    timer:sleep(5000),
+    trigger_tests_in_groups_of(FlowIds, WsName, TstPdn, GroupSize, GroupSize);
+trigger_tests_in_groups_of(
+    [FlowId | Rest], WsName, AlsoTestPendingTests, GroupSize, Cnt
+) ->
+    ered_unittest_engine ! {start_test, FlowId, WsName, AlsoTestPendingTests},
+    trigger_tests_in_groups_of(
+        Rest,
+        WsName,
+        AlsoTestPendingTests,
+        GroupSize,
+        Cnt - 1
+    ).
