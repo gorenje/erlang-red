@@ -421,18 +421,19 @@ handle_msg({incoming, Msg}, NodeDef) ->
     %% not a 'maps:get'
     case maps:find(<<"ignore_failure_if_succeed">>, NodeDef) of
         {ok, true} ->
-            #{'_success_count' := SuccCnt} = NodeDef,
-            #{'_failures' := FailureLst} = NodeDef,
-            #{<<"success_count">> := Cnt} = Msg2,
+            #{'_success_count' := SuccCnt,
+              '_failures' := FailureLst} = NodeDef,
             #{<<"assert_failures">> := Failures} = Msg2,
+
             {handled,
                 NodeDef#{
-                    '_success_count' => SuccCnt + Cnt,
+                    '_success_count' => SuccCnt + inc_if_no_failures(Failures),
                     '_failures' => [{Msg, Failures} | FailureLst]
                 },
                 Msg2};
         _ ->
-            post_failures(maps:get(<<"assert_failures">>, Msg2), NodeDef, Msg),
+            #{<<"assert_failures">> := Failures} = Msg2,
+            post_failures(Failures, NodeDef, Msg),
             set_node_status(
                 maps:get(<<"assert_succeed">>, Msg2), NodeDef, Msg2
             ),
@@ -445,6 +446,11 @@ handle_msg(_, NodeDef) ->
 %%
 %% ------------- Helpers
 %%
+
+inc_if_no_failures([]) ->
+    1;
+inc_if_no_failures(_) ->
+    0.
 
 succeed_or_not(
     #{'_success_count' := SuccCnt} = NodeDef,
