@@ -19,7 +19,9 @@
 %% Storage is handled directlty in the http request.
 %%
 -import(ered_flows, [
-    parse_flow_file/1
+    parse_flow_file/1,
+    compute_timeout/1,
+    tab_name_or_filename/2
 ]).
 -import(ered_nodes, [
     jstr/1
@@ -58,7 +60,14 @@ init([]) ->
 %% Specific implementation for the flow store
 %%
 handle_call({all_flow_ids}, _From, FlowStore) ->
-    AllFlowIds = maps:keys(FlowStore),
+    %% sort flow ids by timeout
+    AllFlowIds =
+        lists:map(fun ({V,_}) -> V end,
+                  lists:sort(
+                    fun({_, #{timeout := V1}},
+                        {_, #{timeout := V2}}) -> V1 > V2 end,
+                maps:to_list(FlowStore))),
+
     {reply, AllFlowIds, FlowStore};
 handle_call({update_all}, _From, _FlowStore) ->
     {reply, true, compile_file_store(compile_file_list(), #{})};
@@ -151,20 +160,6 @@ terminate(Event, _State) ->
 
 %%
 %%
-tab_name_or_filename([], FileName) ->
-    FileName;
-tab_name_or_filename([NodeDef | MoreNodeDefs], FileName) ->
-    case maps:find(<<"type">>, NodeDef) of
-        {ok, <<"tab">>} ->
-            case maps:find(<<"label">>, NodeDef) of
-                {ok, Val} ->
-                    Val;
-                _ ->
-                    FileName
-            end;
-        _ ->
-            tab_name_or_filename(MoreNodeDefs, FileName)
-    end.
 
 compile_file_list() ->
     {ok, MP} = re:compile("([A-Z0-9]{16})/flows.json", [caseless]),
@@ -198,13 +193,10 @@ compile_file_store([FileDetails | MoreFileNames], FileStore) ->
 
     compile_file_store(
         MoreFileNames,
-        maps:put(
-            jstr(FlowId),
-            #{
-                path => jstr(FileName),
-                id   => jstr(FlowId),
-                name => jstr(TestName)
-            },
-            FileStore
-        )
-    ).
+        FileStore#{jstr(FlowId) => #{
+            path    => jstr(FileName),
+            id      => jstr(FlowId),
+            name    => jstr(TestName),
+            timeout => compute_timeout(Ary)
+        }}
+     ).
