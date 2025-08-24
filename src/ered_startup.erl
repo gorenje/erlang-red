@@ -340,6 +340,7 @@ node_type_to_module(<<"i2c out">>)           -> ered_node_i2c_out;
 node_type_to_module(<<"binary">>)            -> ered_node_binary;
 node_type_to_module(<<"sort">>)              -> ered_node_sort;
 node_type_to_module(<<"batch">>)             -> ered_node_batch;
+node_type_to_module(<<"rbe">>)               -> ered_node_rbe;
 %%
 %% Assert nodes for testing functionality of the nodes. These are the first
 %% Node-RED and Erlang-RED nodes - they have implmentations for both because
