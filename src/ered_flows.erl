@@ -3,10 +3,12 @@
 -export([
     append_tab_name_to_filename/2,
     compute_timeout/1,
+    compute_timeout/2,
     ignore_as_eunit_test/1,
     is_test_case_pending/1,
     parse_flow_file/1,
-    should_keep_flow_running/1
+    should_keep_flow_running/1,
+    tab_name_or_filename/2
 ]).
 
 %%
@@ -32,6 +34,24 @@ find_tab_env_ary([NodeDef = #{<<"type">> := <<"tab">>} | _T]) ->
 find_tab_env_ary([_H | T]) ->
     find_tab_env_ary(T).
 
+
+%%
+%%
+tab_name_or_filename([], FileName) ->
+    FileName;
+tab_name_or_filename([NodeDef | MoreNodeDefs], FileName) ->
+    case maps:find(<<"type">>, NodeDef) of
+        {ok, <<"tab">>} ->
+            case maps:find(<<"label">>, NodeDef) of
+                {ok, Val} ->
+                    Val;
+                _ ->
+                    FileName
+            end;
+        _ ->
+            tab_name_or_filename(MoreNodeDefs, FileName)
+    end.
+
 %%
 %% Compute a timeout for the flow test, can be set in the flows.json file.
 %% Since flows have delays or even test the delay node, it must be possible
@@ -45,15 +65,23 @@ find_tab_env_ary([_H | T]) ->
 %% Default timeout is 1234ms which allows eunit to complete. The returned
 %% value of this function is milliseconds, even if the original value in
 %% the flow was seconds.
-obtain_timeout([]) ->
-    2222;
-obtain_timeout([#{<<"value">> := V, <<"name">> := <<"ERED_TIMEOUT">>} | _T]) ->
+obtain_timeout([], false) ->
+    5000 + ceil(rand:uniform() * 300);
+obtain_timeout([], DefaultTimeout) ->
+    DefaultTimeout;
+obtain_timeout(
+  [#{<<"value">> := V, <<"name">> := <<"ERED_TIMEOUT">>} | _T],
+  _DefaultTimeout
+) ->
     element(1, string:to_integer(V)) * 1000;
-obtain_timeout([_H | T]) ->
-    obtain_timeout(T).
+obtain_timeout([_H | T], DefaultTimeout) ->
+    obtain_timeout(T, DefaultTimeout).
 
 compute_timeout(Ary) ->
-    obtain_timeout(find_tab_env_ary(Ary)).
+    obtain_timeout(find_tab_env_ary(Ary), false).
+
+compute_timeout(Ary, DefaultTimeout) ->
+    obtain_timeout(find_tab_env_ary(Ary), DefaultTimeout).
 
 %%
 %%
