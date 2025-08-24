@@ -120,7 +120,7 @@ start(
                             '_count' => IntCount,
                             '_togo' => IntCount
                         },
-                        ?MODULE
+                        ered_node_join_count
                     );
                 false ->
                     ered_node:start(
@@ -163,97 +163,16 @@ start(NodeDef, WsName) ->
 
 %%
 %%
-handle_event({registered, _WsName, _MyPid}, NodeDef) ->
-    Store = ets:new(
-        ered_node_join_store,
-        [ordered_set, private, {write_concurrency, true}]
-    ),
-    NodeDef#{'_store' => Store};
 handle_event(_, NodeDef) ->
     NodeDef.
 
-%%
-%%
-handle_msg(
-    {incoming, #{<<"complete">> := true} = Msg},
-    #{
-        '_store' := Store,
-        '_togo' := ToGo
-    } = NodeDef
-) ->
-    NewToGo = ToGo - 1,
-    true = ets:insert(Store, {NewToGo, term_to_binary(Msg)}),
-    Batch = ets:foldl(fun({_, M}, Acc) -> [M | Acc] end, [], Store),
-    ets:delete_all_objects(Store),
-    NodeDef2 = send_out_collected_messages(NodeDef, Msg, Batch),
-    {handled, NodeDef2, dont_send_complete_msg};
-handle_msg(
-    {incoming, Msg},
-    #{
-        '_store' := Store,
-        '_togo' := ToGo
-    } = NodeDef
-) ->
-    NewToGo = ToGo - 1,
-    true = ets:insert(Store, {NewToGo, term_to_binary(Msg)}),
-
-    NodeDef2 =
-        case NewToGo of
-            0 ->
-                Batch = ets:foldl(fun({_, M}, Acc) -> [M | Acc] end, [], Store),
-                ets:delete_all_objects(Store),
-                send_out_collected_messages(NodeDef, Msg, Batch);
-            _ ->
-                NodeDef#{'_togo' => NewToGo}
-        end,
-
-    {handled, NodeDef2, dont_send_complete_msg};
 %%
 %%
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
 %%
-%%
-%% --------------- helpers
-
-%%
-%%
-send_out_collected_messages(
-    #{<<"propertyType">> := <<"full">>} = NodeDef,
-    Msg,
-    RevStore
-) ->
-    Store = [binary_to_term(M) || M <- RevStore],
-    send_out_collected_messages(NodeDef, Msg, Store, Store);
-send_out_collected_messages(
-    #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
-    Msg,
-    RevStore
-) ->
-    Store = [binary_to_term(M) || M <- RevStore],
-    Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
-    send_out_collected_messages(NodeDef, Msg, Store, Lst2).
-
-%%
-send_out_collected_messages(
-    #{'_count' := Count} = NodeDef, Msg, AllMsgs, PayloadForNodes
-) ->
-    %% retrieve the latest message and use that as a basis for sending out
-    %% these messages - TODO perhaps this is wrong but will do for now.
-    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
-
-    %% now that we are ready to send out our message, we are completed
-    %% with the message that make up that message (!!) so those
-    %% messages should be sent to a complete node - if there is one
-    %% See this post for details:
-    %%   https://discourse.nodered.org/t/complete-node-msg-before-or-after-computation/96648/5
-    [post_completed(NodeDef, M) || M <- AllMsgs],
-
-    %% reset the store, ready to receive more messages
-    NodeDef#{'_togo' => Count}.
-
-%%
+%% -------------------- helpers
 %%
 convert_to_int(Val) when is_integer(Val) ->
     Val;
