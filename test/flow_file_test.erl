@@ -219,4 +219,6 @@ foreach_testflow_test_() ->
 
     TestList = create_test_for_flow_file(FileNames, []),
 
-    {inparallel, TestList}.
+    %% Tests start failing when all are run in parallel.
+    %% No more than 100 tests in parallel - memory saving measure.
+    {inparallel, 100, TestList}.

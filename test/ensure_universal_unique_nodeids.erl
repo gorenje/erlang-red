@@ -53,7 +53,7 @@ duplicates([H | T], Acc) ->
 ensure_universally_unique_nodeids_test() ->
     {_Cnt, FileNames} = filelib:fold_files(
         code:priv_dir(erlang_red) ++ "/testflows/",
-        "",
+        "flows.json",
         true,
         fun(Fname, Acc) ->
             {element(1, Acc) + 1, [Fname | element(2, Acc)]}
