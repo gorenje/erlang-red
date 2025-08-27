@@ -15,7 +15,8 @@
 
 -export([
     deploy/2,
-    reload/1
+    reload/1,
+    stop/1
 ]).
 
 %%
@@ -66,6 +67,10 @@ deploy(JsonStr, WsName) ->
 
 reload(WsName) ->
     gen_server:call(?MODULE, {reload, WsName}).
+
+stop(WsName) ->
+    %% stop is equivalent to deploying an empty JSON file.
+    gen_server:call(?MODULE, {deploy, <<"{\"flows\": []}">>, WsName}).
 
 %%
 %%
