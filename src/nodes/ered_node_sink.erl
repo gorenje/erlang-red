@@ -10,6 +10,9 @@
 %% Placeholder node where messages go to die. Sink node is a node but can
 %% be used by other nodes to ignore configurations without errors.
 %%
+%% Similar to a ignore node but a sink node ignores incoming messages without
+%% an error message.
+%%
 
 %%
 %%

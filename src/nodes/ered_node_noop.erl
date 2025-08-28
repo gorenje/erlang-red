@@ -10,7 +10,8 @@
 
 %%
 %% No Operation node that is used for all unknown types. It represents
-%% a deadend for a message, it stops here.
+%% a deadend for a message, it stops here but with an error message.
+%%
 
 -import(ered_nodes, [
     get_prop_value_from_map/2,
