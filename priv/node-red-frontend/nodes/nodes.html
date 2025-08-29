@@ -13000,7 +13000,13 @@ Attach this to any branch of a flow that is intended to fail.
       }
       if ( this.rules) {
         if (this.rules.length == 1) {
-          return this._("ut-assert-values.label." + this.rules[0].t, { property: prop2name((this.rules[0].pt || "msg"), this.rules[0].p) });
+          let lbl = this._("ut-assert-values.label." + this.rules[0].t, { property: prop2name((this.rules[0].pt || "msg"), this.rules[0].p) });
+
+          if (["num","bool"].includes(this.rules[0].tot)) {
+            lbl += " to " + this.rules[0].to
+          }
+
+          return lbl;
         } else {
           return this._("ut-assert-values.label.changeCount", { count: this.rules.length });
         }
