@@ -24,7 +24,9 @@
     tabid_to_error_collector/1,
     this_should_not_happen/2,
     trigger_outgoing_messages/3,
-    unpriv/1
+    unpriv/1,
+
+    within_range/3
 ]).
 
 %%
@@ -39,6 +41,19 @@
 -import(ered_messages, [
     create_outgoing_msg/1
 ]).
+
+%%
+%% Given a range, From - To, is a given value within that range?
+%%
+within_range(From, To, Value) when
+    From =:= Value;
+    To =:= Value;
+    From < To, Value > From, Value < To;
+    From > To, Value < From, Value > To
+->
+    true;
+within_range(_, _, _) ->
+    false.
 
 %%
 %% Ensure a nodes configuration is supported. This is usually used in the

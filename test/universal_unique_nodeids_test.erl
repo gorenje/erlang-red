@@ -1,4 +1,4 @@
--module(ensure_universal_unique_nodeids).
+-module(universal_unique_nodeids_test).
 
 %%
 %% A test to ensure that all node ids are unique across all flow tests.
