@@ -28,6 +28,10 @@ jobs:
         rebar3: ['3.24.0']
     steps:
       - uses: actions/checkout@v4
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: inotify-tools mosquitto netcat-traditional i2c-tools
+          version: 1.0
       - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{matrix.otp}}
