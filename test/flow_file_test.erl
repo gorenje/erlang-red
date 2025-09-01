@@ -221,4 +221,10 @@ foreach_testflow_test_() ->
 
     %% Tests start failing when all are run in parallel.
     %% No more than 100 tests in parallel - memory saving measure.
-    {inparallel, 100, TestList}.
+    case os:getenv("NUMBER_OF_FLOWTESTS_IN_PARALLEL") of
+        false ->
+            {inparallel, 100, TestList};
+        Value ->
+            Vint = ered_messages:convert_to_num(Value),
+            {inparallel, Vint, TestList}
+    end.
