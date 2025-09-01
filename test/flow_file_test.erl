@@ -53,6 +53,8 @@ websocket_faker(WsName) ->
             websocket_faker(WsName);
         {status, _NodeId, clear} ->
             websocket_faker(WsName);
+        {client_code_exec, _NodeDef, _Msg} ->
+            websocket_faker(WsName);
         Unknown ->
             io:format("WS faker got unknown msg: ~p~n", [Unknown]),
             websocket_faker(WsName)
