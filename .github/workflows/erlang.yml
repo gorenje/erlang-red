@@ -20,6 +20,7 @@ jobs:
       ImageOS: ubuntu24 # equivalent to runs-on ubuntu-24.04
       SHELL: /bin/bash
       LANG: C.UTF-8
+      NUMBER_OF_FLOWTESTS_IN_PARALLEL: 10
       
     strategy:
       matrix:
