@@ -13,14 +13,25 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    name: Erlang/OTP ${{matrix.otp}} / rebar3 ${{matrix.rebar3}}
 
-    container:
-      image: erlang:27.3.0.0
-
+    env:
+      ImageOS: ubuntu24 # equivalent to runs-on ubuntu-24.04
+      SHELL: /bin/bash
+      LANG: C.UTF-8
+      NUMBER_OF_FLOWTESTS_IN_PARALLEL: 10
+      
+    strategy:
+      matrix:
+        otp: ['27.3.3']
+        rebar3: ['3.24.0']
     steps:
-    - uses: actions/checkout@v4
-    - name: Compile
-      run: rebar3 compile
-    - name: Run tests
-      run: rebar3 do eunit, ct
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{matrix.otp}}
+          rebar3-version: ${{matrix.rebar3}}
+      - run: rebar3 compile
+      - run: rebar3 do eunit, ct
+      
