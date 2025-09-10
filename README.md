@@ -2,6 +2,7 @@ Erlang-Red - BEAM/Erlang backend for Node-RED
 =====
 
 [![Erlang CI](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml/badge.svg)](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gorenje/erlang-red)
 
 Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatible with existing flow code.
 
