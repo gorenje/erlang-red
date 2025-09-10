@@ -36,18 +36,21 @@ handle_event(_, NodeDef) ->
 %% Not per-topic filtering
 handle_msg(
     {incoming,
-     #{ <<"reset">> := Value } = _Msg},
+     #{ <<"reset">> := Value } = Msg},
     NodeDef
 ) when Value =:= true; Value =:= <<"true">>; Value =:= 1 ->
-    {handled, NodeDef#{'_lastvalue' => undefined}, dont_send_complete_msg};
+    send_msg_to_connected_nodes(NodeDef, Msg),
+    {handled, NodeDef#{'_lastvalue' => undefined}, Msg};
 
 handle_msg(
     {incoming,
-     #{<<"reset">> := _Value } = _Msg},
+     #{<<"reset">> := _Value } = Msg},
     NodeDef
 ) ->
+    send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
-
+%%
+%%
 handle_msg(
     {incoming, Msg},
     #{
@@ -57,7 +60,7 @@ handle_msg(
 ) ->
     case get_prop(PropName, Msg) of
         {ok, Payload, _} ->
-            {handled, NodeDef#{'_lastvalue' => Payload}, Msg};
+            {handled, NodeDef#{'_lastvalue' => Payload}, dont_send_complete_msg};
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end;

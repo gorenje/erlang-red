@@ -1,4 +1,4 @@
--module(ered_node_rbe_mode_rbe_topic).
+-module(ered_node_rbe_mode_rbei_topic).
 
 -include("ered_nodes.hrl").
 
@@ -10,7 +10,7 @@
 
 %%
 %% Module for the filter settings:
-%%   -- block unless value changes (mode: rbe)
+%%   -- block unless value changes and ignore initial values (mode: rbei)
 %%   -- apply mode separately for each topic (settopics: true)
 %%
 -import(ered_nodes, [
@@ -31,7 +31,7 @@ start(_,_) ->
 %%
 handle_event({registered, _WsName, _MyPid}, NodeDef) ->
     Store = ets:new(
-        ered_node_rbe_mode_rbe_topic_store,
+        ered_node_rbe_mode_rbei_topic_store,
         [set, private, {write_concurrency, true}]
     ),
     NodeDef#{'_store' => Store};
@@ -116,8 +116,7 @@ check_topic_value(
             {handled, NodeDef, Msg};
         [] ->
             ets:insert(Store, {Topic, Payload}),
-            send_msg_to_connected_nodes(NodeDef, Msg),
-            {handled, NodeDef, Msg};
+            {handled, NodeDef, dont_send_complete_msg};
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end.

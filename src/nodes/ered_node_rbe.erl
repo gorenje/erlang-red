@@ -30,18 +30,31 @@
     unsupported/3
 ]).
 
-start(#{<<"func">> := <<"rbe">>, <<"septopics">> := false} = NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ered_node_rbe_mode_rbe_no_topic);
-start(#{<<"func">> := <<"rbe">>, <<"septopics">> := true} = NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ered_node_rbe_mode_rbe_topic);
-start(
-    #{<<"func">> := <<"rbei">>, <<"septopics">> := false} = NodeDef, _WsName
-) ->
-    ered_node:start(NodeDef, ered_node_rbe_mode_rbei_no_topic);
+-define(GroupByTopic, <<"septopics">> := true).
+-define(NoGrouping, <<"septopics">> := false).
+
 start(NodeDef, WsName) ->
-    ErrMsg = jstr("Node Config ~p", [NodeDef]),
-    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
-    ered_node:start(NodeDef, ered_node_ignore).
+    ModName =
+        case NodeDef of
+            #{<<"func">> := <<"rbe">>, ?NoGrouping} ->
+                ered_node_rbe_mode_rbe_no_topic;
+            #{<<"func">> := <<"rbe">>, ?GroupByTopic} ->
+                ered_node_rbe_mode_rbe_topic;
+            #{<<"func">> := <<"rbei">>, ?NoGrouping} ->
+                ered_node_rbe_mode_rbei_no_topic;
+            #{<<"func">> := <<"rbei">>, ?GroupByTopic} ->
+                ered_node_rbe_mode_rbei_topic;
+            #{<<"func">> := <<"narrowbandEq">>, <<"gap">> := <<>>} ->
+                %% Without a valid gap value, the node is valid but does nothing.
+                ered_node_sink;
+            #{<<"func">> := <<"narrowbandEq">>, ?NoGrouping} ->
+                ered_node_rbe_mode_narrowbandeq;
+            _ ->
+                ErrMsg = jstr("Node Config ~p", [NodeDef]),
+                unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+                ered_node_ignore
+        end,
+    ered_node:start(NodeDef, ModName).
 
 %%
 %%
