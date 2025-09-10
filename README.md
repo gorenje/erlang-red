@@ -106,6 +106,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 | [mqtt in](src/nodes/ered_node_mqtt_in.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [mqtt out](src/nodes/ered_node_mqtt_out.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [noop](src/nodes/ered_node_noop.erl) | doing nothing is very much supported | [Flow](https://flows.red-erik.org/f/2c5903c9e50d0648) |
+| [range](src/nodes/ered_node_range.erl) | Working  | [Flow](https://flows.red-erik.org/f/ae38b2dbd23d1681) |
 | [sort](src/nodes/ered_node_sort.erl) | basic sort function implemented | [Flow](https://flows.red-erik.org/f/b7ebaf91f4d66ab3) |
 | [split](src/nodes/ered_node_split.erl) | splitting arrays into individual messages is supported, string, buffers and objects aren't. | [Flow](https://flows.red-erik.org/f/b1430ea37ba7cc19) |
 | [status](src/nodes/ered_node_status.erl) | working | [Flow](https://flows.red-erik.org/f/a916165378c446e3) |
