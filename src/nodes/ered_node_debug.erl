@@ -51,8 +51,7 @@
 start(
     #{
         <<"tostatus">> := true,
-        <<"statusType">> := <<"counter">>,
-        <<"active">> := true
+        <<"statusType">> := <<"counter">>
     } = NodeDef,
     WsName
 ) ->
