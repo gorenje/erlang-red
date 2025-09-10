@@ -30,12 +30,8 @@ handle_response(Req, State) ->
 
     AlsoTestPendingTests =
         case lists:keyfind(<<"testpend">>, 1, Query) of
-            false ->
-                false;
             {<<"testpend">>, <<"true">>} ->
                 true;
-            {<<"testpend">>, <<"false">>} ->
-                false;
             _ ->
                 false
         end,
@@ -44,6 +40,12 @@ handle_response(Req, State) ->
         undefined ->
             {<<"{}">>, Req, State};
         <<"all">> ->
+            %% stop any other running processes, these can cause issues
+            %% with overlapping services.
+            ered_compute_engine:stop(WsName),
+            %% close any dangling tcp listeners
+            ered_tcp_manager ! stop,
+
             AllFlowIds = ered_flow_store_server:all_flow_ids(),
 
             timer:apply_after(500, fun() ->
@@ -56,10 +58,7 @@ handle_response(Req, State) ->
             end),
 
             {
-                json:encode(#{
-                    status => ok,
-                    todo => length(AllFlowIds)
-                }),
+                json:encode(#{status => ok, todo => length(AllFlowIds)}),
                 Req,
                 State
             };
