@@ -1171,18 +1171,26 @@ var RED = (function() {
                   let flowdata = RED.settings.getLocal( "flowdata" )
 
                   if ( !flowdata ) {
-                      options.url = "flows.initial.json"
-
-                      /* setTimeout( () => {
-                       *     RED.nodes.dirty(true);
-                       *     RED.actions.invoke("core:deploy-flows")
-                       * },2300);*/
+                          options.success({
+                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
+                              "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
+                              "flows": [
+                                  {
+                                      "id": RED.nodes.id(),
+                                      "type": "tab",
+                                      "label": "Flow 1",
+                                      "disabled": false,
+                                      "info": "",
+                                      "env": []
+                                  }
+                              ]
+                          })
+                          jqXHR.abort();
                   } else {
                       try {
                           options.success({
-                              "rev": "ea246f68766c8630ea246f68766c8630",
+                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
                               "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
-                              "flowid": "ea246f68766c8632",
                               "flows": JSON.parse(flowdata)["flows"]
                           })
 
@@ -1195,7 +1203,21 @@ var RED = (function() {
                            */
                           jqXHR.abort();
                       } catch(ex) {
-                          options.url = "flows.initial.json"
+                          options.success({
+                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
+                              "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
+                              "flows": [
+                                  {
+                                      "id": RED.nodes.id(),
+                                      "type": "tab",
+                                      "label": "Flow 1",
+                                      "disabled": false,
+                                      "info": "",
+                                      "env": []
+                                  }
+                              ]
+                          })
+                          jqXHR.abort();
                       }
                   }
                 }
@@ -1308,31 +1330,9 @@ var RED = (function() {
         // add Erlang support to monaco
         monaco.languages.register({id: 'erlang'})
 
-        let rules = new MonacoAceTokenizer.erlangDefinition.default
+        let rules = new MonacoAceTokenizer.erlangDefinition.default;
 
         MonacoAceTokenizer.registerRulesForLanguage('erlang', rules);
-
-        // somehow comments aren't highlighted in monaco editor in erlang,
-        // this doesn't help either but it's here.
-        monaco.languages.setLanguageConfiguration('erlang', {
-            comments: {
-                lineComment: '%%'
-            }
-        });
-
-
-
-        // the following works but then the MonacoAceTokenizer stops working,
-        // i.e. only the comments are highlighted
-        /*
-          monaco.languages.setMonarchTokensProvider('erlang',
-                           {
-                               tokenizer: {
-                                   comment: [ [/^%.+$/, "comment"] ]
-                               }
-                           })
-        */
-
 
         loadPluginList();
 
