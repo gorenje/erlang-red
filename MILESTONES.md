@@ -1,5 +1,42 @@
 Milestones
 ---
+
+*Milestone Nine - m9*
+
+1. New Nodes: batch, range and filter
+
+    [Batch](src/nodes/ered_node_batch.erl) node is used to mark messages as belonging to a batch and buffer messages until batches are completed. These messages can later be bunched together using a join node. Basic [example](https://flows.red-erik.org/f/866410b56fa42447) shows how this can be done.
+
+    [Range](src/nodes/ered_node_range.erl) node is used to map between two different value ranges, mapping an input value from an input range to an output range and creating an output value based on the output range. Test [flow](https://flows.red-erik.org/f/ae38b2dbd23d1681) demonstrates this functionality.
+
+    [Filter](src/nodes/ered_node_rbe.erl) node filters messages based on changes in value. Can be used to block messages until a specific value changes. Test [flow](https://flows.red-erik.org/f/6ea4c6b373eeaa8d) demonstrates this functionality.
+
+    Each node is documented within the flow editor, start there for more details on these nodes. Also nodes are compatible to the Node-RED counterparts, so documentation related to the Node-RED nodes are applicable to the Erlang-Red nodes.
+
+2. Upgraded JSONata parser to 0.4.4
+
+    Added several new functions including base64 encoding and decoding. The more functionality in JSONata the Erlang code needs to be defined.
+
+    JSONata is essential to Node-RED and hence Erlang-Red and good knowledge of JSONata can save much time when creating flows. JSONata aims to replace simple and repetitive functionality normally done using a function node. JSONata can be used in the change, switch and inject nodes and thus prevents the usage of a function node and hence make for smaller and compactor flows.
+
+3. Two hundred and fifty compatibility an regression tests
+
+    To ensure compatibility with the original Node-RED functionality, I have been creating visual flow test suite executable both in Node-RED and Erlang-Red. These compatibility tests are located in a separate [repository](https://github.com/gorenje/erlang-red-flow-testsuite) for others to also use. For example, for creating a Node-RED based on [rust](https://github.com/oldrev/edgelinkd).
+
+    All tests are integrated and maintained here and now have reached a grand total of 252 - at time of writing. All tests can be escaped within Erlang-Red using the [unit testing package](https://flows.nodered.org/node/@gregoriusrippenstein/erlang-red-unittest) - which has a sidebar panel for triggering all or individual tests.
+
+4. Added GitHub actions for executing unit tests
+
+    All compatibility tests can also be run using eUnit and configuring an GitHub action to execute these on push makes good sense.
+
+5. Using ETS and pre-compile JSONata for better performance
+
+    With the help of [@vkatsuba](https://erlangforums.com/u/vkatsuba/summary), I started to use [ETS](https://www.erlang.org/doc/apps/stdlib/ets.html) for storing messages more efficiently. This was particularly useful for the batch node that potential needed to store many thousands of messages.
+
+    In addition to that, I began to pre-compile JSONata stanzas to make JSONata usage faster and also better since errors are identified at deploy time not run time.
+
+---
+
 *Milestone Eight - m8*
 
 1. Moved type parsers out to own repository
@@ -40,6 +77,7 @@ Milestones
 
     As if activity is an indication of quality, it's an incentive to add more features and bugs so that projects need constant maintenance to keep working. Using the activity as a measure of project quality ensures the opposite and also ensures that projects are never completed.
 
+---
 
 *Milestone Seven - m7*
 
@@ -96,6 +134,8 @@ Code Name: The Non-Plural Milestone.
     But as Shakespeare said: "What is in a name? Does not a rose by any other name still smell as sweet?".
 
     Speaking of inconsistencies, I decided to drop the 'v' prefix in version numbers, instead just using the version as tag. This is of course is inconsistent with the 'm' prefix in milestone tags. I didn't see a consensus in the usage of 'v' or not, so I decided that a rebar config looks better with the tag name does not contain a 'v'.
+
+---
 
 *Milestones Six - m6*
 
@@ -175,6 +215,7 @@ Code Name: Milestone Six.
 
     So anyway, F2k It bye-bye 100% Node-RED compatibility, hello freedom of authorship and experimentalism.
 
+---
 
 *Milestones Five - m5*
 
@@ -238,6 +279,8 @@ Code Name: Milestone Six.
 
     Once I'm through with documenting everything, I will probably end up modifying everything again - programming is truly a Sisyphusian activity.
 
+---
+
 *Milestone Four - m4*
 
 1. Supervisor Node
@@ -294,6 +337,7 @@ Code Name: Milestone Six.
 
     Tried but [failed](https://github.com/gorenje/erlang-red/issues/15) to get Erlang-Red compiling in an Elixir environment. It does so but then Erlang-Red won't compile in an Erlang environment. I decided to focus on the Erlang path - after all its Erlang-Red not [BEAM-Red](https://github.com/gorenje/erlang-red/discussions/14). My experience is not up to getting Erlang-Red to compile for both Elixir and Erlang, perhaps someone else will make in-roads there.
 
+---
 
 *Milestone Three - m3*
 
@@ -324,6 +368,8 @@ Code Name: Milestone Six.
 5. [Red-Erik.org](https://red-erik.org) utilises multiple flows
 
     The initial release of Red-Erik was based on a single, now its a multiple flow monster! Why is this important? Because it ensures that the link nodes work across multiple flows - this is their main purposes. Also it made me think about how I could get Erlang-RED to execute multiple flows. In doing so, it became clear that executing and designing flows are very much different activities. When the flows get executed, they basically just become an Erlang architecture of processes, nothing remains of the original flows. Each process only knows where to send its messages to - when it receives a message. There is no overall structure of the flow in memory. This is great because there is no overhead to maintain such a structure.
+
+---
 
 *Milestone Two - m2*
 
@@ -375,6 +421,7 @@ Code Name: Milestone Six.
 
     So the flow specification is exactly that: a specification for a bunch Erlang processes that are completely independent of one another.
 
+---
 
 *Milestone One - m1*
 

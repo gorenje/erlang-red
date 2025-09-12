@@ -89,7 +89,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 | [exec](src/nodes/ered_node_exec.erl) | executing and killing commands is supported  but only for commands in spawn mode and set on the node. Appending arguments to commands isn't supported. Timeouts are supported. Kill messages are also supported. | [Flow](https://flows.red-erik.org/f/090eb2d5d71fd45f) |
 | [file](src/nodes/ered_node_file.erl) | write and delete files anywhere on disk | TBD |
 | [file in](src/nodes/ered_node_file_in.erl) | working for files located in `/priv` | [Flow](https://flows.red-erik.org/f/538be5947c639b32) |
-| [filter](src/nodes/ered_node_rbe.erl) | Partially implemented. | [Flow](https://flows.red-erik.org/f/cef9dd7dc179b8b3) |
+| [filter](src/nodes/ered_node_rbe.erl) | filter messages based on value changes | [Flow](https://flows.red-erik.org/f/cef9dd7dc179b8b3) |
 | [function](src/nodes/ered_node_function.erl) | working for any Erlang. Stop and start also respected. Timeout and more than one output port isn't supported. | [Flow](https://flows.red-erik.org/f/3bba732ae17b01a9) |
 | [http in](src/nodes/ered_node_http_in.erl) | working for GET and POST, not available for PUT,DELETE etc | [Flow](https://flows.red-erik.org/f/64445798b59d2630) |
 | [http request](src/nodes/ered_node_http_request.erl) | basic support for doing rrequests, anything complex probably won't work | [Flow](https://flows.red-erik.org/f/27804627fb8f56bd) |
@@ -106,7 +106,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 | [mqtt in](src/nodes/ered_node_mqtt_in.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [mqtt out](src/nodes/ered_node_mqtt_out.erl) | should be working | [Flow](https://flows.red-erik.org/f/486c1412721bb241) |
 | [noop](src/nodes/ered_node_noop.erl) | doing nothing is very much supported | [Flow](https://flows.red-erik.org/f/2c5903c9e50d0648) |
-| [range](src/nodes/ered_node_range.erl) | Working  | [Flow](https://flows.red-erik.org/f/ae38b2dbd23d1681) |
+| [range](src/nodes/ered_node_range.erl) | range node is used to map between two different value ranges. | [Flow](https://flows.red-erik.org/f/ae38b2dbd23d1681) |
 | [sort](src/nodes/ered_node_sort.erl) | basic sort function implemented | [Flow](https://flows.red-erik.org/f/b7ebaf91f4d66ab3) |
 | [split](src/nodes/ered_node_split.erl) | splitting arrays into individual messages is supported, string, buffers and objects aren't. | [Flow](https://flows.red-erik.org/f/b1430ea37ba7cc19) |
 | [status](src/nodes/ered_node_status.erl) | working | [Flow](https://flows.red-erik.org/f/a916165378c446e3) |
