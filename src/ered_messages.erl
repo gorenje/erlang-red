@@ -339,6 +339,7 @@ to_bool("")          -> false;
 to_bool(<<"false">>) -> false;
 to_bool(false)       -> false;
 to_bool("false")     -> false;
+to_bool(undefined)   -> undefined;
 to_bool(_) -> true.
 
 %%

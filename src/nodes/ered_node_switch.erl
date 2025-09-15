@@ -130,6 +130,8 @@ obtain_operator_value(<<"jsonata">>, OpVal, Msg) ->
     case erlang_red_jsonata:execute(OpVal, Msg) of
         {ok, Result} ->
             {ok, Result};
+        {undefined, _Result} ->
+            {ok, undefined};
         {error, Error} ->
             {error, jstr("jsonata term: ~p", [Error])};
         {unsupported, Error} ->
@@ -245,6 +247,8 @@ is_empty(Val) when is_map(Val) ->
     maps:size(Val) =:= 0;
 is_empty(<<"">>) ->
     true;
+is_empty(undefined) ->
+    false;
 is_empty(Val) when is_number(Val) ->
     false;
 is_empty(_) ->
@@ -262,6 +266,8 @@ is_not_empty(null) ->
 is_not_empty(true) ->
     false;
 is_not_empty(false) ->
+    false;
+is_not_empty(undefined) ->
     false;
 is_not_empty(Val) when is_number(Val) ->
     false;
@@ -392,13 +398,14 @@ handle_check_all_rules(
             %% Javascript has "null" "undefined" "NaN" and "Infinity"
             %% JSON has "true", "false", and "null" - the latter being the
             %% atom null in Erlang.
-            Val =:= null andalso send_msg_on(Wires, Msg),
+            (Val =:= null orelse Val =:= undefined) andalso send_msg_on(Wires, Msg),
             handle_check_all_rules(
                 Rules, Val, MoreWires, NodeDef, Msg, Val =:= null
             );
         {<<"nnull">>, _} ->
             %% not-null is the exact opposite of <<"null">> operator
-            Val =/= null andalso send_msg_on(Wires, Msg),
+            Val =/= null andalso Val =/= undefined
+                andalso send_msg_on(Wires, Msg),
             handle_check_all_rules(
                 Rules, Val, MoreWires, NodeDef, Msg, Val =/= null
             );
@@ -500,6 +507,8 @@ handle_stop_after_one(
             end;
         <<"null">> ->
             case Val of
+                undefined ->
+                    send_msg_on(Wires, Msg);
                 null ->
                     send_msg_on(Wires, Msg);
                 _ ->
@@ -508,6 +517,8 @@ handle_stop_after_one(
         <<"nnull">> ->
             case Val of
                 null ->
+                    handle_stop_after_one(Rules, Val, MoreWires, NodeDef, Msg);
+                undefined ->
                     handle_stop_after_one(Rules, Val, MoreWires, NodeDef, Msg);
                 _ ->
                     send_msg_on(Wires, Msg)
@@ -540,6 +551,8 @@ obtain_compare_to_value({ok, <<"jsonata">>}, {ok, PropName}, Msg) ->
     case erlang_red_jsonata:execute(PropName, Msg) of
         {ok, Result} ->
             {ok, Result};
+        {undefined, _Result} ->
+            {ok, undefined};
         {error, Error} ->
             {error, jstr("jsonata term: ~p", [Error])};
         {unsupported, Error} ->
