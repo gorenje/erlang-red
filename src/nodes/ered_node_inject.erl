@@ -57,6 +57,7 @@
 -import(ered_messages, [
     convert_to_num/1,
     decode_json/1,
+    delete_prop/2,
     get_prop/2,
     jsbuffer_to_binary/1,
     set_prop_value/3,
@@ -153,6 +154,8 @@ value_for_proptype(<<"jsonata">>, Val, Prop, NodeDef, Msg) ->
     case erlang_red_jsonata:execute(Val, Msg) of
         {ok, Result} ->
             set_prop_value(Prop, Result, Msg);
+        {undefined, _Result} ->
+            delete_prop(Prop, Msg);
         {error, Error} ->
             unsupported(NodeDef, Msg, jstr("jsonata term: ~p", [Error])),
             Msg;
