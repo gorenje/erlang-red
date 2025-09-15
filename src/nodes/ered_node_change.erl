@@ -224,6 +224,10 @@ do_set_value(
                 ),
             post_exception_or_debug(NodeDef, Msg, Error),
             throw(dont_send_message);
+        error:undefined:Stacktrace ->
+            %% nothing wrong, just that JSONata returned no value, so unset
+            %% the property on the msg.
+            delete_prop(Prop, Msg);
         E:M:S ->
             ErrMsg = jstr("jsonata exception:~n~n~p~n~n~p~n~n~p", [E, M, S]),
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
