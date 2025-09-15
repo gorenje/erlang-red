@@ -352,3 +352,8 @@ Human Intelligence
 No Artificial Intelligence was harmed in the creation of this codebase. This codebase is old skool search engine (ddg), stackoverflow, blog posts and RTFM technology.
 
 AI contributions can be made according to the rules defined in [.aiignore](.aiignore).
+
+Coffee Time
+----
+
+<a href="https://www.buymeacoffee.com/gorenje" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Tee" style="height: 42px !important;width: 152px !important;" ></a>
