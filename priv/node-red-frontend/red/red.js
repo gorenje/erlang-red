@@ -1310,7 +1310,6 @@ var RED = (function() {
         RED.diagnostics.init();
         RED.diff.init();
 
-
         RED.deploy.init(RED.settings.theme("deployButton",null));
 
         RED.keyboard.init(buildMainMenu);
@@ -1435,6 +1434,7 @@ var RED = (function() {
     }
 
     return {
+        isErlangRed: true,
         init: init,
         loader: loader
     }
