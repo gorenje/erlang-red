@@ -55,7 +55,25 @@ handle_event(_, NodeDef) ->
 %%
 handle_msg(
     {incoming, Msg},
-    #{<<"rules">> := Rules, <<"wires">> := Wires} = NodeDef
+    NodeDef
+) ->
+    deal_with_msg(Msg, NodeDef);
+%%
+%%
+handle_msg(_, NodeDef) ->
+    {unhandled, NodeDef}.
+
+%%
+%% ----------------------- Helpers
+%%
+
+deal_with_msg(
+  Msg,
+  #{
+    <<"rules">> := Rules,
+    <<"wires">> := Wires,
+    <<"checkall">> := CheckAll
+   } = NodeDef
 ) ->
     case
         obtain_compare_to_value(
@@ -65,8 +83,8 @@ handle_msg(
         )
     of
         {ok, Val} ->
-            case maps:find(<<"checkall">>, NodeDef) of
-                {ok, <<"true">>} ->
+            case CheckAll of
+                <<"true">> ->
                     %% last flag indicates that nothing has yet matched -
                     %% required for the otherwise ('else') operator.
                     handle_check_all_rules(
@@ -77,7 +95,7 @@ handle_msg(
                         Msg,
                         false
                     );
-                _ ->
+                <<"false">> ->
                     handle_stop_after_one(
                         Rules,
                         Val,
@@ -87,8 +105,8 @@ handle_msg(
                     )
             end;
         property_not_found_on_msg ->
-            case maps:find(<<"checkall">>, NodeDef) of
-                {ok, <<"true">>} ->
+            case CheckAll of
+                <<"true">> ->
                     %% last flag indicates that nothing has yet matched -
                     %% required for the otherwise ('else') operator.
                     handle_check_all_rules(
@@ -99,7 +117,7 @@ handle_msg(
                         Msg,
                         false
                     );
-                _ ->
+                <<"false">> ->
                     handle_stop_after_one(
                         Rules,
                         not_defined_on_msg,
@@ -115,17 +133,10 @@ handle_msg(
         {exception, ErrMsg} ->
             post_exception_or_debug(NodeDef, Msg, ErrMsg)
     end,
-
-    {handled, NodeDef, dont_send_complete_msg};
-%%
-%%
-handle_msg(_, NodeDef) ->
-    {unhandled, NodeDef}.
+    {handled, NodeDef, dont_send_complete_msg}.
 
 %%
-%% ----------------------- Helpers
 %%
-
 obtain_operator_value(<<"jsonata">>, OpVal, Msg) ->
     case erlang_red_jsonata:execute(OpVal, Msg) of
         {ok, Result} ->
@@ -135,9 +146,9 @@ obtain_operator_value(<<"jsonata">>, OpVal, Msg) ->
         {error, Error} ->
             {error, jstr("jsonata term: ~p", [Error])};
         {unsupported, Error} ->
-            {exception, Error};
+            {error, Error};
         {exception, {_E, M, _S}} ->
-            {exception, M}
+            {error, M}
     end;
 obtain_operator_value(<<"num">>, OpVal, _Msg) ->
     {ok, convert_to_num(OpVal)};
@@ -177,7 +188,11 @@ does_rule_match(<<"bleq">>, OpCompVal, MsgVal) ->
     is_same(to_bool(MsgVal), OpCompVal);
 does_rule_match(<<"cont">>, OpCompVal, MsgVal) ->
     string:find(MsgVal, OpCompVal) =/= nomatch;
-does_rule_match(Op, _, _) ->
+does_rule_match(<<"jsonata_exp">>, undefined, _MsgVal) ->
+    false;
+does_rule_match(<<"jsonata_exp">>, OpCompVal, _MsgVal) ->
+    to_bool(OpCompVal);
+does_rule_match(Op, OpCompVal, MsgVal) ->
     {unsupported, jstr("unsupported rule ~p", [Op])}.
 
 does_rule_match(Op, Type, OpVal, MsgVal, NodeDef, Msg) ->
@@ -191,12 +206,9 @@ does_rule_match(Op, Type, OpVal, MsgVal, NodeDef, Msg) ->
             end;
         {error, ErrMsg} ->
             post_exception_or_debug(NodeDef, Msg, ErrMsg),
-            false;
+            stop_on_error;
         {unsupported, ErrMsg} ->
             unsupported(NodeDef, Msg, ErrMsg),
-            false;
-        {exception, ErrMsg} ->
-            post_exception_or_debug(NodeDef, Msg, ErrMsg),
             false
     end.
 %%
@@ -233,9 +245,6 @@ does_regex_match(
             false;
         {unsupported, ErrMsg} ->
             unsupported(NodeDef, Msg, ErrMsg),
-            false;
-        {exception, ErrMsg} ->
-            post_exception_or_debug(NodeDef, Msg, ErrMsg),
             false
     end.
 
@@ -328,9 +337,7 @@ handle_check_all_rules(
             handle_check_all_rules(Rules, Val, MoreWires, NodeDef, Msg, true);
         {<<"true">>, _} ->
             %% this is a "is true" operation
-            case
-                does_rule_match(<<"bleq">>, <<"bool">>, true, Val, NodeDef, Msg)
-            of
+            case Val of
                 true ->
                     send_msg_on(Wires, Msg),
                     handle_check_all_rules(
@@ -343,12 +350,8 @@ handle_check_all_rules(
             end;
         {<<"false">>, _} ->
             %% this is a "is false" operation
-            case
-                does_rule_match(
-                    <<"bleq">>, <<"bool">>, false, Val, NodeDef, Msg
-                )
-            of
-                true ->
+            case Val of
+                false ->
                     send_msg_on(Wires, Msg),
                     handle_check_all_rules(
                         Rules, Val, MoreWires, NodeDef, Msg, true
@@ -398,7 +401,8 @@ handle_check_all_rules(
             %% Javascript has "null" "undefined" "NaN" and "Infinity"
             %% JSON has "true", "false", and "null" - the latter being the
             %% atom null in Erlang.
-            (Val =:= null orelse Val =:= undefined) andalso send_msg_on(Wires, Msg),
+            (Val =:= null orelse Val =:= undefined)
+                andalso send_msg_on(Wires, Msg),
             handle_check_all_rules(
                 Rules, Val, MoreWires, NodeDef, Msg, Val =:= null
             );
@@ -464,9 +468,7 @@ handle_stop_after_one(
             send_msg_on(Wires, Msg);
         <<"true">> ->
             %% this is a "is true" operation
-            case
-                does_rule_match(<<"bleq">>, <<"bool">>, true, Val, NodeDef, Msg)
-            of
+            case Val of
                 true ->
                     send_msg_on(Wires, Msg);
                 _ ->
@@ -474,12 +476,8 @@ handle_stop_after_one(
             end;
         <<"false">> ->
             %% this is a "is false" operation
-            case
-                does_rule_match(
-                    <<"bleq">>, <<"bool">>, false, Val, NodeDef, Msg
-                )
-            of
-                true ->
+            case Val of
+                false ->
                     send_msg_on(Wires, Msg);
                 _ ->
                     handle_stop_after_one(Rules, Val, MoreWires, NodeDef, Msg)
@@ -530,6 +528,8 @@ handle_stop_after_one(
             case does_rule_match(Op, Type, OpVal, Val, NodeDef, Msg) of
                 true ->
                     send_msg_on(Wires, Msg);
+                stop_on_error ->
+                    done;
                 _ ->
                     handle_stop_after_one(Rules, Val, MoreWires, NodeDef, Msg)
             end
