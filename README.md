@@ -4,9 +4,13 @@ Erlang-Red - BEAM/Erlang backend for Node-RED
 [![Erlang CI](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml/badge.svg)](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gorenje/erlang-red)
 
-Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatible with existing flow code.
+Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatibility with existing Node-RED flow code.
 
-The goal is bring the advantages of low-code visual [flow-based programming](https://jpaulm.github.io/fbp/index.html) to a programming language that is designed for message passing and concurrency from the ground up, hence Erlang. More details described in the corresponding [blog post](https://blog.openmindmap.org/erlang-red).
+<p align="center">
+<img width="128px" src=".images/logo.png" alt="Experimental Logo"/>
+</p>
+
+Bring the advantages of low-code visual [flow-based programming](https://jpaulm.github.io/fbp/index.html) to a programming language that is designed for message passing and concurrency from the ground up, hence Erlang. More details described in the corresponding [blog post](https://blog.openmindmap.org/erlang-red).
 
 Why?
 ---
