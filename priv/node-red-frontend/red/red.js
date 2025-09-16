@@ -21451,7 +21451,7 @@ RED.keyboard = (function() {
             var item;
             if (data.nameField && data.valueField) {
                 item = {
-                    name: data.nameField.val(),
+                    name: data.nameField.val() || data.nameField.typedInput("type") || data.nameField.typedInput("value"),
                     value: data.valueField.typedInput("value"),
                     type: data.valueField.typedInput("type")
                 };
@@ -21509,7 +21509,7 @@ RED.keyboard = (function() {
             var data = el.data('data');
             if (data.nameField && data.valueField) {
                 var item = {
-                    name: data.nameField.val(),
+                    name: data.nameField.val() || data.nameField.typedInput("type") || data.nameField.typedInput("value"),
                     value: data.valueField.typedInput("value"),
                     type: data.valueField.typedInput("type")
                 };
@@ -39231,7 +39231,7 @@ RED.editor = (function() {
                     var item;
                     if (data.nameField && data.valueField) {
                         item = {
-                            name: data.nameField.val(),
+                            name: data.nameField.val() || data.nameField.typedInput("type") || data.nameField.typedInput("value"),
                             value: data.valueField.typedInput("value"),
                             type: data.valueField.typedInput("type")
                         }
@@ -40330,7 +40330,46 @@ RED.editor = (function() {
                         class: "node-input-env-name",
                         type: "text",
                         placeholder: RED._("common.label.name")
-                    }).attr("autocomplete","disable").appendTo(envRow).val(opt.name);
+                    }).attr("autocomplete","disable").appendTo(envRow);
+
+                    if ( node.type == "tab" ) {
+                        let nameTypes = [
+                            "NODE_RED_DIVERGENT",
+                            "ERED_TIMEOUT",
+                            "ERED_PENDING",
+                            "ERED_ONLY",
+                            "ERED_NOT_EUNIT",
+                            "ERED_KEEPRUNNING"
+                        ]
+
+                        nameField.typedInput({default:'str',types:['str',
+                                   ...nameTypes.map( d => {
+                                        return { value: d, label: d,
+                                                      hasValue: false }})]});
+
+                        if (nameTypes.includes(opt.name) ) {
+                            nameField.typedInput('value', opt.name)
+                            nameField.typedInput('type', opt.name)
+                        } else {
+                            nameField.typedInput('type', 'str')
+                            nameField.typedInput('value', opt.name)
+                        }
+
+                        nameField.on('change', () => {
+                            if ( nameTypes.includes(nameField.typedInput('type'))) {
+                                valueField.typedInput('type', 'bool');
+                            } else if ( nameField.typedInput('type') == 'str' ) {
+                                valueField.typedInput('type', 'str');
+                            }
+
+                            if ( nameField.typedInput('type') == "ERED_TIMEOUT" ) {
+                                valueField.typedInput('type', 'num');
+                            }
+                        })
+                    } else {
+                        nameField.val(opt.name);
+                    }
+
                     valueField = $('<input/>',{
                         style: "width:100%",
                         class: "node-input-env-value",
