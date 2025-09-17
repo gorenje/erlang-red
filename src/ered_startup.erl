@@ -75,9 +75,7 @@ create_pids_for_nodes([NodeDef | MoreNodeDefs], Pids, WsName) ->
 
 %%
 %% This can be used by a supervisor to revive a dead process.
-spin_up_node(NodeDef, WsName) ->
-    {IdStr, TypeStr} = ?NODE_ID_AND_TYPE(NodeDef),
-
+spin_up_node(#{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef, WsName) ->
     %% here have to respect the 'd' (disabled) attribute. if true, then
     %% the node does not need to have a Pid created for it.
     Module = node_type_to_module(TypeStr, disabled(NodeDef)),

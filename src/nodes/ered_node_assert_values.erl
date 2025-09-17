@@ -39,8 +39,6 @@
     node_status/5
 ]).
 -import(ered_nodes, [
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/2,
     send_msg_to_connected_nodes/2,
     this_should_not_happen/2
@@ -64,8 +62,7 @@ start(NodeDef, _WsName) ->
     ).
 
 debug_data(NodeDef, ErrMsg) ->
-    D = ?BASE_DATA,
-    D#{
+    ?ObtainFrom(NodeDef)#{
         <<"msg">> => ErrMsg,
         <<"format">> => <<"string">>
     }.
@@ -377,11 +374,12 @@ check_rules([H | T], NodeDef, Msg, FailureCount, Failures, SuccessCount) ->
 
 %%
 %%
-handle_event({stop, WsName}, NodeDef) ->
+handle_event(
+    {stop, WsName},
+    #{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef
+) ->
     case maps:find('_mc_incoming', NodeDef) of
         {ok, 0} ->
-            {IdStr, TypeStr} = ?NODE_ID_AND_TYPE(NodeDef),
-
             this_should_not_happen(
                 NodeDef,
                 io_lib:format(
@@ -390,9 +388,7 @@ handle_event({stop, WsName}, NodeDef) ->
                 )
             ),
 
-            D = ?BASE_DATA,
-
-            Data = D#{
+            Data = ?ObtainFrom(NodeDef)#{
                 <<"msg">> => <<"Assert Values Not Reached">>,
                 <<"format">> => <<"string">>
             },

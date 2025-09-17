@@ -19,18 +19,18 @@
 -import(ered_messages, [
     decode_json/1
 ]).
+-import(ered_nodes, [
+    jstr/2
+]).
 
 %%
 %% return the env array on the tab or empty array.
 find_tab_env_ary([]) ->
     [];
-find_tab_env_ary([NodeDef = #{<<"type">> := <<"tab">>} | _T]) ->
-    case maps:find(<<"env">>, NodeDef) of
-        {ok, V} ->
-            V;
-        _ ->
-            []
-    end;
+find_tab_env_ary([#{<<"type">> := <<"tab">>, <<"env">> := V} | _T]) ->
+    V;
+find_tab_env_ary([#{<<"type">> := <<"tab">>} | _T]) ->
+    [];
 find_tab_env_ary([_H | T]) ->
     find_tab_env_ary(T).
 
@@ -38,18 +38,13 @@ find_tab_env_ary([_H | T]) ->
 %%
 tab_name_or_filename([], FileName) ->
     FileName;
-tab_name_or_filename([NodeDef | MoreNodeDefs], FileName) ->
-    case maps:find(<<"type">>, NodeDef) of
-        {ok, <<"tab">>} ->
-            case maps:find(<<"label">>, NodeDef) of
-                {ok, Val} ->
-                    Val;
-                _ ->
-                    FileName
-            end;
-        _ ->
-            tab_name_or_filename(MoreNodeDefs, FileName)
-    end.
+tab_name_or_filename(
+    [#{<<"type">> := <<"tab">>, <<"label">> := Label} | _MoreNodeDefs],
+    _FileName
+) ->
+    Label;
+tab_name_or_filename([_NodeDef | MoreNodeDefs], FileName) ->
+    tab_name_or_filename(MoreNodeDefs, FileName).
 
 %%
 %% Compute a timeout for the flow test, can be set in the flows.json file.
@@ -76,6 +71,7 @@ obtain_timeout(
 obtain_timeout([_H | T], DefaultTimeout) ->
     obtain_timeout(T, DefaultTimeout).
 
+%%
 compute_timeout(Ary) ->
     obtain_timeout(find_tab_env_ary(Ary), false).
 
@@ -96,34 +92,32 @@ append_tab_name_to_filename(Ary, FileName) ->
         FileName,
         maps:find(<<"z">>, lists:nth(2, Ary))
     ).
-
 append_tab_name_to_filename([], FileName, {ok, TabId}) ->
     {TabId, FileName};
-append_tab_name_to_filename([NodeDef | MoreNodeDefs], FileName, {ok, TabId}) ->
-    case maps:find(<<"type">>, NodeDef) of
-        {ok, <<"tab">>} ->
-            {ok, Val} = maps:find(<<"label">>, NodeDef),
-            {ok, TabId2} = maps:find(<<"id">>, NodeDef),
-
-            {TabId2,
-                binary_to_list(
-                    list_to_binary(
-                        io_lib:format(
-                            "~s (~s)",
-                            [Val, FileName]
-                        )
-                    )
-                )};
-        _ ->
-            append_tab_name_to_filename(MoreNodeDefs, FileName, {ok, TabId})
-    end.
+append_tab_name_to_filename(
+    [
+        #{<<"id">> := Id, <<"type">> := <<"tab">>, <<"label">> := V}
+        | _MoreNodeDefs
+    ],
+    FileName,
+    {ok, _TabId}
+) ->
+    {Id, binary_to_list(jstr("~s (~s)", [V, FileName]))};
+append_tab_name_to_filename(
+    [_NodeDef | MoreNodeDefs],
+    FileName,
+    {ok, TabId}
+) ->
+    append_tab_name_to_filename(MoreNodeDefs, FileName, {ok, TabId}).
 
 %%
 %%
 get_pending_envvar([]) ->
     false;
-get_pending_envvar([#{<<"value">> := V, <<"name">> := <<"ERED_PENDING">>} | _T]) ->
-    (V == <<"true">>) or (V == <<"TRUE">>);
+get_pending_envvar(
+    [#{<<"value">> := V, <<"name">> := <<"ERED_PENDING">>} | _T]
+) ->
+    is_true(V);
 get_pending_envvar([_H | T]) ->
     get_pending_envvar(T).
 
@@ -135,7 +129,7 @@ is_test_case_pending(Ary) ->
 keep_running([]) ->
     false;
 keep_running([#{<<"value">> := V, <<"name">> := <<"ERED_KEEPRUNNING">>} | _T]) ->
-    (V == <<"true">>) or (V == <<"TRUE">>);
+    is_true(V);
 keep_running([_H | T]) ->
     keep_running(T).
 
@@ -151,9 +145,17 @@ should_keep_flow_running(Ary) ->
 not_eunit_test([]) ->
     false;
 not_eunit_test([#{<<"value">> := V, <<"name">> := <<"ERED_NOT_EUNIT">>} | _T]) ->
-    (V == <<"true">>) or (V == <<"TRUE">>);
+    is_true(V);
 not_eunit_test([_H | T]) ->
     not_eunit_test(T).
 
+%%
+%%
 ignore_as_eunit_test(Ary) ->
     not_eunit_test(find_tab_env_ary(Ary)).
+
+%%
+%%
+is_true(<<"true">>) -> true;
+is_true(<<"TRUE">>) -> true;
+is_true(_) -> false.

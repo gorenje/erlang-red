@@ -16,8 +16,6 @@
 %%
 
 -import(ered_nodes, [
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/2,
     this_should_not_happen/2
 ]).
@@ -86,9 +84,7 @@ handle_event(
                 )
             ),
 
-            D = ?BASE_DATA,
-
-            Data = D#{
+            Data = ?ObtainFrom(NodeDef)#{
                 <<"_alias">> => IdStr,
                 <<"topic">> => <<"">>,
                 <<"format">> => <<"string">>,

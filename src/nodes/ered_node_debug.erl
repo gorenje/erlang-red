@@ -37,8 +37,6 @@
     unsupported/3
 ]).
 -import(ered_nodes, [
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/2
 ]).
 -import(ered_messages, [

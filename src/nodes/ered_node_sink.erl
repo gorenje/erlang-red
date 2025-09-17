@@ -28,6 +28,5 @@ handle_event(_, NodeDef) ->
 %%
 handle_msg({incoming, _Msg}, NodeDef) ->
     {handled, NodeDef, dont_send_complete_msg};
-
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.

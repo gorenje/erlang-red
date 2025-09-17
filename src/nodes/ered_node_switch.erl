@@ -68,12 +68,12 @@ handle_msg(_, NodeDef) ->
 %%
 
 deal_with_msg(
-  Msg,
-  #{
-    <<"rules">> := Rules,
-    <<"wires">> := Wires,
-    <<"checkall">> := CheckAll
-   } = NodeDef
+    Msg,
+    #{
+        <<"rules">> := Rules,
+        <<"wires">> := Wires,
+        <<"checkall">> := CheckAll
+    } = NodeDef
 ) ->
     case
         obtain_compare_to_value(
@@ -192,7 +192,7 @@ does_rule_match(<<"jsonata_exp">>, undefined, _MsgVal) ->
     false;
 does_rule_match(<<"jsonata_exp">>, OpCompVal, _MsgVal) ->
     to_bool(OpCompVal);
-does_rule_match(Op, OpCompVal, MsgVal) ->
+does_rule_match(Op, _OpCompVal, _MsgVal) ->
     {unsupported, jstr("unsupported rule ~p", [Op])}.
 
 does_rule_match(Op, Type, OpVal, MsgVal, NodeDef, Msg) ->
@@ -401,15 +401,15 @@ handle_check_all_rules(
             %% Javascript has "null" "undefined" "NaN" and "Infinity"
             %% JSON has "true", "false", and "null" - the latter being the
             %% atom null in Erlang.
-            (Val =:= null orelse Val =:= undefined)
-                andalso send_msg_on(Wires, Msg),
+            (Val =:= null orelse Val =:= undefined) andalso
+                send_msg_on(Wires, Msg),
             handle_check_all_rules(
                 Rules, Val, MoreWires, NodeDef, Msg, Val =:= null
             );
         {<<"nnull">>, _} ->
             %% not-null is the exact opposite of <<"null">> operator
-            Val =/= null andalso Val =/= undefined
-                andalso send_msg_on(Wires, Msg),
+            Val =/= null andalso Val =/= undefined andalso
+                send_msg_on(Wires, Msg),
             handle_check_all_rules(
                 Rules, Val, MoreWires, NodeDef, Msg, Val =/= null
             );

@@ -47,7 +47,6 @@
     ws_from/1
 ]).
 -import(ered_nodes, [
-    get_prop_value_from_map/3,
     jstr/2,
     send_msg_to_connected_nodes/2
 ]).
@@ -59,7 +58,7 @@
     to_bool/1
 ]).
 
--define(PIDSTATUS(PID),
+-define(PostPidAsStatus(PID),
     node_status(
         ws_from(Msg),
         NodeDef,
@@ -69,7 +68,7 @@
     )
 ).
 
--define(STATUSKILLED,
+-define(StatusBecomesKilled,
     node_status(ws_from(Msg), NodeDef, "Killed", "red", "dot")
 ).
 
@@ -95,7 +94,7 @@ handle_msg(
 ) ->
     node_status_clear(ws_from(Msg), NodeDef),
 
-    StatusCode > 0 andalso ?STATUSKILLED,
+    StatusCode > 0 andalso ?StatusBecomesKilled,
 
     %% trigger a post completed message
     {handled,
@@ -143,12 +142,23 @@ handle_msg(_, NodeDef) ->
 start_command_running(Msg, #{<<"command">> := CmdStr} = NodeDef) ->
     start_command_running(CmdStr, Msg, NodeDef).
 
+%%
+%% Check the command value
 start_command_running(<<>>, Msg, NodeDef) ->
     ErrMsg = jstr(
         "TypeError: The argument 'file' cannot be empty. Received ''", []
     ),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     NodeDef;
+start_command_running(
+    Cmd, Msg, #{<<"timer">> := Timer} = NodeDef
+) when Timer =/= <<>>, Timer =/= "" ->
+    start_command_running(Cmd, Msg, NodeDef, Timer);
+start_command_running(Cmd, Msg, NodeDef) ->
+    start_command_running(Cmd, Msg, NodeDef, <<"-1">>).
+
+%%
+%% Start command running with a defined timer value
 start_command_running(
     Cmd,
     Msg,
@@ -158,13 +168,12 @@ start_command_running(
         <<"append">> := Append,
         <<"addpay">> := AddPayload,
         '_process_list' := ProcessList
-    } = NodeDef
+    } = NodeDef,
+    Timer
 ) ->
     Opts = #{
         append => Append,
-        timeout => convert_to_num(
-            get_prop_value_from_map(<<"timer">>, NodeDef, <<"-1">>)
-        ),
+        timeout => convert_to_num(Timer),
         addpayload => AddPayload
     },
 
@@ -206,6 +215,6 @@ start_command_running(
 
     MachPid = gen_server:call(ExecPid, run_command),
 
-    ?PIDSTATUS(integer_to_binary(MachPid)),
+    ?PostPidAsStatus(integer_to_binary(MachPid)),
 
     NodeDef#{'_process_list' => [{MachPid, ExecPid}] ++ ProcessList}.

@@ -14,8 +14,6 @@
 %%
 
 -import(ered_nodes, [
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/2,
     this_should_not_happen/2
 ]).
@@ -101,9 +99,7 @@ handle_msg(_, NodeDef) ->
 %% --------------- helpers
 %%
 create_data_for_debug(NodeDef, TypeStr) ->
-    D = ?BASE_DATA,
-
-    D#{
+    ?ObtainFrom(NodeDef)#{
         ?AddTopic(<<>>),
         <<"msg">> => jstr("node type '~s' is not implemented", [TypeStr]),
         <<"format">> => <<"string">>

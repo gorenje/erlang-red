@@ -36,8 +36,6 @@
 -import(ered_nodes, [
     generate_id/0,
     generate_id/1,
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/1,
     jstr/2,
     this_should_not_happen/2
@@ -97,8 +95,7 @@ unittest_result(WsName, FlowId, success) ->
 unsupported(NodeDef, {websocket, WsName}, ErrMsg) ->
     unsupported(NodeDef, #{'_ws' => WsName}, ErrMsg);
 unsupported(NodeDef, Msg, ErrMsg) ->
-    D = ?BASE_DATA,
-    Data = D#{
+    Data = ?ObtainFrom(NodeDef)#{
       <<"msg">> => list_to_binary(
                      io_lib:format(
                        "Unsupported Feature:~n~n~s~n~nNodeDef: ~p ~n~nMsg: ~p",
@@ -111,8 +108,7 @@ unsupported(NodeDef, Msg, ErrMsg) ->
 
 %% erlfmt:ignore lined up and to attention
 send_out_debug_msg(NodeDef, Msg, ErrMsg, DebugType) ->
-    D = ?BASE_DATA,
-    Data = D#{
+    Data = ?ObtainFrom(NodeDef)#{
       <<"msg">>    => ErrMsg,
       <<"format">> => <<"string">>
      },
@@ -121,8 +117,7 @@ send_out_debug_msg(NodeDef, Msg, ErrMsg, DebugType) ->
 
 %% erlfmt:ignore lined up and to attention
 send_out_debug_error(NodeDef, Msg) ->
-    D = ?BASE_DATA,
-    Data = D#{
+    Data = ?ObtainFrom(NodeDef)#{
       <<"msg">>    => Msg,
       <<"format">> => <<"object">>
      },
@@ -130,8 +125,7 @@ send_out_debug_error(NodeDef, Msg) ->
     debug(ws_from(Msg), Data, error).
 
 send_out_debug_warning(NodeDef, Msg) ->
-    D = ?BASE_DATA,
-    Data = D#{
+    Data = ?ObtainFrom(NodeDef)#{
         <<"msg">> => Msg,
         <<"format">> => <<"object">>
     },
@@ -152,8 +146,8 @@ send_to_debug_sidebar(
     %% of "object" as opposed to "Object" (capital-o) causes less
     %% breakage. Definitely something to investigate.
     %% See info for test id: c4690c0a085d6ef5 for more details.
-    Data = ?BASE_DATA#{
-        <<"topic">> => to_binary_if_not_binary(?TopicFromMsg),
+    Data = ?ObtainFrom(NodeDef)#{
+        <<"topic">> => ?TopicFrom(Msg),
         <<"msg">> => jstr(jsonata_eval_or_error_msg(Jsonata, Msg)),
         <<"format">> => <<"string">>
     },
@@ -188,8 +182,8 @@ send_to_debug_sidebar(
     %% of "object" as opposed to "Object" (capital-o) causes less
     %% breakage. Definitely something to investigate.
     %% See info for test id: c4690c0a085d6ef5 for more details.
-    Data = ?BASE_DATA#{
-        <<"topic">> => to_binary_if_not_binary(?TopicFromMsg),
+    Data = ?ObtainFrom(NodeDef)#{
+        <<"topic">> => ?TopicFrom(Msg),
         <<"msg">> => #{PropName => retrieve_prop_value(PropName, Msg)},
         <<"format">> => <<"object">>
     },
@@ -201,8 +195,8 @@ send_to_debug_sidebar(NodeDef, Msg) ->
     %% of "object" as opposed to "Object" (capital-o) causes less
     %% breakage. Definitely something to investigate.
     %% See info for test id: c4690c0a085d6ef5 for more details.
-    Data = ?BASE_DATA#{
-        <<"topic">> => to_binary_if_not_binary(?TopicFromMsg),
+    Data = ?ObtainFrom(NodeDef)#{
+        <<"topic">> => ?TopicFrom(Msg),
         <<"msg">> => Msg,
         <<"format">> => <<"object">>
     },
@@ -240,9 +234,7 @@ ws_from(Msg) ->
 
 %%
 %% helpers
-debug_string(NodeDef, Msg) ->
-    IdStr = get_prop_value_from_map(<<"id">>, NodeDef),
-    ZStr = get_prop_value_from_map(<<"z">>, NodeDef),
+debug_string(#{<<"id">> := IdStr, <<"z">> := ZStr} = _NodeDef, Msg) ->
     debug_string(IdStr, ZStr, Msg).
 
 %% erlfmt:ignore the stars are lined up
@@ -260,9 +252,7 @@ debug_string(NodeId,TabId,Msg) ->
 assert_failure(NodeDef, WsName, ErrMsg) ->
     this_should_not_happen(NodeDef, ErrMsg),
 
-    D = ?BASE_DATA,
-
-    Data = D#{
+    Data = ?ObtainFrom(NodeDef)#{
         <<"msg">> => jstr(ErrMsg),
         <<"format">> => <<"string">>
     },
@@ -282,12 +272,3 @@ post_exception_or_debug(NodeDef, Msg, ErrMsg) ->
                 NodeDef, maps:put(<<"error_msg">>, ErrMsg, Msg)
             )
     end.
-
-%%
-%%
-to_binary_if_not_binary(Obj) when is_binary(Obj) ->
-    Obj;
-to_binary_if_not_binary(Obj) when is_list(Obj) ->
-    list_to_binary(Obj);
-to_binary_if_not_binary(Obj) ->
-    Obj.

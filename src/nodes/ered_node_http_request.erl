@@ -13,8 +13,6 @@
 %% results into the flow.
 %%
 -import(ered_nodes, [
-    get_prop_value_from_map/2,
-    get_prop_value_from_map/3,
     jstr/1,
     jstr/2,
     send_msg_to_connected_nodes/2
@@ -72,13 +70,13 @@ handle_event(_, NodeDef) ->
 handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
     unsupported_headers_warnings(NodeDef, Msg),
 
-    Url = get_prop_from_nodedef_or_msg(<<"url">>, NodeDef, Msg),
+    Url = get_url(NodeDef, Msg),
     Method =
         case NodeMeth of
             <<"use">> ->
-                get_prop_value_from_map(<<"method">>, Msg);
+                maps:get(<<"method">>, Msg, []);
             _ ->
-                get_prop_from_nodedef_or_msg(<<"method">>, NodeDef, Msg)
+                NodeMeth
         end,
 
     case {Method, Url} of
@@ -113,6 +111,13 @@ handle_msg(_, NodeDef) ->
 %%
 %% -------------- helpers
 %%
+get_url(#{<<"url">> := Url}, _) when Url =/= <<>>, Url =/= "" ->
+    Url;
+get_url(NodeDef, Msg) ->
+    get_url(Msg, ignored);
+get_url(_, _) ->
+    [].
+
 headers_to_map(Headers) ->
     %% convert keys to binary and then the header list to a map
     maps:from_list([
@@ -144,16 +149,6 @@ unsupported_headers_warnings(NodeDef, Msg) ->
 
 mth_to_atom(Method) when is_binary(Method) ->
     binary_to_atom(string:lowercase(Method)).
-
-%%
-%% get prop from NodeDef or Msg
-get_prop_from_nodedef_or_msg(PropName, NodeDef, Msg) ->
-    case maps:find(PropName, Msg) of
-        {ok, MsgUrl} ->
-            get_prop_value_from_map(PropName, NodeDef, MsgUrl);
-        _ ->
-            get_prop_value_from_map(PropName, NodeDef)
-    end.
 
 perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
     case maps:find(<<"payload">>, Msg) of

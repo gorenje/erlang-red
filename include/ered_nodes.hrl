@@ -1,20 +1,3 @@
--define(NODE_ID_AND_TYPE(NodeDef), {
-    maps:get(<<"id">>, NodeDef), maps:get(<<"type">>, NodeDef)
-}).
-
--define(BASE_DATA, begin
-    #{
-        <<"id">> => get_prop_value_from_map(<<"id">>, NodeDef),
-        <<"z">> => get_prop_value_from_map(<<"z">>, NodeDef),
-        <<"path">> => get_prop_value_from_map(<<"z">>, NodeDef),
-        <<"name">> => get_prop_value_from_map(
-            <<"name">>,
-            NodeDef,
-            get_prop_value_from_map(<<"type">>, NodeDef)
-        )
-    }
-end).
-
 %% Avoid a "Warning: expression updates a literal" warning when using this
 %% macro on a Hash directly, i.e., ?PUT_WS(#{....})
 %% inspired by
@@ -49,7 +32,6 @@ end#{
 -define(SetPayload, <<"payload">> => Payload).
 -define(AddPayload(V), <<"payload">> => V).
 
--define(TopicFromMsg, get_prop_value_from_map(<<"topic">>, Msg, "")).
 -define(AddTopic(V), <<"topic">> => V).
 -define(GetTopic, <<"topic">> := Topic).
 -define(SetTopic, <<"topic">> => Topic).
@@ -58,3 +40,37 @@ end#{
 -define(GetTypeStr, <<"type">> := TypeStr).
 
 -define(AddParts(V), <<"parts">> => V).
+
+-define(TopicFrom(Msg), begin
+    ToBinary = fun
+        (V) when is_list(V) -> list_to_binary(V);
+        (V) when is_integer(V) -> integer_to_binary(V);
+        (V) -> V
+    end,
+    case maps:find(<<"topic">>, Msg) of
+        {ok, Val2} -> ToBinary(Val2);
+        _ -> <<"">>
+    end
+end).
+
+-define(ObtainFrom(NodeDef), begin
+    #{
+        <<"z">> := Zstr,
+        <<"id">> := IdStr,
+        <<"type">> := Type
+    } = NodeDef,
+
+    Name =
+        case maps:find(<<"name">>, NodeDef) of
+            {ok, Val} when Val =:= <<"">>; Val =:= "" -> Type;
+            {ok, Val} -> Val;
+            _ -> Type
+        end,
+
+    #{
+        <<"z">> => Zstr,
+        <<"id">> => IdStr,
+        <<"path">> => Zstr,
+        <<"name">> => Name
+    }
+end).

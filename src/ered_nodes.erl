@@ -123,17 +123,14 @@ jstr(Str) ->
 
 %%
 %%
-this_should_not_happen(NodeDef, Arg) ->
-    {ok, TabId} = maps:find(<<"z">>, NodeDef),
+this_should_not_happen(#{<<"z">> := TabId, <<"id">> := IdStr}, Arg) ->
     ErrCollector = tabid_to_error_collector(TabId),
 
     case whereis(ErrCollector) of
         undefined ->
             io:format("TSNH: ~s\n", [Arg]);
         _ ->
-            {ok, IdStr} = maps:find(<<"id">>, NodeDef),
-            {ok, ZStr} = maps:find(<<"z">>, NodeDef),
-            ErrCollector ! {it_happened, {IdStr, ZStr}, Arg}
+            ErrCollector ! {it_happened, {IdStr, TabId}, Arg}
     end.
 
 %%
@@ -191,21 +188,6 @@ tabid_to_error_collector(IdStr) ->
     ).
 
 %%
-%% The wires attribute is an array of arrays. The toplevel
-%% array has one entry per port that a node has. (Port being the connectors
-%% from which wires leave the node.)
-%% If a node only has one port, then wires will be an array containing
-%% exactly one array. This is the [Val] case and is the most common case.
-%%
-send_msg_to_connected_nodes(NodeDef, Msg) ->
-    case maps:find(<<"wires">>, NodeDef) of
-        {ok, [Val]} ->
-            send_msg_on(Val, Msg);
-        {ok, Val} ->
-            send_msg_on(Val, Msg)
-    end.
-
-%%
 %% Avoid having to create the same case all the time.
 %%
 get_prop_value_from_map(Prop, Map, Default) when is_atom(Prop) ->
@@ -228,6 +210,25 @@ get_prop_value_from_map(Prop, Map) ->
 %%
 %% Helper for passing on messages once a node has completed with the message
 %%
+
+%%
+%% The wires attribute is an array of arrays. The toplevel
+%% array has one entry per port that a node has. (Port being the connectors
+%% from which wires leave the node.)
+%% If a node only has one port, then wires will be an array containing
+%% exactly one array. This is the [Val] case and is the most common case.
+%%
+send_msg_to_connected_nodes(#{<<"wires">> := Wires} = _NodeDef, Msg) ->
+    case Wires of
+        %% This is [["nodeid","nodeid2",...]], i.e. single port with multiple
+        %% connections. Retrieve the internal array.
+        [Val] ->
+            send_msg_on(Val, Msg);
+        %% This is [["nodeid",...], ["nodeid2",...], ...], i.e. multiple ports
+        %% each with multiple connections.
+        Val ->
+            send_msg_on(Val, Msg)
+    end.
 
 %% Here 'on' is the same 'pass on' not as in 'on & off'. Standing on the
 %% shoulders of great people is also not the same 'on' as here.
