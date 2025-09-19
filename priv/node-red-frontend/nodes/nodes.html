@@ -12348,6 +12348,7 @@ msg.cookies = {
   </div>
 
   <div class="form-row">
+    <label for="checkmarkconfirm"><span data-i18n="erlmodule.label.template"></span></label>
     <input id="checkmarkconfirm" type="checkbox" checked style="width: 5%"></input>
     <button type=button class="template-button ui-button" data-template-type="module">Module</button>
     <button type=button class="template-button ui-button" data-template-type="event">Event</button>
@@ -12724,28 +12725,6 @@ See <a href="https://www.erlang.org/doc/apps/stdlib/gen_event.html">OTP Docu</a>
     oneditprepare: function() {
       var node = this;
 
-      var tabs = RED.tabs.create({
-        id: "erlgenserver-tabs",
-        onchange: function (tab) {
-          $("#erlgenserver-tabs-content").children().hide();
-          $("#" + tab.id).show();
-        }
-      });
-
-      tabs.addTab({
-        id: "erlgenserver-tab-statem-config",
-        iconClass: "fa fa-cog",
-        label: node._("erlgenserver.label.tab.statem_config")
-      });
-
-      tabs.addTab({
-        id: "erlgenserver-tab-handler-config",
-        iconClass: "fa fa-keyboard-o",
-        label: node._("erlgenserver.label.tab.handler_config")
-      });
-
-      tabs.activateTab("erlgenserver-tab-handler-config");
-
       var dirList = $("#node-input-handler-target-container-div").css({
         width: "100%",
         height: "calc(100%)"
@@ -12825,47 +12804,47 @@ See <a href="https://www.erlang.org/doc/apps/stdlib/gen_event.html">OTP Docu</a>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
 
-    <div class="form-row func-tabs-row">
-      <ul style="min-width: 400px; margin-bottom: 20px;" id="erlgenserver-tabs"></ul>
+  <div class="form-row"
+    style="margin-left: 10px; position: relative; min-height: 2vh;">
+    <input type="checkbox" id="node-input-use_module_name_addressing"
+                    style="display:inline-block; width:15px; vertical-align:baseline;">
+    <label for="node-input-use_module_name_addressing">
+      <span data-i18n="erlgenserver.label.use_module_name_addressing"></span></label>
+  </div>
+
+  <div class="form-row"
+    style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
+    <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
+      <input type="text" id="node-input-handler-target-filter">
     </div>
 
-    <div id="erlgenserver-tabs-content" style="min-height: calc(100% - 95px);">
-
-      <div id="erlgenserver-tab-statem-config" style="display:none">
-        <div class="form-row">
-          <input type="checkbox" id="node-input-use_module_name_addressing"
-                          style="display:inline-block; width:15px; vertical-align:baseline;">
-          <label for="node-input-use_module_name_addressing">
-            <span data-i18n="erlgenserver.label.use_module_name_addressing"></span></label>
-        </div>
-      </div>
-
-      <div id="erlgenserver-tab-handler-config" style="display:none">
-        <div class="form-row"
-          style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
-          <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
-            <input type="text" id="node-input-handler-target-filter">
-          </div>
-
-          <div id="node-input-handler-target-container-div"></div>
-        </div>
-      </div>
-    </div>
+    <div id="node-input-handler-target-container-div"></div>
+  </div>
 </script>
 <script type="text/html" data-help-name="erlgenserver">
   <p>Implements that gen_server behaviour.</p>
   Implements the Erlang generic server behaviour.
 
-See <a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html">OTP Docu</a> for more details.
+<h2>Process versus modules</h2>
+<p>Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName). For convenience, Erlang-Red alongs both forms of addressing.</p>
+<p>The advantage is that using process ids (the default) implies that each GenServer <strong>node</strong> spins up its own copy of the module(s) that its managing.</p>
+<p>Thus module that are used in genserver nodes can be reused across multiple genserver nodes and maintain unique state with each genserver node.</p>
+<h2>Addressing mode</h2>
+<p>Default is to address modules using <code>gen_server: call(Pid, ....)</code> to allow for multiple instance of the same module.</p>
+<p>The genserver node has an internal mapping so that module names can be used for the messages which are mapped to individual process ids.</p>
+<p>To enforce singleton behaviour, use module name addressing and ensure that the module is only started by one generic server node. This is <b>not</b> enforced by the system.</p>
+<h2>Messages</h2>
+<p>Message must have two attributes <code>call</code> for the function name and <code>module</code> for the name of the module that is being addressed.</p>
+<p>Even if using process id addressing, the module name <strong>must</strong> be sent to the genserver node. It will then do an internal mapping to process id for the corresponding module name.</p>
+<h2>Multiple modules</h2>
+<p>A genserver node can manage multiple modules, each address by its unique module name.</p>
+<h2>Failure</h2>
+<p>Modules are either started with <code>start</code> or <code>start_link</code> depending on which function their define - <code>start_link</code> has priority if both are defined.</p>
+<p>This means that the genserver node process will only fail if the module being managed has defined <code>start_link</code>. This is important because Erlang-Red will <strong>not</strong> automatically restart the genserver node if it failures. So have modules fail but maintaining the genserver node might be a use-case.</p>
+<p>If the genserver node does fail and it should be restarted, then it is the <strong>responsibility</strong> of the user to use the supervisor node to create a supervisor for the genserver node.</p>
+<p>Finally, see <a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html">OTP Doco</a> for more details.</p>
 
-<p>
-  Default is to address modules using <code>gen_server:call(Pid,....)</code> to allow for
-  multiple instance of the same module.
-</p>
 
-<P>
-  To enforce singleton behaviour, use module name addressing and ensure that the module
-  is only started by one generic server node. This is <b>not</b> enforced by the system.
 </script>
 
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-failure] --- -->

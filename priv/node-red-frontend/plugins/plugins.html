@@ -1125,7 +1125,17 @@ function testCurrentWorkspace() {
   if (RED.comms.isConnected && !RED.comms.isConnected()) {
     return RED.notify("Not connected to server, websocket down", "error")
   }
-  runTestForFlowId(RED.workspaces.active())
+  if ( RED.isErlangRed ) {
+    runTestForFlowId(RED.workspaces.active())
+  } else {
+    RED.notify("restarting flow", { type: "info" });
+    RED.actions.invoke("core:restart-flows")
+
+    setTimeout(() => {
+      RED.notify("testing current workspace", { type: "info" });
+      RED.search.search("type:inject flow:current").map(d => d.node).forEach(d => RED.view.clickNodeButton(d))
+    }, 2000)
+  }
 }
 
 function sendUnittestngHalt() {
@@ -1317,6 +1327,12 @@ $('#node-input-unittestingpull-sb-testall-but').on('click', function (e) {
   runAllTests(dirList)
 })
 
+$('#node-input-unittestingpull-sb-test-workspace-but').on('click', function (e) {
+  e.preventDefault();
+  testCurrentWorkspace()
+})
+
+
 let handleTestResult = (event, data) => {
   if (data.flowid) {
     if ( data.status == "unknown_testcase") {
@@ -1382,19 +1398,27 @@ $('#node-input-unittestingpull-sb-refresh-list-but').on('click', function (e) {
 window.unitTestDirList = dirList;
 window.fakeTestResult = handleTestResult;
 
-RED.comms.on("connect", () => {
-  $('#node-input-unittestingpull-sb-testall-but').prop('disabled', false)
-  $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', false)
-});
+if (RED.comms.on) {
+  // RED.comms.on is not available on NR 3.x
+  RED.comms.on("connect", () => {
+    $('#node-input-unittestingpull-sb-testall-but').prop('disabled', false)
+    $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', false)
+    $('#node-input-unittestingpull-sb-test-workspace-but').prop('disabled', false)
+  });
 
-RED.comms.on("disconnect", () => {
-  $('#node-input-unittestingpull-sb-testall-but').prop('disabled', true)
-  $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', true)
-});
+  RED.comms.on("disconnect", () => {
+    $('#node-input-unittestingpull-sb-testall-but').prop('disabled', true)
+    $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', true)
+    $('#node-input-unittestingpull-sb-test-workspace-but').prop('disabled', true)
+  });
 
-if ( !RED.comms.isConnected || RED.comms.isConnected() ) {
-  $('#node-input-unittestingpull-sb-testall-but').prop('disabled', false)
-  $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', false)
+  if ( !RED.comms.isConnected || RED.comms.isConnected() ) {
+    $('#node-input-unittestingpull-sb-testall-but').prop('disabled', false)
+    $('#node-input-unittestingpull-sb-test-flow-but').prop('disabled', false)
+    $('#node-input-unittestingpull-sb-test-workspace-but').prop('disabled', false)
+  }
+} else {
+  $('#node-input-unittestingpull-sb-test-workspace-but').prop('disabled', false)
 }
 
 RED.actions.add("unittesting:send-halt-to-test-server", sendUnittestngHalt)
@@ -1472,6 +1496,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                   class="red-ui-button">Test all</button>
          <button id="node-input-unittestingpull-sb-test-flow-but" disabled=disabled
                   class="red-ui-button">Test one</button>
+         <button id="node-input-unittestingpull-sb-test-workspace-but" disabled=disabled
+                  style="margin-left: 20px;" class="red-ui-button">Test Current Workspace</button>
       </div>
 
       <div class="form-row" style="margin-left: 10px;">

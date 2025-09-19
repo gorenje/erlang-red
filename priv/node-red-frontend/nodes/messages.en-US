@@ -19,7 +19,7 @@
                     "handler_config": "Module",
                     "statem_config": "Options"
                 },
-                "use_module_name_addressing": "Use module name to send messages"
+                "use_module_name_addressing": "Use module name addressing - Singleton Module"
             },
             "status": {
                 "timeout": "No more time to waiting",
@@ -36,7 +36,8 @@
                 "tab": {
                     "code": "Code",
                     "config": "Settings"
-                }
+                },
+                "template": "Insert Boilerplate"
             },
             "status": {
                 "timeout": "No more time to waiting",

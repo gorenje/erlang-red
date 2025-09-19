@@ -478,7 +478,7 @@
             "ut-assert-failure"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.6"
     },
     {
         "enabled": true,
@@ -490,7 +490,7 @@
             "ut-assert-values"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.6"
     },
     {
         "enabled": true,
@@ -502,7 +502,7 @@
             "ut-assert-success"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.6"
     },
     {
         "enabled": true,
@@ -514,7 +514,7 @@
             "ut-assert-status"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.6"
     },
     {
         "enabled": true,
@@ -526,7 +526,7 @@
             "ut-assert-debug"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.6"
     },
     {
         "enabled": true,
@@ -670,7 +670,7 @@
             "erlsupervisor"
         ],
         "user": false,
-        "version": "0.3.3"
+        "version": "0.3.4"
     },
     {
         "enabled": true,
@@ -682,7 +682,7 @@
             "erlmodule"
         ],
         "user": false,
-        "version": "0.3.3"
+        "version": "0.3.4"
     },
     {
         "enabled": true,
@@ -694,7 +694,7 @@
             "erlstatemachine"
         ],
         "user": false,
-        "version": "0.3.3"
+        "version": "0.3.4"
     },
     {
         "enabled": true,
@@ -706,7 +706,7 @@
             "erleventhandler"
         ],
         "user": false,
-        "version": "0.3.3"
+        "version": "0.3.4"
     },
     {
         "enabled": true,
@@ -718,7 +718,7 @@
             "erlgenserver"
         ],
         "user": false,
-        "version": "0.3.3"
+        "version": "0.3.4"
     },
     {
         "enabled": true,

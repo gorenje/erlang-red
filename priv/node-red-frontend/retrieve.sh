@@ -35,7 +35,8 @@ echo "==> html, javascript & css"
 
 mkdir -p settings nodes debug/view
 
-curl -s "${NODERED_URL}/favicon.ico?_=${CBSTMP}" -o favicon.ico
+## This only needs to be done once - especially if one redefines it.
+## curl -s "${NODERED_URL}/favicon.ico?_=${CBSTMP}" -o favicon.ico
 
 ##
 ## These are all text files.

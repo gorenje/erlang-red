@@ -9,7 +9,7 @@
   },
   "header": {
     "title": "Erlang-Red",
-    "image": "red/images/node-red.svg"
+    "image": "red/images/erlang-red.svg"
   },
   "asset": {
     "red": "red/red.min.js",
