@@ -113,10 +113,10 @@ handle_msg(_, NodeDef) ->
 %%
 get_url(#{<<"url">> := Url}, _) when Url =/= <<>>, Url =/= "" ->
     Url;
-get_url(NodeDef, Msg) ->
-    get_url(Msg, ignored);
-get_url(_, _) ->
-    [].
+get_url(_, no_url_found) ->
+    [];
+get_url(_NodeDef, Msg) ->
+    get_url(Msg, no_url_found).
 
 headers_to_map(Headers) ->
     %% convert keys to binary and then the header list to a map
