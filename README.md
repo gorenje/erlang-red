@@ -21,7 +21,7 @@ Also Erlang isn't the most understandable of programming language - unless one h
 
 So won't it be great to have the simplicity of low-code visual flow based programming and the performance (and concurrency) of Erlang?
 
-Trying Erlang-Red
+Trying Erlang-Red out
 ---
 
 Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be tested at [ered.fly.dev](https://ered.fly.dev/node-red) or locally using docker:
@@ -31,6 +31,21 @@ Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be tested at 
 Starts Erlang-Red listening on [localhost:8080/erlang-red](http://localhost:8080/erlang-red) and drops into an Eshell console for BEAM introspection.
 
 [Erlang-Red at Docker Hub](https://hub.docker.com/r/gorenje/erlang-red).
+
+Videos
+----
+
+For more details on the project, check out my interview at the [TADS Blog](https://blog.tadsummit.com/2025/09/17/erlang-red/) - I go into why Erlang-Red and how it differs from Node-RED and what influence Flow Based Programming has on both.
+
+Some videos explaining how to use Erlang-Red:
+
+- [Creating a HTTP API Backend](https://cdn.openmindmap.org/content/1758277897048_Erlang-Red_Example_Http_Api_Backend.mp4) - [Flow](https://flows.red-erik.org/f/84d219868352be15)
+
+- [Using message tracing to better understand flow execution](https://cdn.openmindmap.org/content/1758278695986_Erlang_Red_Examples_Msg_Tracing.mp4)
+
+- Configuring a visual [genserver behaviour in Erlang-Red](https://cdn.openmindmap.org/content/1758281588853_Erlang_Red_GenServer_Example.mp4) - [Flow](https://flows.red-erik.org/f/38f712d367cecffa)
+
+- Using the [supervisor node in Erlang-Red](https://cdn.openmindmap.org/content/1758282834455_Erlang_Red_Example_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/3afa3b2ec00a5e3d)
 
 Online Example
 ---
