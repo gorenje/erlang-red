@@ -37,7 +37,7 @@ Videos
 
 For more details on the project, check out my interview at the [TADS Blog](https://blog.tadsummit.com/2025/09/17/erlang-red/) - I go into why Erlang-Red and how it differs from Node-RED and what influence Flow Based Programming has on both.
 
-Some videos explaining how to use Erlang-Red:
+Erlang-Red by Example videos:
 
 - [Creating a HTTP API Backend](https://cdn.openmindmap.org/content/1758277897048_Erlang-Red_Example_Http_Api_Backend.mp4) - [Flow](https://flows.red-erik.org/f/84d219868352be15)
 
@@ -46,6 +46,13 @@ Some videos explaining how to use Erlang-Red:
 - Configuring a visual [genserver behaviour in Erlang-Red](https://cdn.openmindmap.org/content/1758281588853_Erlang_Red_GenServer_Example.mp4) - [Flow](https://flows.red-erik.org/f/38f712d367cecffa)
 
 - Using the [supervisor node in Erlang-Red](https://cdn.openmindmap.org/content/1758282834455_Erlang_Red_Example_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/3afa3b2ec00a5e3d)
+
+- [Supervisors of Supervisors of Supervisors ...](https://cdn.openmindmap.org/content/1758360354632_Erlang_Red_Supervisor_of_Supervisor_of_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5)
+
+- [Configuring the intensity of Supervisors](https://cdn.openmindmap.org/content/1758360402750_Erlang_Red_Examples_Supervisors_Intensities.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5)
+
+- [Binary node and intrepreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8)
+
 
 Online Example
 ---
