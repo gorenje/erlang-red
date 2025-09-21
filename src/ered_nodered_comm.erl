@@ -269,6 +269,6 @@ post_exception_or_debug(NodeDef, Msg, ErrMsg) ->
             ok;
         _ ->
             send_out_debug_error(
-                NodeDef, maps:put(<<"error_msg">>, ErrMsg, Msg)
+                NodeDef, maps:put(<<"error_msg">>, jstr(ErrMsg), Msg)
             )
     end.
