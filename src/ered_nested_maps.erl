@@ -124,6 +124,8 @@ deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_list(Value) ->
     deep_find_with_arrays(Keys, {ok, lists:nth(Idx + 1, Value)});
 deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_map(Value) ->
     deep_find_with_arrays(Keys, maps:find(integer_to_binary(Idx), Value));
+deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_tuple(Value) ->
+    deep_find_with_arrays(Keys, {ok, lists:nth(Idx+1, tuple_to_list(Value))});
 deep_find_with_arrays([Key | Keys], {ok, Value}) when is_map(Value) ->
     deep_find_with_arrays(Keys, maps:find(Key, Value));
 deep_find_with_arrays([Key | Keys], {ok, Value}) when is_list(Value) ->
