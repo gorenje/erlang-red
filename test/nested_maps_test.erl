@@ -48,7 +48,7 @@ find_tuples_in_lists_of_hashes_test() ->
         ered_nested_maps:find(
             <<"f[1]">>,
             #{
-                <<"f">> => {1,2,3}
+                <<"f">> => {1, 2, 3}
             }
         )
     ).
