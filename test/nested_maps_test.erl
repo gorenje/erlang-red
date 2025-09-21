@@ -12,6 +12,47 @@ find_edgecases_test() ->
         ered_nested_maps:find("", #{})
     ).
 
+find_tuples_in_lists_of_hashes_test() ->
+    ?assertEqual(
+        {ok, p, <<"f[0][1].a[2]">>},
+        ered_nested_maps:find(
+            <<"f[0][1].a[2]">>,
+            #{
+                <<"f">> =>
+                    [[undefined, #{<<"a">> => {t, u, p, l, e}}]]
+            }
+        )
+    ),
+    ?assertEqual(
+        {ok, p, <<"f[0][1].a[2]">>},
+        ered_nested_maps:find(
+            <<"f[0][1].a[2]">>,
+            #{
+                <<"f">> =>
+                    {{undefined, #{<<"a">> => {t, u, p, l, e}}}}
+            }
+        )
+    ),
+    ?assertEqual(
+        {ok, 3, <<"f[0][1].a[2][2]">>},
+        ered_nested_maps:find(
+            <<"f[0][1].a[2][2]">>,
+            #{
+                <<"f">> =>
+                    {{undefined, #{<<"a">> => {t, u, [1, 2, 3], l, e}}}}
+            }
+        )
+    ),
+    ?assertEqual(
+        {ok, 2, <<"f[1]">>},
+        ered_nested_maps:find(
+            <<"f[1]">>,
+            #{
+                <<"f">> => {1,2,3}
+            }
+        )
+    ).
+
 update_existing_test() ->
     TestData = json:decode(
         <<"{\"array\":[0,1,{\"object\":[2,3,4,{\"object\":[1,\"value\"]}]}]}">>

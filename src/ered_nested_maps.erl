@@ -111,6 +111,7 @@ update(Path, Msg, NewValue) ->
 
 %%
 %% Node-RED has array indicies in property names. Need to support those too.
+%% Erlang has tuples which can also be indexed, need to support them as lists.
 %%
 deep_find_with_arrays([], error) ->
     error;
@@ -120,14 +121,23 @@ deep_find_with_arrays([_Key | _Keys], {ok, []}) ->
     error;
 deep_find_with_arrays([_Key | _Keys], error) ->
     error;
+%
 deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_list(Value) ->
     deep_find_with_arrays(Keys, {ok, lists:nth(Idx + 1, Value)});
 deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_map(Value) ->
     deep_find_with_arrays(Keys, maps:find(integer_to_binary(Idx), Value));
 deep_find_with_arrays([{idx, Idx} | Keys], {ok, Value}) when is_tuple(Value) ->
-    deep_find_with_arrays(Keys, {ok, lists:nth(Idx+1, tuple_to_list(Value))});
+    deep_find_with_arrays(Keys, {ok, element(Idx + 1, Value)});
+%
 deep_find_with_arrays([Key | Keys], {ok, Value}) when is_map(Value) ->
     deep_find_with_arrays(Keys, maps:find(Key, Value));
+deep_find_with_arrays([Key | Keys], {ok, Value}) when is_tuple(Value) ->
+    case convert_to_num(Key) of
+        {error, _} ->
+            error;
+        V ->
+            deep_find_with_arrays(Keys, {ok, element(V + 1, Value)})
+    end;
 deep_find_with_arrays([Key | Keys], {ok, Value}) when is_list(Value) ->
     case convert_to_num(Key) of
         {error, _} ->

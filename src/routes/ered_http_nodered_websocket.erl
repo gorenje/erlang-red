@@ -304,7 +304,9 @@ send_debug_down_the_pipe(Data, State, Level) ->
                                     Data2#{
                                         <<"msg">> => OrigMsg#{
                                             <<"payload">> =>
-                                                list_to_binary(io_lib:format("~p", [Data2]))
+                                                list_to_binary(
+                                                    io_lib:format("~p", [Data2])
+                                                )
                                         }
                                     }
                             }
