@@ -10,6 +10,8 @@
     get_prop_value_from_map/3,
     generate_id/0,
     generate_id/1,
+    is_improper_list/1,
+    improper_to_proper_list/1,
     jstr/2,
     jstr/1,
     nodeid_to_pid/2,
@@ -41,6 +43,22 @@
 -import(ered_messages, [
     create_outgoing_msg/1
 ]).
+
+%%
+%% See https://erlangforums.com/t/is-improper-list-1-why-isnt-there-this-builtin-type-query/5079/5
+%%
+is_improper_list(V) when is_list(V), length(V) >= 0 ->
+    false;
+is_improper_list(_) ->
+    true.
+
+%%
+%% convert improper to proper
+%%
+improper_to_proper_list([H | T]) when not is_list(T) ->
+    [H, T];
+improper_to_proper_list([H | T]) ->
+    [H] ++ improper_to_proper_list(T).
 
 %%
 %% Given a range, From - To, is a given value within that range?

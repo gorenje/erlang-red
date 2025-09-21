@@ -3,6 +3,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -import(ered_nodes, [
+    is_improper_list/1,
     within_range/3
 ]).
 
@@ -36,3 +37,54 @@ within_range_test() ->
 
     ?assertNot(within_range(10, 100, 1)),
     ?assert(within_range(-1, 1, 0)).
+
+not_improper_list_test_() ->
+    CreateTest = fun(V) ->
+        {
+            list_to_binary(
+                io_lib:format(
+                    "not improper list testing ~p", [V]
+                )
+            ),
+            fun() ->
+                ?assert(not is_improper_list(V)),
+                ?assert(is_list(V))
+            end
+        }
+    end,
+    Lists = [
+        [],
+        "",
+        [[] | []],
+        [1 | []],
+        [atom | [atom]],
+        [1, 2, 3],
+        [atom | []],
+        [#{}, #{}]
+    ],
+
+    {inparallel, 100, [CreateTest(V) || V <- Lists]}.
+
+improper_list_test_() ->
+    CreateTest = fun(V) ->
+        {
+            list_to_binary(io_lib:format("improper list testing ~p", [V])),
+            fun() ->
+                ?assert(is_improper_list(V)),
+                ?assert(is_list(V))
+            end
+        }
+    end,
+
+    ImproperList = [
+        [#{} | #{}],
+        [1 | #{}],
+        [1, 2 | #{}],
+        [1, 2 | 3],
+        [1, 2 | atom],
+        [1, 2, 3 | atom],
+        [1 | atom],
+        [atom | atom]
+    ],
+
+    {inparallel, 100, [CreateTest(V) || V <- ImproperList]}.

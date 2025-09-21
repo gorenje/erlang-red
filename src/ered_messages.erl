@@ -32,6 +32,8 @@
 
 -import(ered_nodes, [
     generate_id/0,
+    improper_to_proper_list/1,
+    is_improper_list/1,
     jstr/2
 ]).
 
@@ -182,6 +184,13 @@ encoder({K, V}, Encode) ->
     json:encode_value([K, V], Encode);
 encoder([{_, _} | _] = Value, Encode) ->
     json:encode_key_value_list(Value, Encode);
+encoder(Value, Encode) when is_list(Value) ->
+    case is_improper_list(Value) of
+        true ->
+            json:encode_value(improper_to_proper_list(Value), Encode);
+        false ->
+            json:encode_value(Value, Encode)
+    end;
 encoder(Other, Encode) when is_tuple(Other) ->
     json:encode_value(tuple_to_list(Other), Encode);
 encoder(Other, Encode) when is_reference(Other) ->
