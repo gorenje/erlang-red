@@ -18,7 +18,8 @@
 ]).
 
 -import(ered_messages, [
-    encode_json/1
+    encode_json/1,
+    encode_json_loud/1
 ]).
 
 -define(AppendToBulkdata(Message),
@@ -279,9 +280,38 @@ terminate(_Reason, _Req, State) ->
 %%
 %%
 send_debug_down_the_pipe(Data, State, Level) ->
-    Data2 = maps:put(<<"timestamp">>, erlang:system_time(millisecond), Data),
+    Data2 = Data#{<<"timestamp">> => erlang:system_time(millisecond)},
     ered_ws_event_exchange:debug_msg(maps:find(wsname, State), Level, Data2),
-    {reply, {text, encode_json([#{topic => debug, data => Data2}])}, State}.
+    try
+        {reply, {text, encode_json_loud([#{topic => debug, data => Data2}])},
+            State}
+    catch
+        error:E:S ->
+            io:format("JSON ENCODING ERROR (WebSocket) [~p] [~p]~n", [E, Data2]),
+            io:format("Stack (Websocket) [~p]~n", [S]),
+
+            #{<<"msg">> := OrigMsg} = Data2,
+            %% we assume that the encoding error was in the payload and replace
+            %% that and add a string with the original data object as an Erlang
+            %% object.
+            {reply,
+                {text,
+                    encode_json(
+                        [
+                            #{
+                                topic => debug,
+                                data =>
+                                    Data2#{
+                                        <<"msg">> => OrigMsg#{
+                                            <<"payload">> =>
+                                                list_to_binary(io_lib:format("~p", [Data2]))
+                                        }
+                                    }
+                            }
+                        ]
+                    )},
+                State}
+    end.
 
 %%
 %% HAHAHA the Millis is off by the timer time - since the message is created

@@ -11,6 +11,7 @@
     decode_json/1,
     delete_prop/2,
     encode_json/1,
+    encode_json_loud/1,
     escape_specials/1,
     get_prop/2,
     is_same/2,
@@ -203,14 +204,17 @@ encoder(Other, Encode) ->
     json:encode_value(Other, Encode).
 
 %%
+encode_json_loud(Value) ->
+    json:encode(Value, fun encoder/2).
+
 encode_json(Value) ->
     try
-        json:encode(Value, fun encoder/2)
+        encode_json_loud(Value)
     catch
         error:E:S ->
             io:format("JSON ENCODING ERROR [~p] [~p]~n", [E, Value]),
             io:format("Stack [~p]~n", [S]),
-            json:encode(#{payload => "encoding error, check logs"})
+            json:encode(#{payload => <<"JSON encoding error, check logs">>})
     end.
 
 %%
