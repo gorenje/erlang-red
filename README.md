@@ -21,18 +21,25 @@ Also Erlang isn't the most understandable of programming language - unless one h
 
 So won't it be great to have the simplicity of low-code visual flow based programming and the performance (and concurrency) of Erlang?
 
-Trying Erlang-Red out
+Trying Erlang-Red
 ---
 
-Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be tested at [ered.fly.dev](https://ered.fly.dev/node-red) or locally using docker:
+Online: Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be tested at [ered.fly.dev](https://ered.fly.dev/node-red).
 
-    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.2.8
+Locally: Using docker:
 
-Starts Erlang-Red listening on [localhost:8080/erlang-red](http://localhost:8080/erlang-red) and drops into an Eshell console for BEAM introspection.
+    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.2.9
+
+Starts Erlang-Red web listener on [localhost:8080/erlang-red](http://localhost:8080/erlang-red) and drops the console into an Eshell.
+
+There are two screencasts on using the Erlang-Red docker image:
+
+- [Starting and running tests (5mins)](https://cdn.openmindmap.org/content/1758533603463_Erlang_Red_using_Docker_image_-_testing.mp4)
+- [Using Erlang-Red to breadboard Diameter protocol (9mins)](https://cdn.openmindmap.org/content/1758536540126_Erlang_Red_Breadboard.mp4)
 
 [Erlang-Red at Docker Hub](https://hub.docker.com/r/gorenje/erlang-red).
 
-Videos
+Videos / Screencasts
 ----
 
 For more details on the project, check out my interview at the [TADS Blog](https://blog.tadsummit.com/2025/09/17/erlang-red/) - I go into why Erlang-Red and how it differs from Node-RED and what influence Flow Based Programming has on both.
