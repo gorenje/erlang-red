@@ -22,8 +22,8 @@
         "ctrl-alt-o": "core:open-project",
         "ctrl-shift-d": "core:clear-debug-messages",
         "ctrl-shift-p": "core:show-action-list",
-        "ctrl-shift-a": "unittesting:run-all-tests",
-        "ctrl-shift-s": "unittesting:send-halt-to-test-server"
+        "ctrl-shift-s": "unittesting:send-halt-to-test-server",
+        "ctrl-shift-a": "unittesting:trigger-injects-in-workspace"
     },
     "red-ui-sidebar-node-config": {
         "backspace": "core:delete-config-selection",
