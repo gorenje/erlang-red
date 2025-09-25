@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: inotify-tools mosquitto netcat-traditional i2c-tools
+          packages: inotify-tools mosquitto netcat-traditional i2c-tools erlang-diameter
           version: 1.0
       - uses: erlef/setup-beam@v1
         with:
