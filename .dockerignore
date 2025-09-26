@@ -94,3 +94,4 @@ _build/default/lib/ranch/**/test/*.beam
 # flyctl launch added from node-red-frontend/.gitignore
 
 fly.toml
+priv/flows.json
