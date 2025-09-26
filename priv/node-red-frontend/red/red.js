@@ -1164,62 +1164,6 @@ var RED = (function() {
                         "application/x-json-testflow";
                   options.headers["Accept"] =
                         "application/x-json-testflow";
-
-                } else {
-                  // retrieve the current flow but if its storeed in the browser
-                  // then use that.
-                  let flowdata = RED.settings.getLocal( "flowdata" )
-
-                  if ( !flowdata ) {
-                          options.success({
-                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
-                              "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
-                              "flows": [
-                                  {
-                                      "id": RED.nodes.id(),
-                                      "type": "tab",
-                                      "label": "Flow 1",
-                                      "disabled": false,
-                                      "info": "",
-                                      "env": []
-                                  }
-                              ]
-                          })
-                          jqXHR.abort();
-                  } else {
-                      try {
-                          options.success({
-                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
-                              "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
-                              "flows": JSON.parse(flowdata)["flows"]
-                          })
-
-                          // update the server with the flow that was stored
-                          // locally, trigger a deploy.
-                          /* setTimeout( () => {
-                           *     RED.nodes.dirty(true);
-                           *     RED.actions.invoke("core:deploy-flows")
-                           * },1300);
-                           */
-                          jqXHR.abort();
-                      } catch(ex) {
-                          options.success({
-                              "rev": `${RED.nodes.id()}${RED.nodes.id()}`,
-                              "revision": "fb0df6d24f37fbdf5b3ff97b723416ab4d5f00f9",
-                              "flows": [
-                                  {
-                                      "id": RED.nodes.id(),
-                                      "type": "tab",
-                                      "label": "Flow 1",
-                                      "disabled": false,
-                                      "info": "",
-                                      "env": []
-                                  }
-                              ]
-                          })
-                          jqXHR.abort();
-                      }
-                  }
                 }
             }
 
