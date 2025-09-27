@@ -25,8 +25,8 @@
 NODERED_URL=http://renderbox:1890/cfg
 
 ### TODO remove this also
-#echo "Edit retrieve.sh before use"
-#exit
+echo "Edit retrieve.sh before use"
+exit
 
 CBSTMP=$(date +%s)
 PyTHON=/usr/bin/python3
@@ -39,7 +39,8 @@ mkdir -p settings nodes debug/view
 ## curl -s "${NODERED_URL}/favicon.ico?_=${CBSTMP}" -o favicon.ico
 
 ##
-## These are all text files.
+## These are all files that are used unaltered and can therefore be updated
+## if the Node-RED version was updated.
 ##
 for fle in vendor/jquery/css/base/jquery-ui.min.css \
            vendor/jquery/css/base/images/ui-icons_777777_256x240.png \
@@ -59,6 +60,8 @@ for fle in vendor/jquery/css/base/jquery-ui.min.css \
            vendor/font-awesome/fonts/fontawesome-webfont.woff \
            vendor/mermaid/mermaid.min.js \
            vendor/purify.min.js.map \
+           debug/view/view.html \
+           debug/view/debug.js \
            red/main.min.js \
            red/tours/welcome.js \
            red/images/deploy-full.svg \

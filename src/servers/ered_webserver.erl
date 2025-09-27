@@ -243,6 +243,10 @@ flow_editor_routes() ->
         {"/credentials/[...]", ered_http_nodered_empty_json, []},
         {"/context/[...]", ered_http_nodered_empty_json, []},
 
+        {"/erlang-reddebug/view/view.html", ered_http_redirect,
+            {permanently, "/erlang-red/debug/view/view.html"}},
+        {"/erlang-red/red/red.min.js", ered_http_redirect,
+            {permanently, "/erlang-red/red/red.js"}},
         {"/node-red", ered_http_redirect, {permanently, "/erlang-red"}},
 
         {"/erlang-red", cowboy_static,
@@ -257,6 +261,12 @@ flow_editor_routes() ->
         {"/styles/[...]", cowboy_static,
             {priv_dir, erlang_red, "wrapper_site/styles", []}},
 
+        %% This was added because of the debug panel detachment window
+        %% debug/view/view.html does not use absolute paths.
+        {"/erlang-red/[...]", cowboy_static,
+            {priv_dir, erlang_red, "node-red-frontend", [
+                {mimetypes, ered_http_nodered_mimetypes, mt}
+            ]}},
         {"/[...]", cowboy_static,
             {priv_dir, erlang_red, "node-red-frontend", [
                 {mimetypes, ered_http_nodered_mimetypes, mt}
