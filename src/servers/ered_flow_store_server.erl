@@ -2,16 +2,25 @@
 
 -behaviour(gen_server).
 
--export([init/1, handle_call/3, handle_cast/2]).
--export([handle_info/2, terminate/2, code_change/3]).
--export([stop/0]).
--export([start/0]).
+-export([
+    init/1,
+    handle_call/3,
+    handle_cast/2,
+    handle_info/2,
+    terminate/2,
+    code_change/3,
+    stop/0,
+    start/0
+]).
 
--export([get_flow_data/0]).
--export([update_all_flows/0]).
--export([update_flow/2]).
--export([get_filename/1]).
--export([all_flow_ids/0]).
+-export([
+    all_flow_ids/0,
+    get_filename/1,
+    get_flow_data/0,
+    retrieve_main_flow/0,
+    update_all_flows/0,
+    update_flow/2
+]).
 
 %%
 %% Manage the collection of test flows in the priv/testflows directory.
@@ -26,6 +35,9 @@
 -import(ered_nodes, [
     jstr/1
 ]).
+-import(ered_messages, [
+    encode_json/1
+]).
 
 start() ->
     {ok, Pid} = gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
@@ -34,6 +46,11 @@ start() ->
     erlang:start_timer(200, Pid, initial_load_of_flow_files),
     {ok, Pid}.
 
+init([]) ->
+    {ok, #{}}.
+
+%%
+%%
 get_flow_data() ->
     gen_server:call(?MODULE, {get_store}).
 
@@ -51,10 +68,8 @@ get_filename(FlowId) ->
 all_flow_ids() ->
     gen_server:call(?MODULE, {all_flow_ids}).
 
-%%
-%%
-init([]) ->
-    {ok, #{}}.
+retrieve_main_flow() ->
+    gen_server:call(?MODULE, {retrieve_main_flow}).
 
 %%
 %% Specific implementation for the flow store
@@ -106,6 +121,13 @@ handle_call({filename, FlowId}, _From, FlowStore) ->
         _ ->
             {reply, error, FlowStore}
     end;
+handle_call({retrieve_main_flow}, _From, FlowStore) ->
+    SrcFileName = io_lib:format(
+        "~s/flows.json",
+        [code:priv_dir(erlang_red)]
+    ),
+
+    {reply, file:read_file(SrcFileName), FlowStore};
 handle_call(_Msg, _From, FlowStore) ->
     {reply, FlowStore, FlowStore}.
 
@@ -118,6 +140,26 @@ handle_cast(_Msg, Store) ->
 
 %%
 %%
+handle_info({store_main_flow, FlowData}, State) ->
+    {ok, NodeAry} = maps:find(<<"flows">>, json:decode(FlowData)),
+
+    DestFileName = io_lib:format(
+        "~s/flows.json",
+        [code:priv_dir(erlang_red)]
+    ),
+
+    filelib:ensure_dir(DestFileName),
+    case file:write_file(DestFileName, encode_json(NodeAry)) of
+        ok ->
+            ignore_all_went_well;
+        R ->
+            io:format(
+                "FILE SAVING FAILED: ~s --> ~p~n",
+                [DestFileName, R]
+            )
+    end,
+
+    {noreply, State};
 handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
     FlowMap = json:decode(JsonText),
     {ok, NodeAry} = maps:find(<<"flow">>, FlowMap),
