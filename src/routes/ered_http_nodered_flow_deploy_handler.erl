@@ -6,8 +6,10 @@
     init/2,
     allowed_methods/2,
     content_types_accepted/2,
+    content_types_provided/2,
     handle_flow_restart/2,
     handle_flow_deploy/2,
+    handle_flow_get/2,
     format_error/2
 ]).
 
@@ -18,12 +20,24 @@
 -import(ered_nodered_comm, [
     websocket_name_from_request/1
 ]).
+-import(ered_messages, [
+    encode_json/1
+]).
 
 init(Req, State) ->
     {cowboy_rest, Req, State}.
 
 allowed_methods(Req, State) ->
-    {[<<"POST">>], Req, State}.
+    {[<<"POST">>, <<"GET">>], Req, State}.
+
+content_types_provided(Req, State) ->
+    {
+        [
+            {{<<"application">>, <<"json">>, '*'}, handle_flow_get}
+        ],
+        Req,
+        State
+    }.
 
 content_types_accepted(Req, State) ->
     {
@@ -36,14 +50,16 @@ content_types_accepted(Req, State) ->
         State
     }.
 
+handle_flow_get(Req, State) ->
+    {ered_runtime_manager:get_flow_data(), Req, State}.
+
 handle_flow_restart(Req, State) ->
     WsName = websocket_name_from_request(Req),
     Resp =
         case cowboy_req:header(<<"node-red-deployment-type">>, Req) of
             <<"reload">> ->
                 cowboy_req:set_resp_body(reload(WsName), Req);
-            RestartType ->
-                io:format("Unknow restart type: ~p~n", [RestartType]),
+            _ ->
                 cowboy_req:set_resp_body(<<"ok">>, Req)
         end,
     {true, Resp, State}.
@@ -53,6 +69,8 @@ handle_flow_deploy(Req, State) ->
 
     WsName = websocket_name_from_request(Req),
 
+    ered_runtime_manager:deploy_start(Body, WsName),
+
     %% Different types of deployment do - in real life - different things
     %% here they all do the same thing. 'nodes' is just restarting those
     %% nodes that have changed, 'flows' is redeploy only flow tabs that
@@ -61,19 +79,20 @@ handle_flow_deploy(Req, State) ->
     %% to compare what has changed to what is currently running on the
     %% server. The client should send the diff so that the server
     %% does exactly what is required.
-    RespText =
-        case cowboy_req:header(<<"node-red-deployment-type">>, Req) of
-            <<"full">> ->
-                deploy(Body, WsName);
-            <<"nodes">> ->
-                deploy(Body, WsName);
-            <<"flows">> ->
-                deploy(Body, WsName);
-            DeployType ->
-                io:format("Unknow deploy type: ~p~n", [DeployType])
-        end,
+    case cowboy_req:header(<<"node-red-deployment-type">>, Req) of
+        <<"full">> ->
+            deploy(Body, WsName);
+        <<"nodes">> ->
+            deploy(Body, WsName);
+        <<"flows">> ->
+            deploy(Body, WsName);
+        DeployType ->
+            io:format("Unknown deploy type: ~p~n", [DeployType])
+    end,
 
-    Resp = cowboy_req:set_resp_body(RespText, Req2),
+    Revision = ered_runtime_manager:deploy_complete(WsName),
+
+    Resp = cowboy_req:set_resp_body(encode_json(#{rev => Revision}), Req2),
 
     {true, Resp, State}.
 

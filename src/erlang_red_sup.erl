@@ -89,7 +89,14 @@ init([]) ->
                     module => [ered_tcp_manager]
                 },
                 #{
-                    id => ered_ch11_red_web,
+                    id => ered_ch11_runtime_manager,
+                    start => {ered_runtime_manager, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_runtime_manager]
+                },
+                #{
+                    id => ered_ch12_red_web,
                     start => {ered_webserver, start, []},
                     restart => permanent,
                     type => worker,

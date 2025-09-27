@@ -60,6 +60,7 @@ init(Req, State) ->
 
 websocket_init(State) ->
     WsName = get_websocket_name(),
+    ered_runtime_manager:new_websocket(WsName),
     register(WsName, self()),
 
     % heartbeat timer
@@ -251,7 +252,34 @@ websocket_info({msgtracing, NodeId}, State) ->
         }
     ]),
     {reply, {text, Msg}, State};
-%% -------------- Client Code node
+%% -------------------- Runtime notifications
+%%
+%% These inform the flow editor when the flow on the server has been updated.
+%% Erlang-Red is single-user (just as Node-RED) and thus any clients connected
+%% are informed of a change and asked to merge their changes into their local
+%% copy of the deployed flow.
+websocket_info({runtime_state, RuntimeState, Deploy}, State) ->
+    Msg = encode_json([
+        #{
+            topic => 'notification/runtime-state',
+            data => #{
+                state => RuntimeState,
+                deploy => Deploy
+            }
+        }
+    ]),
+    {reply, {text, Msg}, State};
+websocket_info({runtime_deploy, Revision}, State) ->
+    Msg = encode_json([
+        #{
+            topic => 'notification/runtime-deploy',
+            data => #{
+                revision => Revision
+            }
+        }
+    ]),
+    {reply, {text, Msg}, State};
+%% -------------------- Client Code node
 %%
 %% ClientCode node execute function in browser
 websocket_info({client_code_exec, NodeDef, Msg}, State) ->
