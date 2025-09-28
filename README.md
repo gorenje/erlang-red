@@ -8,6 +8,9 @@ Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming
 
 <p align="center">
 <img width="128px" src=".images/logo.png" alt="Tooling that even HAL uses"/>
+<p align="center">
+<i>Tooling that even HAL uses.</i>
+</p>
 </p>
 
 Bring the advantages of low-code visual [flow-based programming](https://jpaulm.github.io/fbp/index.html) to a programming language that is designed for message passing and concurrency from the ground up, hence Erlang. More details described in the corresponding [blog post](https://blog.openmindmap.org/erlang-red).
