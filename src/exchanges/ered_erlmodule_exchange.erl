@@ -36,7 +36,9 @@ init([]) ->
 add_module(NodeId, ModuleName) ->
     gen_server:call(?MODULE, {add_module, NodeId, ModuleName}).
 
--spec find_module(NodeId :: binary()) -> {ok, ModuleName :: atom()} | not_found.
+-spec find_module(NodeId :: binary()) ->
+    {ok, ModuleName :: atom()}
+    | {not_found, NodeId :: binary()}.
 find_module(NodeId) ->
     gen_server:call(?MODULE, {find_module, NodeId}).
 
@@ -54,7 +56,7 @@ handle_call({find_module, NodeId}, _From, Store) ->
             {ok, ModuleName} ->
                 {ok, ModuleName};
             _ ->
-                not_found
+                {not_found, NodeId}
         end,
         Store};
 handle_call({remove_module, NodeId}, _From, Store) ->

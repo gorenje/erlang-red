@@ -178,7 +178,7 @@ start_modules(
 %%
 find_module_details(ModuleNodeId, ModuleStarter) ->
     case ered_erlmodule_exchange:find_module(ModuleNodeId) of
-        not_found ->
+        {not_found, _NodeId} ->
             {error, ModuleNodeId};
         {ok, ModuleName} ->
             case code:is_loaded(ModuleName) of

@@ -31,20 +31,41 @@
     to_bool/1
 ]).
 
-% erlfmt:ignore
+-import(ered_nodes, [
+    jstr/2
+]).
+
 -define(SendOffMsg(NodeDef, Msg, Result, Action, CurrS, PrevS),
     Msg2 = Msg#{
         ?AddPayload(Result),
         <<"_statem">> => #{
-          <<"state_prev">> => PrevS,
-          <<"state_curr">> => CurrS,
-          <<"action">>     => Action
-       }
+            <<"state_prev">> => PrevS,
+            <<"state_curr">> => CurrS,
+            <<"action">> => Action
+        }
     },
     send_msg_to_connected_nodes(NodeDef, Msg2),
     {handled, NodeDef, Msg2}
 ).
 
+-define(StatusError(ErrMsg),
+    node_status(
+        WsName,
+        NodeDef,
+        jstr("Error: ~p", [ErrMsg]),
+        "red",
+        "dot"
+    )
+).
+
+%% start/2
+
+start(
+    #{<<"scope">> := Scope} = NodeDef,
+    WsName
+) when Scope =:= null; Scope =:= [] ->
+    ?StatusError("module not found"),
+    ered_node:start(NodeDef, ered_node_ignore);
 %%
 %% Since the emit on state change option is a node config, it can't be
 %% changed, so we can set the function to handle message sending as start
@@ -57,38 +78,45 @@ start(NodeDef, WsName) ->
     ).
 
 %%
+%% handle_event/2
 %%
-handle_event({registered, WsName, _MyPid}, NodeDef) ->
+
+handle_event({registered, WsName, _MyPid}, #{<<"scope">> := Scope} = NodeDef) ->
     ModuleName = lists:nth(1, [
-        element(2, ered_erlmodule_exchange:find_module(N))
-     || N <- maps:get(<<"scope">>, NodeDef)
+        case ered_erlmodule_exchange:find_module(N) of
+            {ok, ModName} ->
+                ModName;
+            {not_found, _} ->
+                not_found
+        end
+     || N <- Scope
     ]),
 
-    case module_loaded(ModuleName) of
-        false ->
-            node_status(
-                WsName,
-                NodeDef,
-                <<"module not available">>,
-                "red",
-                "dot"
-            ),
+    case ModuleName of
+        not_found ->
+            ?StatusError("module not found"),
             maps:remove('_statem_pid', NodeDef);
         _ ->
-            {ok, {Pid, _Ref}} = gen_statem:start_monitor(ModuleName, [], []),
-
-            %% State is always: {State, Data}
-            %%  --> https://github.com/erlang/otp/blob/1a0e382d3dc14a356cffc7d791813d0b7601c721/lib/stdlib/src/gen_statem.erl#L3742
-            %% where State is the state atom and Data is whatever data is
-            %% associated with the current state.
-            node_status(
-                WsName,
-                NodeDef,
-                element(1, sys:get_state(Pid)),
-                "blue",
-                "dot"
-            ),
-            maps:put('_statem_pid', Pid, NodeDef)
+            case module_loaded(ModuleName) of
+                false ->
+                    ?StatusError("module not found"),
+                    maps:remove('_statem_pid', NodeDef);
+                _ ->
+                    case gen_statem:start_monitor(ModuleName, [], []) of
+                        {ok, {Pid, _Ref}} ->
+                            node_status(
+                                WsName,
+                                NodeDef,
+                                element(1, sys:get_state(Pid)),
+                                "blue",
+                                "dot"
+                            ),
+                            maps:put('_statem_pid', Pid, NodeDef);
+                        {error, ErrMsg} ->
+                            ?StatusError(ErrMsg),
+                            maps:remove('_statem_pid', NodeDef)
+                    end
+            end
     end;
 handle_event({being_supervised, _WsName}, NodeDef) ->
     %% need this to obtain the exits when the supervisor kills this node
@@ -132,6 +160,10 @@ handle_event(
     maps:remove('_statem_pid', NodeDef);
 handle_event(_, NodeDef) ->
     NodeDef.
+
+%%
+%% handle_msg/2
+%%
 
 %%
 %%

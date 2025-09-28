@@ -179,7 +179,7 @@ add_handlers(
     ErrorList
 ) ->
     case ered_erlmodule_exchange:find_module(NodeId) of
-        not_found ->
+        {not_found, _NodeId} ->
             Error = io_lib:format(
                 "Module for NodeId ~p not found",
                 [NodeId]

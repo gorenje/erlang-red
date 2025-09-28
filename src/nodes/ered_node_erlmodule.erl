@@ -32,6 +32,18 @@
 
 %%
 %%
+start(
+    #{<<"module_name">> := ModuleName} = NodeDef,
+    WsName
+) when ModuleName =:= <<>>; ModuleName =:= "" ->
+    node_status(
+        WsName,
+        NodeDef,
+        "module name not defined",
+        "red",
+        "dot"
+    ),
+    ered_node:start(NodeDef, ered_node_ignore);
 start(NodeDef, _WsName) ->
     ered_node:start(NodeDef, ?MODULE).
 
@@ -57,7 +69,7 @@ install(
         <<"id">> := NodeId
     } = NodeDef,
     WsName
-) ->
+) when ModBinaryName =/= <<>>, ModBinaryName =/= "" ->
     ModuleName = binary_to_atom(ModBinaryName),
 
     FileName = binary_to_list(
@@ -103,7 +115,9 @@ install(
             post_exception_or_debug(NodeDef, ?AddWsName(#{}), "compile failed")
     end,
 
-    file:delete(FileName).
+    file:delete(FileName);
+install(_NodeDef, _WsName) ->
+    ignore.
 
 %%
 %% ErrorLists and WarnLists aren't JSON compatible therefore they need to be
