@@ -12371,11 +12371,33 @@ msg.cookies = {
   </div>
 
 </script>
-<script type="text/html" data-help-name="erlmodule">
-  <p>Node for encapsulating erlang module code.</p>
-  Node for encapsulating erlang module code.
+<script type="text/markdown" data-help-name="erlmodule">
+Node for encapsulating Erlang module code.
 
-Defines a module that can be used with a state machine and other elements of Erlang-Red.
+### Inputs
+
+None.
+
+### Outputs
+
+None.
+
+### Details
+
+Module nodes provide the means to store Erlang module code in flows. Modules are used for provide the behaviours for the Generic Server, Statemachine and Event handler nodes. For each of these behaviours, module nodes have boilerplate template code to provide a starting point.
+
+Module nodes can also provide helper code for the function nodes that make use of them.
+
+Module nodes are always initialised and installed before other nodes. So they are guaranteed to be available to other nodes when flow execution begins.
+
+Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible in the Erlang shell.
+
+### References
+
+- [Erlang Documentation](https://www.erlang.org/doc/system/modules.html)
+- [Module as helper for function node](https://flows.red-erik.org/f/81305f9f22711156)
+- [Module with state machine](https://flows.red-erik.org/f/30a121650c89fce3)
+
 </script>
 
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erlstatemachine] --- -->
@@ -12559,23 +12581,39 @@ Defines a module that can be used with a state machine and other elements of Erl
     </div>
   </div>
 </script>
-<script type="text/html" data-help-name="erlstatemachine">
-  <p>Implements that State Machine behaviour.</p>
-  Implements the Erlang state machine behaviour.
+<script type="text/markdown" data-help-name="erlstatemachine">
+Implements that State Machine behaviour.
 
-<p>
-See <a href="https://www.erlang.org/doc/apps/stdlib/gen_statem">OTP Docu</a> for more details.
-</p>
+### Inputs
 
-<p>
-A handler can only be of type <code>erlmodule</code>.
-</p>
+: action (string) : action to be performed on the state machine.
+: *payload* (string | buffer | any) : (optional) arguments passed to the action.
 
-<p>
-  <a href='https://flows.red-erik.org/f/5672fa442b2b881d' target='_blank'>Example</a>
-</p>
+### Outputs
+
+: payload (any) : return value of performing the action.
+: _statem.state_prev (string) : previous state.
+: _statem.state_curr (string) : current state.
+: _statem.action (string) : action performed.
+
+### Details
+
+To use a state machine node, a module node needs to be implemented.
+
+The module node MUST implement the state machine behaviour:
+`-behaviour(gen_statem)` is required. The module module defines a boilerplate
+template code for the state machine behaviour, start there if unsure.
+
+State machine node does not restart failed process, it remains the responsibility
+of the user to use supervisor nodes to restart failing nodes.
+
+### References
+
+- [OTP Docu](https://www.erlang.org/doc/apps/stdlib/gen_statem)
+- [Usage example](https://flows.red-erik.org/f/5672fa442b2b881d)
+- [Usage example 2](https://flows.red-erik.org/f/30a121650c89fce3)
+
 </script>
-
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erleventhandler] --- -->
 <script type="text/javascript">
   (function(){
@@ -12837,25 +12875,26 @@ Implements the Erlang generic server behaviour.
 
 : module (string) : name of the module to be addressed.
 : call (string) : function to be called on the module.
-: *payload* (string | buffer | any) : (optinal) arguments to be passed to function call.
+: *payload* (string | buffer | any) : (optional) arguments to be passed to function call.
 
 ### Outputs
 
 : payload (any) : return value of the module function.
 
+### Details
 
-### Process versus modules
+**Process versus modules**
 
-Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName). For convenience,
-Erlang-Red alongs both forms of addressing.
+Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName).
+For convenience, Erlang-Red alongs both forms of addressing.
 
-The advantage is that using process ids (the default) implies that each GenServer **node** spins up its own copy of the
-module(s) that its managing.
+The advantage is that using process ids (the default) implies that each GenServer **node** spins up its
+own copy of the module(s) that its managing.
 
-Thus module that are used in genserver nodes can be reused across multiple genserver nodes and maintain unique state
-with each genserver node.
+Thus module that are used in genserver nodes can be reused across multiple genserver nodes
+and maintain unique state with each genserver node.
 
-### Addressing mode
+**Addressing mode**
 
 Default is to address modules using `gen_server: call(Pid, ....)` to allow for multiple instance of the same module.
 
@@ -12865,7 +12904,7 @@ individual process ids.
 To enforce singleton behaviour, use module name addressing and ensure that the module is only started by one generic
 server node. This is <b>not</b> enforced by the system.
 
-### Messages
+**Messages**
 
 Message must have two attributes `call` for the function name and `module` for the name of the module that is being
 addressed.
@@ -12873,11 +12912,11 @@ addressed.
 Even if using process id addressing, the module name **must** be sent to the genserver node. It will then do an internal
 mapping to process id for the corresponding module name.
 
-### Multiple modules
+**Multiple modules**
 
-A genserver node can manage multiple modules, each address by its unique module name.
+A genserver node can manage multiple modules, each address by its unique module name. Even if multiple gen server nodes are created with the same module, each module instance is independented **if and only if** using process addressing mode.
 
-### Failure
+**Failure**
 
 Modules are either started with `start` or `start_link` depending on which function their define - `start_link` has
 priority if both are defined.
@@ -12888,6 +12927,8 @@ but maintaining the genserver node might be a use-case.
 
 If the genserver node does fail and it should be restarted, then it is the **responsibility** of the user to use the
 supervisor node to create a supervisor for the genserver node.
+
+### References
 
 Finally, see [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html) for more details.
 
