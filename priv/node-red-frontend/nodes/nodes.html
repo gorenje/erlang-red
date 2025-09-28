@@ -13863,7 +13863,34 @@ If this node isn't reached, then the test will fail.
         "--o", "-.-o", "==o",
         "o--o", "o-.-o", "o==o",
       ]
-      var allOurWires = [];
+      var allOurWires = [this.id];
+
+      let addConfigField = (nde, currVal) => {
+        var sltObj = $('<select>', { class: 'wirecfg-arrow', style: "max-width: 100px" })
+
+        for (var idx = 0; idx < possibleArrows.length; idx++) {
+          let val = possibleArrows[idx]
+          let selected = val == currVal.arrow ? { selected: "selected" } : {}
+
+          sltObj.append($("<option>", { value: val, ...selected }).append(val))
+        }
+
+        var container = $("<div>", { class: "wirecfg form-row", "data-id": nde.id });
+        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
+        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#node-input-wirecfgs-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+
+        var label = $('<label>', { for: "node-input-name", "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
+        label.append('<i class="fa fa-tag"></i>&nbsp;')
+        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+
+        container.append(label)
+        container.append($('<br/>'))
+        container.append($('<input>', { style: 'min-width: 150px', class: 'wirecfg-name', type: "text", placeholder: "Name", value: currVal.name }))
+
+        container.append(sltObj)
+
+        container.appendTo($('#node-input-wirecfgs-container'))
+      }
 
       RED.nodes.getDownstreamNodes(RED.nodes.node(this.id)).forEach(nde => {
         if ( !this.wirecfgs.some( (d) => d.id == nde.id ) ) {
@@ -13873,36 +13900,21 @@ If this node isn't reached, then the test will fail.
       })
 
       this.wirecfgs.sort( (a,b) => a.id < b.id ).forEach( currVal => {
-         let nde = RED.nodes.node(currVal.id)
+        let nde = RED.nodes.node(currVal.id)
 
         // support older versions
         currVal.arrow = { "arrow": "-->", "thickarrow": "==>", "line": "--", "dotarrow": "-.->" }[currVal.arrow] || currVal.arrow;
 
-          if ( !nde ) { return }
-          if ( allOurWires.indexOf(currVal.id) < 0 ) { return }
+        if ( !nde ) { return }
+        if ( allOurWires.indexOf(currVal.id) < 0 ) { return }
 
-          var sltObj = $('<select>', {class: 'wirecfg-arrow', style: "max-width: 100px"} )
-          for (var idx = 0; idx < possibleArrows.length; idx++ ) {
-            let val = possibleArrows[idx]
-            let selected = val == currVal.arrow ? { selected: "selected" } : {}
+        addConfigField(nde, currVal)
+      })
 
-            sltObj.append( $( "<option>", { value: val, ...selected }).append(val) )
-          }
-          var container = $("<div>", { class: "wirecfg form-row", "data-id": nde.id });
-          container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
-          container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#node-input-wirecfgs-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
-
-        var label = $('<label>', { for: "node-input-name", "data-id": nde.id, onmouseover: "nde=RED.nodes.node($(this).data('id'));nde.highlighted = true;nde.dirty=true;RED.view.redraw();", onmouseout: "nde=RED.nodes.node($(this).data('id'));nde.highlighted = false;nde.dirty=true;RED.view.redraw();" })
-          label.append('<i class="fa fa-tag"></i>&nbsp;')
-          label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
-
-          container.append(label)
-          container.append($('<br/>'))
-          container.append( $('<input>', { style: 'min-width: 150px', class:'wirecfg-name', type: "text", placeholder: "Name", value: currVal.name }))
-
-          container.append( sltObj )
-
-          container.appendTo($('#node-input-wirecfgs-container'))
+      let that = this;
+      $('#node-input-add-self-button').on('click', (e) => {
+        e.preventDefault();
+        addConfigField(that, { id: that.id, name: "", arrow: "-->" })
       })
     },
 
@@ -13985,6 +13997,10 @@ If this node isn't reached, then the test will fail.
 
   <div class="form-row">
     <span>Labels</span>
+  </div>
+
+  <div class="form-row">
+    <button class='button' id='node-input-add-self-button'>Add Self</button>
   </div>
 
   <div class="form-row">
