@@ -58,7 +58,7 @@ Erlang-Red by Example videos:
 
 - [Configuring the intensity of Supervisors](https://cdn.openmindmap.org/content/1758360402750_Erlang_Red_Examples_Supervisors_Intensities.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5)
 
-- [Binary node and intrepreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8)
+- [Binary node and interpreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8)
 
 
 Online Example
