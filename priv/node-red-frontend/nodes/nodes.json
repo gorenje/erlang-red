@@ -574,7 +574,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.2.7"
+        "version": "0.3.1"
     },
     {
         "enabled": true,
@@ -586,7 +586,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.2.7"
+        "version": "0.3.1"
     },
     {
         "enabled": true,

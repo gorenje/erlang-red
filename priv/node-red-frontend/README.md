@@ -10,4 +10,9 @@ Build
 
 To do the same, use the [retrieve.sh](retrieve.sh) script to scrape all the necessary files from a running Node-RED instance.
 
-The [Makefile](Makefile) can also do this.
+The [Makefile](Makefile) can also do this: `make retrieve`
+
+Committing Changes
+---
+
+Also there will be changes that need reverting, the files here have been modified for Erlang-Red and these modifications aren't in the source Node-RED from which this code is retrieved. To do this, use `git restore -p ...` with staged changes. The '-p' option means interactively decided which changes are staged.
