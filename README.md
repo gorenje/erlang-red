@@ -31,14 +31,14 @@ Online: Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be te
 
 Locally: Using docker:
 
-    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.3.1
+    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.3.2
 
 Starts Erlang-Red web listener on [localhost:8080/erlang-red](http://localhost:8080/erlang-red) and drops the console into an Eshell.
 
 There are two screencasts on using the Erlang-Red docker image:
 
-- [Starting and running tests (5mins)](https://cdn.openmindmap.org/content/1758533603463_Erlang_Red_using_Docker_image_-_testing.mp4)
-- [Using Erlang-Red to breadboard Diameter protocol (9mins)](https://cdn.openmindmap.org/content/1758536540126_Erlang_Red_Breadboard.mp4)
+- [Starting and running tests (5mins)](https://cdn.openmindmap.org/content/1758533603463_Erlang_Red_using_Docker_image_-_testing.mp4) - 5 mins
+- [Using Erlang-Red to breadboard Diameter protocol (9mins)](https://cdn.openmindmap.org/content/1758536540126_Erlang_Red_Breadboard.mp4) - 10 mins
 
 [Erlang-Red at Docker Hub](https://hub.docker.com/r/gorenje/erlang-red).
 
@@ -47,24 +47,29 @@ Videos / Screencasts
 
 For more details on the project, check out my interview at the [TADS Blog](https://blog.tadsummit.com/2025/09/17/erlang-red/) - I go into why Erlang-Red and how it differs from Node-RED and what influence Flow Based Programming has on both.
 
-Erlang-Red by Example videos:
+**Erlang-Red by Example screencasts**
 
-- [Creating a HTTP API Backend](https://cdn.openmindmap.org/content/1758277897048_Erlang-Red_Example_Http_Api_Backend.mp4) - [Flow](https://flows.red-erik.org/f/84d219868352be15)
+- [Creating a HTTP API Backend](https://cdn.openmindmap.org/content/1758277897048_Erlang-Red_Example_Http_Api_Backend.mp4) - [Flow](https://flows.red-erik.org/f/84d219868352be15) - 8 mins
 
-- [Using message tracing to better understand flow execution](https://cdn.openmindmap.org/content/1758278695986_Erlang_Red_Examples_Msg_Tracing.mp4)
+- [Using message tracing to better understand flow execution](https://cdn.openmindmap.org/content/1758278695986_Erlang_Red_Examples_Msg_Tracing.mp4) - 5 mins
 
-- Configuring a visual [genserver behaviour in Erlang-Red](https://cdn.openmindmap.org/content/1758281588853_Erlang_Red_GenServer_Example.mp4) - [Flow](https://flows.red-erik.org/f/38f712d367cecffa)
+- Configuring a visual [genserver behaviour in Erlang-Red](https://cdn.openmindmap.org/content/1758281588853_Erlang_Red_GenServer_Example.mp4) - [Flow](https://flows.red-erik.org/f/38f712d367cecffa) - 9 mins
 
-- Using the [supervisor node in Erlang-Red](https://cdn.openmindmap.org/content/1758282834455_Erlang_Red_Example_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/3afa3b2ec00a5e3d)
+- Using the [supervisor node in Erlang-Red](https://cdn.openmindmap.org/content/1758282834455_Erlang_Red_Example_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/3afa3b2ec00a5e3d) - 8 mins
 
-- [Supervisors of Supervisors of Supervisors ...](https://cdn.openmindmap.org/content/1758360354632_Erlang_Red_Supervisor_of_Supervisor_of_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5)
+- [Supervisors of Supervisors of Supervisors ...](https://cdn.openmindmap.org/content/1758360354632_Erlang_Red_Supervisor_of_Supervisor_of_Supervisor.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5) - 6 mins
 
-- [Configuring the intensity of Supervisors](https://cdn.openmindmap.org/content/1758360402750_Erlang_Red_Examples_Supervisors_Intensities.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5)
+- [Configuring the intensity of Supervisors](https://cdn.openmindmap.org/content/1758360402750_Erlang_Red_Examples_Supervisors_Intensities.mp4) - [Flow](https://flows.red-erik.org/f/e447b0048a5983b5) - 5 mins
 
-- [Binary node and interpreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8)
+- [Binary node and interpreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8) - 9 mins
 
+**Erlang-Red Features by Example screencasts**
 
-Online Example
+- [Creating Mermaid (UML) Diagrams in the flow editor](https://cdn.openmindmap.org/content/1759146630212_Erlang_Red_creating_FlowChart_Diagrams.mp4) - [Flow](https://flows.red-erik.org/f/dc897f402c53697f) - 8 mins
+
+- [Creating a statemachine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
+
+Online Installation
 ---
 
 Sample [MQTT Broker](https://ered.fly.dev/erlang-red?tstid=dc897f402c53697f) with [explanation](https://flows.red-erik.org/f/dc897f402c53697f).
