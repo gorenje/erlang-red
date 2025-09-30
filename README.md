@@ -63,11 +63,13 @@ For more details on the project, check out my interview at the [TADS Blog](https
 
 - [Binary node and interpreting binary data in Erlang-Red](https://cdn.openmindmap.org/content/1758364020301_Erlang_Red_Examples_Binary_Node.mp4) - [Flow](https://flows.red-erik.org/f/8f1ed58b183fe5d3) and [Flow](https://flows.red-erik.org/f/fbd5864f413917b8) - 9 mins
 
-**Erlang-Red Features by Example screencasts**
+**Erlang-Red implementing Statemachines screencasts**
 
-- [Creating Mermaid (UML) Diagrams in the flow editor](https://cdn.openmindmap.org/content/1759146630212_Erlang_Red_creating_FlowChart_Diagrams.mp4) - [Flow](https://flows.red-erik.org/f/dc897f402c53697f) - 8 mins
+1. [Creating Mermaid (UML) Diagrams in the flow editor](https://cdn.openmindmap.org/content/1759146630212_Erlang_Red_creating_FlowChart_Diagrams.mp4) - [Flow](https://flows.red-erik.org/f/dc897f402c53697f) - 8 mins
 
-- [Creating a statemachine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
+2. [Creating a statemachine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
+
+3. [Unittesting statemachines in Erlang-Red](https://cdn.openmindmap.org/content/1759220122556_Erlang_Red_Statemachine_-_Unit_testing.mp4) - [Flow](https://flows.red-erik.org/f/72fbf0bdf8eacc7e) - 9 mins
 
 Online Installation
 ---
