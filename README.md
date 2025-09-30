@@ -37,8 +37,8 @@ Starts Erlang-Red web listener on [localhost:8080/erlang-red](http://localhost:8
 
 There are two screencasts on using the Erlang-Red docker image:
 
-- [Starting and running tests (5mins)](https://cdn.openmindmap.org/content/1758533603463_Erlang_Red_using_Docker_image_-_testing.mp4) - 5 mins
-- [Using Erlang-Red to breadboard Diameter protocol (9mins)](https://cdn.openmindmap.org/content/1758536540126_Erlang_Red_Breadboard.mp4) - 10 mins
+- [Starting and running tests](https://cdn.openmindmap.org/content/1758533603463_Erlang_Red_using_Docker_image_-_testing.mp4) - 5 mins
+- [Using Erlang-Red to breadboard Diameter protocol](https://cdn.openmindmap.org/content/1758536540126_Erlang_Red_Breadboard.mp4) - 10 mins
 
 [Erlang-Red at Docker Hub](https://hub.docker.com/r/gorenje/erlang-red).
 
@@ -70,11 +70,6 @@ For more details on the project, check out my interview at the [TADS Blog](https
 2. [Creating a statemachine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
 
 3. [Unittesting statemachines in Erlang-Red](https://cdn.openmindmap.org/content/1759220122556_Erlang_Red_Statemachine_-_Unit_testing.mp4) - [Flow](https://flows.red-erik.org/f/72fbf0bdf8eacc7e) - 9 mins
-
-Online Installation
----
-
-Sample [MQTT Broker](https://ered.fly.dev/erlang-red?tstid=dc897f402c53697f) with [explanation](https://flows.red-erik.org/f/dc897f402c53697f).
 
 Embedding
 ---
