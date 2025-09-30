@@ -1,5 +1,34 @@
 Milestones
 ---
+*Milestone Ten - m10*
+
+1. No new nodes - consolidation milestone
+
+    No nodes have been added in this milestone. I have been concentrating on consolidating the codebase and refactoring. That does not mean that nodes are complete, rather that bugs haven't been fixed.
+
+2. Screencasts
+
+    I was asked to participate in a discussion over at the [TAD Summit](https://blog.tadsummit.com/2025/09/17/erlang-red/). I talked about why I am doing this and what my aims are, hint: they have nothing to do with Erlang!
+
+    That chat motivated me to create [screencasts](https://github.com/gorenje/erlang-red?tab=readme-ov-file#videos--screencasts) to better present what Erlang-Red can and cannot do. It meant that I fixed bugs and made improvements to the flow editor user experience.
+
+3. JSONata bumped from 0.4.4 to 0.5.0
+
+    Erlangs JSONata implementation now understands the `$not` and `$match` operators which were required for something - cannot remember for what. Fixed a hash map thing that values should not be lists but binaries. The conflict between atoms, lists and binaries will continue. I have decided on binaries as being the string representation within Erlang-Red.
+
+    This reminds me of `improper_lists` and JSON not encoding these. For me, improper lists aren't lists, howeverthey reply to `is_list/1` returns true for an improper list. Improper lists then promptly break each and every single list function. I just don't [understand](https://erlangforums.com/t/is-improper-list-1-why-isnt-there-this-builtin-type-query/5079) Erlangs thinking here. Thankfully there is a solution using a [guard](https://erlangforums.com/t/is-improper-list-1-why-isnt-there-this-builtin-type-query/5079/4?u=gorenje) since there is not an `is_improper_list/1` function.
+
+4. Single user, no more multi-user support
+
+    I decided to partially remove multi-user support by notifying users of changes made to flows. This is because I wanted to have a single flows.json file on the server. For that, multiple users is not good. Most of the functionality is in the [runtime manager](https://github.com/gorenje/erlang-red/blob/90a8e5ec30c1ea5da66d71e672ad0c2b015fc74d/src/servers/ered_runtime_manager.erl), so that it can be reverted to a multiple user environment. On the other hand, this brings Erlang-Red in line with Node-RED in having one-user per server, one flow execution per server.
+
+    Turns out though, most of the multi-user support will remain since the web-socket identification of users will continue. Hence there is a strange non-appearance of debug messages in all browsers unless a user also deploys a flow -  the execution of flows will remain per-user basis.
+
+5. Flow editor with a new coat of paint
+
+    To prevent confusion, I did change the banner colour to a bluish-off-black and removed the logo pending a new logo for Erlang-Red. I did consider using the eye of HAL as the logo but that is probably copyrighted by the estate of Stanley Kubrick and/or Arthur C. Clarke.
+
+    At least good to know that HAL uses Erlang-Red. Perhaps Chuck Norris will also give it a try.
 
 *Milestone Nine - m9*
 
@@ -25,7 +54,7 @@ Milestones
 
     All tests are integrated and maintained here and now have reached a grand total of 252 - at time of writing. All tests can be escaped within Erlang-Red using the [unit testing package](https://flows.nodered.org/node/@gregoriusrippenstein/erlang-red-unittest) - which has a sidebar panel for triggering all or individual tests.
 
-4. Added GitHub actions for executing unit tests
+4. Added GitHub actions for performing unit tests on update
 
     All compatibility tests can also be run using eUnit and configuring an GitHub action to execute these on push makes good sense.
 
