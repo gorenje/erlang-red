@@ -28,6 +28,7 @@
 ]).
 
 -import(ered_messages, [
+    any_to_binary/1,
     to_bool/1
 ]).
 
@@ -35,12 +36,26 @@
     jstr/2
 ]).
 
--define(SendOffMsg(NodeDef, Msg, Result, Action, CurrS, PrevS),
+-define(SendOffMsgWithPayload,
     Msg2 = Msg#{
         ?AddPayload(Result),
         <<"_statem">> => #{
-            <<"state_prev">> => PrevS,
-            <<"state_curr">> => CurrS,
+            <<"state_prev">> => any_to_binary(PrevS),
+            <<"state_curr">> => any_to_binary(CurrS),
+            <<"payload">> => OrigPayload,
+            <<"action">> => Action
+        }
+    },
+    send_msg_to_connected_nodes(NodeDef, Msg2),
+    {handled, NodeDef, Msg2}
+).
+
+-define(SendOffMsg,
+    Msg2 = Msg#{
+        ?AddPayload(Result),
+        <<"_statem">> => #{
+            <<"state_prev">> => any_to_binary(PrevS),
+            <<"state_curr">> => any_to_binary(CurrS),
             <<"action">> => Action
         }
     },
@@ -71,9 +86,16 @@ start(
 %% changed, so we can set the function to handle message sending as start
 %% time, this won't change during runtime.
 %%
+
+start(#{<<"emit_on_state_change">> := true} = NodeDef, WsName) ->
+    ered_node:start(
+        NodeDef#{'_func_send_msg' => fun send_message_on_state_change/6,
+                 ?SetWsName},
+        ?MODULE
+    );
 start(NodeDef, WsName) ->
     ered_node:start(
-        NodeDef#{'_func_send_msg' => define_func_send_msg(NodeDef), ?SetWsName},
+        NodeDef#{'_func_send_msg' => fun always_send_message/6, ?SetWsName},
         ?MODULE
     ).
 
@@ -224,16 +246,46 @@ handle_msg(_, NodeDef) ->
 
 %%
 %% ------------------ Helpers
+
+% send_message_on_state_change/6
+
+send_message_on_state_change(
+  NodeDef,
+  #{<<"payload">> := OrigPayload} = Msg,
+  Result,
+  Action,
+  CurrS,
+  PrevS
+) ->
+    case CurrS =:= PrevS of
+        true ->
+            {handled, NodeDef, dont_send_complete_msg};
+        _ ->
+            ?SendOffMsgWithPayload
+    end;
 send_message_on_state_change(NodeDef, Msg, Result, Action, CurrS, PrevS) ->
     case CurrS =:= PrevS of
         true ->
             {handled, NodeDef, dont_send_complete_msg};
         _ ->
-            ?SendOffMsg(NodeDef, Msg, Result, Action, CurrS, PrevS)
+            ?SendOffMsg
     end.
 
+% always_send_message/6
+
+always_send_message(
+  NodeDef,
+  #{ <<"payload">> := OrigPayload} = Msg,
+  Result,
+  Action,
+  CurrS,
+  PrevS
+) ->
+    ?SendOffMsgWithPayload;
 always_send_message(NodeDef, Msg, Result, Action, CurrS, PrevS) ->
-    ?SendOffMsg(NodeDef, Msg, Result, Action, CurrS, PrevS).
+    ?SendOffMsg.
+
+% statem_call/2
 
 statem_call(Pid, CallPayload) ->
     {
@@ -241,9 +293,3 @@ statem_call(Pid, CallPayload) ->
         gen_statem:call(Pid, CallPayload),
         element(1, sys:get_state(Pid))
     }.
-%%
-%%
-define_func_send_msg(#{<<"emit_on_state_change">> := true}) ->
-    fun send_message_on_state_change/6;
-define_func_send_msg(_NodeDef) ->
-    fun always_send_message/6.

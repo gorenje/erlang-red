@@ -4,6 +4,7 @@
 
 -export([
     any_to_list/1,
+    any_to_binary/1,
     convert_to_num/1,
     convert_to_integer/1,
     convert_units_to_milliseconds/2,
@@ -333,6 +334,9 @@ any_to_list(V) when is_list(V) ->
     V;
 any_to_list(V) ->
     V.
+
+any_to_binary(V) ->
+    list_to_binary(any_to_list(V)).
 
 %%
 %%
