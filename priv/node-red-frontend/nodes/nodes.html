@@ -1222,7 +1222,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 }
             };
             RED.events.on("project:change", this.clearMessageList);
-            RED.actions.add("core:clear-debug-messages", function() { RED.debug.clearMessageList(true) });
+            RED.actions.add("core:clear-debug-messages", this.clearMessageList);
             RED.actions.add("core:clear-filtered-debug-messages", function() { RED.debug.clearMessageList(true, true) });
 
             RED.actions.add("core:activate-selected-debug-nodes", function() { setDebugNodeState(getSelectedDebugNodes(true), true); });
