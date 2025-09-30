@@ -15977,6 +15977,10 @@ RED.stack = (function() {
         { value: "url", source: ["http request"] },
         { value: "userProperties", source: ["mqtt"] },
         { value: "_session", source: ["websocket out","tcp out"] },
+        { value: "_statem.action", source: ["erlstatem"] },
+        { value: "_statem.payload", source: ["erlstatem"] },
+        { value: "_statem.state_curr", source: ["erlstatem"] },
+        { value: "_statem.state_prev", source: ["erlstatem"] },
     ]
     var allOptions = {
         msg: { value: "msg", label: "msg.", validate: RED.utils.validatePropertyExpression, autoComplete: msgAutoComplete(msgCompletions) },
