@@ -23,12 +23,17 @@
     ws_from/1
 ]).
 
+-import(ered_messages, [
+    any_to_atom/1
+]).
+
 -import(ered_nodes, [
     jstr/1,
     send_msg_to_connected_nodes/2
 ]).
 
--define(EVENTHANDLER_PID, '_eventh_pid' := EventHandlerPid).
+-define(GetEventHandlerPid, '_eventh_pid' := EventHandlerPid).
+-define(SetEventHandlerPid(Pid), '_eventh_pid' => Pid).
 
 %%
 %%
@@ -40,6 +45,8 @@ start(NodeDef, WsName) ->
 handle_event({registered, WsName, _MyPid}, NodeDef) ->
     {ok, {Pid, _Ref}} = gen_event:start_monitor(),
 
+    %% add handlers here because the registered event is triggered *after*
+    %% all modules defined in module nodes have been loaded and installed.
     case add_handlers(Pid, maps:find(<<"handlers">>, NodeDef)) of
         ok ->
             node_status(WsName, NodeDef, "started", "green", "dot");
@@ -51,7 +58,7 @@ handle_event({registered, WsName, _MyPid}, NodeDef) ->
             node_status(WsName, NodeDef, "invalid", "blue", "ring")
     end,
 
-    NodeDef#{'_eventh_pid' => Pid};
+    NodeDef#{?SetEventHandlerPid(Pid)};
 %%
 handle_event({being_supervised, _WsName}, NodeDef) ->
     %% need this to obtain the exits when the supervisor kills this node
@@ -81,7 +88,7 @@ handle_event(
 %%
 handle_event(
     {'EXIT', _From, Reason},
-    #{?IsBeingSupervised, ?EVENTHANDLER_PID, ?GetWsName} = NodeDef
+    #{?IsBeingSupervised, ?GetEventHandlerPid, ?GetWsName} = NodeDef
 ) ->
     node_status(WsName, NodeDef, "killed", "red", "ring"),
     exit(EventHandlerPid, Reason),
@@ -89,7 +96,7 @@ handle_event(
     maps:remove('_eventh_pid', NodeDef);
 handle_event(
     {stop, _WsName},
-    #{?EVENTHANDLER_PID} = NodeDef
+    #{?GetEventHandlerPid} = NodeDef
 ) ->
     exit(EventHandlerPid, normal),
     maps:remove('_eventh_pid', NodeDef);
@@ -103,17 +110,17 @@ handle_msg(
     {incoming,
         #{
             <<"action">> := <<"add_handler">>,
-            <<"payload">> := ModuleName
+            <<"module_name">> := ModuleName
         } = Msg},
-    #{?EVENTHANDLER_PID} = NodeDef
+    #{?GetEventHandlerPid} = NodeDef
 ) ->
-    ModAtom = binary_to_atom(ModuleName),
+    ModAtom = any_to_atom(ModuleName),
     case code:is_loaded(ModAtom) of
         false ->
             post_exception_or_debug(NodeDef, Msg, <<"module not loaded">>);
         _ ->
-            R = gen_event:add_handler(EventHandlerPid, ModAtom, Msg),
-            send_msg_to_connected_nodes(NodeDef, Msg#{<<"payload">> => R})
+            R = handle_action_msg(Msg, EventHandlerPid),
+            send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(R)})
     end,
     {handled, NodeDef, dont_send_complete_msg};
 %%
@@ -122,13 +129,12 @@ handle_msg(
     {incoming,
         #{
             <<"action">> := <<"delete_handler">>,
-            <<"payload">> := ModuleName
+            <<"module_name">> := _ModuleName
         } = Msg},
-    #{?EVENTHANDLER_PID} = NodeDef
+    #{?GetEventHandlerPid} = NodeDef
 ) ->
-    ModAtom = binary_to_atom(ModuleName),
-    R = gen_event:delete_handler(EventHandlerPid, ModAtom, Msg),
-    send_msg_to_connected_nodes(NodeDef, Msg#{<<"payload">> => R}),
+    R = handle_action_msg(Msg, EventHandlerPid),
+    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(R)}),
     {handled, NodeDef, dont_send_complete_msg};
 %%
 %% handle an event
@@ -137,7 +143,7 @@ handle_msg(
         #{
             <<"event">> := EventName
         } = Msg},
-    #{?EVENTHANDLER_PID} = NodeDef
+    #{?GetEventHandlerPid} = NodeDef
 ) ->
     gen_event:notify(EventHandlerPid, {EventName, Msg, NodeDef}),
     {handled, NodeDef, dont_send_complete_msg};
@@ -175,7 +181,15 @@ add_handlers(_EventHandlerPid, [], ErrorList) ->
     {error, ErrorList};
 add_handlers(
     EventHandlerPid,
-    [#{<<"nodeid">> := NodeId} | MoreHndlrs],
+    [#{<<"nodeid">> := <<>>} | MoreHndlrs],
+    ErrorList
+) ->
+    %% ignore empty nodeid because there has to be one static handler if
+    %% that's empty. This is a kink in the UI for the node.
+    add_handlers(EventHandlerPid, MoreHndlrs, ErrorList);
+add_handlers(
+    EventHandlerPid,
+    [#{<<"nodeid">> := NodeId} = Hndlr | MoreHndlrs],
     ErrorList
 ) ->
     case ered_erlmodule_exchange:find_module(NodeId) of
@@ -198,11 +212,119 @@ add_handlers(
                         [Error | ErrorList]
                     );
                 _ ->
-                    gen_event:add_handler(
-                        EventHandlerPid,
-                        ModuleName,
-                        []
-                    ),
+                    add_static_handler(EventHandlerPid, ModuleName, Hndlr),
                     add_handlers(EventHandlerPid, MoreHndlrs, ErrorList)
             end
     end.
+
+%%
+%% add_static_handler/3
+%%
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"arg">> := <<>>,
+        <<"moduleterm">> := <<>>
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, ModuleName, []);
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"arg">> := Args,
+        <<"moduleterm">> := <<>>
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, ModuleName, Args);
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"arg">> := <<>>,
+        <<"moduleterm">> := ModTerm
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, {ModuleName, ModTerm}, []);
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"arg">> := Args,
+        <<"moduleterm">> := ModTerm
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, {ModuleName, ModTerm}, Args);
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"moduleterm">> := <<>>
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, ModuleName, []);
+add_static_handler(
+    EventHandlerPid,
+    ModuleName,
+    #{
+        <<"moduleterm">> := ModTerm
+    }
+) ->
+    gen_event:add_handler(EventHandlerPid, {ModuleName, ModTerm}, []);
+add_static_handler(EventHandlerPid, ModuleName, _) ->
+    gen_event:add_handler(EventHandlerPid, ModuleName, []).
+
+%%
+%% handle_action_msg/2
+%%
+handle_action_msg(
+    #{
+        <<"action">> := Action,
+        <<"module_name">> := ModuleName,
+        <<"module_id">> := ModuleId,
+        <<"module_arg">> := Args
+    } = _Msg,
+    EventHandlerPid
+) ->
+    do_action(EventHandlerPid, Action, any_to_atom(ModuleName), ModuleId, Args);
+handle_action_msg(
+    #{
+        <<"action">> := Action,
+        <<"module_name">> := ModuleName,
+        <<"module_id">> := ModuleId
+    } = Msg,
+    EventHandlerPid
+) ->
+    do_action(EventHandlerPid, Action, any_to_atom(ModuleName), ModuleId, Msg);
+handle_action_msg(
+    #{
+        <<"action">> := Action,
+        <<"module_name">> := ModuleName,
+        <<"module_arg">> := Args
+    } = _Msg,
+    EventHandlerPid
+) ->
+    do_action(
+        EventHandlerPid, Action, any_to_atom(ModuleName), undefined, Args
+    );
+handle_action_msg(
+    #{
+        <<"action">> := Action,
+        <<"module_name">> := ModuleName
+    } = Msg,
+    EventHandlerPid
+) ->
+    do_action(EventHandlerPid, Action, any_to_atom(ModuleName), undefined, Msg).
+
+%%
+%% do_action/5
+%%
+do_action(EventHandlerPid, <<"add_handler">>, ModAtom, undefined, Args) ->
+    gen_event:add_handler(EventHandlerPid, ModAtom, Args);
+do_action(EventHandlerPid, <<"delete_handler">>, ModAtom, undefined, Args) ->
+    gen_event:delete_handler(EventHandlerPid, ModAtom, Args);
+do_action(EventHandlerPid, <<"add_handler">>, ModAtom, ModuleId, Args) ->
+    gen_event:add_handler(EventHandlerPid, {ModAtom, ModuleId}, Args);
+do_action(EventHandlerPid, <<"delete_handler">>, ModAtom, ModuleId, Args) ->
+    gen_event:delete_handler(EventHandlerPid, {ModAtom, ModuleId}, Args).
