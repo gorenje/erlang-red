@@ -12234,15 +12234,48 @@ msg.cookies = {
 
     </div>
 </script>
-<script type="text/html" data-help-name="erlsupervisor">
-  <p>Supervisor for restarting selected nodes if they die.</p>
-  Supervisor for restarting selected nodes if they die.
+<script type="text/markdown" data-help-name="erlsupervisor">
+Supervisor for restarting selected nodes if they die.
 
-<p>This will restart nodes or a group of nodes, depening on the strategy if they die.
+Nodes in Erlang-Red are all processes. Processes can die and need restarting. One of Erlangs core principles is that process should die fast.
 
-<p>Failure is throwing an exception, die is if the process dies, disappears, vanishes.
+Supervisors are designed to restart process that do die. Erlang-Red takes the position that users are responsible for deciding which processes should be restarted and by extension, which nodes.
 
-<p>For more detauls, <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html">Erlang documentation</a>.
+The supervisor nodes allow users to design their recovery of flows, Erlang-Red only maintains the core of Erlang-Red and ensures that continues to run.
+
+**Erlang-Red does not automatically restart failing nodes.**
+
+This setup is an explicit design decision.
+
+### Inputs
+
+: action (string) : Either `stop` or `restart` to stop the supervisor and all the children it is supervising or to restart them all.
+
+### Outputs
+
+: status (string) : Sent when status of the supervisor has changed. Possible values are `stopped`, `dead`, `restarted` and `started`.
+
+### Details
+
+A supervisor node restarts, stops and starts linked nodes. It manages the entire lifecycle of the node under its care.
+
+Under the hood, the supervisor node uses the `supervisor:start_link/2` behaviour to manage the underlying processes of the nodes being supervised. This is not an emulation of that behaviour, rather it is a visualisation of that behaviour.
+
+**Configuration**
+
+All the main supervisor configurations are supported. These are complex and depended on deeper Erlang/OTP knowledge - if unsure use the defaults.
+
+Some configurations might not be supported, your mileage might vary.
+
+Nodes can be selected visually and a supervisor cannot supervise itself, doing so will lead to dangers beyond the scope of this documentation.
+
+### References
+
+- [Supervisor principles](https://www.erlang.org/doc/system/sup_princ)
+- [Learn you some Erlang](https://learnyousomeerlang.com/supervisors)
+- [OTP Documentation](https://www.erlang.org/doc/apps/stdlib/supervisor.html)
+- [Usage example - supervisor tree](https://flows.red-erik.org/f/83c5e1824f32abec)
+- [Usage example - supervisors of supervisors of supervisors ...](https://flows.red-erik.org/f/e447b0048a5983b5)
 
 </script>
 
@@ -12315,6 +12348,7 @@ msg.cookies = {
           "server": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJczogaHR0cHM6Ly93d3cuZXJsYW5nLm9yZy9kb2MvYXBwcy9zdGRsaWIvZ2VuX3NlcnZlci5odG1sCiUlCgotYmVoYXZpb3VyKGdlbl9zZXJ2ZXIpLgoKLWV4cG9ydChbCiAgICBzdGFydF9saW5rLzAsCiAgICBpbml0LzEsCiAgICBoYW5kbGVfY2FsbC8zLAogICAgaGFuZGxlX2Nhc3QvMiwKICAgIGhhbmRsZV9pbmZvLzIsCiAgICBjb2RlX2NoYW5nZS8zLAogICAgdGVybWluYXRlLzIsCiAgICBzdG9wLzAKXSkuCgolJQolJSBFeHRlcm5lciBleHBvcnRzCi1leHBvcnQoWwogICBpbmNyZW1lbnQvMCwKICAgZGVjcmVtZW50LzAsCiAgIGdldF9jb3VudGVyLzAsCiAgIHNldF9jb3VudGVyLzEKXSkuCgolJQolJSBFeHRlcm5hbCBBUElzCmluY3JlbWVudCgpIC0+CiAgIGdlbl9zZXJ2ZXI6Y2FsbCg/TU9EVUxFLCBpbmNyZW1lbnQpLgoKZGVjcmVtZW50KCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGRlY3JlbWVudCkuCgpnZXRfY291bnRlcigpIC0+CiAgIGdlbl9zZXJ2ZXI6Y2FsbCg/TU9EVUxFLCBnZXRfY291bnRlcikuCgpzZXRfY291bnRlcihWYWx1ZSkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIHtzZXRfY291bnRlciwgVmFsdWV9KS4KCiUlCiUlCnN0YXJ0X2xpbmsoKSAtPgogICAgZ2VuX3NlcnZlcjpzdGFydF9saW5rKHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsICN7Y291bnRlciA9PiAwfSwgW10pLgoKaW5pdChBcmdzKSAtPgogICAge29rLCBBcmdzI3sgY291bnRlciA9PiAxIH19LgoKc3RvcCgpIC0+CiAgICBnZW5fc2VydmVyOmNhc3QoP01PRFVMRSwgc3RvcCkuCgp0ZXJtaW5hdGUobm9ybWFsLCBfU3RhdGUpIC0+CiAgICBvazsKdGVybWluYXRlKF9FdmVudCwgX1N0YXRlKSAtPgogICAgb2suCgpjb2RlX2NoYW5nZShfT2xkVmVyc2lvbiwgU3RhdGUsIF9FeHRyYSkgLT4KICAgIHtvaywgU3RhdGV9LgoKJSUKJSUKaGFuZGxlX2NhbGwoaW5jcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyICsgMX19OwoKaGFuZGxlX2NhbGwoZGVjcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyIC0gMX19OwoKaGFuZGxlX2NhbGwoZ2V0X2NvdW50ZXIsIF9Gcm9tLCAjeyBjb3VudGVyIDo9IENvdW50ZXIgfSA9IFN0YXRlKSAtPgogICAge3JlcGx5LCBDb3VudGVyLCBTdGF0ZX07CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIFBheWxvYWR9LCBfRnJvbSwgU3RhdGUpIHdoZW4gaXNfaW50ZWdlcihQYXlsb2FkKSAtPgogICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IFBheWxvYWR9fTsKCmhhbmRsZV9jYWxsKHtzZXRfY291bnRlciwgUGF5bG9hZH0sIF9Gcm9tLCBTdGF0ZSkgd2hlbiBpc19iaW5hcnkoUGF5bG9hZCk7IGlzX2xpc3QoUGF5bG9hZCkgLT4KICAgY2FzZSBzdHJpbmc6dG9faW50ZWdlcihQYXlsb2FkKSBvZgogICAgICB7ZXJyb3IsIF99IC0+CiAgICAgICAgICB7cmVwbHksIG5vdF9pbnRlZ2VyLCBTdGF0ZX07CiAgICAgIHtJbnRlZ2VyLCBffSAtPgogICAgICAgICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IEludGVnZXJ9fQogICBlbmQ7CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIF9QYXlsb2FkfSwgX0Zyb20sIFN0YXRlKSAtPgogICAge3JlcGx5LCBub3Rfc3VwcG9ydGVkLCBTdGF0ZX07CgpoYW5kbGVfY2FsbChfTXNnLCBfRnJvbSwgU3RhdGUpIC0+CiAgICB7cmVwbHksIG9rLCBTdGF0ZX0uCgolJQolJQpoYW5kbGVfY2FzdChzdG9wLCBTdGF0ZSkgLT4KICAgIHtzdG9wLCBub3JtYWwsIFN0YXRlfTsKaGFuZGxlX2Nhc3QoX01zZywgU3RhdGUpIC0+CiAgICB7bm9yZXBseSwgU3RhdGV9LgoKJSUKJSUKaGFuZGxlX2luZm8oXywgU3RhdGUpIC0+CiAgICB7bm9yZXBseSwgU3RhdGV9LgoK"),
           "event": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKaW5pdChBcmdzKSAtPgogICAge29rLCBBcmdzfS4KCmhhbmRsZV9ldmVudChfRXZlbnQsIFN0YXRlKSAtPgogICAge29rLCBTdGF0ZX0uCgpoYW5kbGVfY2FsbChfUmVxdWVzdCwgU3RhdGUpIC0+CiAgICB7b2ssIG9rLCBTdGF0ZX0uCgpoYW5kbGVfaW5mbyhfSW5mbywgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCnRlcm1pbmF0ZShfUmVhc29uLCBfU3RhdGUpIC0+CiAgICBvay4KCmNvZGVfY2hhbmdlKF9PbGRWc24sIFN0YXRlLCBfRXh0cmEpIC0+CiAgICB7b2ssIFN0YXRlfS4K"),
           "state": atob("LW1vZHVsZSgpLgoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9IG5vX3N0YXRlLCAKICAgIERhdGEgPSAwLAogICAge29rLFN0YXRlLERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9mZiwKICBEYXRhCikgLT4KICAgIHtuZXh0X3N0YXRlLCBvbiwgRGF0YSArIDEsIFt7cmVwbHksIEZyb20sIDw8Im9rIj4+fV19OwoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9uLAogIERhdGEKKSAtPgogICAge25leHRfc3RhdGUsIG9mZiwgRGF0YSwgW3tyZXBseSwgRnJvbSwgPDwib2siPj59XX07CgpoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIDw8ImdldF9jb3VudCI+PiwKICBfQ3VyclN0YXRlLAogIERhdGEKKSAtPgogICAge2tlZXBfc3RhdGUsIERhdGEsIFt7cmVwbHksIEZyb20sIERhdGF9XX07CgolJQolJSBGYWxsIHRocm91Z2guCmhhbmRsZV9ldmVudCh7Y2FsbCwgRnJvbX0gPSBFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YSkgLT4KICAgIGlvOmZvcm1hdCgiVEVTVCAoY2FsbCk6IH5wIH5wIH5wIH5wfm4iLFtFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YV0pLAogICAgP0tFRVBfU1RBVEUoPDwibm90X2FsbG93ZWQiPj4pOwoKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg=="),
+          "eventwithmsg": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKLWltcG9ydChlcmVkX25vZGVzLCBbCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMvMgpdKS4KCmluaXQoQXJncykgLT4KICAgIHtvaywgQXJnc30uCgpoYW5kbGVfZXZlbnQoe0V2ZW50TmFtZSwgTXNnLCBFdmVudEhhbmRsZXJOb2RlRGVmfSwgU3RhdGUpIC0+CiAgICBTdGF0ZTIgPSBpbmNyZW1lbnRfY291bnRlcl9mb3IoRXZlbnROYW1lLCBTdGF0ZSksCgogICAgTXNnMiA9IE1zZyN7IAogICAgICAgIDw8ImNvdW50Ij4+ID0+IG1hcHM6Z2V0KEV2ZW50TmFtZSwgbWFwczpnZXQoY291bnRlciwgU3RhdGUyKSksCiAgICAgICAgPDwiaGFuZGxlciI+PiA9PiBtb2R1bGVfZXZlbnRfY291bnRlcgogICAgfSwKCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMoRXZlbnRIYW5kbGVyTm9kZURlZiwgTXNnMiksCgogICAge29rLCBTdGF0ZTJ9OwoKaGFuZGxlX2V2ZW50KF9FdmVudCwgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCmhhbmRsZV9jYWxsKF9SZXF1ZXN0LCBTdGF0ZSkgLT4KICAgIHtvaywgb2ssIFN0YXRlfS4KCmhhbmRsZV9pbmZvKF9JbmZvLCBTdGF0ZSkgLT4KICAgIHtvaywgU3RhdGV9LgoKdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSkgLT4KICAgIG9rLgoKY29kZV9jaGFuZ2UoX09sZFZzbiwgU3RhdGUsIF9FeHRyYSkgLT4KICAgIHtvaywgU3RhdGV9LgoKJSUKJSUgLS0tLS0tLS0tLS0tLSBoZWxwZXJzCiUlCmluY3JlbWVudF9jb3VudGVyX2ZvcihFdmVudE5hbWUsIFN0YXRlKSAtPgogICAgQ291bnRlciA9IG1hcHM6Z2V0KGNvdW50ZXIsIFN0YXRlKSwKCiAgICBDb3VudGVyMiA9IGNhc2UgbWFwczpmaW5kKEV2ZW50TmFtZSwgQ291bnRlcikgb2YgCiAgICAgICAge29rLCBWYWx9IC0+CiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gVmFsICsgMSB9OwogICAgICAgIF8gLT4gCiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gMSB9CiAgICBlbmQsCgogICAgU3RhdGUjeyBjb3VudGVyID0+IENvdW50ZXIyIH0u"),
         }
 
         e.preventDefault()
@@ -12361,6 +12395,7 @@ msg.cookies = {
     <input id="checkmarkconfirm" type="checkbox" checked style="width: 5%"></input>
     <button type=button class="template-button ui-button" data-template-type="module">Module</button>
     <button type=button class="template-button ui-button" data-template-type="event">Event</button>
+    <button type=button class="template-button ui-button" data-template-type="eventwithmsg">Event w/ Msg</button>
     <button type=button class="template-button ui-button" data-template-type="state">State</button>
     <button type=button class="template-button ui-button" data-template-type="server">Server</button>
   </div>
@@ -12372,7 +12407,11 @@ msg.cookies = {
 
 </script>
 <script type="text/markdown" data-help-name="erlmodule">
-Node for encapsulating Erlang module code.
+Node for encapsulating Erlang modules.
+
+Modules in Erlang are a collection of functions that can be collectively instantiated using the module. However modules are not to be confused with objects as modules have no internal state nor data.
+
+Modules are better thought of encapsulating common functionality under the banner of a single name.
 
 ### Inputs
 
@@ -12390,10 +12429,11 @@ Module nodes can also provide helper code for the function nodes that make use o
 
 Module nodes are always initialised and installed before other nodes. So they are guaranteed to be available to other nodes when flow execution begins.
 
-Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible in the Erlang shell.
+Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible within the Erlang process running Erlang-Red.
 
 ### References
 
+- [learn you some Erlang](https://learnyousomeerlang.com/modules)
 - [Erlang Documentation](https://www.erlang.org/doc/system/modules.html)
 - [Module as helper for function node](https://flows.red-erik.org/f/81305f9f22711156)
 - [Module with state machine](https://flows.red-erik.org/f/30a121650c89fce3)
@@ -12582,7 +12622,9 @@ Modules are installed in the Eshell that, for example, the docker image drops in
   </div>
 </script>
 <script type="text/markdown" data-help-name="erlstatemachine">
-Implements that State Machine behaviour.
+Implements the State Machine behaviour.
+
+Node used to create a state machine using an existing module.
 
 ### Inputs
 
@@ -12595,21 +12637,21 @@ Implements that State Machine behaviour.
 : _statem.state_prev (string) : previous state.
 : _statem.state_curr (string) : current state.
 : _statem.action (string) : action performed.
+: *_statem.payload* (string | buffer | any) : (optional) original payload sent with the action.
 
 ### Details
 
 To use a state machine node, a module node needs to be implemented.
 
-The module node MUST implement the state machine behaviour:
-`-behaviour(gen_statem)` is required. The module module defines a boilerplate
-template code for the state machine behaviour, start there if unsure.
+The module node MUST implement the state machine behaviour: `-behaviour(gen_statem)` is required. The module module defines a boilerplate template code for the state machine behaviour, start there if unsure.
 
-State machine node does not restart failed process, it remains the responsibility
-of the user to use supervisor nodes to restart failing nodes.
+State machine node does not restart failed process, it remains the responsibility of the user to use supervisor nodes to restart failing nodes.
 
 ### References
 
-- [OTP Docu](https://www.erlang.org/doc/apps/stdlib/gen_statem)
+- [learn you some Erlang](https://learnyousomeerlang.com/finite-state-machines)
+- [statem principles](https://www.erlang.org/doc/system/statem)
+- [OTP functional documentation](https://www.erlang.org/doc/apps/stdlib/gen_statem)
 - [Usage example](https://flows.red-erik.org/f/5672fa442b2b881d)
 - [Usage example 2](https://flows.red-erik.org/f/30a121650c89fce3)
 
@@ -12628,7 +12670,11 @@ of the user to use supervisor nodes to restart failing nodes.
         value:"",
       },
       handlers: {
-        value: [{ nodeid: "", moduleterm: ""}]
+        value: [{
+          nodeid: "",  // node id of the module with the code
+          moduleterm: "", // (optional) unique id for the module if instantiated multiple times
+          arg: "" // (optional) a single string as argument in case something needs to be passed to the module
+        }]
       }
     },
 
@@ -12653,8 +12699,12 @@ of the user to use supervisor nodes to restart failing nodes.
     oneditprepare: function() {
       let allModules = [ ["", "-- select module --"], ...RED.nodes.filterNodes({ type: "erlmodule" }).map( d => [d.id, d.module_name] )]
 
+      if ( this.handlers.length == 0 ) {
+        this.handlers.push({ nodeid: "", moduleterm: "", arg: ""})
+      }
+
       this.handlers.sort((a, b) => a.nodeid < b.nodeid).forEach(currVal => {
-        var sltObj = $('<select>', { class: 'erleventhandler-erlmodule' })
+        var sltObj = $('<select>', { class: 'erleventhandler-erlmodule', style: "width: 30%; min-width: 150px;" })
 
         for (var idx = 0; idx < allModules.length; idx++) {
           let val = allModules[idx]
@@ -12663,14 +12713,15 @@ of the user to use supervisor nodes to restart failing nodes.
           sltObj.append($("<option>", { value: val[0], ...selected }).append(val[1]))
         }
 
-        var txtObj = $('<input>', { type: "text", value: currVal.moduleterm, style: "width: 200px;", class: "erleventhandler-erlterm" })
+        var txtObj = $('<input>', { type: "text", value: currVal.moduleterm, placeholder: "Module Id", style: "margin-left: 5px; width: 20%; min-width: 100px;", class: "erleventhandler-erlterm" })
+        var argObj = $('<input>', { type: "text", value: currVal.arg, placeholder: "Argument", style: "margin-left: 5px; width: 30%; min-width: 150px;", class: "erleventhandler-erlarg" })
 
         var container = $("<div>", { class: "form-row" });
 
-        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
-        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+        container.append('<a href="#" style="margin-right: 7px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+        container.append('<a href="#" style="margin-right: 7px; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
 
-        container.append(sltObj).append(txtObj)
+        container.append("<br>").append(sltObj).append(txtObj).append(argObj)
 
         container.appendTo($('#erleventhandler-handler-config-container'))
       })
@@ -12682,7 +12733,11 @@ of the user to use supervisor nodes to restart failing nodes.
     oneditsave: function() {
       let result = []
       $($('#erleventhandler-handler-config-container').find('.erleventhandler-erlmodule')).each((idx, elem) => {
-        result.push({ nodeid: $(elem).val(), moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val() })
+        result.push({
+          nodeid: $(elem).val(),
+          moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val(),
+          arg: $(elem).siblings().filter(".erleventhandler-erlarg").val()
+        })
       })
       this.handlers = result
     },
@@ -12702,29 +12757,102 @@ of the user to use supervisor nodes to restart failing nodes.
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
 
-  <div class="form-row">
-    <span>Select a static selection of event handlers. <br>
-       Need to define Erlang Module node first else <br>
-      this selection will be empty.</span>
+  <div class='form-row'><i class="fa fa-handshake-o"></i> <span>Static Handlers</span></div>
 
-    <p><p>
-    <span>This can be dynamically extended at runtime <br>
-    using the <b>add_handler</b> message.</span>
-  </div>
-
-  <div class="form-row">
-    <div id="erleventhandler-handler-config-container"></div>
-  </div>
+  <div id="erleventhandler-handler-config-container"></div>
 </script>
-<script type="text/html" data-help-name="erleventhandler">
-  <p>Implements that event handler behaviour.</p>
-  Implements the Erlang event behaviour.
+<script type="text/markdown" data-help-name="erleventhandler">
+Wraps event handler behaviour.
 
-See <a href="https://www.erlang.org/doc/apps/stdlib/gen_event.html">OTP Docu</a> for more details.
+Node only works with a module node that define the event handler behaviour.
 
-<p>
-<a href='https://flows.red-erik.org/f/b70a7ce34819e4d5' target="_blank">Example</a>.
-</p>
+This node is responsible for wrapping the module inside a event handler process. It will **not** revive processes that fail, that is the responsibility of the user to add a supervisor node for this node, not the module node.
+
+### Inputs
+
+1. Event handler management
+: action (string) : either `add_handler` or `delete_handler`.
+: module_name (string) : module name to be either deleted or added to the event handler.
+: *module_id* (string) : (optional) module id to use if this module is to be used multiple times in the handler. Handler becomes the tuple `{module_name, module_id}` if set, else `module_name`.
+: *module_arg* (string) : (optional) argument to be passed to the module as third argument of the `add_handler/3` call.  If this not provided, the `Msg` structure is passed to the handler as third argument.
+
+2. Sending events
+: event (string | any) : event triggered on event handler. This event is passed to all configured event handlers.
+
+### Outputs
+
+1. Event handler management
+: payload (any) : Response of calling <code>gen_event&colon;add_handler/3</code> or <code>gen_event&colon;remove_handler/3</code>.
+
+2. Sending events
+: *Unknown* (unknown) : The event handler modules may or may not generated messages, the event handler node does not produce any output messages.
+
+### Details
+
+Event handler node does not restart failed process, it remains the *responsibility* of the user to use supervisor nodes to restart failing nodes. The event handler will start all handlers registered with it when a supervisor revives the handler.
+
+An event handler node will raise an exception if adding a handler that does not exist.
+
+Event handlers do not response nor reply to messages sent to them. Therefore sending a message to the event handler will, initially, not send an output message. Sending output messages need to be done via the event handler module.
+
+To use a event handler node, a module node needs to be implemented.
+
+The module node MUST implement the event behaviour `gen_event`, ie `-behaviour(gen_event)` in the module code. The module defines a boilerplate template code for the event handler, start there if unsure.
+
+**Defining the handler**
+
+Handlers are defined using the module node using the `gen_event` behaviour. There are boilerplate templates define in the module node if unsure.
+
+The `handle_event/2` function is passed a specific event, not just the `payload` of the message but also the entire message hash structure and the node definition of the event handler wrapper:
+
+```erlang
+handle_event({EventName, Msg, EventHandlerNodeDef}, State) ->
+    ...
+    {ok, State};
+```
+
+Possible return values are described over at [learn you some Erlang](https://learnyousomeerlang.com/event-handlers):
+
+- `{ok, NewState}`
+- `{ok, NewState, hibernate}` - which puts the event manager itself into hibernation until the next event
+- `remove_handler`
+- `{swap_handler, Args1, NewState, NewHandler, Args2}`
+
+The event handler node does not wait for the response, return values are solely handled by the internal gen_event behaviour.
+
+**Configuration**
+
+Event handler nodes can be configured with static handlers, those defined at deploy time and also dynamic handlers that are added at runtime.
+
+Static nodes are configured in the node by selecting the module node, an optional module id and an optional argument. Currently an argument can only be a string that is converted to a binary before being passed to the [`add_handler/3`](https://www.erlang.org/doc/apps/stdlib/gen_event.html#add_handler/3) function. If the argument field is not defined, then an empty list `[]` is passed as third argument to add_handler.
+
+Dynamic handlers can be added using the management message described above. Handlers can also be removed using those messages, those handlers can also be statically defined handlers but doing sure things might, in certain environments, lead to confusion.
+
+**Sending Messages**
+
+Because event handlers do not return values directly to the event handler node, messages to be passed out via the event handler node (i.e. this node) need to be specified by the module. This is because events are handled asynchronously by the module, i.e., the event hander node does not wait for a response.
+
+If event handlers are to send messages, then use the boilerplate code template "Event w/ Msg". It uses the [`ered_nodes:send_msg_to_connected_nodes/2`](https://github.com/gorenje/erlang-red/blob/385e87f498199a44c99c2aa4d0166a9ff43428c9/src/ered_nodes.erl#L232-L249) function to send message on to all the nodes connected to the event handler node - not module node (Side-note: module nodes don't have connections anyway).
+
+To send a message from an event handler module:
+
+```erlang
+handle_event({EventName, Msg, EventHandlerNodeDef}, State) ->
+    Msg2 = Msg#{
+        <<"payload">> => <<"new payload">>
+    },
+    ered_nodes:send_msg_to_connected_nodes(EventHandlerNodeDef, Msg2),
+    {ok, State}.
+```
+
+The `EventHandlerNodeDef` is the node definition of the event handler and it contains the wires on which the new Msg hash structure is sent.
+
+### References
+
+- [learn you some Erlang](https://learnyousomeerlang.com/event-handlers)
+- [Gen Event Principles](https://www.erlang.org/doc/system/events)
+- [OTP Functional documentation](https://www.erlang.org/doc/apps/stdlib/gen_event.html)
+- [Usage example](https://flows.red-erik.org/f/b70a7ce34819e4d5)
 
 </script>
 
@@ -12885,36 +13013,29 @@ Implements the Erlang generic server behaviour.
 
 **Process versus modules**
 
-Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName).
-For convenience, Erlang-Red alongs both forms of addressing.
+Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName). For convenience, Erlang-Red allows both forms of addressing.
 
-The advantage is that using process ids (the default) implies that each GenServer **node** spins up its
-own copy of the module(s) that its managing.
+The advantage is that using process ids (the default) implies that each GenServer **node** spins up its own copy of the module(s) that it is managing.
 
-Thus module that are used in genserver nodes can be reused across multiple genserver nodes
-and maintain unique state with each genserver node.
+Thus module that are used in genserver nodes can be reused across multiple genserver nodes and maintain unique state with each genserver node.
 
 **Addressing mode**
 
 Default is to address modules using `gen_server: call(Pid, ....)` to allow for multiple instance of the same module.
 
-The genserver node has an internal mapping so that module names can be used for the messages which are mapped to
-individual process ids.
+The genserver node has an internal mapping so that module names can be used for the messages which are mapped to individual process ids.
 
-To enforce singleton behaviour, use module name addressing and ensure that the module is only started by one generic
-server node. This is <b>not</b> enforced by the system.
+To enforce singleton behaviour, use module name addressing and ensure that the module is only started by one generic server node. This is <b>not</b> enforced by the system.
 
 **Messages**
 
-Message must have two attributes `call` for the function name and `module` for the name of the module that is being
-addressed.
+Message must have two attributes `call` for the function name and `module` for the name of the module that is being addressed.
 
-Even if using process id addressing, the module name **must** be sent to the genserver node. It will then do an internal
-mapping to process id for the corresponding module name.
+Even if using process id addressing, the module name **must** be sent to the genserver node. It will then do an internal mapping to process id for the corresponding module name.
 
 **Multiple modules**
 
-A genserver node can manage multiple modules, each address by its unique module name. Even if multiple gen server nodes are created with the same module, each module instance is independented **if and only if** using process addressing mode.
+A genserver node can manage multiple modules, each address by its unique module name. Even if multiple gen server nodes are created with the same module, each module instance is independent **if and only if** using process addressing mode.
 
 **Failure**
 
@@ -12930,7 +13051,9 @@ supervisor node to create a supervisor for the genserver node.
 
 ### References
 
-Finally, see [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html) for more details.
+- [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html)
+- [learn you some Erlang](https://learnyousomeerlang.com/clients-and-servers)
+
 
 </script>
 
