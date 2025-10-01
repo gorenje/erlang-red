@@ -89,8 +89,10 @@ start(
 
 start(#{<<"emit_on_state_change">> := true} = NodeDef, WsName) ->
     ered_node:start(
-        NodeDef#{'_func_send_msg' => fun send_message_on_state_change/6,
-                 ?SetWsName},
+        NodeDef#{
+            '_func_send_msg' => fun send_message_on_state_change/6,
+            ?SetWsName
+        },
         ?MODULE
     );
 start(NodeDef, WsName) ->
@@ -250,12 +252,12 @@ handle_msg(_, NodeDef) ->
 % send_message_on_state_change/6
 
 send_message_on_state_change(
-  NodeDef,
-  #{<<"payload">> := OrigPayload} = Msg,
-  Result,
-  Action,
-  CurrS,
-  PrevS
+    NodeDef,
+    #{<<"payload">> := OrigPayload} = Msg,
+    Result,
+    Action,
+    CurrS,
+    PrevS
 ) ->
     case CurrS =:= PrevS of
         true ->
@@ -274,12 +276,12 @@ send_message_on_state_change(NodeDef, Msg, Result, Action, CurrS, PrevS) ->
 % always_send_message/6
 
 always_send_message(
-  NodeDef,
-  #{ <<"payload">> := OrigPayload} = Msg,
-  Result,
-  Action,
-  CurrS,
-  PrevS
+    NodeDef,
+    #{<<"payload">> := OrigPayload} = Msg,
+    Result,
+    Action,
+    CurrS,
+    PrevS
 ) ->
     ?SendOffMsgWithPayload;
 always_send_message(NodeDef, Msg, Result, Action, CurrS, PrevS) ->
