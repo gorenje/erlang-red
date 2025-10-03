@@ -34,13 +34,13 @@
 -import(ered_messages, [
     decode_json/1,
     set_prop_value/3,
-    map_keys_to_lists/1
+    map_keys_to_list/1
 ]).
 
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"base64">>, Msg) ->
     {ok, set_prop_value(Prop, base64:decode(binary_to_list(Template)), Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"base64">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_lists(Msg)),
+    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
     {ok,
         set_prop_value(
             Prop,
@@ -50,12 +50,12 @@ doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"base64">>, Msg) ->
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"str">>, Msg) ->
     {ok, set_prop_value(Prop, Template, Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"str">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_lists(Msg)),
+    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
     {ok, set_prop_value(Prop, MustachedRendered, Msg)};
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"json">>, Msg) ->
     {ok, set_prop_value(Prop, decode_json(Template), Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"json">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_lists(Msg)),
+    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
     {ok, set_prop_value(Prop, decode_json(MustachedRendered), Msg)};
 doit(_, _, _, _, _, _) ->
     unsupported.
