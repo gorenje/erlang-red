@@ -11,9 +11,9 @@
 %%
 %% Event handler node for implementing the gen_event behaviour
 %%
-%% A very basic implementation that does not support passing arguments to
-%% the add_handler/3 call nor id value in the name of the handler. That
-%% is just so.
+%% This works with either static handlers that are defined at deploy time
+%% or dynamic handlers that are setup during runtime. See node documentation
+%% for more details.
 %%
 
 -import(ered_nodered_comm, [
