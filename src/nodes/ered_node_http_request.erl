@@ -24,6 +24,11 @@
     unsupported/3
 ]).
 
+-import(ered_messages, [
+    any_to_list/1,
+    decode_json/1
+]).
+
 %%
 %%
 start(
@@ -39,6 +44,15 @@ start(
         <<"headers">> := [],
         <<"method">> := <<"GET">>,
         <<"paytoqs">> := <<"ignore">>
+    } = NodeDef,
+    _WsName
+) ->
+    ered_node:start(NodeDef, ?MODULE);
+start(
+    #{
+        <<"headers">> := [],
+        <<"method">> := <<"GET">>,
+        <<"paytoqs">> := <<"query">>
     } = NodeDef,
     _WsName
 ) ->
@@ -92,8 +106,9 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
         _ ->
             case perform_request(Method, Url, NodeDef, Msg) of
                 {ok, {{_Protocol, StatusCode, _ReasonPhrase}, Headers, Body}} ->
+                    io:format("Body ~p~n", [Body]),
                     Msg2 = Msg#{
-                        ?AddPayload(jstr(Body)),
+                        ?AddPayload(convert_body(Body, NodeDef)),
                         <<"statusCode">> => StatusCode,
                         <<"headers">> => headers_to_map(Headers)
                     },
@@ -111,6 +126,16 @@ handle_msg(_, NodeDef) ->
 %%
 %% -------------- helpers
 %%
+
+%%
+%% convert_body/2
+convert_body(Body, #{<<"ret">> := <<"obj">>}) ->
+    decode_json(Body);
+convert_body(Body, _) ->
+    jstr(Body).
+
+%%
+%% get_url/2
 get_url(#{<<"url">> := Url}, _) when Url =/= <<>>, Url =/= "" ->
     Url;
 get_url(_, no_url_found) ->
@@ -171,6 +196,35 @@ perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
                         {"Cookie", io_lib:format("wsname=~s", [WsName])}
                     ],
                     "application/json", ""},
+                [],
+                []
+            )
+    end;
+perform_request(
+    <<"GET">> = _Method,
+    _Url,
+    #{<<"paytoqs">> := <<"query">>} = NodeDef,
+    #{?GetPayload} = Msg
+) when not is_map(Payload) ->
+    post_exception_or_debug(NodeDef, Msg, <<"Invalid payload">>);
+perform_request(
+    <<"GET">> = Method,
+    Url,
+    #{<<"paytoqs">> := <<"query">>} = NodeDef,
+    #{?GetWsName, ?GetPayload} = Msg
+) when is_map(Payload) ->
+    case uri_string:compose_query(maps:to_list(Payload)) of
+        {error, _} = Error ->
+            post_exception_or_debug(NodeDef, Msg, jstr("~p", [Error]));
+        QueryString ->
+            io:format("URL ~p~n", [
+                any_to_list(Url) ++ "?" ++ any_to_list(QueryString)
+            ]),
+            httpc:request(
+                mth_to_atom(Method),
+                {any_to_list(Url) ++ "?" ++ any_to_list(QueryString), [
+                    {"Cookie", io_lib:format("wsname=~s", [WsName])}
+                ]},
                 [],
                 []
             )
