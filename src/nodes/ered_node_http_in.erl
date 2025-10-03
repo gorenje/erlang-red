@@ -61,6 +61,12 @@ handle_event(_, NodeDef) ->
 
 %%
 %% outgoing message is triggered by the ered_http_node_http_in_handler module
+handle_msg(
+    {outgoing, #{<<"req">> := #{<<"query">> := Query}} = Msg},
+    #{<<"method">> := <<"get">>} = NodeDef
+) ->
+    send_msg_to_connected_nodes(NodeDef, Msg#{<<"payload">> => Query}),
+    {handled, NodeDef, Msg#{<<"payload">> => Query}};
 handle_msg({outgoing, Msg}, NodeDef) ->
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, Msg};
