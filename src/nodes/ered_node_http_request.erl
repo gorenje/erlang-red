@@ -106,7 +106,6 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
         _ ->
             case perform_request(Method, Url, NodeDef, Msg) of
                 {ok, {{_Protocol, StatusCode, _ReasonPhrase}, Headers, Body}} ->
-                    io:format("Body ~p~n", [Body]),
                     Msg2 = Msg#{
                         ?AddPayload(convert_body(Body, NodeDef)),
                         <<"statusCode">> => StatusCode,
@@ -217,9 +216,6 @@ perform_request(
         {error, _} = Error ->
             post_exception_or_debug(NodeDef, Msg, jstr("~p", [Error]));
         QueryString ->
-            io:format("URL ~p~n", [
-                any_to_list(Url) ++ "?" ++ any_to_list(QueryString)
-            ]),
             httpc:request(
                 mth_to_atom(Method),
                 {any_to_list(Url) ++ "?" ++ any_to_list(QueryString), [
