@@ -8,8 +8,40 @@
 ]).
 
 -import(ered_messages, [
+    map_keys_to_binary/1,
+    map_keys_to_list/1,
     convert_to_num/1
 ]).
+
+map_keys_to_list_recursion_test() ->
+    Map = #{
+        <<"one">> => #{
+            <<"two">> => #{
+                <<"three">> => #{
+                    <<"four">> => 4
+                }
+            }
+        }
+    },
+    ?assertEqual(
+        #{"one" => #{"two" => #{"three" => #{"four" => 4}}}},
+        map_keys_to_list(Map)
+    ).
+
+map_keys_to_binary_recursion_test() ->
+    Map = #{
+        <<"one">> => #{
+            <<"two">> => #{
+                <<"three">> => #{
+                    <<"four">> => 4
+                }
+            }
+        }
+    },
+
+    SrcMap = #{"one" => #{"two" => #{"three" => #{"four" => 4}}}},
+
+    ?assertEqual(Map, map_keys_to_binary(SrcMap)).
 
 convert_to_num_test() ->
     ?assertEqual(1.1, convert_to_num("1.1")),

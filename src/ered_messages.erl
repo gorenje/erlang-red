@@ -21,7 +21,7 @@
     jsbuffer_to_binary/1,
     jsonata_eval_or_error_msg/2,
     map_keys_to_binary/1,
-    map_keys_to_lists/1,
+    map_keys_to_list/1,
     retrieve_prop_value/2,
     set_prop_value/3,
     timestamp/0,
@@ -317,10 +317,12 @@ key_to_binary(V) ->
 
 %%
 %%
+map_keys_to_binary(Map) when not is_map(Map) ->
+    Map;
 map_keys_to_binary(Map) ->
     maps:from_list(
         lists:map(
-            fun({D, E}) -> {key_to_binary(D), E} end,
+            fun({D, E}) -> {key_to_binary(D), map_keys_to_binary(E)} end,
             maps:to_list(Map)
         )
     ).
@@ -343,10 +345,12 @@ any_to_atom(V) ->
 
 %%
 %%
-map_keys_to_lists(Map) ->
+map_keys_to_list(Map) when not is_map(Map) ->
+    Map;
+map_keys_to_list(Map) ->
     maps:from_list(
         lists:map(
-            fun({D, E}) -> {any_to_list(D), E} end,
+            fun({D, E}) -> {any_to_list(D), map_keys_to_list(E)} end,
             maps:to_list(Map)
         )
     ).
