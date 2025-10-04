@@ -144,7 +144,7 @@ start(
     WsName
 ) ->
     %% automatic is the same as custom mode with zero count, useparts set to
-    %% true, creating an array and propety is payload on msg.
+    %% true, creating an array and property is payload on msg.
     start(
         NodeDef#{
             <<"mode">> => <<"custom">>,
