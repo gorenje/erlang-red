@@ -6,6 +6,7 @@
     any_to_list/1,
     any_to_binary/1,
     any_to_atom/1,
+    any_to_integer/1,
     convert_to_num/1,
     convert_to_integer/1,
     convert_units_to_milliseconds/2,
@@ -193,6 +194,11 @@ encoder(Value, Encode) when is_list(Value) ->
         false ->
             json:encode_value(Value, Encode)
     end;
+encoder(Other, Encode) when is_function(Other) ->
+    V = #{
+        <<"fun">> => list_to_binary(io_lib:format("~p", [Other]))
+    },
+    json:encode_value(V, Encode);
 encoder(Other, Encode) when is_tuple(Other) ->
     json:encode_value(tuple_to_list(Other), Encode);
 encoder(Other, Encode) when is_reference(Other) ->
@@ -335,6 +341,8 @@ any_to_list(V) when is_atom(V) ->
     erlang:atom_to_list(V);
 any_to_list(V) when is_list(V) ->
     V;
+any_to_list(V) when is_integer(V) ->
+    integer_to_list(V);
 any_to_list(V) ->
     V.
 
@@ -342,6 +350,8 @@ any_to_binary(V) ->
     list_to_binary(any_to_list(V)).
 any_to_atom(V) ->
     list_to_atom(any_to_list(V)).
+any_to_integer(V) ->
+    list_to_integer(any_to_list(V)).
 
 %%
 %%
