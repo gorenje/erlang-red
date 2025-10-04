@@ -94,7 +94,10 @@ send_out_collected_messages(
     RevStore
 ) ->
     Store = [binary_to_term(M) || M <- RevStore],
-    send_out_collected_messages(NodeDef, Msg, Store, Store);
+    send_out_collected_messages(NodeDef,
+                                maps:remove(<<"parts">>, Msg),
+                                Store,
+                                Store);
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
     Msg,
@@ -102,7 +105,10 @@ send_out_collected_messages(
 ) ->
     Store = [binary_to_term(M) || M <- RevStore],
     Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
-    send_out_collected_messages(NodeDef, Msg, Store, Lst2).
+    send_out_collected_messages(NodeDef,
+                                maps:remove(<<"parts">>, Msg),
+                                Store,
+                                Lst2).
 
 %%
 send_out_collected_messages(NodeDef, Msg, AllMsgs, PayloadForNodes) ->
