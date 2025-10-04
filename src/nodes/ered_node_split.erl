@@ -53,11 +53,18 @@
 ]).
 
 -import(ered_messages, [
+    any_to_integer/1,
     convert_to_integer/1,
     get_prop/2,
     retrieve_prop_value/2
 ]).
 
+-define(CommonParts,
+    <<"id">> => PartsId,
+    <<"type">> => <<"array">>,
+    <<"count">> => TotalCnt,
+    <<"index">> => Cnt
+).
 %%
 %%
 start(#{<<"arraySplt">> := V} = NodeDef, _WsName) ->
@@ -184,10 +191,14 @@ route_and_handle_val(
     ),
     split_array(NewLst, 0, erlang:length(NewLst), generate_id(), NodeDef, Msg);
 %%
+route_and_handle_val(Val, _NodeDef, _Msg) when is_integer(Val) ->
+    silent_ly_ignor_ed;
+
+%%
 %% everything else is unsupported. Thank you for caring.
 %%
 route_and_handle_val(Val, NodeDef, Msg) ->
-    unsupported(NodeDef, Msg, jstr("value type ~p", [Val])).
+    unsupported(NodeDef, Msg, jstr("value type ~p cannot be splited", [Val])).
 
 %%
 %%
@@ -207,7 +218,9 @@ split_array([], _Cnt, _TotalLength, _PartsId, NodeDef, Msg) ->
 split_array([Val | MoreVals], Cnt, TotalCnt, PartsId, NodeDef, Msg) ->
     Msg2 = Msg#{
         '_msgid' => generate_id(),
-        <<"parts">> => generate_array_part(Cnt, TotalCnt, PartsId),
+        <<"parts">> => generate_array_part(
+            Cnt, TotalCnt, PartsId, NodeDef, Msg
+        ),
         ?AddPayload(Val)
     },
 
@@ -216,16 +229,53 @@ split_array([Val | MoreVals], Cnt, TotalCnt, PartsId, NodeDef, Msg) ->
 
 %%
 %%
-%% erlfmt:ignore because of alignment
-generate_array_part(Cnt,TotalCnt, PartsId) ->
-    %% index starts from zero so the last element will have Cnt == TotalCnt-1
+%% index starts from zero so the last element will have Cnt == TotalCnt-1
+generate_array_part(
+    Cnt,
+    TotalCnt,
+    PartsId,
+    #{<<"arraySplt">> := Len} = _NodeDef,
+    #{<<"parts">> := ExistingParts} = _Msg
+) ->
     #{
-      <<"id">>    => PartsId,
-      <<"type">>  => <<"array">>, %% TODO figure out what this means
-      <<"len">>   => 1,           %% TODO figure out what this means
-      <<"count">> => TotalCnt,
-      <<"index">> => Cnt
-     }.
+        ?CommonParts,
+        <<"len">> => any_to_integer(Len),
+        <<"parts">> => ExistingParts
+    };
+generate_array_part(
+    Cnt,
+    TotalCnt,
+    PartsId,
+    #{<<"arraySplt">> := Len} = _NodeDef,
+    _Msg
+) ->
+    #{
+        ?CommonParts,
+        <<"len">> => any_to_integer(Len)
+    };
+generate_array_part(
+    Cnt,
+    TotalCnt,
+    PartsId,
+    _NodeDef,
+    #{<<"parts">> := ExistingParts} = _Msg
+) ->
+    #{
+        ?CommonParts,
+        <<"len">> => 1,
+        <<"parts">> => ExistingParts
+    };
+generate_array_part(
+    Cnt,
+    TotalCnt,
+    PartsId,
+    _NodeDef,
+    _Msg
+) ->
+    #{
+        ?CommonParts,
+        <<"len">> => 1
+    }.
 
 %%
 %%
