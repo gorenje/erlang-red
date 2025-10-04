@@ -21,7 +21,7 @@
   0},
  {<<"erlang_red_jsonata">>,
   {git,"https://github.com/gorenje/erlang-red-jsonata",
-       {ref,"7e044a09f4e757c07c5301341043a19659297c36"}},
+       {ref,"0cbeec92f14d36427675b1bc16c2bc1ff2d7b0aa"}},
   0},
  {<<"erlang_red_parsers">>,
   {git,"https://github.com/gorenje/erlang-red-type-parsers",
