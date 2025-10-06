@@ -52,8 +52,8 @@ COPY --from=builder3 --chown=nobody:root /builder/_build/prod/rel/erlang_red ./
 
 ## needed for erlexec
 ENV SHELL=/bin/bash
-ENV COMPUTEFLOW="499288ab4007ac6a,777bee1d06741240,9d3f5506aa810b22"
-ENV DISABLE_FLOWEDITOR=YES
+## ENV COMPUTEFLOW="499288ab4007ac6a,777bee1d06741240,9d3f5506aa810b22"
+## ENV DISABLE_FLOWEDITOR=YES
 
 ## needed for Elixir
 ENV LANG=C.UTF-8

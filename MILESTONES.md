@@ -1,5 +1,6 @@
 Milestones
 ---
+
 *Milestone Ten - m10*
 
 1. No new nodes - consolidation milestone
@@ -29,6 +30,8 @@ Milestones
     To prevent confusion, I did change the banner colour to a bluish-off-black and removed the logo pending a new logo for Erlang-Red. I did consider using the eye of HAL as the logo but that is probably copyrighted by the estate of Stanley Kubrick and/or Arthur C. Clarke.
 
     At least good to know that HAL uses Erlang-Red. Perhaps Chuck Norris will also give it a try.
+
+---
 
 *Milestone Nine - m9*
 

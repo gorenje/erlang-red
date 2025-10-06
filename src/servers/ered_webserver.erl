@@ -13,14 +13,7 @@
 ]).
 
 start() ->
-    InitialState =
-        case os:getenv("DISABLE_FLOWEDITOR") of
-            false ->
-                #{floweditor_routes => flow_editor_routes()};
-            _ ->
-                io:format("Disabling FlowEditor Frontend~n", []),
-                #{floweditor_routes => []}
-        end,
+    InitialState = handle_disable_floweditor(os:getenv("DISABLE_FLOWEDITOR")),
     State = maps:put(http_in_routes, [], InitialState),
     herd_up_the_cattle(State),
     gen_server:start_link({local, ?MODULE}, ?MODULE, State, []).
@@ -124,7 +117,16 @@ terminate(Event, _State) ->
     ok.
 
 %%
+%% --------------------- helpers
 %%
+
+handle_disable_floweditor(V) when is_binary(V) ->
+    handle_disable_floweditor(binary_to_list(V));
+handle_disable_floweditor(V) when V =:= false ; V =:= "false" ; V =:= "NO" ->
+    #{floweditor_routes => flow_editor_routes()};
+handle_disable_floweditor(_) ->
+    io:format("Disabling FlowEditor Frontend~n", []),
+    #{floweditor_routes => []}.
 
 herd_up_the_cattle(State) ->
     %% heroku likes to provide port numbers to docker images running
