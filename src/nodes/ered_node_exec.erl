@@ -144,9 +144,12 @@ start_command_running(Msg, #{<<"command">> := CmdStr} = NodeDef) ->
 
 %%
 %% Check the command value
-start_command_running(<<>>, Msg, NodeDef) ->
+start_command_running(<<>>, Msg,
+                      #{<<"addpay">> := <<>>,
+                        <<"append">> := <<>>} = NodeDef
+) ->
     ErrMsg = jstr(
-        "TypeError: The argument 'file' cannot be empty. Received ''", []
+        "TypeError: The argument 'command' cannot be empty. Received ''", []
     ),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     NodeDef;
