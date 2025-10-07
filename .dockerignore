@@ -95,3 +95,5 @@ _build/default/lib/ranch/**/test/*.beam
 
 fly.toml
 priv/flows.json
+diameter_gen_access_rfc7155.hrl
+diameter_gen_access_rfc7155.erl
