@@ -185,6 +185,12 @@ decode_json(Val) ->
 %%
 encoder({K, V}, Encode) ->
     json:encode_value([K, V], Encode);
+encoder([{file, FileName}, {line, Num}], Encode) when is_list(FileName) ->
+    V = #{
+        <<"file">> => list_to_binary(FileName),
+        <<"line">> => Num
+    },
+    json:encode_value(V, Encode);
 encoder([{_, _} | _] = Value, Encode) ->
     json:encode_key_value_list(Value, Encode);
 encoder(Value, Encode) when is_list(Value) ->
