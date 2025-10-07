@@ -263,12 +263,27 @@ assert_failure(NodeDef, WsName, ErrMsg) ->
 %%
 %% Since exceptions are either handled by a catch node or posted in the
 %% debug panel if they don't get caught.
+post_exception_or_debug(NodeDef, Msg, {Type, Exception, Stack} = Eee) ->
+    case post_exception(NodeDef, Msg, Eee) of
+        dealt_with ->
+            ok;
+        _ ->
+            send_out_debug_error(
+                NodeDef, Msg#{
+                    <<"error_type">> => jstr(Type),
+                    <<"error">> => #{
+                        <<"exception">> => Exception,
+                        <<"stack">> => Stack
+                    }
+                }
+            )
+    end;
 post_exception_or_debug(NodeDef, Msg, ErrMsg) ->
     case post_exception(NodeDef, Msg, jstr(ErrMsg)) of
         dealt_with ->
             ok;
         _ ->
             send_out_debug_error(
-                NodeDef, maps:put(<<"error_msg">>, jstr(ErrMsg), Msg)
+                NodeDef, Msg#{<<"error_msg">> => jstr(ErrMsg)}
             )
     end.

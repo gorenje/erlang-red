@@ -35,6 +35,15 @@
     unsupported/3
 ]).
 
+-define(SetSource(NodeDef, FromDef),
+    <<"source">> => #{
+        <<"id">> => get_prop_value_from_map(<<"id">>, FromDef),
+        <<"type">> => get_prop_value_from_map(<<"type">>, FromDef),
+        <<"name">> => jstr(get_prop_value_from_map(<<"name">>, FromDef)),
+        <<"count">> => maps:get('_mc_exception', NodeDef, 1)
+    }
+).
+
 start(#{<<"scope">> := <<"group">>} = NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "unsupported scope 'group'"),
     ered_node:start(NodeDef, ered_node_ignore);
@@ -64,23 +73,28 @@ handle_event(_, NodeDef) ->
 
 %%
 %%
-% erlfmt:ignore - alignment
+handle_msg({exception, FromDef, Msg, {Type, Exception, Stack}}, NodeDef) ->
+    ErrObj = #{
+        <<"message">> => <<"exception">>,
+        <<"stack">> => Stack,
+        <<"type">> => Type,
+        <<"exception">> => Exception,
+        ?SetSource(NodeDef, FromDef)
+    },
+
+    Msg2 = Msg#{<<"error">> => ErrObj},
+    send_msg_to_connected_nodes(NodeDef, Msg2),
+    {handled, NodeDef, Msg2};
 handle_msg({exception, FromDef, Msg, ErrMsg}, NodeDef) ->
     ErrObj = #{
         <<"message">> => ErrMsg,
-        <<"stack">>   => ErrMsg,
-        <<"source">>  => #{
-            <<"id">>    => get_prop_value_from_map(<<"id">>,        FromDef),
-            <<"type">>  => get_prop_value_from_map(<<"type">>,      FromDef),
-            <<"name">>  => jstr(get_prop_value_from_map(<<"name">>, FromDef)),
-            <<"count">> => maps:get('_mc_exception', NodeDef, 1)
-        }
+        <<"stack">> => ErrMsg,
+        ?SetSource(NodeDef, FromDef)
     },
 
-    Msg2 = maps:put(<<"error">>, ErrObj, Msg),
+    Msg2 = Msg#{<<"error">> => ErrObj},
     send_msg_to_connected_nodes(NodeDef, Msg2),
     {handled, NodeDef, Msg2};
-
 %%
 %%
 handle_msg(_, NodeDef) ->
