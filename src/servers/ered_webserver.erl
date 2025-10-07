@@ -122,7 +122,7 @@ terminate(Event, _State) ->
 
 handle_disable_floweditor(V) when is_binary(V) ->
     handle_disable_floweditor(binary_to_list(V));
-handle_disable_floweditor(V) when V =:= false ; V =:= "false" ; V =:= "NO" ->
+handle_disable_floweditor(V) when V =:= false; V =:= "false"; V =:= "NO" ->
     #{floweditor_routes => flow_editor_routes()};
 handle_disable_floweditor(_) ->
     io:format("Disabling FlowEditor Frontend~n", []),

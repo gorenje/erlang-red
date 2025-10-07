@@ -193,7 +193,6 @@ route_and_handle_val(
 %%
 route_and_handle_val(Val, _NodeDef, _Msg) when is_integer(Val) ->
     silent_ly_ignor_ed;
-
 %%
 %% everything else is unsupported. Thank you for caring.
 %%
