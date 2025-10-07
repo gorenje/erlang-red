@@ -21,6 +21,7 @@
 -import(ered_nodered_comm, [
     debug/3,
     debug_string/2,
+    post_exception_or_debug/3,
     ws_from/1,
     unsupported/3
 ]).
@@ -40,7 +41,7 @@
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"base64">>, Msg) ->
     {ok, set_prop_value(Prop, base64:decode(binary_to_list(Template)), Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"base64">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
+    MustachedRendered = bbmustache:render(Template, Msg, [{key_type, binary}]),
     {ok,
         set_prop_value(
             Prop,
@@ -50,12 +51,12 @@ doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"base64">>, Msg) ->
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"str">>, Msg) ->
     {ok, set_prop_value(Prop, Template, Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"str">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
+    MustachedRendered = bbmustache:render(Template, Msg, [{key_type, binary}]),
     {ok, set_prop_value(Prop, MustachedRendered, Msg)};
 doit(Prop, <<"msg">>, Template, <<"plain">>, <<"json">>, Msg) ->
     {ok, set_prop_value(Prop, decode_json(Template), Msg)};
 doit(Prop, <<"msg">>, Template, <<"mustache">>, <<"json">>, Msg) ->
-    MustachedRendered = bbmustache:render(Template, map_keys_to_list(Msg)),
+    MustachedRendered = bbmustache:render(Template, Msg, [{key_type, binary}]),
     {ok, set_prop_value(Prop, decode_json(MustachedRendered), Msg)};
 doit(_, _, _, _, _, _) ->
     unsupported.
@@ -83,25 +84,31 @@ handle_msg(
     <<"output">>    := Output
    } = NodeDef
 ) ->
-    {NewNodeDef, NewMsg} =
-        case doit(Prop, PropType, Template, Syntax, Output, Msg) of
-            {ok, Msg2} ->
-                send_msg_to_connected_nodes(NodeDef, Msg2),
-                {NodeDef, Msg2};
-            unsupported ->
-                ErrMsg = jstr("Unsupported configuration: ~p", [NodeDef]),
-                unsupported(NodeDef, Msg, ErrMsg),
+    try
+        {NewNodeDef, NewMsg} =
+            case doit(Prop, PropType, Template, Syntax, Output, Msg) of
+                {ok, Msg2} ->
+                    send_msg_to_connected_nodes(NodeDef, Msg2),
+                    {NodeDef, Msg2};
+                unsupported ->
+                    ErrMsg = jstr("Unsupported configuration: ~p", [NodeDef]),
+                    unsupported(NodeDef, Msg, ErrMsg),
 
-                %% Ok, we push the content into the msg object but warn as
-                %% well. Not modifying the message and sending it on would
-                %% be an error but not supporting formatting is kind of ...
-                %% an error really but since I don't raise an error here, set
-                %% the content in the msg.
-                Msg2 = set_prop_value(Prop, Template, Msg),
-                send_msg_to_connected_nodes(NodeDef, Msg2),
-                {NodeDef, Msg2}
-        end,
-    {handled, NewNodeDef, NewMsg};
+                    %% Ok, we push the content into the msg object but warn as
+                    %% well. Not modifying the message and sending it on would
+                    %% be an error but not supporting formatting is kind of ...
+                    %% an error really but since I don't raise an error here, set
+                    %% the content in the msg.
+                    Msg2 = set_prop_value(Prop, Template, Msg),
+                    send_msg_to_connected_nodes(NodeDef, Msg2),
+                    {NodeDef, Msg2}
+            end,
+        {handled, NewNodeDef, NewMsg}
+    catch
+        E:F:S ->
+            post_exception_or_debug(NodeDef, Msg, {E, F, S}),
+            {handled, NodeDef, dont_send_complete_msg}
+    end;
 
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
