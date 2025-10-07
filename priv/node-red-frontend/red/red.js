@@ -21816,6 +21816,14 @@ RED.workspaces = (function() {
                             RED.actions.invoke('core:lock-flow', tab?tab.id:undefined)
                         }
                     },
+                    {
+                        label: "Duplicate flow",
+                        shortcut: RED.keyboard.getShortcut("core:duplicate-flow"),
+                        onselect: function() {
+                            RED.actions.invoke('core:duplicate-flow',
+                                tab?tab.id:undefined)
+                        }
+                    },
                     null
                 )
             }
@@ -22077,6 +22085,36 @@ RED.workspaces = (function() {
         $("#red-ui-workspace-footer").children().hide()
     }
 
+    function duplicateWorkspace(id) {
+        function getFlowDataFromCurrentWorkspace(id) {
+          var activeWorkspace = id || RED.workspaces.active();
+          var nodes = RED.nodes.groups(activeWorkspace);
+
+          nodes = nodes.concat(RED.nodes.junctions(activeWorkspace));
+          nodes = nodes.concat(RED.nodes.filterNodes({ z: activeWorkspace }));
+
+          RED.nodes.eachConfig(function (n) {
+            if (n.z === RED.workspaces.active() && n._def.hasUsers === false) {
+              // Grab any config nodes scoped to this flow that don't
+              // require any flow-nodes to use them
+              nodes.push(n);
+            }
+          });
+
+          var parentNode = RED.nodes.workspace(
+            activeWorkspace
+          ) || RED.nodes.subflow(activeWorkspace);
+
+          nodes.unshift(parentNode);
+
+          return RED.nodes.createExportableNodeSet(nodes);
+        }
+
+        if (!id) { return; }
+        RED.view.importNodes(getFlowDataFromCurrentWorkspace(id),
+            {generateIds: true, addFlow: true, touchImport: true});
+    }
+
     function init() {
         $('<ul id="red-ui-workspace-tabs"></ul>').appendTo("#red-ui-workspace");
         $('<div id="red-ui-workspace-tabs-shade" class="hide"></div>').appendTo("#red-ui-workspace");
@@ -22137,6 +22175,7 @@ RED.workspaces = (function() {
         RED.actions.add("core:enable-flow",enableWorkspace);
         RED.actions.add("core:disable-flow",disableWorkspace);
         RED.actions.add("core:lock-flow",lockWorkspace);
+        RED.actions.add("core:duplicate-flow",duplicateWorkspace);
         RED.actions.add("core:unlock-flow",unlockWorkspace);
         RED.actions.add("core:move-flow-to-start", function(id) { moveWorkspace(id, 'start') });
         RED.actions.add("core:move-flow-to-end", function(id) { moveWorkspace(id, 'end') });
