@@ -70,8 +70,12 @@ create_pids_for_nodes(AryAll, WsName) ->
 create_pids_for_nodes([], Pids, _WsName) ->
     Pids;
 create_pids_for_nodes([NodeDef | MoreNodeDefs], Pids, WsName) ->
-    {ok, Pid} = spin_up_node(NodeDef, WsName),
-    create_pids_for_nodes(MoreNodeDefs, [Pid | Pids], WsName).
+    case spin_up_node(NodeDef, WsName) of
+        {ok, Pid} ->
+            create_pids_for_nodes(MoreNodeDefs, [Pid | Pids], WsName);
+        {error, no_id_found} ->
+            create_pids_for_nodes(MoreNodeDefs, Pids, WsName)
+    end.
 
 %%
 %% This can be used by a supervisor to revive a dead process.
@@ -95,7 +99,11 @@ spin_up_node(#{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef, WsName) ->
     %% when a node is initialised via the Module:start.
     gen_server:call(Pid, {registered, WsName, Pid}),
 
-    {ok, Pid}.
+    {ok, Pid};
+
+spin_up_node(NodeDef, _WsName) ->
+    io:format("NO ID/TYPE FOUND FOR ~p~n", [NodeDef]),
+    {error, no_id_found}.
 
 %% Used by the supervisor node to restart/start nodes.
 spin_up_and_link_node(NodeDef, WsName) ->
