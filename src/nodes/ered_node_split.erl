@@ -106,19 +106,8 @@ handle_msg(_, NodeDef) ->
 route_and_handle_val(Val, NodeDef, Msg) when is_atom(Val) ->
     unsupported(NodeDef, Msg, "splitting the atom");
 %%
-%% Binary splitting by fixed length.
+%% Binary splitting by fixed length & chars
 %%
-route_and_handle_val(
-    Val,
-    #{
-        <<"arraySpltType">> := <<"len">>,
-        <<"arraySplt">> := 0
-    } = NodeDef,
-    Msg
-) when is_binary(Val) ->
-    %% binary isn't the same as a NodeJS buffer - this is also something that
-    %% needs revisiting.
-    unsupported(NodeDef, Msg, "binary split operation");
 route_and_handle_val(
     Val,
     #{
@@ -146,9 +135,9 @@ route_and_handle_val(
         <<"splt">> := SearchPattern
     } = NodeDef,
     Msg
-) when is_list(Val) ->
+) when is_list(Val); is_binary(Val) ->
     %% If arraySplt is zero, then we assume this is a string-based split on
-    %% splt pattern
+    %% splt pattern. Either binary or list are supported.
     NewLst =
         case SearchPattern of
             <<"\\n">> ->
