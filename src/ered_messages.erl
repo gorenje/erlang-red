@@ -261,9 +261,21 @@ encode_json(Value) ->
 %%    {error, ErrorMsg}
 %%
 get_prop({ok, Prop}, Msg) ->
-    ered_nested_maps:find(Prop, Msg);
+    try
+        ered_nested_maps:find(Prop, Msg)
+    catch
+        _E:_F:_S ->
+            %%io:format("GET PROP FAILED: ~p / ~p / ~p ~n", [E,F,S]),
+            {undefined, Prop}
+    end;
 get_prop(Prop, Msg) ->
-    ered_nested_maps:find(Prop, Msg).
+    try
+        ered_nested_maps:find(Prop, Msg)
+    catch
+        _E:_F:_S ->
+            %%io:format("GET PROP FAILED: ~p / ~p / ~p ~n", [E,F,S]),
+            {undefined, Prop}
+    end.
 
 %%
 %% Retrieve a nested parameters from the Msg map.

@@ -139,7 +139,9 @@
                 NodeDef,
                 Msg#{<<"cause">> => Why},
                 "unexpected exit"
-            )
+            ),
+            #{'_ws' := WsName} = Msg,
+            node_status(WsName, NodeDef, <<"failed">>, "red", "dot")
     end
 ).
 
