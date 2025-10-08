@@ -1,52 +1,78 @@
-# Try to maintain user-servicable parts up front
-ARG ELIXIR_VERSION=1.18.3
-ARG OTP_VERSION=27.3.4
-ARG ALPINE_VERSION=3.21.3
+## build the base image
+FROM erlang:27.3.0.0 as builder
 
-ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-alpine-${ALPINE_VERSION}"
-ARG RUNNER_IMAGE="alpine:${ALPINE_VERSION}"
+RUN apt-get update && apt-get -y install \
+    git \
+    inotify-tools \
+    cmake \
+    mosquitto
 
-FROM ${BUILDER_IMAGE} AS builder
-
-RUN apk update && \
-    apk add alpine-sdk bash curl cmake perl linux-headers rebar3 && \
-	rm -rf /var/cache/apk/*
+## get the dependencies and build them
+FROM builder as builder2
 
 WORKDIR /builder
 
-## First get and create the dependencies
 COPY rebar.config .
 COPY rebar.lock .
+
+## needed for Elixir
+ENV LANG=C.UTF-8
+ENV ELIXIR_ERL_OPTIONS="+fnu"
 
 RUN rebar3 get-deps
 RUN rebar3 compile
 
-## Changes to the source does not rebuild the dependencies
-COPY .git .git/
+## build the source code and create a release
+FROM builder2 as builder3
+
+WORKDIR /builder
+
+## needed for Elixir
+ENV LANG=C.UTF-8
+ENV ELIXIR_ERL_OPTIONS="+fnu"
+
 COPY src src/
+## This is a hack solution to get diameterc to work,
+## --> https://erlangforums.com/t/diameter-exprecs-undef-parse-transform/5128
+RUN cp /usr/local/lib/erlang/lib/diameter-2.4.1/src/compiler/diameter_exprecs.erl src/
+RUN cp /usr/local/lib/erlang/lib/diameter-2.4.1/src/compiler/diameter_forms.hrl src/
+
 COPY include include/
 COPY priv priv/
 
+## copy some content into the images to use for the website
+COPY MILESTONES.md priv/
+COPY README.md priv/
+COPY .images priv/
+
 RUN rebar3 as prod release -n erlang_red
 
-FROM ${RUNNER_IMAGE}
+##
+## Finally the docker image that gets run
+FROM erlang:27.3.0.0
 
 WORKDIR "/erlang-red"
-RUN apk update && apk add libncursesw libstdc++ openssl mosquitto && \
-	rm -rf /var/cache/apk/*
-RUN chown nobody /
 
-# Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /builder/_build/prod/rel/erlang_red ./
+COPY --from=builder3 --chown=nobody:root /builder/_build/prod/rel/erlang_red ./
+
+RUN apt-get update && apt-get -y install \
+    mosquitto
+
+RUN chown -R nobody "/erlang-red"
 
 ## needed for erlexec
-ENV SHELL=/bin/sh
+ENV SHELL=/bin/bash
 
+## needed for Elixir
+ENV LANG=C.UTF-8
+ENV ELIXIR_ERL_OPTIONS="+fnu"
+
+## needed for nobody
 USER nobody
 
-ENV ERL_FLAGS="+c false"
-
-## PORT is now respected by cowboy
+## needed for cowboy
 ENV PORT=8080
+
 EXPOSE 8080
+
 CMD ["/erlang-red/bin/erlang_red", "console"]
