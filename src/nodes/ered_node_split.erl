@@ -140,8 +140,14 @@ route_and_handle_val(
     %% splt pattern. Either binary or list are supported.
     NewLst =
         case SearchPattern of
-            <<"\\n">> ->
-                string:split(Val, "\n", all);
+            <<"\\", C, "\\", D, "\\", A>> ->
+                string:split(Val,
+                             to_escape(C) ++ to_escape(D) ++ to_escape(A),
+                             all);
+            <<"\\", C, "\\", D>> ->
+                string:split(Val, to_escape(C) ++ to_escape(D), all);
+            <<"\\", C>> ->
+                string:split(Val, to_escape(C), all);
             _ ->
                 string:split(Val, binary_to_list(SearchPattern), all)
         end,
@@ -277,3 +283,12 @@ split_binary_into_list(_MatchFunc, <<>>, Acc) ->
 split_binary_into_list(MatchFunc, Binary, Acc) ->
     {Packet, Rest} = MatchFunc(Binary),
     split_binary_into_list(MatchFunc, Rest, [Packet | Acc]).
+
+%%
+%% support the most popular escape sequences
+%%
+to_escape(98) -> "\b";
+to_escape(110) -> "\n";
+to_escape(114) -> "\r";
+to_escape(116) -> "\t";
+to_escape(_) -> "\n".
