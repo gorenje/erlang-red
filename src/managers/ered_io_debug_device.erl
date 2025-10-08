@@ -30,8 +30,7 @@ loop(#state{wsname = Wsname, nodedef = NodeDef} = State) ->
             Content = any_to_binary(apply(Module, Function, Args)),
             send_out_debug_msg(NodeDef, #{'_ws' => Wsname}, Content, normal),
             ?MODULE:loop(State);
-        {io_request, From, ReplyAs,
-            {put_chars, _Encoding, Content}} ->
+        {io_request, From, ReplyAs, {put_chars, _Encoding, Content}} ->
             From ! {io_reply, ReplyAs, ok},
             send_out_debug_msg(NodeDef, #{'_ws' => Wsname}, Content, normal),
             ?MODULE:loop(State);

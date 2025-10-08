@@ -32,9 +32,11 @@
     get_node_name/2
 ]).
 
--define(INC_COUNTER(CntName), NodeDef#{
-    CntName => maps:get(CntName, NodeDef) + 1
-}).
+-define(IncrementCounter(CntName), begin
+    NodeDef#{
+        CntName => maps:get(CntName, NodeDef) + 1
+    }
+end).
 
 %% TODO: a tab node (i.e. the tab containing a flow) also has a disabled
 %% TODO: flag but this is called 'disabled'. If it is set, then the entire
@@ -100,7 +102,6 @@ spin_up_node(#{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef, WsName) ->
     gen_server:call(Pid, {registered, WsName, Pid}),
 
     {ok, Pid};
-
 spin_up_node(NodeDef, _WsName) ->
     io:format("NO ID/TYPE FOUND FOR ~p~n", [NodeDef]),
     {error, no_id_found}.
@@ -154,11 +155,11 @@ add_counters(NodeDef, NodePid) ->
 %%
 %% this needs to be in sync with ered_nodes:add_counters/2
 % erlfmt:ignore - alignment
-bump_counter(exception,   NodeDef) -> ?INC_COUNTER('_mc_exception');
-bump_counter(ws_event,    NodeDef) -> ?INC_COUNTER('_mc_websocket');
-bump_counter(outgoing,    NodeDef) -> ?INC_COUNTER('_mc_outgoing');
-bump_counter(incoming,    NodeDef) -> ?INC_COUNTER('_mc_incoming');
-bump_counter(link_return, NodeDef) -> ?INC_COUNTER('_mc_link_return');
+bump_counter(exception,   NodeDef) -> ?IncrementCounter('_mc_exception');
+bump_counter(ws_event,    NodeDef) -> ?IncrementCounter('_mc_websocket');
+bump_counter(outgoing,    NodeDef) -> ?IncrementCounter('_mc_outgoing');
+bump_counter(incoming,    NodeDef) -> ?IncrementCounter('_mc_incoming');
+bump_counter(link_return, NodeDef) -> ?IncrementCounter('_mc_link_return');
 bump_counter(_, NodeDef) ->
     NodeDef.
 

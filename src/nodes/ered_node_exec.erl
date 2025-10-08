@@ -144,9 +144,13 @@ start_command_running(Msg, #{<<"command">> := CmdStr} = NodeDef) ->
 
 %%
 %% Check the command value
-start_command_running(<<>>, Msg,
-                      #{<<"addpay">> := <<>>,
-                        <<"append">> := <<>>} = NodeDef
+start_command_running(
+    <<>>,
+    Msg,
+    #{
+        <<"addpay">> := <<>>,
+        <<"append">> := <<>>
+    } = NodeDef
 ) ->
     ErrMsg = jstr(
         "TypeError: The argument 'command' cannot be empty. Received ''", []
