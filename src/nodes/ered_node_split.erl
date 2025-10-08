@@ -141,9 +141,11 @@ route_and_handle_val(
     NewLst =
         case SearchPattern of
             <<"\\", C, "\\", D, "\\", A>> ->
-                string:split(Val,
-                             to_escape(C) ++ to_escape(D) ++ to_escape(A),
-                             all);
+                string:split(
+                    Val,
+                    to_escape(C) ++ to_escape(D) ++ to_escape(A),
+                    all
+                );
             <<"\\", C, "\\", D>> ->
                 string:split(Val, to_escape(C) ++ to_escape(D), all);
             <<"\\", C>> ->
