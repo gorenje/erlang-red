@@ -220,6 +220,8 @@ to_binary_keys([H | T], Lst) ->
 
 % erlfmt:ignore - alignment
 push_out_msg(Req, HttpInPid, WsName) ->
+    ContentType = cowboy_req:parse_header(<<"content-type">>, Req),
+
     BaseReqObj = #{
         <<"url">>         => cowboy_req:path(Req),
         <<"uri">>         => iolist_to_binary(cowboy_req:uri(Req)),
@@ -232,12 +234,25 @@ push_out_msg(Req, HttpInPid, WsName) ->
         <<"query">>       => maps:from_list(cowboy_req:parse_qs(Req))
     },
 
+    AddDataFromBody =
+        case ContentType of
+            {_, <<"x-www-form-urlencoded">>, _} ->
+                case cowboy_req:read_urlencoded_body(Req) of
+                    {ok, [_D|_T] = Hsh, _Req2} ->
+                        #{<<"formdata">> => maps:from_list(Hsh)};
+                    _ ->
+                        #{}
+                end;
+            _ ->
+                #{}
+        end,
+
     push_out_msg(
       Req,
       HttpInPid,
       WsName,
-      cowboy_req:parse_header(<<"content-type">>, Req),
-      BaseReqObj
+      ContentType,
+      maps:merge(BaseReqObj, AddDataFromBody)
      ).
 
 %%
