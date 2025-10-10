@@ -33,10 +33,38 @@ handle_json_body(Req, State) ->
 
     {ok, Body, Req2} = ered_http_utils:read_body(Req, <<"">>),
 
-    #{
-        <<"wsname">> := WsName,
-        <<"allIsOn">> := AllIsOn
-    } = TaskData = json:decode(Body),
+    %%
+    %% Message tracing has two types: debug pr msgtracing - these can both
+    %% be active at the same time.
+    %%
+    %% - `debug` sends the message contents to the debug panel regardless of the
+    %%    node type (normally only a debug node goes to the debug panel).
+    %%
+    %% - `msgtracing` has a list of nodes that received messages and each
+    %%    node that has received a message, has its status updated so that it
+    %%    beecomes clear in the flow which nodes got messages.
+    %%
+    %% Both then have the options of either all nodes or a selected list of
+    %% nodes for which debug or msgtracing should be applied.
+    %%
+
+    TaskData = json:decode(Body),
+
+    {WsName, AllIsOn, Nodes} =
+        case TaskData of
+            #{
+                <<"wsname">> := A,
+                <<"allIsOn">> := B,
+                <<"nodesSelected">> := C
+            } ->
+                {A, B, C};
+            #{<<"wsname">> := A, <<"nodesSelected">> := C} ->
+                {A, false, C};
+            #{<<"wsname">> := A, <<"allIsOn">> := B} ->
+                {A, B, []};
+            #{<<"wsname">> := A} ->
+                {A, false, []}
+        end,
 
     %% if this is 'on' then we readd these, of this is 'off' and then
     %% we do nothing else but either way, we remove the handlers first.
@@ -54,45 +82,13 @@ handle_json_body(Req, State) ->
             ered_msgtracer_manager:remove_handler({
                 ered_msgtracer_handler_debug_all,
                 WsName
+            }),
+            ered_msgtracer_manager:remove_handler({
+                ered_msgtracer_handler_debug,
+                WsName
             })
     end,
 
-    DebugOnForNode = fun(NodeId) ->
-        ered_msgtracer_manager:add_handler(
-            {
-                ered_msgtracer_handler_debug,
-                <<WsName/bytes, NodeId/bytes>>
-            },
-            #{
-                <<"nodeids">> => [NodeId],
-                '_ws' => binary_to_atom(WsName)
-            }
-        )
-    end,
-
-    DebugOffForNode = fun(NodeId) ->
-        ered_msgtracer_manager:remove_handler(
-            {
-                ered_msgtracer_handler_debug,
-                <<WsName/bytes, NodeId/bytes>>
-            }
-        )
-    end,
-
-    %%
-    %% Message tracing has two types: debug pr msgtracing - these can both
-    %% be active at the same time.
-    %%
-    %% - `debug` sends the message contents to the debug panel regardless of the
-    %%    node type (normally only a debug node goes to the debug panel).
-    %%
-    %% - `msgtracing` has a list of nodes that received messages and each
-    %%    node that has received a message, has its status updated so that it
-    %%    beecomes clear in the flow which nodes got messages.
-    %%
-    %% Both then have the options of either all nodes or a selected list of
-    %% nodes for which debug or msgtracing should be applied. Hence this
-    %% case has four cases...
     case {Task, TaskState, AllIsOn} of
         {<<"debug">>, <<"on">>, true} ->
             ered_msgtracer_manager:add_handler(
@@ -102,13 +98,19 @@ handle_json_body(Req, State) ->
                 },
                 #{'_ws' => binary_to_atom(WsName)}
             );
-        {<<"debug">>, <<"off">>, false} ->
-            [
-                DebugOffForNode(N)
-             || N <- maps:get(<<"nodesSelected">>, TaskData)
-            ];
         {<<"debug">>, <<"on">>, false} ->
-            [DebugOnForNode(N) || N <- maps:get(<<"nodesSelected">>, TaskData)];
+            ered_msgtracer_manager:add_handler(
+                {
+                    ered_msgtracer_handler_debug,
+                    WsName
+                },
+                #{
+                    <<"nodeids">> => Nodes,
+                    '_ws' => binary_to_atom(WsName)
+                }
+            );
+        %%
+        %%
         {<<"msgtracing">>, <<"on">>, true} ->
             ered_msgtracer_manager:add_handler(
                 {
@@ -124,7 +126,7 @@ handle_json_body(Req, State) ->
                     WsName
                 },
                 #{
-                    <<"nodeids">> => maps:get(<<"nodesSelected">>, TaskData),
+                    <<"nodeids">> => Nodes,
                     '_ws' => binary_to_atom(WsName)
                 }
             );
