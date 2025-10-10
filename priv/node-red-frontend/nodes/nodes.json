@@ -574,7 +574,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.3.1"
+        "version": "0.4.0"
     },
     {
         "enabled": true,
@@ -586,7 +586,43 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.3.1"
+        "version": "0.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-start",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flow2uml",
+        "name": "mermaid-state-start",
+        "types": [
+            "mermaid-state-start"
+        ],
+        "user": false,
+        "version": "0.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-state",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flow2uml",
+        "name": "mermaid-state-state",
+        "types": [
+            "mermaid-state-state"
+        ],
+        "user": false,
+        "version": "0.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flow2uml",
+        "name": "mermaid-state-end",
+        "types": [
+            "mermaid-state-end"
+        ],
+        "user": false,
+        "version": "0.4.0"
     },
     {
         "enabled": true,
@@ -598,7 +634,7 @@
             "Seeker"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,
@@ -610,7 +646,7 @@
             "Sink"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,
@@ -622,7 +658,7 @@
             "ClientCode"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,
@@ -634,7 +670,7 @@
             "GetFlows"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,
@@ -646,7 +682,7 @@
             "SendFlow"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,
@@ -658,7 +694,7 @@
             "InstallPackage"
         ],
         "user": false,
-        "version": "0.10.3"
+        "version": "0.11.1"
     },
     {
         "enabled": true,

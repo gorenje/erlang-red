@@ -14011,6 +14011,11 @@ If this node isn't reached, then the test will fail.
       return this.name?"node_label_italic":"";
     },
 
+    // called when node is added to workspace also if copied and pasted.
+    onadd: function() {
+    },
+
+    // called when node type added to palette-bar
     onpaletteadd: function() {
     },
 
@@ -14018,6 +14023,8 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditprepare: function() {
+      let that = this;
+
       var possibleArrows = [
         "--", "-.-", "==",
         "-->", "-.->", "==>",
@@ -14027,10 +14034,10 @@ If this node isn't reached, then the test will fail.
         "--o", "-.-o", "==o",
         "o--o", "o-.-o", "o==o",
       ]
-      var allOurWires = [this.id];
+      var allOurWires = [this.id, "self"];
 
       let addConfigField = (nde, currVal) => {
-        var sltObj = $('<select>', { class: 'wirecfg-arrow', style: "max-width: 100px" })
+        var sltObj = $('<select>', { class: 'wirecfg-arrow', style: "max-width: 100px; margin-left: 5px;" })
 
         for (var idx = 0; idx < possibleArrows.length; idx++) {
           let val = possibleArrows[idx]
@@ -14040,11 +14047,15 @@ If this node isn't reached, then the test will fail.
         }
 
         var container = $("<div>", { class: "wirecfg form-row", "data-id": nde.id });
+
         container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
+
         container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#node-input-wirecfgs-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
 
         var label = $('<label>', { for: "node-input-name", "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
+
         label.append('<i class="fa fa-tag"></i>&nbsp;')
+
         label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
 
         container.append(label)
@@ -14064,18 +14075,17 @@ If this node isn't reached, then the test will fail.
       })
 
       this.wirecfgs.sort( (a,b) => a.id < b.id ).forEach( currVal => {
-        let nde = RED.nodes.node(currVal.id)
+        let nde = RED.nodes.node(currVal.id == "self" ? that.id : currVal.id)
 
         // support older versions
         currVal.arrow = { "arrow": "-->", "thickarrow": "==>", "line": "--", "dotarrow": "-.->" }[currVal.arrow] || currVal.arrow;
 
-        if ( !nde ) { return }
-        if ( allOurWires.indexOf(currVal.id) < 0 ) { return }
+        /* if ( !nde ) { return } */
+        /* if ( allOurWires.indexOf(currVal.id) < 0 ) { return } */
 
-        addConfigField(nde, currVal)
+        addConfigField(nde || that, currVal)
       })
 
-      let that = this;
       $('#node-input-add-self-button').on('click', (e) => {
         e.preventDefault();
         addConfigField(that, { id: that.id, name: "", arrow: "-->" })
@@ -14086,9 +14096,14 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditsave: function() {
+      let that = this;
       let result = []
       $($('#node-input-wirecfgs-container').find('.wirecfg')).each( (idx,elem) => {
-        result.push( { name: $(elem).find('.wirecfg-name').val(), id: $(elem).data("id"), arrow: $(elem).find('.wirecfg-arrow').val()})
+        result.push( {
+          name: $(elem).find('.wirecfg-name').val(),
+          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"),
+          arrow: $(elem).find('.wirecfg-arrow').val()
+        })
       })
       this.wirecfgs = result
     },
@@ -14164,7 +14179,7 @@ If this node isn't reached, then the test will fail.
   </div>
 
   <div class="form-row">
-    <button class='button' id='node-input-add-self-button'>Add Self</button>
+    <button class='red-ui-button' id='node-input-add-self-button'>Add Self</button>
   </div>
 
   <div class="form-row">
@@ -14174,6 +14189,404 @@ If this node isn't reached, then the test will fail.
 <script type="text/html" data-help-name="mermaid-flowchart">
   <p>Used to create mermaid flowchart</p>
   Used to create mermaid flowchart
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-start] --- -->
+<script type="text/javascript">
+  (function(){
+
+
+  function frontendSupportFunction() {
+  }
+
+  var functTwo = (arg) => {
+
+  };
+
+  RED.nodes.registerType('mermaid-state-start',{
+    color: '#D7D7A0',
+    icon: "font-awesome/fa-circle",
+    category: 'mermaid',
+    paletteLabel: 'Start',
+    defaults: {
+      name: {
+        value:"start",
+      },
+      wirecfgs: {
+        value: [], // { action: "", id: "", payload: "" } <<---- expected
+      },
+      l: { value: false }
+    },
+
+    inputs: 0,
+
+    outputs: 1,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function() {
+      let that = this;
+
+      var allOurWires = [];
+
+      let addConfigField = (nde, currVal) => {
+        var container = $("<div>", { class: "wirecfg form-row", "data-id": nde.id });
+
+        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
+
+        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#node-input-wirecfgs-start-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+
+        var label = $('<label>', { "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
+
+        label.append('<i class="fa fa-tag"></i>&nbsp;')
+
+        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+
+        container.append(label)
+        container.append($('<br/>'))
+        container.append($('<input>', { style: 'width: 40%;', class: 'wirecfg-action', type: "text", placeholder: "Action", value: currVal.action }))
+        container.append($('<input>', { style: 'width: 50%; margin-left: 2%; margin-right: 2%;', class: 'wirecfg-payload', type: "text", placeholder: "Payload", value: currVal.payload }))
+
+        container.appendTo($('#node-input-wirecfgs-start-container'))
+      }
+
+      RED.nodes.getDownstreamNodes(RED.nodes.node(this.id)).forEach(nde => {
+        if (!this.wirecfgs.some((d) => d.id == nde.id)) {
+          this.wirecfgs.push({ id: nde.id, action: "", payload: "" })
+        }
+        allOurWires.push(nde.id)
+      })
+
+      this.wirecfgs.sort((a, b) => a.id < b.id).forEach(currVal => {
+        let nde = RED.nodes.node(currVal.id == "self" ? that.id : currVal.id)
+
+        /* if ( !nde ) { return } */
+        /* if ( allOurWires.indexOf(currVal.id) < 0 ) { return } */
+
+        addConfigField(nde || that, currVal)
+      })
+    },
+
+    oneditcancel: function() {
+    },
+
+    oneditsave: function() {
+      let that = this;
+      let result = []
+      $($('#node-input-wirecfgs-start-container').find('.wirecfg')).each( (idx,elem) => {
+        result.push( {
+          action: $(elem).find('.wirecfg-action').val(),
+          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"),
+          payload: $(elem).find('.wirecfg-payload').val()
+        })
+      })
+      this.wirecfgs = result
+    },
+
+    oneditresize: function(size) {
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="mermaid-state-start">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+    <div class="form-row">
+      <div id="node-input-wirecfgs-start-container"></div>
+    </div>
+</script>
+<script type="text/markdown" data-help-name="mermaid-state-start">
+Start of a state diagram
+
+### Inputs
+
+: payload (any) : what is expected as payload input.
+: topic (string) : (optional) is a topic expected or handled.
+
+### Outputs
+
+: payload (any) : what is returned as payload.
+
+### Description
+
+Used to define a state machine diagram.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
+
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-state] --- -->
+<script type="text/javascript">
+  (function(){
+
+
+  function frontendSupportFunction() {
+  }
+
+  var functTwo = (arg) => {
+
+  };
+
+  RED.nodes.registerType('mermaid-state-state',{
+    color: '#D7D7A0',
+    icon: "font-awesome/fa-map-marker",
+    category: 'mermaid',
+    paletteLabel: 'State',
+    defaults: {
+      name: {
+        value:"state",
+      },
+      wirecfgs: {
+        value: [] // { action: "", id: "", payload: "" } <<---- expected
+      }
+    },
+
+    inputs: 1,
+
+    outputs: 1,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function () {
+      let that = this;
+
+      var allOurWires = [];
+
+      let addConfigField = (nde, currVal) => {
+        var container = $("<div>", { class: "wirecfg form-row", "data-id": nde.id });
+
+        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
+
+        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#node-input-wirecfgs-state-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+
+        var label = $('<label>', { "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
+
+        label.append('<i class="fa fa-tag"></i>&nbsp;')
+
+        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+
+        container.append(label)
+        container.append($('<br/>'))
+        container.append($('<input>', { style: 'width: 40%;', class: 'wirecfg-action', type: "text", placeholder: "Action", value: currVal.action }))
+        container.append($('<input>', { style: 'width: 50%; margin-left: 2%; margin-right: 2%;', class: 'wirecfg-payload', type: "text", placeholder: "Payload", value: currVal.payload }))
+
+        container.appendTo($('#node-input-wirecfgs-state-container'))
+      }
+
+      RED.nodes.getDownstreamNodes(RED.nodes.node(this.id)).forEach(nde => {
+        if (!this.wirecfgs.some((d) => d.id == nde.id)) {
+          this.wirecfgs.push({ id: nde.id, action: "", payload: "" })
+        }
+        allOurWires.push(nde.id)
+      })
+
+      this.wirecfgs.sort((a, b) => a.id < b.id).forEach(currVal => {
+        let nde = RED.nodes.node(currVal.id == "self" ? that.id : currVal.id)
+
+        /* if ( !nde ) { return } */
+        /* if ( allOurWires.indexOf(currVal.id) < 0 ) { return } */
+
+        addConfigField(nde || that, currVal)
+      })
+
+      $('#node-input-add-self-button').on('click', (e) => {
+        e.preventDefault();
+        addConfigField(that, { id: that.id, action: "", payload: "" })
+      })
+    },
+
+    oneditcancel: function () {
+    },
+
+    oneditsave: function () {
+      let that = this;
+      let result = []
+      $($('#node-input-wirecfgs-state-container').find('.wirecfg')).each((idx, elem) => {
+        result.push({
+          action: $(elem).find('.wirecfg-action').val(),
+          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"),
+          payload: $(elem).find('.wirecfg-payload').val()
+        })
+      })
+      this.wirecfgs = result
+    },
+
+    oneditresize: function(size) {
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="mermaid-state-state">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+  <div class="form-row">
+    <button class='red-ui-button' id='node-input-add-self-button'>Add Self</button>
+  </div>
+
+  <div class="form-row">
+    <div id="node-input-wirecfgs-state-container"></div>
+  </div>
+</script>
+<script type="text/markdown" data-help-name="mermaid-state-state">
+Defines a state within a state diagram
+
+### Inputs
+
+: payload (any) : what is expected as payload input.
+: topic (string) : (optional) is a topic expected or handled.
+
+### Outputs
+
+: payload (any) : what is returned as payload.
+
+### Description
+
+Used to define a state machine diagram.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
+
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end] --- -->
+<script type="text/javascript">
+  (function(){
+
+
+  function frontendSupportFunction() {
+  }
+
+  var functTwo = (arg) => {
+
+  };
+
+  RED.nodes.registerType('mermaid-state-end',{
+    color: '#D7D7A0',
+    icon: "font-awesome/fa-bullseye",
+    category: 'mermaid',
+    paletteLabel: 'End',
+    defaults: {
+      name: {
+        value:"done",
+      },
+      l: { value: false }
+    },
+
+    inputs: 1,
+
+    outputs: 0,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function() {
+    },
+
+    oneditcancel: function() {
+    },
+
+    oneditsave: function() {
+    },
+
+    oneditresize: function(size) {
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="mermaid-state-end">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+</script>
+<script type="text/markdown" data-help-name="mermaid-state-end">
+Defines the end point of a state diagram.
+
+### Inputs
+
+: payload (any) : what is expected as payload input.
+: topic (string) : (optional) is a topic expected or handled.
+
+### Outputs
+
+: payload (any) : what is returned as payload.
+
+### Description
+
+Used to define a state machine diagram.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
+
 </script>
 
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flowhub/flowhubpull] --- -->
