@@ -2631,7 +2631,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     <p>If no response is received within the configured timeout, default 30 seconds, the node
        will log an error that can be caught using the <code>catch</code> node.</p>
     <p>When the option <b>Link Type</b> is set to "Dynamic target" <code>msg.target</code> can be used to call a
-       <code>link in</code> by name or id.
+       <code>link in</code> by name or id. 
     <ul>
       <li>If there is a <code>link in</code> nodes with the same id, it will be called</li>
       <li>If there are two or more <code>link in</code> nodes with the same name, an error will be raised</li>
@@ -4078,7 +4078,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     <h4>Notes</h4>
     <p>The <code>is true/false</code> and <code>is null</code> rules perform strict
        comparisons against those types. They do not convert between types.</p>
-    <p>The <code>is empty</code> and <code>is not empty</code> rules can be used to test the length of Strings, Arrays and Buffers, or the number of properties an Object has. Neither rule will pass if the property being tested has a <code>boolean</code>, <code>null</code>
+    <p>The <code>is empty</code> and <code>is not empty</code> rules can be used to test the length of Strings, Arrays and Buffers, or the number of properties an Object has. Neither rule will pass if the property being tested has a <code>boolean</code>, <code>null</code> 
        or <code>undefined</code> value.</p>
     <h4>Handling message sequences</h4>
     <p>By default, the node does not modify the <code>msg.parts</code> property of messages
@@ -7331,7 +7331,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     <dl class="message-properties">
        <dt>action <span class="property-type">string</span></dt>
        <dd>the name of the action the node should perform. Available actions are: <code>"connect"</code>,
-       <code>"disconnect"</code>, <code>"getSubscriptions"</code>, <code>"subscribe"</code> and
+       <code>"disconnect"</code>, <code>"getSubscriptions"</code>, <code>"subscribe"</code> and 
        <code>"unsubscribe"</code>.</dd>
        <dt class="optional">topic <span class="property-type">string|object|array</span></dt>
        <dd>For the <code>"subscribe"</code> and <code>"unsubscribe"</code> actions, this property
@@ -8288,10 +8288,10 @@ msg.cookies = {
                         height -= cr.outerHeight(true);
                 }
                 $("#node-input-headers-container").editableList('height',height);
-            }
+            } 
         }
     });
-})();
+})();    
 </script>
 <!--
   Copyright JS Foundation and other contributors, http://js.foundation
@@ -8466,7 +8466,7 @@ msg.cookies = {
         { value: "application/xml", label: "application/xml", hasValue: false },
         ...defaultOptions,
     ];
-
+    
     headerOptions["accept-encoding"] = [
         { value: "gzip", label: "gzip", hasValue: false },
         { value: "deflate", label: "deflate", hasValue: false },
@@ -8761,7 +8761,7 @@ msg.cookies = {
                     propertyName.on('change', function (event) {
                         propertyValue.typedInput('types', getHeaderOptions(propertyName.typedInput('type')));
                     });
-
+                
                 },
                 sortable: true,
                 removable: true
@@ -8774,7 +8774,7 @@ msg.cookies = {
             }
         },
         oneditsave: function() {
-
+            
             const node = this;
 
             if (!/^wss:/i.test($("#node-config-input-path").val())) {
@@ -8785,7 +8785,7 @@ msg.cookies = {
             }
 
             const headers = $("#node-input-headers-container").editableList('items');
-
+            
             node.headers = [];
             headers.each(function(i) {
                 const header = $(this);
@@ -8796,7 +8796,7 @@ msg.cookies = {
                 node.headers.push({
                     keyType, keyValue, valueType, valueValue
                 })
-
+                
             });
         },
         oneditresize: function(size) {
@@ -8811,7 +8811,7 @@ msg.cookies = {
                         height -= cr.outerHeight(true);
                 }
                 $("#node-input-headers-container").editableList('height',height);
-            }
+            } 
         }
     });
 
@@ -9720,7 +9720,7 @@ msg.cookies = {
                 <option value="" data-i18n="csv.spec.legacy"></option>
             </select>
             <div>
-                <div class="form-tips csv-lecacy-warning" data-i18n="node-red:csv.spec.legacy_warning"
+                <div class="form-tips csv-lecacy-warning" data-i18n="node-red:csv.spec.legacy_warning" 
                     style="width: calc(100% - 18px); margin-top: 4px; max-width: unset;">
                 </div>
             </div>
@@ -9840,7 +9840,7 @@ msg.cookies = {
                     $(".form-tips.csv-lecacy-warning").show();
                 }
             });
-            // new nodes will have `spec` set to "rfc" (default), but existing nodes will either not have
+            // new nodes will have `spec` set to "rfc" (default), but existing nodes will either not have 
             // a spec value or it will be empty - we need to maintain the legacy behaviour for existing
             // flows but default to rfc for new nodes
             let spec = !this.spec ? "" : "rfc"
@@ -11712,7 +11712,7 @@ msg.cookies = {
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">filename <span class="property-type">string</span></dt>
-        <dd>The name of the file to be updated can be provided in the node configuration, or as a message property.
+        <dd>The name of the file to be updated can be provided in the node configuration, or as a message property. 
             By default it will use <code>msg.filename</code> but this can be customised in the node.
         </dd>
         <dt class="optional">encoding <span class="property-type">string</span></dt>
@@ -11737,7 +11737,7 @@ msg.cookies = {
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">filename <span class="property-type">string</span></dt>
-        <dd>The name of the file to be read can be provided in the node configuration, or as a message property.
+        <dd>The name of the file to be read can be provided in the node configuration, or as a message property. 
             By default it will use <code>msg.filename</code> but this can be customised in the node.
         </dd>
     </dl>
@@ -11870,16 +11870,140 @@ msg.cookies = {
    Visual comparison of flows being edited and flow that has been deployed.
 </script>
 
+<!-- --- [red-module:@gregoriusrippenstein/erlang-red-process-nodes/erlconfig] --- -->
+<script type="text/javascript">
+(function ($) {
+   RED.nodes.registerType('erlconfigCfg', {
+      category: 'config',
+      hasUsers: false,
+      defaults: {
+         name: { value: "" },
+         data: { value: "" }
+      },
+      paletteLabel: 'config',
+      label: function () {
+         return this.name;
+      }
+  });
+})(jQuery);
+</script>
+
+<!-- The html for the config node info panel (in right sidebar) -->
+<script type="text/x-red" data-template-name="erlconfigCfg">
+   <p>Configiration</p>
+   Configuration
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/erlang-red-process-nodes/erlprocess] --- -->
+<script type="text/javascript">
+  (function(){
+  
+
+  function frontendSupportFunction() {
+  }
+
+  var functTwo = (arg) => {
+
+  };
+  
+  RED.nodes.registerType('erlprocess',{
+    color: '#FFCC66',
+    icon: "font-awesome/fa-genderless",
+    category: 'processes',
+    paletteLabel: 'Process',
+    defaults: {
+      name: {
+        value:"",
+      },
+      pid: {
+        value: "",
+        required: true
+      }
+    },
+
+    inputs: 1,
+
+    outputs: 1,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function() {
+    },
+
+    oneditcancel: function() {
+    },
+
+    oneditsave: function() {
+    },
+
+    oneditresize: function(size) {
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="erlprocess">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-pid"><i class="fa fa-circle"></i> <span data-i18n="erlprocess.label.process"></span></label>
+    <input type="text" id="node-input-pid" data-i18n="[placeholder]erlprocess.label.process">
+  </div>
+</script>
+<script type="text/markdown" data-help-name="erlprocess">
+Represent an existing Erlang process by name, number or rank.
+
+### Inputs
+
+: payload (any) : The messager payload to send the process.
+: *msgtype* (string) : (optional) either `info`, `cast` or `call`. Defaults to `info`.
+
+### Outputs
+
+: *payload* (any) : (optional) in the case of `cast` or `call` messages, the reply value.
+
+### Description
+
+An Erlang-Red representation of an existing Erlang process.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
+
+</script>
+
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erlsupervisor] --- -->
 <script type="text/javascript">
   (function(){
-
+    
   RED.nodes.registerType('erlsupervisor',{
     color: '#E9967A',
     icon: "font-awesome/fa-ambulance",
     category: 'behaviour',
     paletteLabel: 'Supervisor',
-
+    
     defaults: {
       name: {
         value:"",
@@ -11981,12 +12105,12 @@ msg.cookies = {
       /*
         sortable is a hidden feature of treeList --> https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/editor-client/src/js/ui/common/treeList.js --> which is a feature of editableList ==> https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/editor-client/src/js/ui/common/editableList.js
        */
-      var dirList = $("#node-input-erlsupervisor-target-container-div").css({
-          width: "100%",
-          height: "100%"
-        }).treeList({
-          multi: true,
-          sortable: true
+      var dirList = $("#node-input-erlsupervisor-target-container-div").css({ 
+          width: "100%", 
+          height: "100%" 
+        }).treeList({ 
+          multi: true, 
+          sortable: true 
         }).on("treelistitemmouseover", function (e, item) {
           item.node.highlighted = true;
           item.node.dirty = true;
@@ -12040,7 +12164,7 @@ msg.cookies = {
           items.push(nodeItemMap[n.id]);
         }
       });
-
+      
       scopedItems.sort( (a,b) => { return scope.indexOf(a.id) < scope.indexOf(b.id) ? -1 : 1})
 
       dirList.treeList('data', [...scopedItems, ...items]);
@@ -12118,7 +12242,7 @@ msg.cookies = {
         this.scope = "group";
       } else {
         // this seems to be the only way to get the list of ids in sorted ordered ...
-        this.scope = Array.from($("#node-input-erlsupervisor-target-container-div").find('li').find('.selected').map( (d,o) => $($(o).parent()).data().data.id ))
+        this.scope = Array.from($("#node-input-erlsupervisor-target-container-div").find('li').find('.selected').map( (d,o) => $($(o).parent()).data().data.id )) 
       }
     },
 
@@ -12177,7 +12301,7 @@ msg.cookies = {
             <label style="width: 150px;" for="node-input-intensity" data-i18n="erlsupervisor.label.intensity"></label>
             <input type="number" id="node-input-intensity" data-i18n="[placeholder]erlsupervisor.placeholder.intensity" style="width: 100px;"></input>
           </div>
-
+          
           <div class="form-row">
             <label style="width: 150px;" for="node-input-period" data-i18n="erlsupervisor.label.period"></label>
             <input type="number" id="node-input-period" data-i18n="[placeholder]erlsupervisor.placeholder.period"  style="width: 100px;"></input>
@@ -12211,7 +12335,7 @@ msg.cookies = {
                 <option value="supervisor" data-i18n="erlsupervisor.child_type.supervisor"></option>
             </select>
           </div>
-
+          
           <div class="form-row">
             <label style="width: 150px;" for="node-input-child_restart" data-i18n="erlsupervisor.label.child_restart"></label>
             <select id="node-input-child_restart">
@@ -12241,9 +12365,9 @@ Nodes in Erlang-Red are all processes. Processes can die and need restarting. On
 
 Supervisors are designed to restart process that do die. Erlang-Red takes the position that users are responsible for deciding which processes should be restarted and by extension, which nodes.
 
-The supervisor nodes allow users to design their recovery of flows, Erlang-Red only maintains the core of Erlang-Red and ensures that continues to run.
+The supervisor nodes allow users to design their recovery of flows, Erlang-Red only maintains the core of Erlang-Red and ensures that continues to run. 
 
-**Erlang-Red does not automatically restart failing nodes.**
+**Erlang-Red does not automatically restart failing nodes.** 
 
 This setup is an explicit design decision.
 
@@ -12269,7 +12393,7 @@ Some configurations might not be supported, your mileage might vary.
 
 Nodes can be selected visually and a supervisor cannot supervise itself, doing so will lead to dangers beyond the scope of this documentation.
 
-### References
+### References 
 
 - [Supervisor principles](https://www.erlang.org/doc/system/sup_princ)
 - [Learn you some Erlang](https://learnyousomeerlang.com/supervisors)
@@ -12282,7 +12406,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erlmodule] --- -->
 <script type="text/javascript">
   (function(){
-
+  
   RED.nodes.registerType('erlmodule',{
     color: '#fdd0a2',
     icon: "font-awesome/fa-keyboard-o",
@@ -12295,7 +12419,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
       module_name: {
         value:"",
         required: true,
-        validate: RED.validators.regex(/^[a-z0-9_]+$/)
+        validate: RED.validators.regex(/^[a-z0-9_]+$/)        
       },
       code: {
         value: atob("LW1vZHVsZSgpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
@@ -12350,9 +12474,9 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
           "state": atob("LW1vZHVsZSgpLgoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9IG5vX3N0YXRlLCAKICAgIERhdGEgPSAwLAogICAge29rLFN0YXRlLERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9mZiwKICBEYXRhCikgLT4KICAgIHtuZXh0X3N0YXRlLCBvbiwgRGF0YSArIDEsIFt7cmVwbHksIEZyb20sIDw8Im9rIj4+fV19OwoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9uLAogIERhdGEKKSAtPgogICAge25leHRfc3RhdGUsIG9mZiwgRGF0YSwgW3tyZXBseSwgRnJvbSwgPDwib2siPj59XX07CgpoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIDw8ImdldF9jb3VudCI+PiwKICBfQ3VyclN0YXRlLAogIERhdGEKKSAtPgogICAge2tlZXBfc3RhdGUsIERhdGEsIFt7cmVwbHksIEZyb20sIERhdGF9XX07CgolJQolJSBGYWxsIHRocm91Z2guCmhhbmRsZV9ldmVudCh7Y2FsbCwgRnJvbX0gPSBFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YSkgLT4KICAgIGlvOmZvcm1hdCgiVEVTVCAoY2FsbCk6IH5wIH5wIH5wIH5wfm4iLFtFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YV0pLAogICAgP0tFRVBfU1RBVEUoPDwibm90X2FsbG93ZWQiPj4pOwoKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg=="),
           "eventwithmsg": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKLWltcG9ydChlcmVkX25vZGVzLCBbCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMvMgpdKS4KCmluaXQoQXJncykgLT4KICAgIHtvaywgQXJnc30uCgpoYW5kbGVfZXZlbnQoe0V2ZW50TmFtZSwgTXNnLCBFdmVudEhhbmRsZXJOb2RlRGVmfSwgU3RhdGUpIC0+CiAgICBTdGF0ZTIgPSBpbmNyZW1lbnRfY291bnRlcl9mb3IoRXZlbnROYW1lLCBTdGF0ZSksCgogICAgTXNnMiA9IE1zZyN7IAogICAgICAgIDw8ImNvdW50Ij4+ID0+IG1hcHM6Z2V0KEV2ZW50TmFtZSwgbWFwczpnZXQoY291bnRlciwgU3RhdGUyKSksCiAgICAgICAgPDwiaGFuZGxlciI+PiA9PiBtb2R1bGVfZXZlbnRfY291bnRlcgogICAgfSwKCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMoRXZlbnRIYW5kbGVyTm9kZURlZiwgTXNnMiksCgogICAge29rLCBTdGF0ZTJ9OwoKaGFuZGxlX2V2ZW50KF9FdmVudCwgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCmhhbmRsZV9jYWxsKF9SZXF1ZXN0LCBTdGF0ZSkgLT4KICAgIHtvaywgb2ssIFN0YXRlfS4KCmhhbmRsZV9pbmZvKF9JbmZvLCBTdGF0ZSkgLT4KICAgIHtvaywgU3RhdGV9LgoKdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSkgLT4KICAgIG9rLgoKY29kZV9jaGFuZ2UoX09sZFZzbiwgU3RhdGUsIF9FeHRyYSkgLT4KICAgIHtvaywgU3RhdGV9LgoKJSUKJSUgLS0tLS0tLS0tLS0tLSBoZWxwZXJzCiUlCmluY3JlbWVudF9jb3VudGVyX2ZvcihFdmVudE5hbWUsIFN0YXRlKSAtPgogICAgQ291bnRlciA9IG1hcHM6Z2V0KGNvdW50ZXIsIFN0YXRlKSwKCiAgICBDb3VudGVyMiA9IGNhc2UgbWFwczpmaW5kKEV2ZW50TmFtZSwgQ291bnRlcikgb2YgCiAgICAgICAge29rLCBWYWx9IC0+CiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gVmFsICsgMSB9OwogICAgICAgIF8gLT4gCiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gMSB9CiAgICBlbmQsCgogICAgU3RhdGUjeyBjb3VudGVyID0+IENvdW50ZXIyIH0u"),
         }
-
+        
         e.preventDefault()
-
+        
         let content = templateCode[$(e.target).data('template-type')]
         if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?") ) {
           this.editor.setValue(content)
@@ -12362,13 +12486,13 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
 
     oneditcancel: function() {
       this.editor.destroy();
-      delete this.editor;
+      delete this.editor;      
     },
 
     oneditsave: function() {
       this.code = this.editor.getValue();
       this.editor.destroy();
-      delete this.editor;
+      delete this.editor;      
     },
 
     oneditresize: function(size) {
@@ -12385,7 +12509,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
     <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="erlmodule.label.module_name"></span></label>
     <input type="text" id="node-input-module_name" data-i18n="[placeholder]erlmodule.label.module_name">
   </div>
-
+  
   <div class="form-row">
       <div style="height: 73vh; min-height:150px;" class="node-text-editor" id="node-input-erlmodule-editor"></div>
   </div>
@@ -12443,7 +12567,7 @@ Modules are installed in the Eshell that, for example, the docker image drops in
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erlstatemachine] --- -->
 <script type="text/javascript">
   (function(){
-
+    
   RED.nodes.registerType('erlstatemachine',{
     color: '#FFCC66',
     icon: "font-awesome/fa-gears",
@@ -12536,8 +12660,8 @@ Modules are installed in the Eshell that, for example, the docker image drops in
         item.node.highlighted = false;
         item.node.dirty = true;
         RED.view.redraw();
-      })
-
+      }) 
+      
       var search = $("#node-input-handler-target-filter").searchBox({
         style: "compact",
         delay: 300,
@@ -12569,7 +12693,7 @@ Modules are installed in the Eshell that, for example, the docker image drops in
         }
       })
 
-      dirList.treeList('data', data)
+      dirList.treeList('data', data)      
     },
 
     oneditcancel: function() {
@@ -12615,7 +12739,7 @@ Modules are installed in the Eshell that, for example, the docker image drops in
         <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
           <input type="text" id="node-input-handler-target-filter">
         </div>
-
+      
         <div id="node-input-handler-target-container-div"></div>
       </div>
     </div>
@@ -12641,7 +12765,7 @@ Node used to create a state machine using an existing module.
 
 ### Details
 
-To use a state machine node, a module node needs to be implemented.
+To use a state machine node, a module node needs to be implemented. 
 
 The module node MUST implement the state machine behaviour: `-behaviour(gen_statem)` is required. The module module defines a boilerplate template code for the state machine behaviour, start there if unsure.
 
@@ -12659,7 +12783,7 @@ State machine node does not restart failed process, it remains the responsibilit
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/erleventhandler] --- -->
 <script type="text/javascript">
   (function(){
-
+    
   RED.nodes.registerType('erleventhandler',{
     color: '#FFCC66',
     icon: "font-awesome/fa-snowflake-o",
@@ -12670,7 +12794,7 @@ State machine node does not restart failed process, it remains the responsibilit
         value:"",
       },
       handlers: {
-        value: [{
+        value: [{ 
           nodeid: "",  // node id of the module with the code
           moduleterm: "", // (optional) unique id for the module if instantiated multiple times
           arg: "" // (optional) a single string as argument in case something needs to be passed to the module
@@ -12724,7 +12848,7 @@ State machine node does not restart failed process, it remains the responsibilit
         container.append("<br>").append(sltObj).append(txtObj).append(argObj)
 
         container.appendTo($('#erleventhandler-handler-config-container'))
-      })
+      })      
     },
 
     oneditcancel: function() {
@@ -12733,10 +12857,10 @@ State machine node does not restart failed process, it remains the responsibilit
     oneditsave: function() {
       let result = []
       $($('#erleventhandler-handler-config-container').find('.erleventhandler-erlmodule')).each((idx, elem) => {
-        result.push({
-          nodeid: $(elem).val(),
+        result.push({ 
+          nodeid: $(elem).val(), 
           moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val(),
-          arg: $(elem).siblings().filter(".erleventhandler-erlarg").val()
+          arg: $(elem).siblings().filter(".erleventhandler-erlarg").val() 
         })
       })
       this.handlers = result
@@ -12758,13 +12882,13 @@ State machine node does not restart failed process, it remains the responsibilit
   </div>
 
   <div class='form-row'><i class="fa fa-handshake-o"></i> <span>Static Handlers</span></div>
-
+  
   <div id="erleventhandler-handler-config-container"></div>
 </script>
 <script type="text/markdown" data-help-name="erleventhandler">
 Wraps event handler behaviour.
 
-Node only works with a module node that define the event handler behaviour.
+Node only works with a module node that define the event handler behaviour. 
 
 This node is responsible for wrapping the module inside a event handler process. It will **not** revive processes that fail, that is the responsibility of the user to add a supervisor node for this node, not the module node.
 
@@ -12795,7 +12919,7 @@ An event handler node will raise an exception if adding a handler that does not 
 
 Event handlers do not response nor reply to messages sent to them. Therefore sending a message to the event handler will, initially, not send an output message. Sending output messages need to be done via the event handler module.
 
-To use a event handler node, a module node needs to be implemented.
+To use a event handler node, a module node needs to be implemented. 
 
 The module node MUST implement the event behaviour `gen_event`, ie `-behaviour(gen_event)` in the module code. The module defines a boilerplate template code for the event handler, start there if unsure.
 
@@ -12954,7 +13078,7 @@ The `EventHandlerNodeDef` is the node definition of the event handler and it con
         }
       })
 
-      dirList.treeList('data', data)
+      dirList.treeList('data', data)      
     },
 
     oneditcancel: function() {
@@ -12978,7 +13102,7 @@ The `EventHandlerNodeDef` is the node definition of the event handler and it con
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
-
+        
   <div class="form-row"
     style="margin-left: 10px; position: relative; min-height: 2vh;">
     <input type="checkbox" id="node-input-use_module_name_addressing"
@@ -13049,7 +13173,7 @@ but maintaining the genserver node might be a use-case.
 If the genserver node does fail and it should be restarted, then it is the **responsibility** of the user to use the
 supervisor node to create a supervisor for the genserver node.
 
-### References
+### References 
 
 - [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html)
 - [learn you some Erlang](https://learnyousomeerlang.com/clients-and-servers)
@@ -13060,7 +13184,7 @@ supervisor node to create a supervisor for the genserver node.
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-failure] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -13068,7 +13192,7 @@ supervisor node to create a supervisor for the genserver node.
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('ut-assert-failure',{
     color: '#FFAAAA',
     icon: "font-awesome/fa-frown-o",
@@ -13078,7 +13202,7 @@ supervisor node to create a supervisor for the genserver node.
         value:"",
       },
     },
-
+    
     paletteLabel: 'Assert False',
     inputs: 1,
 
@@ -13132,7 +13256,7 @@ Attach this to any branch of a flow that is intended to fail.
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-values] --- -->
 <script type="text/javascript">
   (function(){
-
+  
   RED.nodes.registerType('ut-assert-values',{
     color: '#FDF0C2',
     icon: "font-awesome/fa-exclamation",
@@ -13172,7 +13296,7 @@ Attach this to any branch of a flow that is intended to fail.
       },
 
     },
-
+    
     paletteLabel: 'Assert Values',
     inputs: 1,
 
@@ -13194,7 +13318,7 @@ Attach this to any branch of a flow that is intended to fail.
           if (["num","bool"].includes(this.rules[0].tot)) {
             lbl += " to " + this.rules[0].to
           }
-
+          
           return lbl;
         } else {
           return this._("ut-assert-values.label.changeCount", { count: this.rules.length });
@@ -13271,9 +13395,9 @@ Attach this to any branch of a flow that is intended to fail.
 
           var selectField = $('<select/>', { class: "node-input-rule-type", style: "width:110px; margin-right:10px;" }).appendTo(row1);
           var selectOptions = [
-            { v: "eql" },
-            { v: "noteql" },
-            { v: "mth" },
+            { v: "eql" }, 
+            { v: "noteql" }, 
+            { v: "mth" }, 
             { v: "notmth" },
             { v: "set" },
             { v: "notset" },
@@ -13334,7 +13458,7 @@ Attach this to any branch of a flow that is intended to fail.
                 var parts = createPropertyValue(row2_1, row2_2);
                 propertyValue = parts[0];
               }
-
+              
               propertyValue.typedInput('show');
               propertyValue.typedInput('value', rule.to);
               propertyValue.typedInput('type', rule.tot);
@@ -13387,7 +13511,7 @@ Attach this to any branch of a flow that is intended to fail.
         if (type !== "notset" && type !== "debug" && type !== "set") {
           r.to = rule.find(".node-input-rule-property-value").typedInput('value');
           r.tot = rule.find(".node-input-rule-property-value").typedInput('type');
-        }
+        }        
         node.rules.push(r);
       });
 
@@ -13467,7 +13591,7 @@ Failures will still be sent to the debug panel however the node status will rema
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-success] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -13475,7 +13599,7 @@ Failures will still be sent to the debug panel however the node status will rema
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('ut-assert-success',{
     color: '#addb7b',
     icon: "font-awesome/fa-smile-o",
@@ -13561,7 +13685,7 @@ If this node isn't reached, then the test will fail.
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-status] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -13569,7 +13693,7 @@ If this node isn't reached, then the test will fail.
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('ut-assert-status',{
     color: '#C0DEED',
     icon: "font-awesome/fa-window-minimize",
@@ -13611,7 +13735,7 @@ If this node isn't reached, then the test will fail.
         if (node) {
           nodeLabel = RED.utils.getNodeLabel(node)
         }
-
+        
         if ( this.inverse )  {
           return `Assert No Status for ${nodeLabel}`
         } else {
@@ -13650,7 +13774,7 @@ If this node isn't reached, then the test will fail.
         if (item && item.nodeid) {
           RED.view.reveal(item.nodeid);
           RED.view.select(item.nodeid);
-        }
+        }        
       }).on('treelistconfirm', function (event, item) {
       }).on("treelistitemmouseover", function (e, item) {
         item.node.highlighted = true;
@@ -13693,7 +13817,7 @@ If this node isn't reached, then the test will fail.
         }
       })
 
-      dirList.treeList('data', data)
+      dirList.treeList('data', data)      
     },
 
     oneditcancel: function() {
@@ -13735,7 +13859,7 @@ If this node isn't reached, then the test will fail.
             <i class="fa fa-tag"></i>
             <span>Colour</span>
           </label>
-
+    
       <select id="node-input-colour">
         <option value="red" selected=selected>Red</option>
         <option value="grey">Grey</option>
@@ -13750,7 +13874,7 @@ If this node isn't reached, then the test will fail.
             <i class="fa fa-tag"></i>
             <span>Shape</span>
           </label>
-
+    
       <select id="node-input-shape">
         <option value="dot" selected=selected>Dot</option>
         <option value="ring">Ring</option>
@@ -13763,7 +13887,7 @@ If this node isn't reached, then the test will fail.
           <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
       <input type="text" id="node-input-assert-status-target-filter">
     </div>
-
+    
     <div id="node-input-assert-status-target-container-div"></div>
     </div>
 </script>
@@ -13775,7 +13899,7 @@ If this node isn't reached, then the test will fail.
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-debug] --- -->
 <script type="text/javascript">
   (function(){
-
+    
   RED.nodes.registerType('ut-assert-debug',{
     color: '#D8BFD8',
     icon: "font-awesome/fa-bug",
@@ -13788,15 +13912,15 @@ If this node isn't reached, then the test will fail.
       nodeid: {
         value: "",
         required: true
-      },
+      },      
       msgtype: {
         value: "normal",
         required: true
-      },
+      },      
       inverse: {
         value: false,
         required: true
-      },
+      },      
     },
 
     inputs: 0,
@@ -13840,7 +13964,7 @@ If this node isn't reached, then the test will fail.
 
       var dirList = $("#node-input-assert-debug-target-container-div").css({
         width: "100%",
-        height: "calc(100%)"
+        height: "calc(100%)"        
       }).treeList(
         {
           multi: false
@@ -13848,7 +13972,7 @@ If this node isn't reached, then the test will fail.
       ).on('treelistselect', function (event, item) {
         if (item && item.nodeid) {
           RED.view.reveal(item.nodeid);
-          RED.view.select(item.nodeid);
+          RED.view.select(item.nodeid);          
         }
       }).on('treelistconfirm', function (event, item) {
       }).on("treelistitemmouseover", function (e, item) {
@@ -13879,7 +14003,7 @@ If this node isn't reached, then the test will fail.
       });
 
       let data = RED.nodes.filterNodes({z:RED.workspaces.active()}).filter(n => !n.type.startsWith("ut-assert-")).map( nde =>{
-          return {
+          return { 
             label: RED.utils.getNodeLabel(nde),
             icon: "",
             nodeid: nde.id,
@@ -13899,7 +14023,7 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditsave: function() {
-      this.nodeid = $("#node-input-assert-debug-target-container-div").treeList('selected').nodeid
+      this.nodeid = $("#node-input-assert-debug-target-container-div").treeList('selected').nodeid 
     },
 
     oneditresize: function(size) {
@@ -13929,7 +14053,7 @@ If this node isn't reached, then the test will fail.
               <i class="fa fa-tag"></i>
               <span>Msg Type</span>
             </label>
-
+    
       <select id="node-input-msgtype">
           <option value="normal">Normal</option>
           <option value="warning">Warning</option>
@@ -13942,7 +14066,7 @@ If this node isn't reached, then the test will fail.
       <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
         <input type="text" id="node-input-assert-debug-target-filter">
       </div>
-
+    
       <div id="node-input-assert-debug-target-container-div"></div>
     </div>
 </script>
@@ -13981,7 +14105,7 @@ If this node isn't reached, then the test will fail.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-flowchart] --- -->
 <script type="text/javascript">
   (function(){
-
+  
   RED.nodes.registerType('mermaid-flowchart',{
     color: '#C7E9C0',
     icon: "font-awesome/fa-code-fork",
@@ -13996,7 +14120,7 @@ If this node isn't reached, then the test will fail.
       },
       wirecfgs: {
         value: [{ name: "", id: "", arrow: "" }],
-      }
+      }      
     },
 
     inputs: 1,
@@ -14014,7 +14138,7 @@ If this node isn't reached, then the test will fail.
     // called when node is added to workspace also if copied and pasted.
     onadd: function() {
     },
-
+    
     // called when node type added to palette-bar
     onpaletteadd: function() {
     },
@@ -14027,7 +14151,7 @@ If this node isn't reached, then the test will fail.
 
       var possibleArrows = [
         "--", "-.-", "==",
-        "-->", "-.->", "==>",
+        "-->", "-.->", "==>", 
         "<-->", "<-.->", "<==>",
         "--x", "-.-x", "==x",
         "x--x", "x-.-x", "x==x",
@@ -14080,7 +14204,7 @@ If this node isn't reached, then the test will fail.
 
       this.wirecfgs.sort( (a,b) => a.id < b.id ).forEach( currVal => {
         let nde = RED.nodes.node(currVal.id == "self" ? that.id : currVal.id)
-
+        
         // support older versions
         currVal.arrow = { "arrow": "-->", "thickarrow": "==>", "line": "--", "dotarrow": "-.->" }[currVal.arrow] || currVal.arrow;
 
@@ -14103,9 +14227,9 @@ If this node isn't reached, then the test will fail.
       let that = this;
       let result = []
       $($('#node-input-wirecfgs-container').find('.wirecfg')).each( (idx,elem) => {
-        result.push( {
-          name: $(elem).find('.wirecfg-name').val(),
-          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"),
+        result.push( { 
+          name: $(elem).find('.wirecfg-name').val(), 
+          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"), 
           arrow: $(elem).find('.wirecfg-arrow').val()
         })
       })
@@ -14198,7 +14322,7 @@ If this node isn't reached, then the test will fail.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-start] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -14206,7 +14330,7 @@ If this node isn't reached, then the test will fail.
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('mermaid-state-start',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-circle",
@@ -14296,13 +14420,13 @@ If this node isn't reached, then the test will fail.
       let that = this;
       let result = []
       $($('#node-input-wirecfgs-start-container').find('.wirecfg')).each( (idx,elem) => {
-        result.push( {
-          action: $(elem).find('.wirecfg-action').val(),
-          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"),
+        result.push( { 
+          action: $(elem).find('.wirecfg-action').val(), 
+          id: $(elem).data("id") == that.id ? "self" : $(elem).data("id"), 
           payload: $(elem).find('.wirecfg-payload').val()
         })
       })
-      this.wirecfgs = result
+      this.wirecfgs = result      
     },
 
     oneditresize: function(size) {
@@ -14347,7 +14471,7 @@ Used to define a state machine diagram.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-state] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -14355,7 +14479,7 @@ Used to define a state machine diagram.
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('mermaid-state-state',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-map-marker",
@@ -14443,7 +14567,7 @@ Used to define a state machine diagram.
       $('#node-input-add-self-button').on('click', (e) => {
         e.preventDefault();
         addConfigField(that, { id: that.id, action: "", payload: "" })
-      })
+      })      
     },
 
     oneditcancel: function () {
@@ -14508,7 +14632,7 @@ Used to define a state machine diagram.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end] --- -->
 <script type="text/javascript">
   (function(){
-
+  
 
   function frontendSupportFunction() {
   }
@@ -14516,7 +14640,7 @@ Used to define a state machine diagram.
   var functTwo = (arg) => {
 
   };
-
+  
   RED.nodes.registerType('mermaid-state-end',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-bullseye",
@@ -14658,7 +14782,7 @@ Used to define a state machine diagram.
           $('#node-input-flowname').val(item.label);
 
           obtainFhbToken(obtainConfigNode(), (token) => {
-            if ( token !== "" && token ) {
+            if ( token !== "" && token ) { 
               token = "?t=" + tokenToUrl(token)
             }
             $('#flowhubpull-view-flow-link').attr(
@@ -14680,7 +14804,7 @@ Used to define a state machine diagram.
 
             $('#flowhubpull-view-flow-link').attr(
               'href', 'https://flowhub.org/f/' + $('#node-input-flowid').val() + token
-            ).show();
+            ).show();             
           })
          }, 200);
        } else {
@@ -14723,11 +14847,11 @@ Used to define a state machine diagram.
 
          setTimeout( () => {
            obtainFhbToken(obtainConfigNode(), (token) => {
-            flowHubPullUpdateFlows( (lst) => {
+            flowHubPullUpdateFlows( (lst) => { 
               dirList.treeList('empty')
               $('#flowhubpull-view-flow-link').hide()
               setTimeout( () => {
-                dirList.treeList('data', lst)
+                dirList.treeList('data', lst) 
               },300)
             }, token);
            })
@@ -14759,7 +14883,7 @@ Used to define a state machine diagram.
          $('#flowhubpull-dialog-import-opt-new').addClass('selected')
          $('#flowhubpull-dialog-import-opt-current').removeClass('selected')
        }
-
+       
        $('#flowhubpull-dialog-import-opt-current').on('click', (e) => {
          e.preventDefault();
          $('#node-input-notab').prop('checked', true)
@@ -14797,7 +14921,7 @@ Used to define a state machine diagram.
                 class="red-ui-button">Import Flow</button>
         <input type="text" id="node-input-flowname" style="display: none;">
 
-        <a id="flowhubpull-view-flow-link" style="color: blue; display: none; margin-left: 80px;"
+        <a id="flowhubpull-view-flow-link" style="color: blue; display: none; margin-left: 80px;" 
            target="_blank" href="">Webiliser <i class="fa fa-external-link"></i></a>
     </div>
 
@@ -14832,7 +14956,7 @@ Used to define a state machine diagram.
       <label for="node-input-flowrevision"><i class="fa fa-tag"></i> Revision</label>
       <input type="text" id="node-input-flowrevision" placeholder="Revision"/>
     </div>
-
+    
     <div class="form-row">
       <hr/>
     </div>
@@ -14859,7 +14983,7 @@ Used to define a state machine diagram.
       category: 'config',
       hasUsers: false,
       defaults: {
-        apiToken: { value: "" },
+        apiToken: { value: "" },      
         apiTokenType: { value: "" },
         fullname: { value: "" },
         email: { value: "" },
@@ -14908,7 +15032,7 @@ RED.nodes.registerType("Seeker",{color:"#e5e4ef",icon:"font-awesome/fa-ship",cat
   </div>
 
   <div class="form-row" style="margin-top: 0px; margin-bottom: 20px;">
-    <label>Total Paths:
+    <label>Total Paths: 
         <span id="node-input-seeker-totalPaths"></span><img class='hide' id="node-input-seeker-spinner" src='red/images/spin.svg'/>
     </label>
     <button id="node-input-seeker-extract-pathway-but" style="float: right" class="red-ui-button">Extract Pathway to Clipboard</button>
@@ -14952,7 +15076,7 @@ RED.nodes.registerType("Sink",{color:"#e5e4ef",icon:"font-awesome/fa-anchor",cat
   </div>
 
   <div class="form-row" style="margin-top: 0px; margin-bottom: 20px;">
-    <label>Total Paths:
+    <label>Total Paths: 
         <span id="node-input-sink-totalPaths"></span><img id="node-input-sink-spinner" class="hide" src='red/images/spin.svg'/>
      </label>
      <button id="node-input-sink-extract-pathway-but" class="red-ui-button" style="float: right">Extract Pathway to Clipboard</button>
@@ -14974,7 +15098,7 @@ RED.nodes.registerType("Sink",{color:"#e5e4ef",icon:"font-awesome/fa-anchor",cat
 <script type="text/javascript">
 
 function handleMsgTracePacket(e,r){if(r.nodeid){let a=RED.nodes.node(r.nodeid);if(a){var s,r=$("#node-input-msgtracer-trace-treelist").treeList("data");let t=!1;r.forEach(e=>{e.id==a.id&&(t=!0,e.seenCounter+=1,e.sublabel=e.seenCounter+" @ "+e.workspaceLabel)}),t?$("#node-input-msgtracer-trace-treelist").treeList("data",r):(s={id:a.id,label:"",_label:RED.utils.getNodeLabel(a),seenCounter:1,workspaceLabel:(RED.nodes.workspace(a.z)||{label:a.z}).label,sublabel:"1 @ "+(RED.nodes.workspace(a.z)||{label:a.z}).label,selected:!1,checkbox:!1,node:a,icon:RED.utils.createNodeIcon(a,!0)},$("#node-input-msgtracer-trace-treelist").treeList("data",[s,...r]))}}}RED.comms.subscribe("msgtracer:node-received",(e,t)=>{try{handleMsgTracePacket(e,t)}catch(e){console.error(e)}});
-
+ 
 function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid,_msg,msg,node,payload,topic;"execfunc"==data.msg&&(doSend=(o,d,e)=>{"object"==typeof o&&(o={...e,...o}),$.ajax({url:"ClientCode/"+d,type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(o),success:function(o){},error:function(o,e,t){RED.notify("ClientCode Communcation Failure: "+d+": "+e,{type:"error",id:d,timeout:3e3})}})},doStatus=(o,d,e)=>{$.ajax({url:"ClientCode/"+d+"/status",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(o),success:function(o){},error:function(o,e,t){RED.notify("ClientCode Communcation Failure: "+d+": "+e,{type:"error",id:d,timeout:3e3})}})},doError=(o,e,t)=>{RED.notify("ClientCode Failed: "+e+": "+o,{type:"error",id:e,timeout:3e3}),console.log("ClientCode: Error with node: "+e+": "+o)},nodeid=data.nodeid,_msg=data._msg,msg=data._msg,node={id:data.nodeid,send:o=>{doSend(o,nodeid,_msg)},error:o=>{doError(o,nodeid,_msg)},status:o=>{doStatus(o,nodeid,_msg)}},payload=data.payload,topic=data.topic,eval(data.func))}RED.comms.subscribe("introspect:client-code-perform",(o,e)=>{try{handleClientCodeFrontend(o,e)}catch(o){console.error(o)}});
 
   RED.nodes.registerType('ClientCode',{
@@ -15024,7 +15148,7 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
         mode: 'ace/mode/nrjavascript',
         stateId: stateId,
         globals: {
-          msg:true,
+          msg:true,          
           RED: true,
           node: true,
           alert: true,
@@ -15131,7 +15255,7 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
 
 <script type="text/html" data-help-name="ClientCode">
   <p>Execute Javascript code in the Node-RED frontend, triggered from the server.</p>
-
+  
   The code is executed in the users browser and has the following enviornment defined:
   <pre>
   <code>
@@ -15151,7 +15275,7 @@ Functionality:
    </pre>
 
     <p>
-    This might be confusing since the code in the node <b>is not</b>
+    This might be confusing since the code in the node <b>is not</b> 
     executed on the Node-RED server, rather it is executed in the client
     browser.
     <p>
@@ -15159,7 +15283,7 @@ Functionality:
     on the server in the backgrond on some dark and stormy night. The ClientCode
     node is intended for immediate, frontend-only use.
     <p>
-    An example flow with some use cases is included and can be accessed either via
+    An example flow with some use cases is included and can be accessed either via 
     the Import Flow dialog or accessed online <a style="color: blue" href="https://flowhub.org/f/e02ba6e534f7a0f4" target="_blank">at here <i class="fa fa-external-link"></i></a>.
     <p>
     The code to be executed by the client can also be passed in via the `msg` object using the
@@ -15286,7 +15410,7 @@ Functionality:
 <script type="text/html" data-help-name="GetFlows">
   <p>Retrieves the current flow file from this server. This uses the Node-RED API and is therefore storage-method independent. Payload becomes a Json string.</p>
 
-  If the response is to sent to another host, then insert a JSON node to convert the response of this node to a Javascript array which can be passed as payload
+  If the response is to sent to another host, then insert a JSON node to convert the response of this node to a Javascript array which can be passed as payload 
   to the SendFlow node.
 </script>
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-introspection/sendflow] --- -->
@@ -15301,7 +15425,7 @@ Functionality:
       },
 
       hostUrl: {
-        value:"hostUrl",
+        value:"hostUrl", 
         required:true
       },
       hostUrlType: {
@@ -15327,7 +15451,7 @@ Functionality:
         value: "env",
       },
     },
-
+    
     inputs:1,
     outputs:1,
 
@@ -15446,7 +15570,7 @@ Functionality:
       },
 
       hostUrl: {
-        value:"hostUrl",
+        value:"hostUrl", 
         required:true
       },
       hostUrlType: {
@@ -15472,7 +15596,7 @@ Functionality:
         value: false
       }
     },
-
+    
     inputs:1,
     outputs:1,
 
@@ -15586,7 +15710,7 @@ Functionality:
 <script type="text/html" data-help-name="InstallPackage">
   <p>Install package on another Node-RED instance.</p>
 
-  <p>This takes two forms, it can either install a package by name and version (defaults to "latest") or it can
+  <p>This takes two forms, it can either install a package by name and version (defaults to "latest") or it can 
   accept a buffer object containing a .tgz package file.</p>
 
   <p></p>For the first case:
@@ -15840,7 +15964,7 @@ Functionality:
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
-
+ 
 
 
 <script type="text/javascript">
@@ -15889,7 +16013,7 @@ Functionality:
             ) {
                 $("#node-input-payload").typedInput('value','payload');
             }
-
+			
             $("#node-input-payload").on('change',function() {
                 if ($("#node-input-payload").typedInput('type') === 'msg' &&
                     $("#node-input-payload").typedInput('value') === ''
@@ -15912,7 +16036,7 @@ Functionality:
     <p>Only the <code>msg.payload</code> is sent.</p>
     <p>address <b>0</b> means that you will broadcast to all I2C-units on the I2C bus.</p>
     <p>The <b>Send bytes</b> is used to set the number of bytes that will be used when the payload is a number.</p>
-    <p>The <b>payload</b> and <b>msg.payload</b> can be a Buffer, Array, String or Integer.</p>
+    <p>The <b>payload</b> and <b>msg.payload</b> can be a Buffer, Array, String or Integer.</p>	
 </script>
 <!-- --- [red-module:node-red-node-markdown/markdown] --- -->
 

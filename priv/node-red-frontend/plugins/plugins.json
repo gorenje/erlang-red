@@ -70,5 +70,17 @@
         "runtime": false,
         "user": false,
         "version": "0.0.8"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.0.1"
     }
 ]

@@ -1,5 +1,6 @@
 {
     "@gorenje/node-red-contrib-flowcompare": [],
+    "@gregoriusrippenstein/erlang-red-process-nodes": [],
     "@gregoriusrippenstein/erlang-red-supervisor-node": [],
     "@gregoriusrippenstein/erlang-red-unittest": [],
     "@gregoriusrippenstein/node-red-contrib-flow2uml": [],

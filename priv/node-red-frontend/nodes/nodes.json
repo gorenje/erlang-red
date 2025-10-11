@@ -793,5 +793,29 @@
         ],
         "user": false,
         "version": "0.1.3"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
+        "name": "erlconfig",
+        "types": [
+            "erlconfigCfg"
+        ],
+        "user": false,
+        "version": "0.0.1"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-process-nodes/erlprocess",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
+        "name": "erlprocess",
+        "types": [
+            "erlprocess"
+        ],
+        "user": false,
+        "version": "0.0.1"
     }
 ]

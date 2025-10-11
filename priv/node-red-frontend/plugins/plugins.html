@@ -133,8 +133,8 @@ function createDiff(ndeV1, ndeV2) {
     }
   });
 
-  /*
-   * strange happenings, the server says that these two nodes differ but
+  /* 
+   * strange happenings, the server says that these two nodes differ but 
    * there are zero changed attributes ... hm  ... so do a diff over the
    * entire nodes.
    */
@@ -407,7 +407,7 @@ function generateVisualDiff(resp) {
       return;
     }
 
-    /*
+    /* 
      * Pass this point only nodes, no groups, tabs or junctions
      */
     var n = RED.nodes.node(nId);
@@ -568,12 +568,12 @@ function doSubmission(flowdata) {
     }
 
     let resp = fakeComparisonCallToBackend(flowid, e.flowdata /* from server */, flowdata /* here */)
-    generateVisualDiff(resp)
-
+    generateVisualDiff(resp) 
+    
   }).fail(e => {
     // flow data not available becauase test has not be created, test against an empty flow file.
     let resp = fakeComparisonCallToBackend(flowid, [], flowdata /* here */)
-    generateVisualDiff(resp)
+    generateVisualDiff(resp) 
   });
 }
 
@@ -614,8 +614,8 @@ function showNextChangeButtonPressed(e) {
       if (globalYourConfigNode === null) {
          var configNodes = [];
          RED.nodes.eachConfig(function(configNode) {
-             if (configNode.type === 'FlowCompareCfg') {
-                 configNodes.push(configNode);
+             if (configNode.type === 'FlowCompareCfg') { 
+                 configNodes.push(configNode); 
              }
          });
 
@@ -640,7 +640,7 @@ function showNextChangeButtonPressed(e) {
              id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
              _def: RED.nodes.getType("FlowCompareCfg"),
              type: "FlowCompareCfg",
-             hasUsers: false,
+             hasUsers: false, 
              users: [],
              name: "FlowCompare",
              label: function() { return this.name || "FlowCompare"},
@@ -653,7 +653,7 @@ function showNextChangeButtonPressed(e) {
 
          // Make sure the "Deploy" button becomes active
          RED.nodes.dirty(true);
-      }
+      }      
    }
 
    // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
@@ -662,7 +662,7 @@ function showNextChangeButtonPressed(e) {
 
       // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
       var content = $($('script[type="text/x-red"][data-template-name="FlowCompare"]').i18n().html());
-
+    
       // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
@@ -675,7 +675,7 @@ function showNextChangeButtonPressed(e) {
          enableOnEdit: true,
          iconClass: "fa fa-map" // your fontawesome icon
       });
-
+      
       addPanZoom();
       ensureYourConfigNodeExists();
 
@@ -692,7 +692,7 @@ function showNextChangeButtonPressed(e) {
       });
 
       $('#node-input-flowcompare-next-change-btn').on('click', showNextChangeButtonPressed)
-
+      
       RED.panels.create({
          id: "flowcompare-diff-panel",
          resize: (topSze,botSze) => {
@@ -861,7 +861,7 @@ function showNextChangeButtonPressed(e) {
 <!-- --- [red-plugin:@gregoriusrippenstein/erlang-red-unittest/unittesting_sidebar] --- -->
 <script type="text/javascript">
   (function() {
-
+         
    function unitTestingPullUpdateFlows(cb = null, token = null) {
   let handleResponse = (resp) => {
     if (resp.status == "failed") {
@@ -1098,7 +1098,7 @@ function runTestForFlowId(flowid,dirList=undefined) {
     }
     clearNodeStatusForFlow(flowid)
     resetTestResultsRow();
-
+    
     if ( $('#node-input-unittestingpull-clear-debug-on-testrun').is(':checked')) {
       clearDebugPanel()
     }
@@ -1109,7 +1109,7 @@ function runTestForFlowId(flowid,dirList=undefined) {
     } else {
       params = `${params}&testpend=false`
     }
-
+    
     $.get({
       url: `/UnitTesting/${flowid}/runtest?${params}`
     }).done((resp) => {
@@ -1134,7 +1134,7 @@ function testCurrentWorkspace() {
     setTimeout(() => {
       RED.notify("testing current workspace", { type: "info" });
       RED.search.search("type:inject flow:current").map(d => d.node).forEach(d => RED.view.clickNodeButton(d))
-    }, 2000)
+    }, 2000)    
   }
 }
 
@@ -1167,7 +1167,7 @@ function runAllTests(dirList) {
   if (RED.comms.isConnected && !RED.comms.isConnected()) {
     return RED.notify("Not connected to server, websocket down", "error")
   }
-
+  
   resetTestResultsRow();
   expandAllTests(dirList)
   clearAllNodeStatus()
@@ -1194,13 +1194,13 @@ function runAllTests(dirList) {
     }).fail((e) => {
       RED.notify("Failed to trigger tests", "error")
     });
-  }, 200)
+  }, 200)  
 }
 
    // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
    var initialiseConfigNodeOnce = () => {
       RED.events.off('runtime-state', initialiseConfigNodeOnce);
-
+    
       var content = $($('script[type="text/x-red"][data-template-name="UnitTestingSidebar"]').i18n().html());
 
 // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
@@ -1288,24 +1288,24 @@ var search = $("#node-input-unittestingpull-sb-target-filter").searchBox({
       if ( val == "is:pending" ) {
         count = dirList.treeList("filter", function (item) {
           return $($(item.treeList.container).find('.red-ui-treeList-icon')).data("status") == "pending"
-        });
-      } else if (val == "is:failed" || val == "is:error")  {
+        });        
+      } else if (val == "is:failed" || val == "is:error")  { 
         count = dirList.treeList("filter", function (item) {
           return $($(item.treeList.container).find('.red-ui-treeList-icon')).data("status") == "failed"
-        });
-      } else if (val == "is:passed" || val == "is:success" || val == "is:succeed") {
+        });        
+      } else if (val == "is:passed" || val == "is:success" || val == "is:succeed") { 
         count = dirList.treeList("filter", function (item) {
           return $($(item.treeList.container).find('.red-ui-treeList-icon')).data("status") == "success"
-        });
-      } else if (val == "is:untested" || val == "is:todo") {
+        });        
+      } else if (val == "is:untested" || val == "is:todo") { 
         count = dirList.treeList("filter", function (item) {
           return !$($(item.treeList.container).find('.red-ui-treeList-icon')).data("status")
-        });
+        });        
       } else if (val == "is:tested") {
         count = dirList.treeList("filter", function (item) {
           return !!$($(item.treeList.container).find('.red-ui-treeList-icon')).data("status")
-        });
-      } else {
+        });        
+      } else { 
         count = dirList.treeList("filter", function (item) {
           return item.label.toLowerCase().indexOf(val) > -1 || item.sublabel.toLowerCase().indexOf(val) > -1
          });
@@ -1321,7 +1321,7 @@ $('#node-input-unittestingpull-sb-test-flow-but').on('click', function (e) {
   if (RED.comms.isConnected && !RED.comms.isConnected()) {
     return RED.notify("Not connected to server, websocket down", "error")
   }
-
+  
   let sltd = dirList.treeList('selected')
   if ( sltd.flowid) {
     runTestForFlowId(sltd.flowid,dirList)
@@ -1355,7 +1355,7 @@ let handleTestResult = (event, data) => {
       type: data.status == "failed" ? "error" : (data.status == "pending" ? "warning" : "success"),
       timeout: (data.status == "failed" || data.status == "pending") ? 3000 : 2000
     });
-
+    
     // update the test results row
     let v = parseInt($("#node-input-unittestingpull-testresults-row").find(".todo").html());
     if ( v > 0 ) {
@@ -1390,7 +1390,7 @@ $('#node-input-unittestingpull-sb-refresh-list-but').on('click', function (e) {
   e.preventDefault();
 
   $('#node-input-unittestingpull-sb-target-filter').val('').trigger('keyup', { keyCode: 13 })
-
+  
   setTimeout(() => {
     unitTestingPullUpdateFlows((lst) => {
       dirList.treeList('empty')
@@ -1406,7 +1406,7 @@ $('#node-input-unittestingpull-sb-refresh-list-but').on('click', function (e) {
 window.unitTestDirList = dirList;
 window.fakeTestResult = handleTestResult;
 
-if (RED.comms.on) {
+if (RED.comms.on) { 
   // RED.comms.on is not available on NR 3.x
   RED.comms.on("connect", () => {
     $('#node-input-unittestingpull-sb-testall-but').prop('disabled', false)
@@ -1437,18 +1437,18 @@ RED.actions.add("unittesting:trigger-injects-in-workspace", triggerInjectsInWork
 $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) => {
   e.preventDefault();
   if ( $(e.target).data('filter') == "") {
-     $('#node-input-unittestingpull-sb-target-filter').val('').trigger('keyup', { keyCode: 13})
+     $('#node-input-unittestingpull-sb-target-filter').val('').trigger('keyup', { keyCode: 13}) 
   } else {
     let newVal = `is:${$(e.target).data('filter')}`
     let currVal = $('#node-input-unittestingpull-sb-target-filter').val()
 
     if ( newVal == currVal) { newVal = "" }  // toggle between filter and all
-    $('#node-input-unittestingpull-sb-target-filter').val(newVal).trigger('keyup', { keyCode: 13})
+    $('#node-input-unittestingpull-sb-target-filter').val(newVal).trigger('keyup', { keyCode: 13}) 
   }
 })
 
    };
-
+   
    RED.events.on('runtime-state', initialiseConfigNodeOnce);
 })();
 </script>
@@ -1470,11 +1470,11 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             <div class="form-row" style="margin-left: 10px; margin-top: 30px;">
                <button id="node-input-unittestingpull-sb-refresh-list-but"
                         class="red-ui-button"><i class="fa fa-refresh"></i> Refresh Test List</button>
-                <a id="unittesting-view-testflow-link"
-                    style="color: blue; display: none; margin-left: 20px;"
-                    target="_blank" href="">Share Testcase <i class="fa fa-external-link"></i></a>
+                <a id="unittesting-view-testflow-link" 
+                    style="color: blue; display: none; margin-left: 20px;" 
+                    target="_blank" href="">Share Testcase <i class="fa fa-external-link"></i></a>            
             </div>
-
+ 
             <div class="form-row"
                style="position: relative; min-height: 100px; height: 500px; margin-left: 10px; margin-right: 15px; margin-top: 5px;">
                <div style="position: absolute; top: -30px; right: 0px;">
@@ -1491,7 +1491,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          <span>double click on a test case <b>to import that test case</b></span>
       </div>
 
-      <div id="node-input-unittestingpull-testresults-row" class="form-row"
+      <div id="node-input-unittestingpull-testresults-row" class="form-row" 
                 style="margin-left: 10px; margin-top: 15px; display: none;">
          <span class='filtrg'data-filter="todo">Todo <span class="todo" style="color: purple">0</span></span>
          / <span class='filtrg'data-filter="succeed">Succeed <span class="success" style="color: green">0</span></span>
@@ -1559,11 +1559,11 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 <script type="text/javascript">
 (function() {
    var globalYourConfigNode = null;
-
+      
    function escapeHtml(e){return String(e).replace(/[&<>"'`=\/]/g,function(e){return entityMap[e]})}function checkToken(e){$("#flowhubpush-check-token-result-content").fadeOut(300,()=>{$.get({url:"https://flowhub.org/integration/token/check?format=json&t="+e}).done(e=>{if(!e.data)return RED.notify("Check failed: "+e.msg,{type:"error",id:"FlowHubTokenCheck",timeout:2e3});RED.notify("FlowHub token is good!",{type:"success",id:"FlowHubTokenCheck",timeout:2e3}),$("#flowhubpush-check-token-result-content").find(".user").attr("href","mailto:"+e.data.email).html(e.data.name),$("#flowhubpush-check-token-result-content").find(".email").html(e.data.email),$("#flowhubpush-check-token-result-content").find(".repo").attr("href",e.data.repo_url).html(e.data.repo),$("#flowhubpush-check-token-result-content").find(".permission").html(e.data.permission),$("#flowhubpush-check-token-result-content").find(".branch").html(e.data.branch),$("#flowhubpush-check-token-result-content").fadeIn(300)}).fail(e=>{RED.notify("Check failed: "+e.msg,{type:"error",id:"FlowHubTokenCheck",timeout:2e3})})})}var entityMap={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;","`":"&#x60;","=":"&#x3D;"},descMap={z:"Flow Tab Id",g:"Group Id",d:"Disabled"},setOldToNewForNode=(e,t,o)=>{e[t]=o,e.dirty=!0,RED.nodes.dirty(!0),RED.view.redraw()},defaultRevertHandler=(e,t,o)=>{e=RED.nodes.node(e)||RED.nodes.junction(e);e&&setOldToNewForNode(e,t,o)},revertableAttributes={},revertableAttributesNames=(["x","y","template","name","info","func","label","tooltip","timeout","repeat"].forEach(function(e){revertableAttributes[e]=defaultRevertHandler}),Object.keys(revertableAttributes));function attrDesc(e){return descMap[e]?" <i style='font-size: 80%;'>("+descMap[e]+")</i>":""}function clickBaitDiff(){$("th.revertable").on("click",e=>{e.preventDefault();var t,o=$($(e.target).parent()).data("attr");confirm('Really revert changes to attribute "'+o+'"?')&&(t=revertableAttributes[o])&&t($($(e.target).parent()).data("id"),o,JSON.parse(atob($($(e.target).parent()).data("oldval"))))})}function createDiff(r,s){var f=[],c=[];try{if(Object.keys(s).forEach(function(e){var t;Object.keys(r).indexOf(e)<0&&(t="object"==typeof s[e]?JSON.stringify(s[e]):s[e],f.push("<tr class='dv-removed'><th>"+e+attrDesc(e)+"</th><td><i>MISSING</i></td><td><code>"+escapeHtml(t)+"</code></td></tr>"),c.push(e))}),Object.keys(r).forEach(function(e){var t;Object.keys(s).indexOf(e)<0&&(t="object"==typeof r[e]?JSON.stringify(r[e]):r[e],f.push("<tr class='dv-added'><th>"+e+attrDesc(e)+"</th><td><code>"+escapeHtml(t)+"</code></td><td><i>ADDED</i></td></tr>"),c.push(e))}),Object.keys(r).forEach(function(i){if(-1<Object.keys(s).indexOf(i))if(JSON.stringify(r[i])!==JSON.stringify(s[i]))try{let o=null,t=void 0;c.push(i);try{t=Diff.diffLines(s[i],r[i])}catch(e){t=Diff.diffLines(JSON.stringify(s[i],void 0,1),JSON.stringify(r[i],void 0,1))}let n=document.createDocumentFragment();t.forEach(e=>{var t=e.added?"green":e.removed?"red":"#040506";(o=document.createElement("pre")).setAttribute("class","dv-pre-elem"),o.style.color=t,o.appendChild(document.createTextNode(e.value)),o.appendChild(document.createElement("br")),n.appendChild(o)});var a=-1<revertableAttributesNames.indexOf(i)?" revertable":"",e=document.createElement("tr");e.setAttribute("class","dv-differ"),e.setAttribute("data-id",r.id),e.setAttribute("data-attr",i);try{e.setAttribute("data-oldval",btoa(JSON.stringify(s[i])))}catch(e){a=""}var d,l=document.createElement("th");l.setAttribute("class",a),l.appendChild(document.createTextNode(i)),descMap[i]&&((d=document.createElement("i")).style["font-size"]="80%",d.appendChild(document.createTextNode("("+descMap[i]+")")),l.appendChild(d)),e.append(l),(l=document.createElement("td")).setAttribute("colspan","2"),l.append(n),e.append(l),f.push(e.outerHTML)}catch(e){console.log("--Exceeption",e),f.push("<tr><th class='dv-error'>"+i+" CAUSED EXCEP</th><td><code>"+escapeHtml(r[i])+"</code></td><td><code>"+escapeHtml(s[i])+"</code></td></tr>")}else f.push("<tr><th>"+i+"</th><td><code>"+escapeHtml(r[i])+"</code></td><td><code>"+escapeHtml(s[i])+"</code></td></tr>")}),0==c.length){let o=null;var e="OBJ",t=Diff.diffJson(s,r);let n=document.createDocumentFragment();t.forEach(e=>{var t=e.added?"green":e.removed?"red":"#040506";(o=document.createElement("pre")).setAttribute("class","dv-pre-elem"),o.style.color=t,o.appendChild(document.createTextNode(e.value)),o.appendChild(document.createElement("br")),n.appendChild(o)});var i,a=document.createElement("tr"),d=(a.setAttribute("class","dv-differ"),document.createElement("th"));return d.appendChild(document.createTextNode(e)),descMap[e]&&((i=document.createElement("i")).style["font-size"]="80%",i.appendChild(document.createTextNode("("+descMap[e]+")")),d.appendChild(i)),a.append(d),(d=document.createElement("td")).setAttribute("colspan","2"),d.append(n),a.append(d),{html:a.outerHTML,icon:"fa-question"}}}catch(e){console.log("Exception",e)}var o,n;return{html:f.join(""),icon:(t=c,n=[...o=["x","y","w","h","g"],"wires","d","nodes"],0==t.filter(e=>o.indexOf(e)<0).length?"fa-eye":0==t.filter(e=>n.indexOf(e)<0).length?"fa-paint-brush":"fa-pencil")}}function getInstalledNodeDetails(e){$.ajax({url:"nodes",headers:{Accept:"application/json"},success:e,error:()=>{e(["error"])}})}function doTokenCheck(e,t){$.ajax({url:"FlowHubTokenCheck",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({cfgnode:e}),success:function(e){t(e)},error:function(e,t,o){RED.notify("Check failed: "+t,{type:"error",id:"FlowHubTokenCheck",timeout:2e3})}})}function doPushSubmission(e,t,o,n){var i=RED.workspaces.active();let a=e.map(e=>e.type);n=n.filter(e=>-1<a.indexOf(e.types[0])),$.ajax({url:"FlowHubPush",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({flowid:i,flowdata:e||{},flowlabel:RED.nodes.workspace(i).label,cfgnode:t,svgdata:o,nodedetails:n}),success:function(e){RED.notify("Submission triggered",{type:"warning",id:"FlowHubPush",timeout:2e3}),obtainFhbToken(obtainConfigNode(),e=>{""!==e&&(e=e&&"?t="+tokenToUrl(e)),$("#flowhubpush-view-flow-link").attr("href","https://flowhub.org/f/"+i+e).show()})},error:function(e,t,o){RED.notify("Submission failed: "+t,{type:"error",id:"FlowHubPush",timeout:2e3}),console.log(t,o)}})}function getFlowDataFromCurrentWorkspace(e){var e=e||RED.workspaces.active(),t=RED.nodes.groups(e),e=(t=(t=t.concat(RED.nodes.junctions(e))).concat(RED.nodes.filterNodes({z:e})),RED.nodes.eachConfig(function(e){e.z===RED.workspaces.active()&&!1===e._def.hasUsers&&t.push(e)}),RED.nodes.workspace(e)||RED.nodes.subflow(e));return t.unshift(e),RED.nodes.createExportableNodeSet(t)}function iframeRemoveHighlight(){document.getElementById("flowhubdiff-svgimageiframe").contentWindow.postMessage({msg:"removehighlight"},"*")}function iframeHighlightItem(e){iframeRemoveHighlight(),document.getElementById("flowhubdiff-svgimageiframe").contentWindow.postMessage({item:{label:e.label,icon:e.icon,class:e.class,sublabel:e.sublabel,objid:e.objid},msg:"highlightitem"},"*")}function iframeHasBeenLoaded(e){let t=$(e).data("flowid");var o=getFlowDataFromCurrentWorkspace(t);setTimeout(()=>{e.contentWindow&&e.contentWindow.postMessage({nodes:o,msg:"renderlocalflow",flowid:t||RED.workspaces.active()},"*")},345)}function doComparison(e,t){var n=RED.workspaces.active();if($("#node-input-flowhubdiff-next-change-btn").hide(),RED.nodes.workspace(n))RED.notify("Flow Comparison Triggered",{type:"warning",id:"FlowHubDiff",timeout:2e3}),$.ajax({url:"FlowHubDiff",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({flowid:n,flowhub:"submission from ",flowdata:e||{},flowlabel:RED.nodes.workspace(n).label,cfgnode:t}),success:function(t){var e,d=[],l={};if("failed"==t.status){RED.notify(t.msg||"This does not seem to be a FlowHub flow id: "+n,{type:"error",timeout:2e3}),$("#flowhubdiff-view-flow-link").hide();try{$("#node-input-flowhubdiff-diffcontainer").html(""),$("#node-input-flowhubdiff-svgcontainer").html(""),$("#node-input-flowhubdiff-target-container-div").treeList("empty")}catch(e){}}else if(t.revision&&""!=t.revision&&(e=ensureYourConfigNodeExists()).flowrevisions&&e.flowrevisions[t.flowid]&&e.flowrevisions[t.flowid].substr(0,8)!=t.revision.substr(0,8)&&RED.notify(`WARNING: Revision mismatch: Local: ${e.flowrevisions[t.flowid].substr(0,8)}, Remote: `+t.revision.substr(0,8),{type:"warning",timeout:4e3}),obtainFhbToken(obtainConfigNode(),e=>{(""!==e&&e?$("#flowhubdiff-view-flow-link").attr("href","https://flowhub.org/f/"+t.flowid+"?t="+tokenToUrl(e)):$("#flowhubdiff-view-flow-link").attr("href","https://flowhub.org/f/"+t.flowid)).show()}),t.changes.forEach(function(e){var t,o,n,i,a=e.id;"deleted"==e.type?(l[a]={label:e.oldObj.name||e.oldObj.type,icon:"fa fa-trash",class:"",diffcontent:createDiff({},e.oldObj).html,sublabel:e.oldObj.type,selected:!1,checkbox:!1,children:void 0,objid:a},d.push(l[a])):"added"==e.type?(l[a]={objid:a,label:e.newObj.name||e.newObj.type,icon:"fa fa-plus-square",class:"",diffcontent:createDiff(e.newObj,{}).html,sublabel:e.newObj.type,selected:!1,checkbox:!1,children:void 0},d.push(l[a])):"tab"==e.oldObj.type||"group"==e.oldObj.type||"junction"==e.oldObj.type?(i=createDiff(e.newObj,e.oldObj),l[a]={objid:a,label:e.oldObj.name||e.oldObj.type,icon:"fa "+i.icon,class:"",diffcontent:i.html,sublabel:e.type+" - "+e.oldObj.type,selected:!1,checkbox:!1,children:void 0},d.push(l[a])):(t=RED.nodes.node(a))?((o=RED.nodes.getType(t.type))&&(n=("function"==typeof(n=o.label)?n.call(t):n)||""),o&&n||(n=t.type),i=createDiff(e.newObj,e.oldObj),l[t.id]={node:t,objid:a,label:n,icon:"fa "+i.icon,class:"",diffcontent:i.html,sublabel:e.oldObj.type,selected:!1,checkbox:!1,children:void 0},d.push(l[t.id])):console.log("Node ignore, Type: "+e.type,e)}),t.ifurl&&$("#node-input-flowhubdiff-svgcontainer").html('<iframe id="flowhubdiff-svgimageiframe" width="100%" height="100%" src="'+t.ifurl+'" onload="window.iframeHasBeenLoaded(this)" style="border: none; min-height: 300px;" data-flowid="'+n+'"></iframe>'),0==d.length){RED.notify("No Flow Changes",{type:"warning",timeout:2e3});try{$("#node-input-flowhubdiff-diffcontainer").html(""),$("#node-input-flowhubdiff-target-container-div").treeList("empty")}catch(e){}}else{try{$("#node-input-flowhubdiff-target-container-div").treeList("empty")}catch(e){$("#node-input-flowhubdiff-target-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){t.objid&&iframeHighlightItem(t)}).on("treelistitemmouseout",function(e,t){}).on("treelistselect",function(e,t){t.objid&&(RED.view.reveal(t.objid,!0),RED.view.redraw()),t.diffcontent?($("#node-input-flowhubdiff-next-change-btn").show(),$("#node-input-flowhubdiff-next-change-btn").data("cntr",0),$("#node-input-flowhubdiff-diffcontainer").html(t.diffcontent),clickBaitDiff(),setTimeout(()=>{var e=$("#node-input-flowhubdiff-diffcontainer").find(".dv-pre-elem").length;0<e&&RED.notify("Total changes: "+e,{type:"success"})},300)):($("#node-input-flowhubdiff-diffcontainer").html(""),$("#node-input-flowhubdiff-next-change-btn").hide(),$("#node-input-flowhubdiff-next-change-btn").data("cntr",void 0))}).on("treelistconfirm",function(e,t){var o;t.objid&&(o=t.objid,setTimeout(()=>{var e=RED.nodes.node(o);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),o==RED.workspaces.active()&&RED.workspaces.edit()},50))}),$("#node-input-flowhubdiff-target-filter").show();var o=$("#node-input-flowhubdiff-target-filter").searchBox({style:"compact",delay:300,change:function(){var e,t=$(this).val().trim().toLowerCase();""===t?($("#node-input-flowhubdiff-target-container-div").treeList("filter",null),o.searchBox("count","")):(e=$("#node-input-flowhubdiff-target-container-div").treeList("filter",function(e){return-1<e.label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)}),o.searchBox("count",e+" / "+$("#node-input-flowhubdiff-target-container-div").treeList("data").length))}})}$("#node-input-flowhubdiff-target-container-div").treeList("data",d.sort((e,t)=>e.icon==t.icon?e.label.toLowerCase()>t.label.toLowerCase():e.icon>t.icon))}},error:function(e,t,o){$("#flowhubdiff-view-flow-link").hide();try{$("#node-input-flowhubdiff-diffcontainer").html(""),$("#node-input-flowhubdiff-svgcontainer").html(""),$("#node-input-flowhubdiff-target-container-div").treeList("empty")}catch(e){}404==e.status?RED.notify("Node has not yet been deployed, please deploy.","error"):405==e.status?RED.notify("Not Allowed.","error"):500==e.status?RED.notify("Not Allowed - 500.","error"):0==e.status?RED.notify("Not Allowed - 0.","error"):RED.notify("Not Allowed - Unexpected.","error")}});else{RED.notify("Comparing subflows not supported.",{type:"error",id:"FlowHubDiff",timeout:2e3}),$("#flowhubdiff-view-flow-link").hide();try{$("#node-input-flowhubdiff-diffcontainer").html(""),$("#node-input-flowhubdiff-svgcontainer").html(""),$("#node-input-flowhubdiff-target-container-div").treeList("empty")}catch(e){}}}function addTokenToList(e,t){$("#node-input-flowhubpush-token-list").append(`<tr class='${e}' data-type='${t.type}' data-name='${t.name}' data-token='${t.val}'>`+`<td><a class='flowhubpush-token-select-link' href='#'>${t.name}</a></td>`+"<td><a class='flowhubpush-token-select-link button' href='#'>Use</a></td><td><a class='flowhubpush-token-remove-link button' href='#'>Remove</a></td><td><a class='flowhubpush-token-hide-link button' href='#'>Hide</a></td><td><a class='flowhubpush-token-check-link button' href='#'>Check</a></td><td><a class='flowhubpush-token-copy-link button' href='#'>Copy</a></td></tr>")}function addEventHandlersToTokenList(n){$(".flowhubpush-token-copy-link").off("click"),$(".flowhubpush-token-copy-link").on("click",e=>{RED.clipboard.copyText($($(e.target).closest("tr")).data("token"))&&RED.notify("Token copied","success")}),$(".flowhubpush-token-check-link").off("click"),$(".flowhubpush-token-check-link").on("click",e=>{checkToken($($(e.target).closest("tr")).data("token"))}),$(".flowhubpush-token-hide-link").off("click"),$(".flowhubpush-token-hide-link").on("click",e=>{e&&e.preventDefault();let t=$($(e.target).closest("tr"));$($(e.target).closest("tr")).fadeOut(300,()=>{RED.notify("Hidden token <b>"+t.data("name")+"</b>, will reappear with reload","success")})}),$(".flowhubpush-token-remove-link").off("click"),$(".flowhubpush-token-remove-link").on("click",e=>{e&&e.preventDefault();let t=$($(e.target).closest("tr")),o=n;confirm(`Remove token "${t.data("name")}"?`)&&$($(e.target).closest("tr")).fadeOut(300,()=>{o.tokens=o.tokens.filter(e=>!(e.name==t.data("name")&&e.val==t.data("token")&&e.type==t.data("type"))),RED.nodes.dirty(!0),RED.notify("Removed token <b>"+t.data("name")+"</b>.","success")})}),$(".flowhubpush-token-select-link").off("click"),$(".flowhubpush-token-select-link").on("click",e=>{e&&e.preventDefault();e=$($(e.target).closest("tr"));$(".flowhub-token-selected").removeClass("flowhub-token-selected"),$("#node-input-flowhubpush-apiToken").typedInput("value",e.data("token")),$("#node-input-flowhubpush-apiToken").typedInput("type",e.data("type")),e.addClass("flowhub-token-selected"),RED.notify("Using token <b>"+e.data("name")+"</b>","success")})}function showNextChangeButtonPressed(e){var t;e&&e.preventDefault(),0<$("#node-input-flowhubdiff-diffcontainer").find(".dv-pre-elem").length&&(e=parseInt($("#node-input-flowhubdiff-next-change-btn").data("cntr")),(t=$("#node-input-flowhubdiff-diffcontainer").find(".dv-pre-elem")[e])?(t.scrollIntoView(),$("#node-input-flowhubdiff-next-change-btn").data("cntr",e+1)):(RED.notify("Cycled through all changes.",{type:"success"}),$("#node-input-flowhubdiff-next-change-btn").data("cntr",0)))}window.iframeHasBeenLoaded=iframeHasBeenLoaded;
 
    function nr_intro_generate_svg_4_1(n){return t=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),t)}catch(e){var r="Error Generating SVG: "+JSON.stringify(e);n.notify(r,{type:"error"}),t('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+r+"</text></svg>")}}}function nr_intro_generate_svg_4_0(n){return t=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),t)}catch(e){var r="Error Generating SVG: "+JSON.stringify(e);n.notify(r,{type:"error"}),t('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+r+"</text></svg>")}}}function nr_intro_generate_svg_3_1(n){return t=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),t)}catch(e){var r="Error Generating SVG: "+JSON.stringify(e);n.notify(r,{type:"error"}),t('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+r+"</text></svg>")}}}function nr_intro_generate_svg_3_0(n){return t=>{try{handleSvgObject($($("svg")[0]),t)}catch(e){var r="Error Generating SVG: "+JSON.stringify(e);n.notify(r,{type:"error"}),t('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+r+"</text></svg>")}}}function handleSvgObject(o,e){o.find("g.red-ui-flow-group-selected").removeClass("red-ui-flow-group-selected"),o.find("rect.red-ui-flow-group-outline-select").css("stroke-opacity","0"),o.find(".red-ui-flow-node-selected").removeClass("red-ui-flow-node-selected"),o.find(".red-ui-flow-link-selected").removeClass("red-ui-flow-link-selected");var t=o.clone(),r=(t.find("foreignObject").remove(),t.find(".mindmap-image-preview-element").remove(),t.find("svg.__screenshot").remove(),'width="'+o.attr("width")+'" height="'+o.attr("height")+'"'),n=RED.settings.version.split("."),s=parseInt(n[0]),n=parseInt(n[1]);if(3==s&&1==n||4==s&&0==n){var i=$($($(o).children("g")[0]).children("g")[0]).children("g"),a={x:8e3,y:8e3,w:-1,h:-1};for(let e=1;e<i.length;e++){var l=i[e].getBBox();0==l.width&&0==l.height||(a.x=Math.min(l.x,a.x),a.y=Math.min(l.y,a.y),a.w=Math.max(l.width,a.w),a.h=Math.max(l.height,a.h))}r+=` viewBox='${a.x} ${a.y} ${a.w} ${a.h}'`}function g(e,t){for(var r=0;r<e.length;r++){var s=e.item(r),i=t[r];["stroke-width","fill-opacity","stroke-opacity","opacity","stroke-dasharray"].forEach(function(e){s.setAttribute(e,$(i).attr(e)||$(i).css(e))}),["fill","stroke"].forEach(function(e){var t,r,n=(t=$(i).attr(e)||$(i).css(e))&&null!==t&&"none"!=t?(r=t.match(/^#(.)(.)(.)$/))?"#"+r[1]+r[1]+r[2]+r[2]+r[3]+r[3]:(r=t.match(/^#......$/))?t:null===(r=t.match(/^rgb\(([0-9]+),\s+([0-9]+),\s+([0-9]+)/))?(n=t.match(/^rgba\(([0-9]+),\s+([0-9]+),\s+([0-9]+),\s+([0-9]+)/))?{clr:"#"+("0"+parseInt(n[1],10).toString(16)).slice(-2)+("0"+parseInt(n[2],10).toString(16)).slice(-2)+("0"+parseInt(n[3],10).toString(16)).slice(-2),opa:n[4]}:(console.log("Screenshot node: returned unknown color: "+t),t):"#"+("0"+parseInt(r[1],10).toString(16)).slice(-2)+("0"+parseInt(r[2],10).toString(16)).slice(-2)+("0"+parseInt(r[3],10).toString(16)).slice(-2):"none";"object"==typeof n?(s.setAttribute(e+"-opacity",n.opa),s.setAttribute(e,n.clr)):s.setAttribute(e,n)}),$(i).hasClass("hide")&&("g"==s.tagName&&s.setAttribute("opacity","0"),s.setAttribute("visibility","hidden"))}}var s='<?xml version="1.0" standalone="no"?>\r\n<svg '+r+' pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" class="__screenshot" xmlns:xlink="http://www.w3.org/1999/xlink">\r\n',n=t.html(),c=(new DOMParser).parseFromString(s+n+"\r\n</svg>","image/svg+xml"),h=t=>(["g","rect","line","path","circle","image","text"].forEach(e=>{$(t.getElementsByTagName(e)).each((e,t)=>{t.setAttribute("class",""),t.setAttribute("id","")})}),t),f=(["g","rect","line","path","circle","image"].forEach(function(e){g(c.getElementsByTagName(e),o.find(e))}),["text"].forEach(function(e){g(c.getElementsByTagName(e),o.find(e));for(var t=c.getElementsByTagName(e),r=o.find(e),n=0;n<t.length;n++){var s=t.item(n),i=r[n];["font-family","font-size","font-size-adjust","font-stretch","font-style","font-variant","font-weight","text-anchor","dominant-baseline"].forEach(function(e){s.setAttribute(e,$(i).attr(e)||$(i).css(e))})}}),c.getElementsByTagName("image")),v={},w=(r,n,s)=>{var i=r.getAttribute("xlink:href")||r.getAttribute("href");if(!i)return s(n-1);var o=i.substr(-4,4).toLowerCase(),a={".jpg":"jpeg",jpeg:"jpeg",".png":"png",".svg":"svg+xml"};if(v[i])return r.setAttribute("xlink:href","data:image/"+a[o]+";base64,"+v[i]),s(n-1);switch(o){case".jpg":case"jpeg":case".png":var l=new XMLHttpRequest;l.open("GET",i,!0),l.responseType="arraybuffer";l.onerror=function(e){s(n-1)},l.onload=function(e){var t=l.response;t&&(t=(e=>{for(var t="",r=new Uint8Array(e),n=r.byteLength,s=0;s<n;s++)t+=String.fromCharCode(r[s]);return window.btoa(t)})(t),v[i]=t,r.setAttribute("xlink:href","data:image/"+a[o]+";base64,"+t)),s(n-1)},l.send(null);break;case".svg":$.get(i,function(e){var t=new XMLSerializer,t=btoa(t.serializeToString(e));v[i]=t,r.setAttribute("xlink:href","data:image/svg+xml;base64,"+t),s(n-1)});break;default:s(n-1)}},d=t=>{if(t<0)e((new XMLSerializer).serializeToString(h(c)));else try{w(f.item(t),t,d)}catch(e){d(t-1)}};0<f.length?w(f.item(f.length-1),f.length-1,d):e((new XMLSerializer).serializeToString(h(c)))}function svgGeneratorFunctionForVersion(e){var r,t=e.settings.version.split("."),n=t[0],t=t[1];if("3"==n){if("0"==t)return nr_intro_generate_svg_3_0(e);if("1"==t)return nr_intro_generate_svg_3_1(e)}if("4"==n){if("0"==t)return nr_intro_generate_svg_4_0(e);if("1"==t)return nr_intro_generate_svg_4_1(e)}return r=e,e=>{var t="Node-RED version ("+r.settings.version+") not supported";r.notify(t,{type:"error"}),e&&e('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+t+"</text></svg>")}}
-
+   
    function ensureYourConfigNodeExists() {
       // If we had found it previously, check if it has been deleted by the user behind our back
       if (globalYourConfigNode !== null) {
@@ -1575,8 +1575,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       if (globalYourConfigNode === null) {
          var configNodes = [];
          RED.nodes.eachConfig(function(configNode) {
-             if (configNode.type === 'FlowHubCfg') {
-                 configNodes.push(configNode);
+             if (configNode.type === 'FlowHubCfg') { 
+                 configNodes.push(configNode); 
              }
          });
 
@@ -1595,12 +1595,12 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       if (globalYourConfigNode === null) {
 
          let typ = RED.nodes.getType("FlowHubCfg");
-
+         
          globalYourConfigNode = {
             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
             _def: typ,
             type: "FlowHubCfg",
-            hasUsers: false,
+            hasUsers: false, 
             users: [],
             name: "FlowHubCfg",
             label: function() { return this.name || "FlowHubCfg"},
@@ -1624,8 +1624,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
          // Make sure the "Deploy" button becomes active
          RED.nodes.dirty(true);
-      }
-
+      }    
+      
       return globalYourConfigNode
    }
 
@@ -1637,7 +1637,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
       // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
       var content = $($('script[type="text/x-red"][data-template-name="FlowHubDiff"]').i18n().html());
-
+    
       // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
@@ -1649,7 +1649,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          iconClass: "fa fa-window-minimize",
          visible: true
       });
-
+      
       let cfgNode = ensureYourConfigNodeExists();
 
       /* for older config nodes, add new parameters */
@@ -1677,7 +1677,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                $('#' + tab.id).show();
             }
       });
-
+      
       // Add pull tab
       tabs.addTab({
             id: 'func-flowhub-tab-pull',
@@ -1691,14 +1691,14 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             iconClass: 'fa fa-clone',
             label: 'Compare'
       });
-
+      
       // Add push tab
       tabs.addTab({
             id: 'func-flowhub-tab-push',
             iconClass: 'fa fa-arrow-up',
             label: 'Push'
       });
-
+      
       tabs.activateTab("func-flowhub-tab-pull");
 
       $('#node-input-flowhubdiff-compare-btn').on('click', (e) => {
@@ -1748,7 +1748,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
       $("#node-input-flowhubpush-apiToken").on('change', () => {
          ensureYourConfigNodeExists();
-
+         
          var val = $("#node-input-flowhubpush-apiToken").typedInput('value');
          var typ = $("#node-input-flowhubpush-apiToken").typedInput('type');
 
@@ -1768,7 +1768,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          ensureYourConfigNodeExists();
 
          let val = $('#node-input-flowhubpush-email').val();
-         if ( val != globalYourConfigNode.email ) {
+         if ( val != globalYourConfigNode.email ) { 
             globalYourConfigNode.email = val;
             RED.nodes.dirty(true);
          }
@@ -1780,7 +1780,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          ensureYourConfigNodeExists();
 
          let val = $('#node-input-flowhubpush-fullname').val();
-         if ( val != globalYourConfigNode.fullname ) {
+         if ( val != globalYourConfigNode.fullname ) { 
             globalYourConfigNode.fullname = val;
             RED.nodes.dirty(true);
          }
@@ -1792,7 +1792,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          ensureYourConfigNodeExists();
 
          let val = $('#node-input-flowhubpush-comment').val();
-         if ( val != globalYourConfigNode.pushcomment ) {
+         if ( val != globalYourConfigNode.pushcomment ) { 
             globalYourConfigNode.pushcomment = val;
             RED.nodes.dirty(true);
          }
@@ -1806,7 +1806,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
           timeout: data.statusType == "error" ? 3000 : 2000
         });
 
-        /* update an existing revision of a flow, this happens after the
+        /* update an existing revision of a flow, this happens after the 
           flow was successfully submitted and updated */
         if ( data.flowid && data.flowrevision ) {
           let cfgNode = ensureYourConfigNodeExists();
@@ -1828,7 +1828,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          $('#flowhubpull-dialog-import-opt-sb-new').addClass('selected')
          $('#flowhubpull-dialog-import-opt-sb-current').removeClass('selected')
        }
-
+       
        $('#flowhubpull-dialog-import-opt-sb-current').on('click', (e) => {
          e.preventDefault();
 
@@ -1872,9 +1872,9 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
               }
               $('#flowhubpull-sb-view-flow-link').attr(
                 'href', 'https://flowhub.org/f/' + item.flowid + token
-              ).show();
+              ).show();              
            })
-
+           
            $('#node-input-flowhubpull-sb-import-flow-but').prop('disabled',false)
          }
        }).on('treelistconfirm', function(event, item) {
@@ -1947,11 +1947,11 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
           ensureYourConfigNodeExists();
 
           obtainFhbToken(globalYourConfigNode, (token) => {
-            flowHubPullUpdateFlows( (lst) => {
-              dirList.treeList('empty')
+            flowHubPullUpdateFlows( (lst) => { 
+              dirList.treeList('empty') 
               $('#flowhubpull-sb-view-flow-link').hide()
               setTimeout( () => {
-                dirList.treeList('data', lst)
+                dirList.treeList('data', lst) 
               },300)
             }, token);
           })
@@ -1963,12 +1963,12 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       })
 
       $('#node-input-flowhubpush-clear-token-btn').on('click', e => {
-        if ( e ) { e.preventDefault() }
+        if ( e ) { e.preventDefault() }      
         $('#node-input-flowhubpush-new-token-name-field').val("")
         $('#node-input-flowhubpush-new-token-field').val("")
         $('#node-input-flowhubpush-new-token-field').trigger('change')
       })
-
+      
       $('#node-input-flowhubpush-add-token-btn').on('click', e => {
         if ( e ) { e.preventDefault() }
 
@@ -2047,7 +2047,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       $('#node-input-flowhubpull-flowrevision').on('change', () => {
         ensureYourConfigNodeExists();
         let val = $('#node-input-flowhubpull-flowrevision').val();
-
+        
         if (globalYourConfigNode.flowrevision != val ) {
           globalYourConfigNode.flowrevision = val
           RED.nodes.dirty(true);
@@ -2062,7 +2062,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
         }
     })
    };
-
+   
    RED.events.on('runtime-state', initialiseConfigNodeOnce);
 })();
 </script>
@@ -2353,7 +2353,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
     Data
 ) ->
     {next_state, ${r}, Data, [{ reply, From, ${t[2]||"ok"} }]};`,o.push(e)}})}}return o.join("\n")},retrieveInitialState:function(e){for(var a=0;a<e.length;a++)if("mermaid-state-start"==e[a].type)return e[a].name;return"start"}}})();
-
+  
    function obtainCurrentActiveFlow() {
       // check whether there is a current selection of nodes: if so, use that instead
       // of the current active tab.
@@ -2385,7 +2385,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
    };
 
    function getMermaidLink(mermaidTxt) {
-      /*
+      /* 
        * this snippet isn't taken from
        *   https://github.com/mermaid-js/mermaid-live-editor/blob/develop/src/lib/util/serde.ts
        * but it comes from there. Using base64 instead of pako because
@@ -2406,7 +2406,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       }
       return "https://mermaid.live/edit#base64:" + btoa( JSON.stringify(payload) )
    };
-
+   
    function ensureYourConfigNodeExists() {
       // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
       // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
@@ -2421,8 +2421,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       if (globalYourConfigNode === null) {
          var configNodes = [];
          RED.nodes.eachConfig(function(configNode) {
-             if (configNode.type === 'Flow2MermaidCfg') {
-                 configNodes.push(configNode);
+             if (configNode.type === 'Flow2MermaidCfg') { 
+                 configNodes.push(configNode); 
              }
          });
 
@@ -2447,7 +2447,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
              id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
              _def: RED.nodes.getType("Flow2MermaidCfg"),
              type: "Flow2MermaidCfg",
-             hasUsers: false,
+             hasUsers: false, 
              users: [],
              name: "Flow2Uml",
              label: function() { return this.name || "Flow2Uml"},
@@ -2461,7 +2461,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
          // Make sure the "Deploy" button becomes active
          RED.nodes.dirty(true);
-      }
+      }      
    }
 
    // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
@@ -2470,7 +2470,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
       // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
       var content = $($('script[type="text/x-red"][data-template-name="Flow2Mermaid"]').i18n().html());
-
+    
       // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
@@ -2504,7 +2504,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       $("#btn_genmersave").on('click', (e) => {
          var data = atob($('#node-input-genmereditor-mermaid-code').data('mermaid'));
          ensureYourConfigNodeExists();
-
+         
          if (globalYourConfigNode.genmereditor != data) {
             globalYourConfigNode.genmereditor = data;
             $('#genmermaid-view-uml-link').attr('href', getMermaidLink(data));
@@ -2516,7 +2516,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          if (e) { e.preventDefault(); }
          ensureYourConfigNodeExists();
 
-         var mermaidTxt = FlowToMermaid.constructMermaid(obtainCurrentActiveFlow(), globalYourConfigNode.direction, RED);
+         var mermaidTxt = FlowToMermaid.constructMermaid(obtainCurrentActiveFlow(), globalYourConfigNode.direction, RED);         
 
          try {
             /*
@@ -2568,7 +2568,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          e.preventDefault();
 
          ensureYourConfigNodeExists();
-
+         
          let statemDef = FlowToMermaid.constructErlangStatem(obtainCurrentActiveFlow());
          let initState = FlowToMermaid.retrieveInitialState(obtainCurrentActiveFlow());
 
@@ -2591,11 +2591,11 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             nde.syntax    = "plain"
             nde.template  = nde.code
             nde.output    =  "str"
-
+            
             delete nde.code
             delete nde.module_name
          }
-
+         
          RED.view.importNodes([nde])
       })
 
@@ -2621,7 +2621,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             types: [
                {
                   value: "genmerdirection",
-
+                  
                   options: [
                         { "value":"TB", "label": "Top to Bottom"},
                         { "value":"LR", "label": "Left to Right"},
@@ -2634,7 +2634,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       // At startup load your config node data into the plugin sidebar html elements
       $('#node-input-genmerdirection').val(globalYourConfigNode.direction)
 
-      // Allow dynamic re-size after init. appearance
+      // Allow dynamic re-size after init. appearance 
       setTimeout(function () {
             $('#node-props').css('width', '100%');
       }, 30);
@@ -2740,8 +2740,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
    <div id="node-props" style="width: 460px; height: 100%; margin-left: 10px; margin-right: 15px; margin-top: 30px;">
       <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
          <button id="node-input-generate-diagram-but" type="button" class="red-ui-button btn-regular"><i class="fa fa-plug"></i> Generate Mermaid Diagram</button>
-         <button id="node-input-generate-and-view-diagram-but"
-                   type="button" class="red-ui-button btn-regular"><i class="fa fa-eye"></i> Generate & View Diagram</button>
+         <button id="node-input-generate-and-view-diagram-but" 
+                   type="button" class="red-ui-button btn-regular"><i class="fa fa-eye"></i> Generate & View Diagram</button>      
       </div>
 
       <!--form-row-->
@@ -2763,7 +2763,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
             <a href="#" download="flow.mermaid" id="btn_genmersave" type="button"
                class="red-ui-button btn-regular"><i class="fa fa-save"></i> Save</a>
-
+               
             <a id="btn_genmercopy" style="margin-left: 5px;" type="button" class="red-ui-button btn-regular"><i class="fa fa-copy"></i> Copy to Clipboard</a>
 
             <a type="button"
@@ -2781,9 +2781,9 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
    var globalRefToSvgData;
 
    let obfuscateHelpers={getFlowDataFromCurrentWorkspace:e=>{var e=e||RED.workspaces.active(),t=RED.nodes.groups(e),e=(t=(t=t.concat(RED.nodes.junctions(e))).concat(RED.nodes.filterNodes({z:e})),RED.nodes.eachConfig(function(e){e.z===RED.workspaces.active()&&!1===e._def.hasUsers&&t.push(e)}),RED.nodes.workspace(e)||RED.nodes.subflow(e));return t.unshift(e),RED.nodes.createExportableNodeSet(t)},openImportDialog:e=>{RED.clipboard.import();let t=e;setTimeout(()=>{$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(t)).trigger("paste")},300)}};function obfuscatieCurrentFlow(l){let p=obfuscateHelpers.getFlowDataFromCurrentWorkspace(),f=(l.remove_groups&&(p=p.filter(e=>"group"!=e.type)).forEach(e=>{delete e.g}),{}),t={},d={},c={},s=[],h={},r={};if(p.forEach(e=>{"subflow"==(f[e.id]=e).type&&(r[e.id]=e),"junction"==e.type&&(t[e.id]=e),"link out"==e.type&&(c[e.id]=e),"link in"==e.type&&(d[e.id]=e),"link call"==e.type&&s.push(e.id),"catch"==e.type&&(h[e.id]=(e.wires||[])[0]||[])}),l.remove_junctions&&(Object.keys(t).forEach(n=>{let s=t[n];r[s.z]||p.forEach(t=>{for(let e=0;e<(t.wires||[]).length;e++){var r=t.wires[e].indexOf(n);-1<r&&(t.wires[e].splice(r,1),t.wires[e].push(...s.wires[0]))}})}),p=p.filter(e=>!("junction"==e.type&&!r[e.z]))),l.remove_linkout_nodes||l.remove_linkcall_nodes){let r=[],n=[],i=[],a=(l.remove_linkout_nodes&&!l.copy_linkin_nodes&&Object.keys(c).forEach(n=>{var e=c[n];let s=e.links||[];s.reduce((e,t)=>e&&(!!d[t]||l.ignore_off_flow_links),!0)&&"return"!=e.mode&&(r.push(n),p.forEach(r=>{for(let t=0;t<(r.wires||[]).length;t++){var e=r.wires[t].indexOf(n);-1<e&&(r.wires[t].splice(e,1),s.forEach(e=>{d[e]&&r.wires[t].push(...d[e].wires[0])}))}}))}),(s,e)=>{if(!e)return!1;let t=[],o=[],r=[];function u(e){if(r.indexOf(e.id)<0)switch(r.push(e.id),t.push(e),e.type){case"link out":if("return"!=e.mode)throw"not handable";break;case"link call":throw"unhandled";default:RED.nodes.getNodeLinks(e).forEach(function(e){u(e.target)})}}try{RED.nodes.getNodeLinks(e).forEach(function(e){u(e.target),o.push(e.target.id)});if(Object.keys(h).forEach(e=>{((t,e)=>{try{return e.map(e=>e.id).forEach(e=>{if(t.includes(e))throw"yes"}),!1}catch(e){return!0}})(h[e],t)&&t.push(f[e])}),0==t.length)return!1;let r={};var i=t[0];let n={x:s.x-i.x,y:s.y-i.y};var a=t.map(e=>{var t=structuredClone(f[e.id]);return t||console.log("WARNING: nodeid not found",[e.id,f[e.id]]),t.id=RED.nodes.id(),t.x+=n.x,t.y+=n.y,r[e.id]=t});return a.forEach(e=>{"catch"==e.type&&Array.isArray(e.scope)&&(e.scope=e.scope.map(e=>{var t=r[e];return t&&t.id||e})),e.wires&&(e.wires=e.wires.map(e=>e.map(e=>{var t=r[e];return t&&"link out"==t.type?[...s.wires[0],(t||{}).id||e]:(t||{}).id||e}).flat()))}),{nodes:a.filter(e=>"link out"!=e.type),entryNodes:o.map(e=>r[e])}}catch(e){return!1}});l.remove_linkout_nodes&&l.copy_linkin_nodes&&Object.keys(c).forEach(s=>{let o=c[s],u=o.links||[];if("return"!=o.mode){let t=u.map(e=>{var t=d[e],t=a(o,t);return t?[e,t]:[void 0,void 0]});t.reduce((e,t)=>e&&(!!t[0]||l.ignore_off_flow_links),!0)&&(r.push(s),p.forEach(n=>{for(let r=0;r<(n.wires||[]).length;r++){var e=n.wires[r].indexOf(s);-1<e&&(n.wires[r].splice(e,1),(t=u.map(e=>{var t=d[e],t=a(o,t);return t?[e,t]:[void 0,void 0]})).forEach(([,e])=>{var t;e&&(t=e.entryNodes.map(e=>e.id),n.wires[r].push(...t),i.push(...e.nodes))}))}}))}}),l.remove_linkcall_nodes&&s.forEach(s=>{var e=f[s],t=d[e.links[0]];let o=a(e,t);t&&o&&(n.push(e.id),p.forEach(t=>{for(let e=0;e<(t.wires||[]).length;e++){var r,n=t.wires[e].indexOf(s);-1<n&&(r=o.entryNodes.map(e=>e.id),t.wires[e].splice(n,1),t.wires[e].push(...r),i.push(...o.nodes))}}))}),(p=p.filter(e=>r.indexOf(e.id)<0&&n.indexOf(e.id)<0)).push(...i)}if((p=l.remove_debugs?p.filter(e=>"debug"!=e.type&&"comment"!=e.type):p).forEach(e=>{l.name&&(e.name=RED.nodes.id()),l.shrink_node&&(e.l=!1),l.info&&(e.info="",delete e.outputLabels,delete e.inputLabels),l.add_license&&(l.append_license?e.info=(e.info||"")+"\n---\n\n"+l.license_text:e.info=l.license_text),l.position&&(e.x=150,e.y=150),l.remove_icons&&delete e.icon}),l.replace_switch){let n=(t,r)=>{for(let e=0;e<r.rules.length;e++){var n=r.rules[e];if("nnull"==n.t)t.push("if ( _propValue != null ) {  _returnValue.push(msg) ; return node.send(_returnValue) } else { _returnValue.push(undefined) }");else if("null"==n.t)t.push("if ( _propValue == null ) {  _returnValue.push(msg) ; return node.send(_returnValue) } else { _returnValue.push(undefined) }");else if("eq"==n.t&&"str"==n.vt){s=n.v;s=btoa(encodeURIComponent(s).replace(/%([0-9A-F]{2})/g,function(e,t){return String.fromCharCode("0x"+t)}));t.push("if ( _propValue === Buffer.from('"+s+"', 'base64').toString('utf-8') ) {  _returnValue.push(msg) ; return node.send(_returnValue) } else { _returnValue.push(undefined) }")}else if("gt"==n.t&&"num"==n.vt)t.push("if ( _propValue > "+n.v+" ) {  _returnValue.push(msg) ; return node.send(_returnValue) } else { _returnValue.push(undefined) }");else if("eq"==n.t&&"num"==n.vt)t.push("if ( _propValue == "+n.v+" ) {  _returnValue.push(msg) ; return node.send(_returnValue) } else { _returnValue.push(undefined) }");else if("empty"==n.t)t.push('let p = _propValue ;  if (  (Array.isArray(p) && p.length == 0) || ((typeof p === "object") && p != null && Object.keys(p).length == 0) || ((typeof p === "string") && p.length == 0) ) { _returnValue.push(msg) ; return node.send(_returnValue) } else {  _returnValue.push(undefined) }');else if("nempty"==n.t)t.push('let p = _propValue ;  if (  (Array.isArray(p) && p.length > 0) || ((typeof p === "object") && p != null && Object.keys(p).length > 0) || ((typeof p === "string") && p.length > 0) ) { _returnValue.push(msg) ; return node.send(_returnValue) } else {  _returnValue.push(undefined) }');else{if("else"!=n.t)throw"unhandled";t.push("_returnValue.push(msg)","return node.send(_returnValue)")}}var s};p=p.map(t=>{if("switch"!=t.type)return t;var e={id:t.id,name:t.name,type:"function",x:t.x,y:t.y,func:"",outputs:t.outputs,timeout:"",noerr:0,initialize:"",finalize:"",libs:[{var:"process",module:"process"},{var:"jsonata",module:"jsonata"}],wires:t.wires};t.hasOwnProperty("z")&&(e.z=t.z),t.hasOwnProperty("l")&&(e.l=t.l);try{var r=[];if(t.checkAll)throw"unhandled";if("msg"==t.propertyType)r.push("((msg,node) => {","let _propValue = undefined","try { _propValue = RED.util.getMessageProperty(msg, '"+t.property+"') } catch (ex) {}","let _returnValue = []"),n(r,t),r.push("})(msg,node);");else{if("jsonata"!=t.propertyType)throw"unhandled";r.push("jsonata('"+t.property+"').evaluate(msg).then(_propValue => {","let _returnValue = []"),n(r,t),r.push("})")}return e.func=r.join("\n"),e}catch(e){return t}})}if(l.replace_change){let s=e=>btoa(encodeURIComponent(e).replace(/%([0-9A-F]{2})/g,function(e,t){return String.fromCharCode("0x"+t)}));p=p.map(t=>{if("change"!=t.type)return t;var e={id:t.id,name:t.name,type:"function",x:t.x,y:t.y,func:"",outputs:1,timeout:"",noerr:0,initialize:"",finalize:"",libs:[{var:"process",module:"process"},{var:"jsonata",module:"jsonata"}],wires:t.wires};t.hasOwnProperty("z")&&(e.z=t.z),t.hasOwnProperty("l")&&(e.l=t.l);try{var r=["(async (msg,node) => {","let __s = RED.util.setMessageProperty","let __g = RED.util.getMessageProperty"];for(let e=0;e<t.rules.length;e++){var n=t.rules[e];if("set"==n.t){if(n.dc)throw"unhandled";if("msg"==n.pt&&"str"==n.tot)r.push("__s(msg,'"+n.p+"', Buffer.from('"+s(n.to)+"', 'base64').toString('utf-8') )");else if("msg"==n.pt&&"bool"==n.tot)r.push("__s(msg,'"+n.p+"', "+n.to+")");else if("msg"==n.pt&&"num"==n.tot)r.push("__s(msg,'"+n.p+"', Number(Buffer.from('"+s(n.to)+"', 'base64').toString('utf-8')))");else if("msg"==n.pt&&"json"==n.tot)r.push("__s(msg,'"+n.p+"', JSON.parse(Buffer.from('"+s(n.to)+"', 'base64').toString('utf-8')))");else if("msg"==n.pt&&"msg"==n.tot)r.push("try { __s(msg,'"+n.p+"',  __g(msg, '"+n.to+"')) } catch (ex) {}");else if("msg"==n.pt&&"env"==n.tot)r.push("__s(msg,'"+n.p+"',  process.env['"+n.to+"'])");else{if("msg"!=n.pt||"jsonata"!=n.tot||!n.to.startsWith("/* @obfuscate-safe */"))throw"unhandlable";r.push("__s(msg,'"+n.p+"',  await jsonata(Buffer.from('"+s(n.to)+"', 'base64').toString('utf-8')).evaluate(msg) )")}}else{if("delete"!=n.t||"msg"!=n.pt)throw"unhandlable";r.push("delete msg."+n.p)}}return r.push("node.send(msg) })(msg,node);"),e.func=r.join("\n"),e}catch(e){return console.log(e),t}})}if(l.javascript){let r={},t=[];p.forEach(e=>{"javascript"!=(r[e.id]=e).format&&"function"!=e.type&&"css"!=e.format&&"json"!=e.format||t.push(e)});var e={parse:{bare_returns:!0,expression:!1},compress:{},mangle:{reserved:["$","export","require"]},output:null,sourceMap:null,nameCache:null,toplevel:!1,warnings:!1},o={compatibility:"*",level:2};$.ajax({url:"ClientCode/"+RED.nodes.id()+"/ugify",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({nodes:t,jscfg:e,csscfg:o}),success:function(e){e.forEach(e=>{var t=r[e.id];e._error&&console.log("ERROR NODE",e),"function"==t.type?t.func=e.func:"javascript"!=t.format&&"css"!=t.format&&"json"!=t.format||(t.template=e.template)}),obfuscateHelpers.openImportDialog(p)},error:function(e,t,r){RED.notify("ClientCode Communcation Failure: "+n.id+": "+t,{type:"error",timeout:3e3})}})}else obfuscateHelpers.openImportDialog(p)}
-
+   
    function setupTreelist(){var e=collectOrphans();if(0==e.length){RED.notify("No Orphans Found",{type:"success",timeout:2e3});try{$("#node-input-orphan-target-container-div").treeList("empty")}catch(e){}}else{try{$("#node-input-orphan-target-container-div").treeList("empty")}catch(e){$("#node-input-orphan-target-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistselect",function(e,t){t.node&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,t){var n;t.node&&(n=t.node.id,setTimeout(()=>{var e=RED.nodes.node(n);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),n==RED.workspaces.active()&&RED.workspaces.edit()},50))}),$("#node-input-orphan-target-filter").show();var n=$("#node-input-orphan-target-filter").searchBox({style:"compact",delay:300,change:function(){var e,t=$(this).val().trim().toLowerCase();""===t?($("#node-input-orphan-target-container-div").treeList("filter",null),n.searchBox("count","")):(e=$("#node-input-orphan-target-container-div").treeList("filter",function(e){return-1<e.label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)}),n.searchBox("count",e+" / "+$("#node-input-orphan-target-container-div").treeList("data").length))}})}$("#node-input-orphan-target-container-div").treeList("data",e.sort((e,t)=>e.node.z>t.node.z))}}function collectOrphans(){let t=new Set;var n=[],i=(RED.nodes.eachLink(e=>{t.add(e.source),t.add(e.target)}),RED.nodes.eachNode(e=>{(!t.has(e)||"link out"==e.type&&"link"==e.mode&&0==e.links.reduce((e,t)=>e||!!RED.nodes.node(t),!1))&&n.push(e)}),[]),r={};return n.forEach(function(e){var t=RED.nodes.getType(e.type);if(t){var n=t.label,n=("function"==typeof n?n.call(e):n)||"",o=e.type;if(0===o.indexOf("subflow:"))return}t&&n||(n=e.type),r[e.id]={node:e,label:n,sublabel:o,selected:!1,checkbox:!1},i.push(r[e.id])}),i}
-
+   
    function nr_intro_generate_svg_4_1(r,t){return e=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),e,t)}catch(t){var n="Error Generating SVG: "+JSON.stringify(t);r.notify(n,{type:"error"}),e('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+n+"</text></svg>")}}}function nr_intro_generate_svg_4_0(r,t){return e=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),e,t)}catch(t){var n="Error Generating SVG: "+JSON.stringify(t);r.notify(n,{type:"error"}),e('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+n+"</text></svg>")}}}function nr_intro_generate_svg_3_1(r,t){return e=>{try{handleSvgObject($($("#red-ui-workspace-chart").find("svg")[0]),e,t)}catch(t){var n="Error Generating SVG: "+JSON.stringify(t);r.notify(n,{type:"error"}),e('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+n+"</text></svg>")}}}function nr_intro_generate_svg_3_0(r,t){return e=>{try{handleSvgObject($($("svg")[0]),e,t)}catch(t){var n="Error Generating SVG: "+JSON.stringify(t);r.notify(n,{type:"error"}),e('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+n+"</text></svg>")}}}function handleSvgObject(o,t,e){var n=o.clone(),r=(e.removeforeignobjects&&n.find("foreignObject").remove(),n.find("svg.__screenshot").remove(),'width="'+o.attr("width")+'" height="'+o.attr("height")+'"'),s=RED.settings.version.split("."),i=parseInt(s[0]),s=parseInt(s[1]);if(3<=i&&1<=s||4<=i){var a=$($($(o).children("g")[0]).children("g")[0]).children("g"),l={x:8e3,y:8e3,w:-1,h:-1};for(let t=1;t<a.length;t++){var g=a[t].getBBox();0==g.width&&0==g.height||(l.x=Math.min(g.x,l.x),l.y=Math.min(g.y,l.y),l.w=Math.max(g.width,l.w),l.h=Math.max(g.height,l.h))}r+=` viewBox='${l.x} ${l.y} ${l.w} ${l.h}'`}function c(t,e){for(var n=0;n<t.length;n++){var s=t.item(n),i=e[n];["stroke-width","fill-opacity","stroke-opacity","opacity","stroke-dasharray"].forEach(function(t){s.setAttribute(t,$(i).attr(t)||$(i).css(t))}),["fill","stroke"].forEach(function(t){var e,n,r=(e=$(i).attr(t)||$(i).css(t))&&null!==e&&"none"!=e?(n=e.match(/^#(.)(.)(.)$/))?"#"+n[1]+n[1]+n[2]+n[2]+n[3]+n[3]:(n=e.match(/^#......$/))?e:null===(n=e.match(/^rgb\(([0-9]+),\s+([0-9]+),\s+([0-9]+)/))?(r=e.match(/^rgba\(([0-9]+),\s+([0-9]+),\s+([0-9]+),\s+([0-9]+)/))?{clr:"#"+("0"+parseInt(r[1],10).toString(16)).slice(-2)+("0"+parseInt(r[2],10).toString(16)).slice(-2)+("0"+parseInt(r[3],10).toString(16)).slice(-2),opa:r[4]}:(console.log("Screenshot node: returned unknown color: "+e),e):"#"+("0"+parseInt(n[1],10).toString(16)).slice(-2)+("0"+parseInt(n[2],10).toString(16)).slice(-2)+("0"+parseInt(n[3],10).toString(16)).slice(-2):"none";"object"==typeof r?(s.setAttribute(t+"-opacity",r.opa),s.setAttribute(t,r.clr)):s.setAttribute(t,r)}),$(i).hasClass("hide")&&("g"==s.tagName&&s.setAttribute("opacity","0"),s.setAttribute("visibility","hidden"))}}var s='<?xml version="1.0" standalone="no"?>\r\n<svg '+r+' pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" class="__screenshot" xmlns:xlink="http://www.w3.org/1999/xlink">\r\n',i=n.html(),h=(new DOMParser).parseFromString(s+i+"\r\n</svg>","image/svg+xml"),v=t=>t,f=(e.rmidsandclasses&&(v=e=>(["g","rect","line","path","circle","image","text"].forEach(t=>{$(e.getElementsByTagName(t)).each((t,e)=>{e.setAttribute("class",""),e.setAttribute("id","")})}),e)),["g","rect","line","path","circle","image"].forEach(function(t){c(h.getElementsByTagName(t),o.find(t))}),["text"].forEach(function(t){c(h.getElementsByTagName(t),o.find(t));for(var e=h.getElementsByTagName(t),n=o.find(t),r=0;r<e.length;r++){var s=e.item(r),i=n[r];["font-family","font-size","font-size-adjust","font-stretch","font-style","font-variant","font-weight","text-anchor","dominant-baseline"].forEach(function(t){s.setAttribute(t,$(i).attr(t)||$(i).css(t))})}}),h.getElementsByTagName("image")),w={},d=(n,r,s)=>{var i=n.getAttribute("xlink:href")||n.getAttribute("href"),o=i.substr(-4,4).toLowerCase(),a={".jpg":"jpeg",jpeg:"jpeg",".png":"png",".svg":"svg+xml"};if(w[i])return n.setAttribute("xlink:href","data:image/"+a[o]+";base64,"+w[i]),s(r-1);switch(o){case".jpg":case"jpeg":case".png":var l=new XMLHttpRequest;l.open("GET",i,!0),l.responseType="arraybuffer";l.onerror=function(t){s(r-1)},l.onload=function(t){var e=l.response;e&&(e=(t=>{for(var e="",n=new Uint8Array(t),r=n.byteLength,s=0;s<r;s++)e+=String.fromCharCode(n[s]);return window.btoa(e)})(e),w[i]=e,n.setAttribute("xlink:href","data:image/"+a[o]+";base64,"+e)),s(r-1)},l.send(null);break;case".svg":$.get(i,function(t){var e=new XMLSerializer,e=btoa(e.serializeToString(t));w[i]=e,n.setAttribute("xlink:href","data:image/svg+xml;base64,"+e),s(r-1)});break;default:console.log("SVG Capture ignoring file prefix: "+o),s(r-1)}},m=e=>{if(e<0)t((new XMLSerializer).serializeToString(v(h)));else try{d(f.item(e),e,m)}catch(t){m(e-1)}};0<f.length?d(f.item(f.length-1),f.length-1,m):t((new XMLSerializer).serializeToString(v(h)))}function generatorFunctionForVersion(t,e){var n,r=t.settings.version.split("."),s=r[0],r=r[1];if("3"==s){if("0"==r)return nr_intro_generate_svg_3_0(t,e);if("1"==r)return nr_intro_generate_svg_3_1(t,e)}if("4"==s){if("0"==r)return nr_intro_generate_svg_4_0(t,e);if("1"==r)return nr_intro_generate_svg_4_1(t,e)}return n=t,t=>{var e="Node-RED version ("+n.settings.version+") not supported";n.notify(e,{type:"error"}),t&&t('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="1000" height="1000" viewBox="0 0 1000 1000" pointer-events="all" style="cursor: crosshair; touch-action: none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.small { font: bold 20px sans-serif; fill: red;}</style><text x="10" y="30" class="small">'+e+"</text></svg>")}}function addPanZoom(){var t=d3.select("#node-input-screenshot-svgcontainer svg"),e=(t.html("<g>"+t.html()+"</g>"),setTimeout(()=>{var t=$("#node-input-screenshot-svgcontainer svg"),e=$(t).attr("viewBox").split(" ");t.animate({height:parseInt(e[3]),width:parseInt(e[2])},800,"swing")},100),t.select("g")),n=d3.behavior.zoom().scaleExtent([.1,200]).on("zoom",function(t){e.attr({transform:"translate("+n.translate()+") scale("+n.scale()+")"})});t.call(n)}
 
    function setupTreelistInfoness(){var e=collectUndocumentedNodes();if(0==e.length){RED.notify("All nodes documented",{type:"success",timeout:2e3});try{$("#node-input-orphan-target-container-div").treeList("empty")}catch(e){}}else{try{$("#node-input-orphan-target-container-div").treeList("empty")}catch(e){$("#node-input-orphan-target-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistselect",function(e,t){t.node&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,t){var i;t.node&&(i=t.node.id,setTimeout(()=>{var e=RED.nodes.node(i);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e,"editor-tab-description")),i==RED.workspaces.active()&&RED.workspaces.edit()},50))}),$("#node-input-orphan-target-filter").show();var i=$("#node-input-orphan-target-filter").searchBox({style:"compact",delay:300,change:function(){var e,t=$(this).val().trim().toLowerCase();""===t?($("#node-input-orphan-target-container-div").treeList("filter",null),i.searchBox("count","")):(e=$("#node-input-orphan-target-container-div").treeList("filter",function(e){return-1<e.label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)}),i.searchBox("count",e+" / "+$("#node-input-orphan-target-container-div").treeList("data").length))}})}$("#node-input-orphan-target-container-div").treeList("data",e.sort((e,t)=>e.node.z>t.node.z))}}function collectUndocumentedNodes(){let t=[];RED.nodes.eachNode(e=>{if($("#"+e.id).find(".red-ui-info-available-indicator").remove(),e.info&&e.info.trim()&&$("#"+e.id)[0]){var i=document.createElementNS("http://www.w3.org/2000/svg","g"),n=(i.setAttribute("class","red-ui-info-available-indicator"),i.setAttribute("transform","translate(20,10)"),i.setAttribute("id","infoclk-"+e.id),document.createElementNS("http://www.w3.org/2000/svg","g")),o=(n.setAttribute("class","tip"),n.setAttribute("fill","lightyellow"),document.createElementNS("http://www.w3.org/2000/svg","rect")),o=(o.setAttribute("width","30"),o.setAttribute("height","20"),o.setAttribute("x",$("#"+e.id)[0].getBBox().width-60),o.setAttribute("y","-15"),o.setAttribute("rx","2"),o.setAttribute("style","cursor: pointer;"),n.append(o),document.createElementNS("http://www.w3.org/2000/svg","text"));o.setAttribute("x",$("#"+e.id)[0].getBBox().width-55),o.setAttribute("y","-6"),o.appendChild(document.createTextNode("docs")),n.append(o),i.append(n),$(i).insertBefore($("#"+e.id).find(".red-ui-flow-node"));let t=e.id;$("#infoclk-"+e.id).on("click",e=>{e&&e.preventDefault();e=RED.nodes.node(t);RED.editor.edit(e,"editor-tab-description"),RED.sidebar.show("info")})}else e.z==RED.workspaces.active()&&["link in","link out","link call"].indexOf(e.type)<0&&t.push(e)});var o=[],r={};return t.forEach(function(e){var t=RED.nodes.getType(e.type);if(t){var i,n=t.label,n=("function"==typeof n?n.call(e):n)||"";if(0===(i=e.type).indexOf("subflow:"))return}t&&n||(n=e.type),r[e.id]={node:e,label:n,sublabel:i,selected:!1,checkbox:!1},o.push(r[e.id])}),o}
@@ -2802,7 +2802,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 
       // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
       var content = $($('script[type="text/x-red"][data-template-name="Screenshot"]').i18n().html());
-
+    
       // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
@@ -2821,14 +2821,14 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                $('#' + tab.id).show();
             }
       });
-
+      
       // Add first tab, screenshot
       tabs.addTab({
             id: 'func-introspection-tab-screenshot',
             iconClass: 'fa fa-photo',
             label: 'Screenshot'
       });
-
+      
       // Add tab, orphans
       tabs.addTab({
             id: 'func-introspection-tab-lint',
@@ -2902,7 +2902,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             rmidsandclasses: $('#node-input-screenshot-remove-classes-and-ids').is('checked'),
             removeforeignobjects: true // $('#node-input-screenshot-remove-foreign-objects').is(":checked")
          }
-
+         
          generatorFunctionForVersion(RED, opts)( (svgdata) => {
             $('#node-input-screenshot-svgcontainer').html(svgdata);
             globalRefToSvgData = svgdata;
@@ -2922,7 +2922,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             type: "success"
             }
          );
-
+         
          $.ajax({
             type: "POST",
             url: postEndpoint,
@@ -2964,7 +2964,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                };
             },
          });
-
+         
       })
 
       // handle the download button under the editor window.
@@ -3059,7 +3059,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
       $('#node-input-linkcalls-find-btn').on('click', (e) => {
          if ( e ) { e.preventDefault() }
          highlightAllLinkCalls()
-
+         
          /*
          try {
             $("#node-input-orphan-target-container-div").treeList('empty')
@@ -3089,18 +3089,18 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
    .col-100 .red-ui-typedInput-container {
    width: 70% !important;
    }
-
+   
    .col-100.no-label .red-ui-typedInput-container {
    width: 100% !important;
    }
    .w-30 {
       width: 40% !important;
       margin-left: 10px;
-   }
+   }   
    .w-25 {
       width: 25% !important;
       margin-left: 10px;
-   }
+   }   
    .ml-30 {
       margin-left: 30px !important;
    }
@@ -3123,7 +3123,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
         stroke-opacity: 0.3;
         cursor: pointer;
     }
-
+    
     svg g.tip text {
         font-style="normal";
         font-size: 8px;
@@ -3132,13 +3132,13 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
         fill: #000;
         color: #000;
     }
-
+    
     svg .tip rect {
       fill: lightyellow;
       stroke-width: 0.5;
       stroke: #000;
     }
-
+    
     svg:hover g.tip:hover {
         transform: translatey(-6px);
         fill-opacity: 1;
@@ -3170,9 +3170,9 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                   <span>Remove Classes and Ids?</span>
                </label>
                <input type="checkbox" checked="checked" id="node-input-screenshot-remove-classes-and-ids"
-                      style="display:inline-block; width:15px; vertical-align:baseline;">
+                      style="display:inline-block; width:15px; vertical-align:baseline;">                          
             </div>
-
+            
             <div class="form-row"
                style="min-height: 300px; height: 65vh; overflow: hidden; margin-left: 10px; margin-right: 15px; border: 1px rgb(196, 196, 196) solid; border-radius: 5px;">
                <div id="node-input-screenshot-svgcontainer"></div>
@@ -3215,7 +3215,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             <button id="node-input-statistics-btn"
                        class="red-ui-button"><i class="fa fa-pie-chart"></i> Stats</button>
          </div>
-
+   
          <div class="form-row"
             style="margin-left: 10px; position: relative; min-height: 5vh; height: 20vh; margin-right: 15px;">
             <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
@@ -3224,7 +3224,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             <div id="node-input-orphan-target-container-div"></div>
          </div>
       </div>
-
+      
       <div>
          <!-- message tracing stuff -->
          <div class="form-row" style="margin-left: 10px; margin-top: 40px">
@@ -3250,18 +3250,18 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             </label>
             <input type="checkbox" id="node-input-msgtracer-toggle"
                    style="display:inline-block; width:15px; vertical-align:baseline;">
-
+   
             <label for="node-input-msgtracer-toggle-all"  class="w-25">
                <i class="fa fa-warning"></i>
                <span>All nodes?</span>
             </label>
             <input type="checkbox" id="node-input-msgtracer-toggle-all"
                    style="display:inline-block; width:15px; vertical-align:baseline;">
-
+   
             <button id="node-input-msgtrace-clear-trace-btn" style="margin-left: 10px;"
                           class="red-ui-button">Clear Trace</button>
          </div>
-
+   
          <div class="form-row"
             style="margin-left: 10px; position: relative; min-height: 5vh; height: 20vh; margin-right: 15px;">
             <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
@@ -3269,7 +3269,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             </div>
             <div id="node-input-msgtracer-trace-treelist"></div>
          </div>
-
+   
          <div class="form-row" style="margin-left: 10px; margin-top: 40px;">
             <label for="node-input-msgtracer-msgtodebug" class="w-25">
                         <i class="fa fa-bug"></i>
@@ -3277,14 +3277,14 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
                   </label>
             <input type="checkbox" id="node-input-msgtracer-msgtodebug"
                          style="display:inline-block; width:15px; vertical-align:baseline;">
-
+   
             <label for="node-input-msgtracer-msgtodebug-all" class="w-25">
                         <i class="fa fa-warning"></i>
                         <span>All nodes?</span>
                   </label>
             <input type="checkbox" id="node-input-msgtracer-msgtodebug-all"
                          style="display:inline-block; width:15px; vertical-align:baseline;">
-
+   
             <button id="node-input-msgtrace-clear-debug-btn" style="margin-left: 10px;"
                                       class="red-ui-button">Clear Debug</button>
          </div>
@@ -3437,7 +3437,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          </label>
          <input type="checkbox" id="node-input-obfuscate-add-license-text" style="display:inline-block; width:15px; vertical-align:baseline;">
       </div>
-
+      
       <div id="node-input-obfuscate-add-license-text-row" style="display: none;">
          <div class="form-row ml-30">
             <label for="node-input-obfuscate-append-license-text" style="width: 150px">
@@ -3477,7 +3477,7 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 window.scratchPadResetDiff = [
     () => {
         $('#node-input-scratchpad-diff-content').html('')
-        $('.selected-for-compare').removeClass('selected-for-compare')
+        $('.selected-for-compare').removeClass('selected-for-compare')        
     }
 ]
 
@@ -3487,7 +3487,7 @@ function generateDiff(content1, content2) {
     const fragment = document.createDocumentFragment();
 
     let btn = document.createElement('button')
-
+    
     btn.setAttribute('onclick',"window.scratchPadResetDiff.map( d => d() ); ")
     btn.setAttribute('class','button')
     btn.setAttribute('title','Clear')
@@ -3516,7 +3516,7 @@ function addEventHandlers(cfgnode) {
     let firstObj = undefined
 
     window.scratchPadResetDiff.push( () => { firstObj = undefined })
-
+    
     $('.scratchpad-compare-btn').off('click')
     $('.scratchpad-compare-btn').on('click', e => {
         if (e) { e.preventDefault() }
@@ -3652,7 +3652,7 @@ function ensureYourConfigNodeExists() {
 
       // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
       var content = $($('script[type="text/x-red"][data-template-name="ScratchPad"]').i18n().html());
-
+    
       // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
@@ -3676,10 +3676,10 @@ function ensureYourConfigNodeExists() {
             globalYourConfigNode.scratches[idx] = { "txt": globalYourConfigNode.scratches[idx] }
             RED.nodes.dirty(true)
          }
-
-         $(obj).find(".scratchpad-content-field").val(
-            globalYourConfigNode.scratches[idx].txt
-         ).css(
+         
+         $(obj).find(".scratchpad-content-field").val( 
+            globalYourConfigNode.scratches[idx].txt 
+         ).css( 
             'width', globalYourConfigNode.scratches[idx].wdh || "360px"
          ).css(
             'height', globalYourConfigNode.scratches[idx].hgt || "150px"
@@ -3737,4 +3737,119 @@ function ensureYourConfigNodeExists() {
 
    <div id="node-input-scratchpad-fields">
    </div>
+</script>
+<!-- --- [red-plugin:@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin] --- -->
+<script type="text/javascript">
+(function() {
+   var globalYourConfigNode = null;
+
+   function ensureYourConfigNodeExists() {
+      // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
+      // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
+
+      // If we had found it previously, check if it has been deleted by the user behind our back
+      if (globalYourConfigNode !== null) {
+         var configNode = RED.nodes.node(globalYourConfigNode.id);
+         if (configNode === null) { globalYourConfigNode = null; }
+      }
+
+      // If not found previously, let's go find it
+      if (globalYourConfigNode === null) {
+         var configNodes = [];
+         RED.nodes.eachConfig(function(configNode) {
+             if (configNode.type === 'erlconfigCfg') { 
+                 configNodes.push(configNode); 
+             }
+         });
+
+         // Make sure we only have 1 config node
+         while (configNodes.length > 1) {
+             var configNode = configNodes.pop();
+             RED.nodes.remove(configNode.id);
+             RED.nodes.dirty(true);
+         }
+
+         // When we found a config node, let's use that one
+         if (configNodes.length === 1) { globalYourConfigNode = configNodes[0]; }
+      }
+
+      // When it doesn't exist yet, create it if required
+      if (globalYourConfigNode === null) {
+         // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
+         // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
+         // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
+         // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
+         globalYourConfigNode = {
+             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
+             _def: RED.nodes.getType("erlconfigCfg"),
+             type: "erlconfigCfg",
+             hasUsers: false, 
+             users: [],
+             name: "erlconfig",
+             label: function() { return "config" || this.name },
+             /* values and data defined by this config node */
+             data: "some default value", // Default data
+         }
+
+         // Add the new config node to the collection of Node-RED nodes
+         RED.nodes.add(globalYourConfigNode);
+
+         // Make sure the "Deploy" button becomes active
+         RED.nodes.dirty(true);
+      }      
+   }
+
+   // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
+   var initialiseConfigNodeOnce = () => {
+      RED.events.off('runtime-state', initialiseConfigNodeOnce);
+
+      // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
+      var content = $($('script[type="text/x-red"][data-template-name="erlconfig"]').i18n().html());
+    
+      // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
+      // --> more details: https://nodered.org/docs/api/ui/sidebar/
+      RED.sidebar.addTab({
+         id: "erlconfig",
+         label: "erlconfig", // short name for the tab
+         name: "erlconfig", // long name for the menu
+         content: content,
+         closeable: true,
+         // disableOnEdit: true,
+         enableOnEdit: true,
+         iconClass: "fa fa-circle" // your fontawesome icon
+      });
+
+      ensureYourConfigNodeExists();
+
+
+
+      // At startup load your config node data into the plugin sidebar html elements
+      $("#node-input-data").val(globalYourConfigNode.data);
+
+      // When the user has entered new data in the sidebar, then store it into the config node
+      $("#node-input-data").on("change", function() {
+        ensureYourConfigNodeExists();
+
+        let data = $(this).val();
+
+         if (globalYourConfigNode.data != data) {
+            globalYourConfigNode.data = data;
+            // Since the config node has been updated, the 'Deploy' button should become active
+            RED.nodes.dirty(true);
+         }
+      })
+   };
+   RED.events.on('runtime-state', initialiseConfigNodeOnce);
+})();
+</script>
+
+<!-- The html for the right sidebar plugin screen -->
+<script type="text/x-red" data-template-name="erlconfig">
+  <div class="form-row">
+    <div style="position: relative; height: 100%; margin: 15px;">
+      <label for="node-input-data" style="margin-top: 15px"><i class="fa fa-cog"></i> Process List</label>
+    </div>
+  </div>
+  
+
 </script>
