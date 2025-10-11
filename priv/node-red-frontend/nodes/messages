@@ -233,6 +233,7 @@
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-flowchart": {
         "mermaid-flowchart": {
             "label": {
+                "add_keep_state": "Add Self",
                 "shape": "Shape",
                 "shapes": {
                     "bolt": "Lightning Bolt",
@@ -292,6 +293,7 @@
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end": {
         "mermaid-state-end": {
             "label": {
+                "state": "End State",
                 "statusset": "Status Set"
             },
             "status": {
@@ -303,6 +305,7 @@
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-start": {
         "mermaid-state-start": {
             "label": {
+                "state": "Start State",
                 "statusset": "Status Set"
             },
             "status": {
@@ -314,6 +317,8 @@
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-state": {
         "mermaid-state-state": {
             "label": {
+                "add_keep_state": "Add Keep State",
+                "state": "State",
                 "statusset": "Status Set"
             },
             "status": {

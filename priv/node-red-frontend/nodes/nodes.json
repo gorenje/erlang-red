@@ -538,7 +538,7 @@
             "FlowHubPull"
         ],
         "user": false,
-        "version": "0.8.9"
+        "version": "0.9.0"
     },
     {
         "enabled": true,
@@ -550,7 +550,7 @@
             "FlowHubCfg"
         ],
         "user": false,
-        "version": "0.8.9"
+        "version": "0.9.0"
     },
     {
         "enabled": true,
@@ -574,7 +574,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     {
         "enabled": true,
@@ -586,7 +586,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     {
         "enabled": true,
@@ -598,7 +598,7 @@
             "mermaid-state-start"
         ],
         "user": false,
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     {
         "enabled": true,
@@ -610,7 +610,7 @@
             "mermaid-state-state"
         ],
         "user": false,
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     {
         "enabled": true,
@@ -622,7 +622,7 @@
             "mermaid-state-end"
         ],
         "user": false,
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     {
         "enabled": true,

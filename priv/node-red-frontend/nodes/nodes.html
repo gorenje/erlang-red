@@ -14054,9 +14054,13 @@ If this node isn't reached, then the test will fail.
 
         var label = $('<label>', { for: "node-input-name", "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
 
-        label.append('<i class="fa fa-tag"></i>&nbsp;')
-
-        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+        if (nde.id == this.id) {
+          label.append('<i class="fa fa-rotate-right"></i>&nbsp;')
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde) + " (self)"))
+        } else {
+          label.append('<i class="fa fa-tag"></i>&nbsp;')
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
+        }
 
         container.append(label)
         container.append($('<br/>'))
@@ -14179,7 +14183,7 @@ If this node isn't reached, then the test will fail.
   </div>
 
   <div class="form-row">
-    <button class='red-ui-button' id='node-input-add-self-button'>Add Self</button>
+    <button class='red-ui-button' id='node-input-add-self-button'><i class="fa fa-rotate-right"></i> <span data-i18n="mermaid-flowchart.label.add_keep_state"></span></button>
   </div>
 
   <div class="form-row">
@@ -14256,9 +14260,9 @@ If this node isn't reached, then the test will fail.
 
         var label = $('<label>', { "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
 
-        label.append('<i class="fa fa-tag"></i>&nbsp;')
+        label.append('<i class="fa fa-map-marker"></i>&nbsp;')
 
-        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " <b>keep state</b>" : "")))
 
         container.append(label)
         container.append($('<br/>'))
@@ -14312,8 +14316,8 @@ If this node isn't reached, then the test will fail.
 
 <script type="text/html" data-template-name="mermaid-state-start">
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
-    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    <label for="node-input-name"><i class="fa fa-map-marker"></i> <span data-i18n="mermaid-state-start.label.state"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]mermaid-state-start.label.state">
   </div>
 
     <div class="form-row">
@@ -14404,9 +14408,13 @@ Used to define a state machine diagram.
 
         var label = $('<label>', { "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
 
-        label.append('<i class="fa fa-tag"></i>&nbsp;')
-
-        label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " (self)" : "")))
+        if (nde.id == this.id) {
+          label.append('<i class="fa fa-rotate-right"></i>&nbsp;')
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde) + " (this state)"))
+        } else {
+          label.append('<i class="fa fa-map-marker"></i>&nbsp;')
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
+        }
 
         container.append(label)
         container.append($('<br/>'))
@@ -14465,12 +14473,12 @@ Used to define a state machine diagram.
 
 <script type="text/html" data-template-name="mermaid-state-state">
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
-    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    <label for="node-input-name"><i class="fa fa-map-marker"></i> <span data-i18n="mermaid-state-state.label.state"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]mermaid-state-state.label.state">
   </div>
 
   <div class="form-row">
-    <button class='red-ui-button' id='node-input-add-self-button'>Add Self</button>
+    <button class='red-ui-button' id='node-input-add-self-button'><i class="fa fa-rotate-right"></i> <span data-i18n="mermaid-state-state.label.add_keep_state"></span></button>
   </div>
 
   <div class="form-row">
@@ -14565,8 +14573,8 @@ Used to define a state machine diagram.
 
 <script type="text/html" data-template-name="mermaid-state-end">
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
-    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    <label for="node-input-name"><i class="fa fa-map-marker"></i> <span data-i18n="mermaid-state-end.label.state"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]mermaid-state-end.label.state">
   </div>
 </script>
 <script type="text/markdown" data-help-name="mermaid-state-end">
