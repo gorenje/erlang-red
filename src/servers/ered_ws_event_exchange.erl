@@ -49,8 +49,7 @@
 start() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-debug_msg({ok, WsName}, Type, Data) ->
-    NodeId = maps:get(<<"id">>, Data),
+debug_msg({ok, WsName}, Type, #{<<"id">> := NodeId} = Data) ->
     gen_server:call(?MODULE, {debug_event, WsName, NodeId, Type, Data});
 debug_msg(_, _, _) ->
     ignore.
@@ -289,6 +288,9 @@ handle_cast(_Msg, Store) ->
 %%
 handle_info(stop, SubscriberStore) ->
     gen_server:cast(?MODULE, stop),
+    {noreply, SubscriberStore};
+
+handle_info(_, SubscriberStore) ->
     {noreply, SubscriberStore}.
 
 code_change(_OldVersion, SubscriberStore, _Extra) ->
