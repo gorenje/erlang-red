@@ -4,6 +4,7 @@
     "@gregoriusrippenstein/erlang-red-process-nodes/erlprocess": {
         "erlprocess": {
             "label": {
+                "capture_io": "Capture I/O?",
                 "process": "Process Id",
                 "statusset": "Status Set"
             },

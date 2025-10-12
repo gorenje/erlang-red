@@ -804,7 +804,7 @@
             "erlconfigCfg"
         ],
         "user": false,
-        "version": "0.0.1"
+        "version": "0.0.3"
     },
     {
         "enabled": true,
@@ -816,6 +816,6 @@
             "erlprocess"
         ],
         "user": false,
-        "version": "0.0.1"
+        "version": "0.0.3"
     }
 ]

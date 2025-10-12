@@ -11918,7 +11918,10 @@ msg.cookies = {
       pid: {
         value: "",
         required: true
-      }
+      },
+      capture_io: {
+        value: false
+      },      
     },
 
     inputs: 1,
@@ -11969,6 +11972,12 @@ msg.cookies = {
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
 
+  <div class="form-row">
+    <input type="checkbox" id="node-input-capture_io"
+               style="display:inline-block; width:15px; vertical-align:baseline;">
+    <label for="node-input-capture_io"><span data-i18n="erlprocess.label.capture_io"></span></label>
+  </div>
+  
   <div class="form-row">
     <label for="node-input-pid"><i class="fa fa-circle"></i> <span data-i18n="erlprocess.label.process"></span></label>
     <input type="text" id="node-input-pid" data-i18n="[placeholder]erlprocess.label.process">

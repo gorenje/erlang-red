@@ -3743,6 +3743,160 @@ function ensureYourConfigNodeExists() {
 (function() {
    var globalYourConfigNode = null;
 
+   function dagreLR(payload, callback) {
+      var allnodes = payload.allnodes;
+      var alledges = payload.alledges;
+      var fixedNodeId = payload.fixedNodeId;
+
+      var g = new dagre.graphlib.Graph();
+      
+      g.setGraph({});
+      g.setDefaultEdgeLabel(function () { return {}; });
+
+      for (var idx = 0; idx < allnodes.length; idx++) {
+         var n = allnodes[idx];
+         g.setNode(n.id, {
+               ...n,
+         })
+      }
+
+      for (var idx = 0; idx < alledges.length; idx++) {
+         var e = alledges[idx];
+         g.setEdge(e.sources[0], e.targets[0])
+      }
+
+      g.graph().rankdir = "LR"
+      g.graph().marginx = 20
+      g.graph().marginy = 20
+      g.graph().nodesep = 30
+      g.graph().ranksep = 50
+
+      dagre.layout(g)
+
+      callback({
+         type: "movenodes",
+         fixedNodeId: fixedNodeId,
+         nodes: g.nodes().map(function (v) {
+               return {
+                     ...g.node(v)
+                  }
+         })            
+      })
+   }
+
+   function getProcesses(opts, cb) {
+
+      $.ajax({
+         url: "erlprocess/processes",
+         type: "GET",
+         data: JSON.stringify({
+         }),
+         contentType: 'application/json',
+         processData: false,
+         success: function(resp) {
+            let processes = resp.data.processes;
+            let pid2node = {}
+            
+            processes.forEach( proc => {
+               pid2node[proc.pid] = {
+                  pid: proc.pid,
+                  label: proc.name || proc.pid,
+                  parentpid: proc.parent,
+                  sublabel: proc.pid,
+                  selected: false,
+                  checkbox: false,
+                  children: []
+               }
+            })
+
+            let hasparent = []
+            processes.forEach( p => {
+               if ( pid2node[p.parent] && (p.parent != p.pid) ) {
+                  pid2node[p.parent].children.push(pid2node[p.pid])
+                  hasparent.push(p.pid)
+               }
+            })
+
+            Object.values(pid2node).forEach( d => {
+               if (d.children.length == 0 ) d.children = undefined
+            })
+
+            cb(Object.values(pid2node).filter( d => !hasparent.includes(d.pid) ), opts)
+         },
+         error: function(resp) {console.log(resp)},
+         complete: function() {}
+      })
+   }
+
+   function setupTreelistForProcesses(items, opts) {
+      if (items.length == 0) {
+         RED.notify("No Processes Found", {
+               type: "success",
+               timeout: 2000
+         });
+
+         try {
+               $("#node-input-erlprocess-target-container-div").treeList('empty')
+         } catch (ex) { }
+      } else {
+         try {
+               $("#node-input-erlprocess-target-container-div").treeList('empty')
+         } catch (ex) {
+               $("#node-input-erlprocess-target-container-div").css({
+                  width: "100%",
+                  height: "calc(100%)"
+               }).treeList(
+                  {
+                     multi: false
+                  }
+               ).on("treelistitemmouseover", function (e, item) {
+                  /*
+                  if (item.node && item.node.z == RED.workspaces.active()) {
+                     RED.view.reveal(item.node.id, true);
+                     RED.view.redraw();
+                  }
+                  */
+               }).on("treelistitemmouseout", function (e, item) {
+               }).on('treelistselect', function (event, item) {
+                  /* here we do nothing, that is desired */
+               }).on('treelistconfirm', function (event, item) {
+                  if (item.pid) {
+                     let nde = {
+                        "id": RED.nodes.id(),
+                        "type": "erlprocess",
+                        "pid": item.label, // this is either the registered name or the pid - name is better since it will survive restarts
+                        "name": item.label,
+                        "capture_io": false,
+                        "l": !$('#erlprocess-import-compact-node-size').is(":checked")
+                     }
+                     RED.view.importNodes([nde])
+                  }
+               });
+
+               $("#node-input-erlprocess-target-container-filter").show();
+
+               var search = $("#node-input-erlprocess-target-container-filter").searchBox({
+                  style: "compact",
+                  delay: 300,
+                  change: function () {
+                     var val = $(this).val().trim().toLowerCase();
+                     if (val === "") {
+                           $("#node-input-erlprocess-target-container-div").treeList("filter", null);
+                           search.searchBox("count", "");
+                     } else {
+                           var count = $("#node-input-erlprocess-target-container-div").treeList("filter", function (item) {
+                              return item.label.toLowerCase().indexOf(val) > -1 || item.pid.toLowerCase().indexOf(val) > -1
+                           });
+
+                           search.searchBox("count", count + " / " + $("#node-input-erlprocess-target-container-div").treeList("data").length);
+                     }
+                  }
+               });
+         }
+         $("#node-input-erlprocess-target-container-div").treeList("data", items.sort((a, b) => a.label < b.label))
+      }
+   }
+
    function ensureYourConfigNodeExists() {
       // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
       // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
@@ -3785,7 +3939,7 @@ function ensureYourConfigNodeExists() {
              type: "erlconfigCfg",
              hasUsers: false, 
              users: [],
-             name: "erlconfig",
+             name: "Processes",
              label: function() { return "config" || this.name },
              /* values and data defined by this config node */
              data: "some default value", // Default data
@@ -3810,8 +3964,8 @@ function ensureYourConfigNodeExists() {
       // --> more details: https://nodered.org/docs/api/ui/sidebar/
       RED.sidebar.addTab({
          id: "erlconfig",
-         label: "erlconfig", // short name for the tab
-         name: "erlconfig", // long name for the menu
+         label: "Processes", // short name for the tab
+         name: "Processes", // long name for the menu
          content: content,
          closeable: true,
          // disableOnEdit: true,
@@ -3820,8 +3974,6 @@ function ensureYourConfigNodeExists() {
       });
 
       ensureYourConfigNodeExists();
-
-
 
       // At startup load your config node data into the plugin sidebar html elements
       $("#node-input-data").val(globalYourConfigNode.data);
@@ -3838,6 +3990,107 @@ function ensureYourConfigNodeExists() {
             RED.nodes.dirty(true);
          }
       })
+
+      $('#node-input-erlprocess-refresh-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+            getProcesses({}, (items,opts) => {
+               setupTreelistForProcesses(items,opts)
+            })
+      })
+
+      $('#node-input-erlprocess-import-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+
+         let mapChildren = (ary) => {
+            return ary.map( d => {
+               if ( d.children) {
+                  return [d, mapChildren(d.children)]
+               } else {
+                  return [d]
+               }
+            })
+         }
+
+         let process = $("#node-input-erlprocess-target-container-div").treeList('selected')
+
+         if ( !process ) { return }
+
+         let processes = [process];
+         if ( process.children ) {
+            processes = [process, ...mapChildren(process.children)].flat(100)
+         }
+
+         let pid2node = {};
+
+         processes.forEach( p => {
+            pid2node[p.pid] = {
+               "id": RED.nodes.id(),
+               "type": "erlprocess",
+               "pid": p.label,
+               "name": p.label,
+               "capture_io": false,
+               "l": !$('#erlprocess-import-compact-node-size').is(":checked"),
+               "wires": [[]]
+            }
+         })
+
+         let alledges = []
+
+         if ( !$('#erlprocess-import-reverse-tree').is(":checked")) {
+            processes.forEach( p => {
+               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
+                  pid2node[p.parentpid].wires[0].push(pid2node[p.pid].id)
+                  alledges.push({
+                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
+                     sources: [pid2node[p.parentpid].id],
+                     targets: [pid2node[p.pid].id]
+                  })
+               }
+            })
+         } else {
+            processes.forEach( p => {
+               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
+                  pid2node[p.pid].wires[0].push(pid2node[p.parentpid].id)
+
+                  alledges.push({
+                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
+                     targets: [pid2node[p.parentpid].id],
+                     sources: [pid2node[p.pid].id]
+                  })
+               }
+            })
+         }
+
+         let allnodes = Object.values(pid2node).map( d => {
+            d.height = 20;
+            d.width = $('#erlprocess-import-compact-node-size').is(":checked") ? 30 : 150;
+            return d
+         })
+
+         if ( typeof dagre == "object") {
+            dagreLR({
+               "allnodes": allnodes,
+               "alledges": alledges,
+               "fixedNodeId": pid2node[process.pid].id
+            }, (data) => { RED.view.importNodes(data.nodes) });
+         } else {
+            RED.view.importNodes(allnodes)
+         }
+      })
+
+      $('#node-input-erlprocess-select-none-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = false; return d })) 
+      })
+      $('#node-input-erlprocess-select-all-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = true; return d })) 
+      })
+      $('#node-input-erlprocess-select-inverse-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = !d.selected; return d })) 
+      })
+
    };
    RED.events.on('runtime-state', initialiseConfigNodeOnce);
 })();
@@ -3845,11 +4098,32 @@ function ensureYourConfigNodeExists() {
 
 <!-- The html for the right sidebar plugin screen -->
 <script type="text/x-red" data-template-name="erlconfig">
-  <div class="form-row">
-    <div style="position: relative; height: 100%; margin: 15px;">
-      <label for="node-input-data" style="margin-top: 15px"><i class="fa fa-cog"></i> Process List</label>
-    </div>
-  </div>
-  
 
+   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
+      <button class="red-ui-button" id="node-input-erlprocess-refresh-but"><i class="fa fa-rotate-left"></i> Refresh</button>
+      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-but"><i class="fa fa-rotate-right"></i> Import Tree</button>
+   </div>
+
+   <div class="form-row" style="margin-left: 10px;">
+      <label for="erlprocess-import-reverse-tree" style="width: 40%;"><i class="fa fa-tree" ></i> Reverse Tree?</label>
+      <input style="width: 10%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
+   </div>
+
+   <div class="form-row" style="margin-left: 10px;">
+      <label for="erlprocess-import-compact-node-size" style="width: 40%;"><i class="fa fa-compress" ></i> Compact Nodes?</label>
+      <input style="width: 10%;" type="checkbox" id="erlprocess-import-compact-node-size"/>
+   </div>
+
+   <div style="position: relative; margin: 15px;">
+      <label for="node-input-data" style="margin-top: 15px"><i class="fa fa-download"></i> Double click to import process</label>
+   </div>
+
+   <div class="form-row"
+      style="margin-left: 10px; position: relative; min-height: 300px; height: 650px; margin-right: 15px;">
+      <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
+         <input type="text" id="node-input-erlprocess-target-container-filter" style="display: none;">
+      </div>
+      <div id="node-input-erlprocess-target-container-div"></div>
+   </div>
 </script>
+
