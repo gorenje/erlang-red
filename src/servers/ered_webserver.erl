@@ -239,6 +239,8 @@ flow_editor_routes() ->
             {priv_file, erlang_red, "vendor/monaco-tokenizer.js"}},
         {"/vendor/erlang.js", cowboy_static,
             {priv_file, erlang_red, "vendor/erlang.js"}},
+        {"/vendor/dagre.min.js", cowboy_static,
+            {priv_file, erlang_red, "vendor/dagre.min.js"}},
 
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
@@ -253,6 +255,8 @@ flow_editor_routes() ->
 
         {"/erlang-red", cowboy_static,
             {priv_file, erlang_red, "node-red-frontend/index.html"}},
+
+        {"/erlprocess/processes", ered_http_erlprocesses_process, []},
 
         %%% Wrapper site on '/' - flow editor is on '/erlang-red'
         {"/", ered_http_release_status, []},

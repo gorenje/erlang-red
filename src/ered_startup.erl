@@ -331,12 +331,9 @@ node_type_to_module(<<"markdown">>)          -> ered_node_markdown;
 node_type_to_module(<<"csv">>)               -> ered_node_csv;
 node_type_to_module(<<"FlowHubPull">>)       -> ered_node_flowhub_pull;
 node_type_to_module(<<"erlsupervisor">>)     -> ered_node_erlsupervisor;
-node_type_to_module(<<"Sink">>)              -> ered_node_ignore;
-node_type_to_module(<<"Seeker">>)            -> ered_node_ignore;
 node_type_to_module(<<"erlmodule">>)         -> ered_node_erlmodule;
 node_type_to_module(<<"erlstatemachine">>)   -> ered_node_erlstatemachine;
 node_type_to_module(<<"erleventhandler">>)   -> ered_node_erleventhandler;
-node_type_to_module(<<"mermaid-flowchart">>) -> ered_node_ignore;
 node_type_to_module(<<"tcp in">>)            -> ered_node_tcp_in;
 node_type_to_module(<<"tcp out">>)           -> ered_node_tcp_out;
 node_type_to_module(<<"erlgenserver">>)      -> ered_node_erlgenserver;
@@ -349,10 +346,15 @@ node_type_to_module(<<"sort">>)              -> ered_node_sort;
 node_type_to_module(<<"batch">>)             -> ered_node_batch;
 node_type_to_module(<<"rbe">>)               -> ered_node_rbe;
 node_type_to_module(<<"range">>)             -> ered_node_range;
+node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
 %
+% These are "frontend-only" nodes, they don't have any backend functionality.
 node_type_to_module(<<"mermaid-state-start">>) -> ered_node_ignore;
 node_type_to_module(<<"mermaid-state-end">>)   -> ered_node_ignore;
 node_type_to_module(<<"mermaid-state-state">>) -> ered_node_ignore;
+node_type_to_module(<<"mermaid-flowchart">>)   -> ered_node_ignore;
+node_type_to_module(<<"Sink">>)                -> ered_node_ignore;
+node_type_to_module(<<"Seeker">>)              -> ered_node_ignore;
 
 %%
 %% Assert nodes for testing functionality of the nodes. These are the first
@@ -383,6 +385,7 @@ is_config_node(<<"Flow2MermaidCfg">>)    -> true;
 is_config_node(<<"FlowHubCfg">>)         -> true;
 is_config_node(<<"ScratchPadCfg">>)      -> true;
 is_config_node(<<"websocket-listener">>) -> true;
+is_config_node(<<"erlconfigCfg">>)       -> true;
 is_config_node(_)                        -> false.
 
 %%

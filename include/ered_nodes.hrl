@@ -29,6 +29,7 @@ end#{
 -define(GetNodePid, '_node_pid_' := NodePid).
 
 -define(GetPayload, <<"payload">> := Payload).
+-define(PayloadIsSet, <<"payload">> := _Payload).
 -define(SetPayload, <<"payload">> => Payload).
 -define(AddPayload(V), <<"payload">> => V).
 

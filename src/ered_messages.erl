@@ -209,6 +209,8 @@ encoder(Other, Encode) when is_tuple(Other) ->
     json:encode_value(tuple_to_list(Other), Encode);
 encoder(Other, Encode) when is_reference(Other) ->
     json:encode_value(list_to_binary(ref_to_list(Other)), Encode);
+encoder(Other, Encode) when is_port(Other) ->
+    json:encode_value(list_to_binary(port_to_list(Other)), Encode);
 encoder(Other, Encode) when is_pid(Other) ->
     json:encode_value(list_to_binary(pid_to_list(Other)), Encode);
 encoder(Other, Encode) when is_binary(Other) ->
