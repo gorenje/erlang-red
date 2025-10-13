@@ -9962,7 +9962,7 @@ RED.utils = (function() {
         },
         tokenizer(src, tokens) {
             if (!src) { return null; }
-            const rule = /^(?::[^:\n]+:[^:\n]*(?:\n|$))+/;    // Regex for the complete token
+            const rule = /^(?::[^:\n]+:[^\n]*(?:\n|$))+/;    // *** (ERLANG-RED) CHANGED*** Regex for the complete token
             const match = rule.exec(src);
             if (match) {
                 return {                                        // Token to generate
@@ -9988,7 +9988,7 @@ RED.utils = (function() {
         },
         tokenizer(src, tokens) {
             if (!src) { return null; }
-            const rule = /^:([^:\n]+)\(([^:\n]+)\).*?:([^:\n]*)(?:\n|$)/;  // Regex for the complete token
+            const rule = /^:([^:\n]+)\(([^:\n]+)\).*?:([^\n]*)(?:\n|$)/;  // *** (ERLANG-RED) CHANGED*** Regex for the complete token
             const match = rule.exec(src);
             if (match) {
                 return {                                       // Token to generate
