@@ -67,9 +67,16 @@ For more details on the project, check out my interview at the [TADS Blog](https
 
 1. [Creating Mermaid (UML) Diagrams in the flow editor](https://cdn.openmindmap.org/content/1759146630212_Erlang_Red_creating_FlowChart_Diagrams.mp4) - [Flow](https://flows.red-erik.org/f/dc897f402c53697f) - 8 mins
 
-2. [Creating a statemachine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
+2. [Creating a state-machine definition from a flow diagram](https://cdn.openmindmap.org/content/1759150570186_Erlang-Red_generate_statem_def.mp4) = [Flow](https://flows.red-erik.org/f/ac9f69e018b6cbfc) - 10 mins
 
-3. [Unittesting statemachines in Erlang-Red](https://cdn.openmindmap.org/content/1759220122556_Erlang_Red_Statemachine_-_Unit_testing.mp4) - [Flow](https://flows.red-erik.org/f/72fbf0bdf8eacc7e) - 9 mins
+3. [Unittesting state-machines in Erlang-Red](https://cdn.openmindmap.org/content/1759220122556_Erlang_Red_Statemachine_-_Unit_testing.mp4) - [Flow](https://flows.red-erik.org/f/72fbf0bdf8eacc7e) - 9 mins
+
+**Erlang-Red Walkthrough**
+
+Thanks to [Alan @ TADSummit](https://blog.tadsummit.com), I was able to do a [walkthrough](https://blog.tadsummit.com/2025/10/10/erlang-red-walkthrough/) of Erlang-Red and how to implement an extension to the [diameter](https://github.com/erlang/otp/blob/master/lib/diameter/doc/guides/diameter_intro.md) protocol in Erlang-Red - visually.
+
+For that walkthrough, I created a collection of [flows](https://github.com/gorenje/tadsummit_diameter) that can be imported into Erlang-Red (or Node-RED or [Browser-Red](https://cdn.flowhub.org)).
+
 
 Embedding
 ---
@@ -170,6 +177,8 @@ These nodes represent specific Erlang features as nodes and as such, could be im
 | [generic server](src/nodes/ered_node_erlgenserver.erl) | Implements the [`gen_server`](https://www.erlang.org/doc/apps/stdlib/gen_server.html) behaviour. Requires a [module node](src/nodes/ered_node_erlmodule.erl) to define the actions of the server. | [Flow](https://flows.red-erik.org/f/38f712d367cecffa) |
 
 These nodes can be installed using the corresponding Node-RED [node package](https://flows.nodered.org/node/@gregoriusrippenstein/erlang-red-supervisor-node). In Node-RED these nodes are placebos, doing nothing.
+
+Existing processes can be represented by the [process](src/nodes/ered_node_erlprocess.erl) node. A process listing provides easy access to those processes.
 
 ### Unit testing nodes
 
@@ -285,7 +294,7 @@ Example
 
 What the gif shows is executing a [simple flow](https://flowhub.org/f/ea246f68766c8630) using Erlang as a backend. The flow demonstrates the difference in the switch node of 'check all' or 'stop at first match'.
 
-All nodes are are processes- that is shown on the left in the terminal window.
+All nodes are are processes - these are shown on the left in the terminal window.
 
 This example is extremely trivial but it does lay the groundwork for expansion.
 
@@ -350,8 +359,9 @@ An overview of the sibling projects for both the reader and me:
 - [Node-RED and Erlang-Red unit testing nodes](https://github.com/gorenje/erlang-red-unittesting-nodes) are used to define and automatically ensure the correct functionality. These nodes are embedded in test flows and ensure that test flows are correct. This makes testing repeatable and reliable and fast! As an aside, these nodes are maintained in an [Node-RED flow](https://flowhub.org/f/ef91cb280e1bfd72).
 - [JSONata support for Erlang-Red](https://github.com/gorenje/erlang-red-jsonata) is implemented by an Erlang parser with a grammer that covers most of JSONata syntax, no guarantees made. Support of JSONata functionality is limited to what the test flows require. Nothing prevents others from extending the functionality themselves, it is not a priority of mine.
 - [Elixir helper library](https://github.com/gorenje/erlang-red-elixir-helpers) allows Elixir code to be also part of Erlang-Red. Erlang-Red is not intended to be a *pure* Erlang project, it is intended to be a *pure* BEAM project. Anything that compiles down to the BEAM VM, why not include it?
-- [Supervisor nodes](https://github.com/gorenje/erlang-red-supervisor-node) and other Erlang behaviours as Node-RED nodes. Node package includes `gen_statem` and `gen_event` as nodes that can be used with Erlang-Red flows. These nodes can also be installed into Node-RED but there they do nothing.
+- [Supervisor and Behaviour nodes](https://github.com/gorenje/erlang-red-supervisor-node) and other Erlang behaviours as Node-RED nodes. Node package includes `gen_statem` and `gen_event` as nodes that can be used with Erlang-Red flows. These nodes can also be installed into Node-RED but there they do nothing.
 - [Type parsers](https://github.com/gorenje/erlang-red-type-parsers) for parsing specific Node-RED types such as Number or Buffer. Also for handling attribute access of maps and arrays.
+- [Erlang Processes Nodes](https://github.com/gorenje/erlang-red-process-nodes) provide structured access to existing Erlang processes allowing message interaction with processes and capturing I/O from existing processes.
 
 FAQs
 ---
