@@ -804,7 +804,7 @@
             "erlconfigCfg"
         ],
         "user": false,
-        "version": "0.0.3"
+        "version": "0.0.5"
     },
     {
         "enabled": true,
@@ -816,6 +816,18 @@
             "erlprocess"
         ],
         "user": false,
-        "version": "0.0.3"
+        "version": "0.0.5"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
+        "name": "erlcaptureio",
+        "types": [
+            "erlcaptureio"
+        ],
+        "user": false,
+        "version": "0.0.5"
     }
 ]

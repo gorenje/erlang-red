@@ -1,5 +1,6 @@
 {
     "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
+    "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlprocess": {},
     "@gregoriusrippenstein/erlang-red-supervisor-node/erleventhandler": {},

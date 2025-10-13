@@ -1,5 +1,25 @@
 {
     "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
+    "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {
+        "erlcaptureio": {
+            "label": {
+                "intensity": "Intensity (count)",
+                "period": "Period (seconds)",
+                "selectAll": "select all",
+                "source": "Captured Nodes",
+                "statusset": "Status Set"
+            },
+            "scope": {
+                "all": "All flow nodes",
+                "group": "In same group",
+                "selected": "Selected nodes"
+            },
+            "status": {
+                "timeout": "No more time to waiting",
+                "waiting": "Waiting for Godot"
+            }
+        }
+    },
     "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlprocess": {
         "erlprocess": {

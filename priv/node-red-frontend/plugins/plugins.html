@@ -3801,6 +3801,7 @@ function ensureYourConfigNodeExists() {
                pid2node[proc.pid] = {
                   pid: proc.pid,
                   label: proc.name || proc.pid,
+                  sortby: (proc.name || proc.pid).replace(/^[<]/, "zzz"), // ensure <1.2.3> Pids go to the bottom of the listing
                   parentpid: proc.parent,
                   sublabel: proc.pid,
                   selected: false,
@@ -3818,12 +3819,13 @@ function ensureYourConfigNodeExists() {
             })
 
             Object.values(pid2node).forEach( d => {
-               if (d.children.length == 0 ) d.children = undefined
+               if (d.children.length == 0 ) { d.children = undefined }
+               else { d.children.sort( (a, b) => a.sortby > b.sortby ) }
             })
 
             cb(Object.values(pid2node).filter( d => !hasparent.includes(d.pid) ), opts)
          },
-         error: function(resp) {console.log(resp)},
+         error: function(resp) {},
          complete: function() {}
       })
    }
@@ -3893,7 +3895,7 @@ function ensureYourConfigNodeExists() {
                   }
                });
          }
-         $("#node-input-erlprocess-target-container-div").treeList("data", items.sort((a, b) => a.label < b.label))
+         $("#node-input-erlprocess-target-container-div").treeList("data", items.sort((a, b) => a.sortby > b.sortby))
       }
    }
 
@@ -4101,11 +4103,11 @@ function ensureYourConfigNodeExists() {
 
    <div class="form-row" style="margin-left: 10px; margin-top: 15px">
       <button class="red-ui-button" id="node-input-erlprocess-refresh-but"><i class="fa fa-rotate-left"></i> Refresh</button>
-      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-but"><i class="fa fa-rotate-right"></i> Import Tree</button>
+      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-but"><i class="fa fa-tree"></i> Import Processes</button>
    </div>
 
    <div class="form-row" style="margin-left: 10px;">
-      <label for="erlprocess-import-reverse-tree" style="width: 40%;"><i class="fa fa-tree" ></i> Reverse Tree?</label>
+      <label for="erlprocess-import-reverse-tree" style="width: 40%;"><i class="fa fa-refresh" ></i> Reverse Tree?</label>
       <input style="width: 10%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
    </div>
 

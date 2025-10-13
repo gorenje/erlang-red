@@ -11918,10 +11918,7 @@ msg.cookies = {
       pid: {
         value: "",
         required: true
-      },
-      capture_io: {
-        value: false
-      },      
+      }
     },
 
     inputs: 1,
@@ -11973,12 +11970,6 @@ msg.cookies = {
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-capture_io"
-               style="display:inline-block; width:15px; vertical-align:baseline;">
-    <label for="node-input-capture_io"><span data-i18n="erlprocess.label.capture_io"></span></label>
-  </div>
-  
-  <div class="form-row">
     <label for="node-input-pid"><i class="fa fa-circle"></i> <span data-i18n="erlprocess.label.process"></span></label>
     <input type="text" id="node-input-pid" data-i18n="[placeholder]erlprocess.label.process">
   </div>
@@ -11998,6 +11989,282 @@ Represent an existing Erlang process by name, number or rank.
 ### Description
 
 An Erlang-Red representation of an existing Erlang process.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
+
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio] --- -->
+<script type="text/javascript">
+  (function(){
+  
+
+  function frontendSupportFunction() {
+  }
+
+  var functTwo = (arg) => {
+
+  };
+  
+  RED.nodes.registerType('erlcaptureio',{
+    color: '#FFAAAA',
+    icon: "font-awesome/fa-medkit",
+    category: 'processes',
+    paletteLabel: 'CaptureIO',
+    defaults: {
+      name: {
+        value:"",
+      },
+
+      scope: { value: "flow", type: "*[]", required: true }
+
+    },
+
+    inputs: 1,
+
+    outputs: 1,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function() {
+      var node = this;
+
+      var scope = node.scope || [];
+
+      this._resize = function () {
+        var rows = $("#dialog-form>div:not(.node-input-target-list-row)");
+        var height = $("#dialog-form").height();
+        for (var i = 0; i < rows.length; i++) {
+          height -= $(rows[i]).outerHeight(true);
+        }
+        var editorRow = $("#dialog-form>div.node-input-target-list-row");
+        editorRow.css("height", height + "px");
+      };
+
+      var search = $("#node-input-erlcaptureio-target-filter").searchBox({
+        style: "compact",
+        delay: 300,
+        change: function () {
+          var val = $(this).val().trim().toLowerCase();
+          if (val === "") {
+            dirList.treeList("filter", null);
+            search.searchBox("count", "");
+          } else {
+            var count = dirList.treeList("filter", function (item) {
+              return item.label.toLowerCase().indexOf(val) > -1 || item.node.type.toLowerCase().indexOf(val) > -1
+            });
+            search.searchBox("count", count + " / " + candidateNodes.length);
+          }
+        }
+      });  
+
+      var dirList = $("#node-input-erlcaptureio-target-container-div").css({
+        width: "100%",
+        height: "100%"
+      }).treeList({
+        multi: true,
+        sortable: false
+      }).on("treelistitemmouseover", function (e, item) {
+        item.node.highlighted = true;
+        item.node.dirty = true;
+        RED.view.redraw();
+      }).on("treelistitemmouseout", function (e, item) {
+        item.node.highlighted = false;
+        item.node.dirty = true;
+        RED.view.redraw();
+      })
+
+      var candidateNodes = RED.nodes.filterNodes({ z: node.z });
+      var items = [];
+      var scopedItems = [];
+      var nodeItemMap = {};
+
+      candidateNodes.forEach(function (n) {
+        if (n.id === node.id || !["function", "erlprocess", "erlgenserver", "erlstatemachine", "erleventhandler"].includes(n.type)) {
+          return;
+        }
+        var isChecked = scope.indexOf(n.id) !== -1;
+
+        var nodeDef = RED.nodes.getType(n.type);
+        var label;
+        var sublabel;
+        if (nodeDef) {
+          var l = nodeDef.label;
+          label = (typeof l === "function" ? l.call(n) : l) || "";
+          sublabel = n.type;
+          if (sublabel.indexOf("subflow:") === 0) {
+            var subflowId = sublabel.substring(8);
+            var subflow = RED.nodes.subflow(subflowId);
+            sublabel = "subflow : " + subflow.name;
+          }
+        }
+        if (!nodeDef || !label) {
+          label = n.type;
+        }
+
+        nodeItemMap[n.id] = {
+          node: n,
+          id: n.id,
+          label: label,
+          sublabel: sublabel,
+          selected: isChecked,
+          checkbox: true
+        };
+
+        if (isChecked) {
+          scopedItems.push(nodeItemMap[n.id]);
+        } else {
+          items.push(nodeItemMap[n.id]);
+        }
+      });
+
+      scopedItems.sort((a, b) => { return scope.indexOf(a.id) < scope.indexOf(b.id) ? -1 : 1 })
+
+      dirList.treeList('data', [...scopedItems, ...items]);
+
+      $("#node-input-erlcaptureio-target-select").on("click", function (e) {
+        e.preventDefault();
+        var preselected = dirList.treeList('selected').map(function (n) { return n.node.id });
+        RED.tray.hide();
+        RED.view.selectNodes({
+          selected: preselected,
+          onselect: function (selection) {
+            RED.tray.show();
+            var newlySelected = {};
+            selection.forEach(function (n) {
+              newlySelected[n.id] = true;
+              if (nodeItemMap[n.id]) {
+                nodeItemMap[n.id].treeList.select(true);
+              }
+            })
+            preselected.forEach(function (id) {
+              if (!newlySelected[id]) {
+                nodeItemMap[id].treeList.select(false);
+              }
+            })
+          },
+          oncancel: function () {
+            RED.tray.show();
+          },
+          filter: function (n) {
+            return n.id !== node.id && ["function","erlprocess","erlgenserver","erlstatemachine","erleventhandler"].includes(n.type);
+          }
+        });
+      })
+
+      $("#node-input-scope-select").on("change", function (e) {
+        var scope = $(this).val();
+        if (scope === "target") {
+          $(".node-input-target-row").show();
+        } else {
+          $(".node-input-target-row").hide();
+        }
+        node._resize();
+      });
+
+      if (this.scope === null || this.scope === "flow") {
+        $("#node-input-scope-select").val("flow");
+      } else if (this.scope === "group") {
+        $("#node-input-scope-select").val("group");
+      } else {
+        $("#node-input-scope-select").val("target");
+      }
+      
+      $("#node-input-scope-select").trigger("change");
+    },
+
+    oneditcancel: function() {
+    },
+
+    oneditsave: function() {
+      var scope = $("#node-input-scope-select").val();
+      if (scope === null || scope === 'flow') {
+        this.scope = 'flow';
+      } else if (scope === 'group') {
+        this.scope = "group";
+      } else {
+        // this seems to be the only way to get the list of ids in sorted ordered ...
+        this.scope = Array.from($("#node-input-erlcaptureio-target-container-div").find('li').find('.selected').map((d, o) => $($(o).parent()).data().data.id))
+      }      
+    },
+
+    oneditresize: function(size) {
+      this._resize();
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="erlcaptureio">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  
+
+  <div class="form-row">
+    <label style="width: 150px;" for="node-input-scope" data-i18n="erlcaptureio.label.source"></label>
+    <select id="node-input-scope-select">
+                  <option value="flow" data-i18n="erlcaptureio.scope.all"></option>
+                  <option value="group" data-i18n="erlcaptureio.scope.group"></option>
+                  <option value="target" data-i18n="erlcaptureio.scope.selected"></option>
+              </select>
+  </div>
+  
+  <div class="form-row node-input-target-row">
+    <button type="button" id="node-input-erlcaptureio-target-select" class="red-ui-button" data-i18n="node-red:common.label.selectNodes"></button>
+  </div>
+  
+  <div class="form-row node-input-target-row node-input-target-list-row" style="position: relative; min-height: 100px">
+    <div style="position: absolute; top: -30px; right: 0;"><input type="text" id="node-input-erlcaptureio-target-filter">
+    </div>
+    <div id="node-input-erlcaptureio-target-container-div"></div>
+  </div>
+
+</script>
+<script type="text/markdown" data-help-name="erlcaptureio">
+Capture the I/O of selected processes.
+
+Used to capture the I/O of existing Erlang processes or function nodes within Erlang-Red.
+
+Can also be used to send input to a process by sending the node a message.
+
+### Inputs
+
+: payload (any) : what is expected as payload input.
+: pid (string) :  Process id `<1.2.3>` or registered node to which the payload should be sent the next time a io get is done.
+
+### Outputs
+
+: payload (any) : the node generated output using `io:format(..)` or something else that works via the I/O protocol.
+
+### Description
+
+Listen in on the I/O of processes, modules, functions and behaviours.
+
+See the [I/O Protocol](https://www.erlang.org/doc/apps/stdlib/io_protocol.html) for a details. This node captures messages generated by process and sent to their group leader. This node works by replacing the group leader for the chosen process.
+
 
 <!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
 
