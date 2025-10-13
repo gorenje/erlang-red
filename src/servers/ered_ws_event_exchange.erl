@@ -289,7 +289,6 @@ handle_cast(_Msg, Store) ->
 handle_info(stop, SubscriberStore) ->
     gen_server:cast(?MODULE, stop),
     {noreply, SubscriberStore};
-
 handle_info(_, SubscriberStore) ->
     {noreply, SubscriberStore}.
 

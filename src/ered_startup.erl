@@ -347,6 +347,7 @@ node_type_to_module(<<"batch">>)             -> ered_node_batch;
 node_type_to_module(<<"rbe">>)               -> ered_node_rbe;
 node_type_to_module(<<"range">>)             -> ered_node_range;
 node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
+node_type_to_module(<<"erlcaptureio">>)      -> ered_node_erlcaptureio;
 %
 % These are "frontend-only" nodes, they don't have any backend functionality.
 node_type_to_module(<<"mermaid-state-start">>) -> ered_node_ignore;

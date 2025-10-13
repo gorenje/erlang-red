@@ -170,7 +170,7 @@ terminate(_, _State) ->
 %%
 %%
 perform_func_code(
-    #{<<"wires">> := Wires} = NodeDef,
+    #{<<"wires">> := Wires, <<"id">> := NodeId} = NodeDef,
     #{'_ws' := WsName} = Msg,
     From
 ) ->
@@ -178,7 +178,8 @@ perform_func_code(
         {ok, <<>>} ->
             ?POST_MISSING_CODE(<<"empty function code, doing nothing">>);
         {ok, Code} ->
-            IoDevicePid = ered_io_debug_device:start(NodeDef, WsName),
+            %% capture i/o requests for process if required.
+            ered_capture_io_exchange:pid_for(NodeId, self(), WsName),
 
             %% TODO allow for context to be stored in the NodeDef hash
             %% TODO this would allow function nodes to store data between
@@ -193,14 +194,11 @@ perform_func_code(
             %% TODO So leave it as is until a better solution is found.
             NewMsg = execute_sync(
                 io_lib:format(
-                    "fun(NodeDef,Msg,DebugIO) -> ~n ~s ~n end.", [Code]
+                    "fun(NodeDef,Msg) -> ~n ~s ~n end.", [Code]
                 ),
                 NodeDef,
-                Msg,
-                IoDevicePid
+                Msg
             ),
-
-            IoDevicePid ! stop,
 
             case send_message_on_ports(Wires, NewMsg) of
                 unacceptable_response ->
@@ -226,17 +224,6 @@ execute_sync(ErlangCode, NodeDef, Msg) ->
     case evaluate_erlang(ErlangCode) of
         {ok, Func} ->
             Func(NodeDef, Msg);
-        Error ->
-            ?POST_OFF_PARSE_ERROR,
-            NodeDef
-    end.
-
-execute_sync(ErlangCode, NodeDef, Msg, IoDevice) ->
-    % this execute is performed by start and finalize code and returns
-    % a NodeDef map.
-    case evaluate_erlang(ErlangCode) of
-        {ok, Func} ->
-            Func(NodeDef, Msg, IoDevice);
         Error ->
             ?POST_OFF_PARSE_ERROR,
             NodeDef

@@ -14,7 +14,7 @@
     format_error/2
 ]).
 
--import(ered_messages,[
+-import(ered_messages, [
     encode_json/1
 ]).
 
@@ -27,28 +27,34 @@ allowed_methods(Req, State) ->
 content_types_provided(Req, State) ->
     {[{{<<"application">>, <<"json">>, '*'}, handle_get_response}], Req, State}.
 
-
 handle_get_response(Req, State) ->
     ToV = fun
         (false) -> <<>>;
-        ({_,V}) when is_list(V) -> list_to_binary(V);
-        ({_,V}) -> V
-        end,
+        ({_, V}) when is_list(V) -> list_to_binary(V);
+        ({_, V}) -> V
+    end,
 
     ToHash = fun(P, ProcInfo) ->
         #{
-            <<"pid">>    => P,
+            <<"pid">> => P,
             <<"parent">> => ToV(lists:keyfind(group_leader, 1, ProcInfo)),
             <<"status">> => ToV(lists:keyfind(status, 1, ProcInfo)),
-            <<"name">>   => ToV(lists:keyfind(registered_name, 1, ProcInfo))
+            <<"name">> => ToV(lists:keyfind(registered_name, 1, ProcInfo))
         }
-        end,
+    end,
 
-
-    {encode_json(#{ <<"data">> => #{ <<"processes">> => [ToHash(P, process_info(P)) || P <- erlang:processes()] }}),
-     Req,
-     State}.
-
+    {
+        encode_json(#{
+            <<"data">> => #{
+                <<"processes">> => [
+                    ToHash(P, process_info(P))
+                 || P <- erlang:processes()
+                ]
+            }
+        }),
+        Req,
+        State
+    }.
 
 format_error(Reason, Req) ->
     {

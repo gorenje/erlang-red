@@ -96,7 +96,14 @@ init([]) ->
                     module => [ered_runtime_manager]
                 },
                 #{
-                    id => ered_ch12_red_web,
+                    id => ered_ch12_capture_io_exchange,
+                    start => {ered_capture_io_exchange, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_capture_io_exchange]
+                },
+                #{
+                    id => ered_ch13_red_web,
                     start => {ered_webserver, start, []},
                     restart => permanent,
                     type => worker,
