@@ -804,7 +804,7 @@
             "erlconfigCfg"
         ],
         "user": false,
-        "version": "0.0.5"
+        "version": "0.0.6"
     },
     {
         "enabled": true,
@@ -816,7 +816,7 @@
             "erlprocess"
         ],
         "user": false,
-        "version": "0.0.5"
+        "version": "0.0.6"
     },
     {
         "enabled": true,
@@ -828,6 +828,6 @@
             "erlcaptureio"
         ],
         "user": false,
-        "version": "0.0.5"
+        "version": "0.0.6"
     }
 ]

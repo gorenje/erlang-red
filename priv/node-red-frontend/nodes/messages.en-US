@@ -2,6 +2,8 @@
     "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {
         "erlcaptureio": {
+            "captureFlow": "captureio: flow",
+            "captureGroup": "captureio: group",
             "label": {
                 "intensity": "Intensity (count)",
                 "period": "Period (seconds)",
@@ -9,6 +11,7 @@
                 "source": "Captured Nodes",
                 "statusset": "Status Set"
             },
+            "nodeCount": "captureio: __number__",
             "scope": {
                 "all": "All flow nodes",
                 "group": "In same group",

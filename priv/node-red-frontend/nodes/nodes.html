@@ -12024,12 +12024,20 @@ An Erlang-Red representation of an existing Erlang process.
 
     outputs: 1,
 
-    label: function() {
-      return (this.name || this._def.paletteLabel);
+    label: function () {
+      if (this.name) {
+        return this.name;
+      }
+      if (this.scope === "group") {
+        return this._("erlcaptureio.captureGroup");
+      } else if (Array.isArray(this.scope)) {
+        return this._("erlcaptureio.nodeCount", { number: this.scope.length });
+      }
+      return this._("erlcaptureio.captureFlow")
     },
 
-    labelStyle: function() {
-      return this.name?"node_label_italic":"";
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
     },
 
     // called when node is added to workspace also if copied and pasted.
