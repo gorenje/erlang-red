@@ -89,10 +89,8 @@ handle_event(
 ) ->
     node_status(WsName, NodeDef, jstr("dead: ~p", [Status]), "red", "dot"),
     NodeDef;
-
 handle_event({stop, _WsName}, NodeDef) ->
     NodeDef;
-
 handle_event(M, NodeDef) ->
     %% what magic shall happen when monitoring existing processes?
     io:format("ErlProcess handled: ~p~n", [M]),
