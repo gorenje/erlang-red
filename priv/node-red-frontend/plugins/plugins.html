@@ -3787,10 +3787,9 @@ function ensureYourConfigNodeExists() {
    function getProcesses(opts, cb) {
 
       $.ajax({
-         url: "erlprocess/processes",
+         url: `erlprocess/processes?by=${opts.by}`,
          type: "GET",
-         data: JSON.stringify({
-         }),
+         data: {},
          contentType: 'application/json',
          processData: false,
          success: function(resp) {
@@ -3993,14 +3992,39 @@ function ensureYourConfigNodeExists() {
          }
       })
 
-      $('#node-input-erlprocess-refresh-but').on('click', (e) => {
+      $('#node-input-erlprocess-refresh-leaders-but').on('click', (e) => {
          if ( e ) { e.preventDefault() }
-            getProcesses({}, (items,opts) => {
+            getProcesses({"by":"leader"}, (items,opts) => {
                setupTreelistForProcesses(items,opts)
             })
       })
 
-      $('#node-input-erlprocess-import-but').on('click', (e) => {
+      $('#node-input-erlprocess-refresh-links-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+            getProcesses({"by":"links"}, (items,opts) => {
+               setupTreelistForProcesses(items,opts)
+            })
+      })
+
+      $('#node-input-erlprocess-import-process-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         
+         let item = $("#node-input-erlprocess-target-container-div").treeList('selected')
+         
+         if ( !item ) { return }
+
+         let nde = {
+            "id": RED.nodes.id(),
+            "type": "erlprocess",
+            "pid": item.label, // this is either the registered name or the pid - name is better since it will survive restarts
+            "name": item.label,
+            "capture_io": false,
+            "l": !$('#erlprocess-import-compact-node-size').is(":checked")
+         }
+         RED.view.importNodes([nde])         
+      })
+      
+      $('#node-input-erlprocess-import-tree-but').on('click', (e) => {
          if ( e ) { e.preventDefault() }
 
          let mapChildren = (ary) => {
@@ -4102,22 +4126,21 @@ function ensureYourConfigNodeExists() {
 <script type="text/x-red" data-template-name="erlconfig">
 
    <div class="form-row" style="margin-left: 10px; margin-top: 15px">
-      <button class="red-ui-button" id="node-input-erlprocess-refresh-but"><i class="fa fa-rotate-left"></i> Refresh</button>
-      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-but"><i class="fa fa-tree"></i> Import Processes</button>
+      <button class="red-ui-button" id="node-input-erlprocess-refresh-leaders-but"><i class="fa fa-rotate-left"></i> Refresh by Group Leader</button>
+      <button style="margin-left: 10px;" class="red-ui-button" id="node-input-erlprocess-refresh-links-but"><i class="fa fa-rotate-right"></i> Refresh by Links</button>
+   </div>
+
+   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
+      <button class="red-ui-button" style="" id="node-input-erlprocess-import-tree-but"><i class="fa fa-tree"></i> Import Tree</button>
+      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-process-but"><i class="fa fa-genderless"></i> Import Process</button>
    </div>
 
    <div class="form-row" style="margin-left: 10px;">
-      <label for="erlprocess-import-reverse-tree" style="width: 40%;"><i class="fa fa-refresh" ></i> Reverse Tree?</label>
-      <input style="width: 10%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
-   </div>
+      <input style="width: 5%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
+      <label for="erlprocess-import-reverse-tree" style="width: 30%;"><i class="fa fa-refresh" ></i> Reverse Tree?</label>
 
-   <div class="form-row" style="margin-left: 10px;">
-      <label for="erlprocess-import-compact-node-size" style="width: 40%;"><i class="fa fa-compress" ></i> Compact Nodes?</label>
-      <input style="width: 10%;" type="checkbox" id="erlprocess-import-compact-node-size"/>
-   </div>
-
-   <div style="position: relative; margin: 15px;">
-      <label for="node-input-data" style="margin-top: 15px"><i class="fa fa-download"></i> Double click to import process</label>
+      <input style="margin-left: 20px; width: 5%;" type="checkbox" id="erlprocess-import-compact-node-size"/>
+      <label for="erlprocess-import-compact-node-size" style="width: 30%;"><i class="fa fa-compress" ></i> Compact Nodes?</label>
    </div>
 
    <div class="form-row"
