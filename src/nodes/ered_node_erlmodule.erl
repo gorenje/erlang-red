@@ -128,8 +128,19 @@ compiler_list_to_json_list([]) ->
 compiler_list_to_json_list([{_Filename, [ErrorInfo | Lst]}]) ->
     [errorinfo_tuple_to_list(ErrorInfo) | errorinfo_list(Lst)];
 compiler_list_to_json_list([{_Filename, [ErrorInfo]} | Lst]) ->
-    [errorinfo_tuple_to_list(ErrorInfo) | compiler_list_to_json_list(Lst)].
+    [errorinfo_tuple_to_list(ErrorInfo) | compiler_list_to_json_list(Lst)];
+compiler_list_to_json_list(
+    [{_Filename, [_ErrorInfo | _MoreErrors] = AllErrors} | Lst]
+) ->
+    [
+        [errorinfo_tuple_to_list(R) || R <- AllErrors]
+        | compiler_list_to_json_list(Lst)
+    ];
+compiler_list_to_json_list(NoMatch) ->
+    io:format("NO MACH: ~p~n", [NoMatch]),
+    ["error stack creation errror"].
 
+%%
 errorinfo_list([]) ->
     [];
 errorinfo_list([ErrorInfo]) ->
@@ -137,12 +148,16 @@ errorinfo_list([ErrorInfo]) ->
 errorinfo_list([ErrorInfo | Lst]) ->
     [errorinfo_tuple_to_list(ErrorInfo) | errorinfo_list(Lst)].
 
+%%
 errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) ->
     [
         list_to_binary(io_lib:format("Line: ~p, Char: ~p", [Line, Char])),
         Module,
         list_to_binary(io_lib:format("~p", [Desc]))
-    ].
+    ];
+errorinfo_tuple_to_list(NoMatch) ->
+    io:format("NO MACH (tuple): ~p~n", [NoMatch]),
+    ["error tuple not converted"].
 
 %%
 %%
