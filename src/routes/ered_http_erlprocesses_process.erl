@@ -28,6 +28,29 @@ content_types_provided(Req, State) ->
     {[{{<<"application">>, <<"json">>, '*'}, handle_get_response}], Req, State}.
 
 handle_get_response(Req, State) ->
+    Data =
+        case lists:keyfind(<<"by">>, 1, cowboy_req:parse_qs(Req)) of
+            {_, <<"links">>} ->
+                process_list_by_links();
+            _ ->
+                process_list_by_group_leader()
+        end,
+
+    {encode_json(Data), Req, State}.
+
+format_error(Reason, Req) ->
+    {
+        [
+            {<<"error">>, <<"bad_request">>},
+            {<<"reason">>, Reason}
+        ],
+        Req
+    }.
+
+%%
+%% ------------------ helpers
+%%
+process_list_by_group_leader() ->
     ToV = fun
         (false) -> <<>>;
         ({_, V}) when is_list(V) -> list_to_binary(V);
@@ -43,24 +66,54 @@ handle_get_response(Req, State) ->
         }
     end,
 
-    {
-        encode_json(#{
-            <<"data">> => #{
-                <<"processes">> => [
-                    ToHash(P, process_info(P))
-                 || P <- erlang:processes()
-                ]
-            }
-        }),
-        Req,
-        State
+    #{
+        <<"data">> => #{
+            <<"processes">> => [
+                ToHash(P, process_info(P))
+             || P <- erlang:processes()
+            ]
+        }
     }.
 
-format_error(Reason, Req) ->
-    {
-        [
-            {<<"error">>, <<"bad_request">>},
-            {<<"reason">>, Reason}
-        ],
-        Req
+process_list_by_links() ->
+    ToV = fun
+        (false) -> <<>>;
+        (V) when is_port(V) -> <<>>;
+        (V) when is_pid(V) -> list_to_binary(pid_to_list(V));
+        ({_, V}) when is_list(V) -> list_to_binary(V);
+        ({_, V}) -> V
+    end,
+
+    AllProcesss = erlang:processes(),
+
+    ParentFor = fun
+        (_Pid, undefined) -> [];
+        (Pid, {links, Lst}) -> [{P, Pid} || P <- Lst]
+    end,
+
+    Parents = lists:flatten(
+        [ParentFor(Pid, process_info(Pid, links)) || Pid <- AllProcesss]
+    ),
+
+    ChefPd = list_to_pid("<0.0.0>"),
+
+    ToHash = fun(P, ProcInfo) ->
+        Parent =
+            case lists:keyfind(P, 1, Parents) of
+                {ChefPd, _} -> ChefPd;
+                {P, P2} -> P2;
+                _ -> P
+            end,
+        #{
+            <<"pid">> => P,
+            <<"parent">> => ToV(Parent),
+            <<"status">> => ToV(lists:keyfind(status, 1, ProcInfo)),
+            <<"name">> => ToV(lists:keyfind(registered_name, 1, ProcInfo))
+        }
+    end,
+
+    #{
+        <<"data">> => #{
+            <<"processes">> => [ToHash(P, process_info(P)) || P <- AllProcesss]
+        }
     }.

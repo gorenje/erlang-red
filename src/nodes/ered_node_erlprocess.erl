@@ -38,6 +38,8 @@
     post_exception/3
 ]).
 
+-define(RegExpPid, "[<][[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+[>]").
+
 %%
 %%
 start(#{<<"pid">> := TgtPid} = NodeDef, WsName) when
@@ -45,8 +47,8 @@ start(#{<<"pid">> := TgtPid} = NodeDef, WsName) when
 ->
     try
         PidOrAtom =
-            case string:split(TgtPid, <<".">>, all) of
-                [_A, _B, _C] ->
+            case re:run(TgtPid, ?RegExpPid) of
+                {match, _} ->
                     list_to_pid(binary_to_list(TgtPid));
                 _ ->
                     binary_to_atom(TgtPid)
@@ -87,8 +89,13 @@ handle_event(
 ) ->
     node_status(WsName, NodeDef, jstr("dead: ~p", [Status]), "red", "dot"),
     NodeDef;
+
+handle_event({stop, _WsName}, NodeDef) ->
+    NodeDef;
+
 handle_event(M, NodeDef) ->
-    io:format("ErlProcess Received: ~p~n", [M]),
+    %% what magic shall happen when monitoring existing processes?
+    io:format("ErlProcess handled: ~p~n", [M]),
     NodeDef.
 
 %%
@@ -138,6 +145,8 @@ send_payload_to_process(NodeDef, Msg, Pid, Payload, {ok, <<"cast">>}) ->
     {handled, NodeDef, Msg};
 send_payload_to_process(NodeDef, Msg, Pid, Payload, _) ->
     Pid ! Payload,
+    %% info messages are passed through, for a cascading affect!
+    send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, Msg}.
 
 %%

@@ -21,8 +21,8 @@
 ]).
 
 -import(ered_capture_io_exchange, [
-    capture/2,
-    capture_remove/1
+    capture/3,
+    capture_remove/2
 ]).
 
 %%
@@ -35,9 +35,9 @@ start(#{<<"scope">> := <<"flow">>} = NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "unsupported scope 'group'"),
     ered_node:start(NodeDef, ered_node_ignore);
 start(
-    #{<<"scope">> := NodeIds, <<"wires">> := Wires} = NodeDef, _WsName
+    #{<<"scope">> := NodeIds, <<"wires">> := Wires} = NodeDef, WsName
 ) when NodeIds =/= [], Wires =/= [[]] ->
-    [capture(NodeId, Wires) || NodeId <- NodeIds],
+    [capture(NodeId, Wires, WsName) || NodeId <- NodeIds],
     ered_node:start(NodeDef, ?MODULE);
 start(NodeDef, _WsName) ->
     ered_node:start(NodeDef, ?MODULE).
@@ -45,9 +45,9 @@ start(NodeDef, _WsName) ->
 %%
 %%
 handle_event(
-    {stop, _WsName}, #{<<"scope">> := NodeIds} = NodeDef
+    {stop, WsName}, #{<<"scope">> := NodeIds} = NodeDef
 ) when NodeIds =/= [] ->
-    [capture_remove(NodeId) || NodeId <- NodeIds],
+    [capture_remove(NodeId, WsName) || NodeId <- NodeIds],
     NodeDef;
 handle_event(_, NodeDef) ->
     NodeDef.
