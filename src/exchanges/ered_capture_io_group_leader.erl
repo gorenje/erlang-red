@@ -109,7 +109,13 @@ handle_info(
             case maps:find(NodeId, NodeId2Wires) of
                 {ok, Wires} ->
                     {outgoing, Msg} = create_outgoing_msg(WsName),
-                    Msg2 = Msg#{<<"payload">> => any_to_binary(Buf1)},
+                    Msg2 = Msg#{
+                        <<"payload">> => any_to_binary(Buf1),
+                        <<"source">> => #{
+                            <<"id">> => NodeId,
+                            <<"pid">> => From
+                        }
+                    },
                     send_msg_on(Wires, Msg2);
                 _ ->
                     ignore
