@@ -185,6 +185,11 @@ decode_json(Val) ->
 %%
 encoder({K, V}, Encode) ->
     json:encode_value([K, V], Encode);
+encoder({erlang, list_to_pid, Args, ErrObj}, Encode) when is_list(Args) ->
+    json:encode_value(
+        [erlang, list_to_pid, list_to_binary(Args), ErrObj],
+        Encode
+    );
 encoder([{file, FileName}, {line, Num}], Encode) when is_list(FileName) ->
     V = #{
         <<"file">> => list_to_binary(FileName),
@@ -208,10 +213,13 @@ encoder(Other, Encode) when is_function(Other) ->
 encoder(Other, Encode) when is_tuple(Other) ->
     json:encode_value(tuple_to_list(Other), Encode);
 encoder(Other, Encode) when is_reference(Other) ->
+    %% TODO: add '#Ref'
     json:encode_value(list_to_binary(ref_to_list(Other)), Encode);
 encoder(Other, Encode) when is_port(Other) ->
+    %% TODO: add '#Port'
     json:encode_value(list_to_binary(port_to_list(Other)), Encode);
 encoder(Other, Encode) when is_pid(Other) ->
+    %% TODO: add '#Pid'
     json:encode_value(list_to_binary(pid_to_list(Other)), Encode);
 encoder(Other, Encode) when is_binary(Other) ->
     %% if not then: exception error: {invalid_byte,130}
