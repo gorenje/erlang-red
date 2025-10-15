@@ -17,11 +17,11 @@
 %%    fill: "grey"
 %%    shape: "dot"
 %%    text: "e"
-%% },
-%% source: {
-%%    id: "97abdd5fa249b712"
-%%    type: "debug"
-%%    name: "debug 395"
+%%    source: {
+%%      id: "97abdd5fa249b712"
+%%      type: "debug"
+%%      name: "debug 395"
+%%    },
 %% },
 %% _msgid: "cb8474786455d81c"
 %%
@@ -98,12 +98,12 @@ handle_msg({ws_event, {status, WsName, NodeId, Txt, Clr, Shp}}, NodeDef) ->
     %% TODO but on the other hand, with the node id, the frontend can
     %% TODO do that itself.
     Msg2 = Msg#{
-        <<"source">> => #{
-            <<"id">> => NodeId,
-            <<"type">> => <<"">>,
-            <<"name">> => <<"">>
-        },
         <<"status">> => #{
+            <<"source">> => #{
+                <<"id">> => NodeId,
+                <<"type">> => <<>>,
+                <<"name">> => <<>>
+            },
             <<"fill">> => jstr(Clr),
             <<"shape">> => jstr(Shp),
             <<"text">> => jstr(Txt)
