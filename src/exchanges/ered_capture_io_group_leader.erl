@@ -14,11 +14,11 @@
 ]).
 
 %%
-%% This little gem is used to be the group leader for processes of whom we
+%% This little gem is used as the group leader for processes of whom we
 %% want to capture the I/O - e.g. io:format(..) calls.
 %%
 %% This is instantiated once per websocket and is used for all processes to be
-%% captured for the websocket. It remains around while other processes come
+%% captured for that websocket. It remains around while other processes come
 %% and go.
 %%
 %% It is managed by the ered_capture_io_exchange service which is responsible
@@ -55,11 +55,13 @@ handle_call(
     State2 =
         case maps:find(NodeId, NodeWires) of
             error ->
-                State#{wires => NodeWires#{NodeId => [Wires]}};
+                State#{wires => NodeWires#{
+                      NodeId => lists:flatten([Wires])
+                }};
             {ok, ExistingWires} ->
                 State#{
                     wires => NodeWires#{
-                        NodeId => dedup([Wires | ExistingWires])
+                        NodeId => lists:flatten([Wires | ExistingWires])
                     }
                 }
         end,
@@ -111,9 +113,11 @@ handle_info(
                     {outgoing, Msg} = create_outgoing_msg(WsName),
                     Msg2 = Msg#{
                         <<"payload">> => any_to_binary(Buf1),
-                        <<"source">> => #{
-                            <<"id">> => NodeId,
-                            <<"pid">> => From
+                        <<"captureio">> => #{
+                            <<"source">> => #{
+                                <<"id">> => NodeId,
+                                <<"pid">> => From
+                            }
                         }
                     },
                     send_msg_on(Wires, Msg2);
@@ -156,9 +160,6 @@ terminate(_, _State) ->
 %%
 %% ------------------ helpers
 %%
-dedup(Lst) ->
-    sets:to_list(sets:from_list(lists:flatten(Lst))).
-
 can_set_group_leader(
     NodeId,
     #{pids := NodeId2Pid, wires := NodeId2Wires} = State
