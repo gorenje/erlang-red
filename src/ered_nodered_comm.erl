@@ -14,6 +14,7 @@
     debug_string/2,
     debug_string/3,
     get_websocket_name/0,
+    node_status_after/6,
     node_status_clear/2,
     node_status/5,
     post_exception_or_debug/3,
@@ -67,6 +68,12 @@ node_status(WsName, NodeDef, Txt, Clr, Shp) when is_integer(Txt) ->
     node_status(WsName, NodeDef, TxtStr, Clr, Shp);
 node_status(WsName, #{<<"id">> := NodeId}, Txt, Clr, Shp) ->
     send_on_if_ws(WsName, {status, NodeId, Txt, Clr, Shp}).
+
+node_status_after(TimeMillSec, WsName, NodeDef, Txt, Clr, Shp) ->
+    timer:apply_after(
+      TimeMillSec,
+      fun () -> node_status(WsName, NodeDef, Txt, Clr, Shp) end
+     ).
 
 debug(WsName, Data, error) ->
     send_on_if_ws(WsName, {debug, Data, error});
