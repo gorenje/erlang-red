@@ -9,6 +9,7 @@ end#{
 }).
 -define(GetWsName, '_ws' := WsName).
 -define(SetWsName, '_ws' => WsName).
+-define(WsNameIsSet, '_ws' := _WsName).
 
 %%
 %% Check for supervision

@@ -18,6 +18,7 @@
 %%
 
 -import(ered_nodered_comm, [
+    node_status_after/6,
     node_status/5,
     post_exception_or_debug/3,
     send_out_debug_msg/4,
@@ -60,6 +61,9 @@ start(#{<<"pid">> := TgtPid} = NodeDef, WsName) when
             post_exception_or_debug(NodeDef, #{'_ws' => WsName}, {E, F, S}),
             ered_node:start(NodeDef, ered_node_ignore)
     end;
+start(#{<<"pid">> := <<>>} = NodeDef, WsName) ->
+    node_status(WsName, NodeDef, "dynamic", "blue", "ring"),
+    ered_node:start(NodeDef#{erlpid => <<"dynamic">>}, ?MODULE);
 start(NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "no process id set"),
     ered_node:start(NodeDef, ered_node_ignore).
@@ -67,6 +71,12 @@ start(NodeDef, WsName) ->
 %%
 %% handle_event/2
 %%
+handle_event(
+    {registered, _WsName, _Pid},
+    #{erlpid := <<"dynamic">>} = NodeDef
+) ->
+    NodeDef;
+
 handle_event(
     {registered, WsName, _Pid},
     #{erlpid := ErlPid} = NodeDef
@@ -83,6 +93,7 @@ handle_event(
         PidPid ->
             check_pid(PidPid, NodeDef, WsName)
     end;
+%
 handle_event(
     {'DOWN', _Ref, process, ErlPid, Status},
     #{erlpid := ErlPid, ?GetWsName} = NodeDef
@@ -93,12 +104,42 @@ handle_event({stop, _WsName}, NodeDef) ->
     NodeDef;
 handle_event(M, NodeDef) ->
     %% what magic shall happen when monitoring existing processes?
-    io:format("ErlProcess handled: ~p~n", [M]),
+    io:format("ErlProcess not handled: ~p~n", [M]),
     NodeDef.
 
 %%
 %% handle_msg/2
 %%
+
+%%
+%% dynamic pid, defined by msg object
+handle_msg(
+    {incoming, #{?GetPayload, ?GetWsName, <<"pid">> := DynPid} = Msg},
+    #{erlpid := <<"dynamic">>} = NodeDef
+) when DynPid =/= <<>> ->
+    node_status_after(2402, WsName, NodeDef, "dynamic", "blue", "ring"),
+
+    case obtain_pid(DynPid) of
+        false ->
+            node_status(WsName, NodeDef, "dynamic", "red", "dot"),
+            {handled, maps:remove(erlpid, NodeDef), dont_send_complete_msg};
+        TgtPid ->
+            node_status(WsName, NodeDef, "dynamic", "green", "dot"),
+            send_payload_to_process(
+                NodeDef,
+                Msg,
+                TgtPid,
+                Payload,
+                maps:find(<<"msgtype">>, Msg)
+            )
+    end;
+
+handle_msg(
+    {incoming, #{?PayloadIsSet, ?WsNameIsSet} = _Msg},
+    #{erlpid := <<"dynamic">>} = NodeDef
+) ->
+    %% ignore messages without process ids
+    {handled, NodeDef, dont_send_complete_msg};
 
 handle_msg(
     {incoming, #{?GetPayload, ?GetWsName} = Msg},
@@ -117,6 +158,7 @@ handle_msg(
             node_status(WsName, NodeDef, "dead", "red", "dot"),
             {handled, maps:remove(erlpid, NodeDef), Msg}
     end;
+
 %%
 %% process is not available
 handle_msg(
@@ -127,12 +169,32 @@ handle_msg(
     node_status(WsName, NodeDef, "dead", "red", "dot"),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     {handled, NodeDef, dont_send_complete_msg};
+
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
 %%
 %% ---------------- helpers
 %%
+obtain_pid(undefined) ->
+    false;
+obtain_pid(TgtPid) when is_pid(TgtPid) ->
+    case is_process_alive(TgtPid) of
+        true -> TgtPid;
+        false -> false
+    end;
+obtain_pid(TgtPid) when is_list(TgtPid) ->
+    obtain_pid(list_to_binary(TgtPid));
+obtain_pid(TgtPid) when is_binary(TgtPid) ->
+    Thing =
+        case re:run(TgtPid, ?RegExpPid) of
+            {match, _} ->
+                list_to_pid(binary_to_list(TgtPid));
+            _ ->
+                whereis(binary_to_atom(TgtPid))
+        end,
+    obtain_pid(Thing).
+
 
 send_payload_to_process(NodeDef, Msg, Pid, Payload, {ok, <<"call">>}) ->
     Msg2 = Msg#{<<"payload">> => gen_server:call(Pid, Payload)},
