@@ -32,9 +32,15 @@
             %% process - this ensures that all nodes have a status update
             %% when a module shutsdown.
             erlang:monitor(process, Pid),
-            start_modules(Rest, NodeDef#{
-                '_lookup' => Lookup#{ModuleName => Pid}
-            });
+            %% capture i/o requests for process if required.
+            ered_capture_io_exchange:pid_for(NodeId, Pid, WsName),
+            start_modules(
+                Rest,
+                NodeDef#{
+                    '_lookup' => Lookup#{ModuleName => Pid}
+                },
+                WsName
+            );
         {error, _NodeId} ->
             {error, modoule_not_found}
     end
@@ -53,7 +59,7 @@ handle_event(
 ) ->
     process_flag(trap_exit, true),
 
-    case start_modules(ModuleNodeIds, NodeDef) of
+    case start_modules(ModuleNodeIds, NodeDef, WsName) of
         {ok, NewNodeDef} ->
             node_status(WsName, NodeDef, "started", "green", "dot"),
             NewNodeDef;
@@ -128,11 +134,12 @@ handle_msg(_, NodeDef) ->
 %%
 %%  helpers
 %%
-start_modules([], NodeDef) ->
+start_modules([], NodeDef, _WsName) ->
     {ok, NodeDef};
 start_modules(
     [ModuleNodeId | Rest],
-    #{?GetLookup, ?UseNameAddressing} = NodeDef
+    #{?GetLookup, ?UseNameAddressing, <<"id">> := NodeId} = NodeDef,
+    WsName
 ) ->
     Starter = fun(Exports, ModuleName) ->
         case
@@ -152,7 +159,8 @@ start_modules(
     ?CallFindDetails;
 start_modules(
     [ModuleNodeId | Rest],
-    #{?GetLookup, ?UsePidAddressing} = NodeDef
+    #{?GetLookup, ?UsePidAddressing, <<"id">> := NodeId} = NodeDef,
+    WsName
 ) ->
     Starter =
         fun RefStarter(Exports, ModuleName) ->

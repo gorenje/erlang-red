@@ -42,7 +42,7 @@ start(NodeDef, WsName) ->
 
 %%
 %%
-handle_event({registered, WsName, _MyPid}, NodeDef) ->
+handle_event({registered, WsName, _MyPid}, #{<<"id">> := NodeId} = NodeDef) ->
     {ok, {Pid, _Ref}} = gen_event:start_monitor(),
 
     %% add handlers here because the registered event is triggered *after*
@@ -58,6 +58,8 @@ handle_event({registered, WsName, _MyPid}, NodeDef) ->
             node_status(WsName, NodeDef, "invalid", "blue", "ring")
     end,
 
+    %% capture i/o requests for process if required.
+    ered_capture_io_exchange:pid_for(NodeId, Pid, WsName),
     NodeDef#{?SetEventHandlerPid(Pid)};
 %%
 handle_event({being_supervised, _WsName}, NodeDef) ->

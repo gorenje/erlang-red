@@ -105,7 +105,10 @@ start(NodeDef, WsName) ->
 %% handle_event/2
 %%
 
-handle_event({registered, WsName, _MyPid}, #{<<"scope">> := Scope} = NodeDef) ->
+handle_event(
+    {registered, WsName, _MyPid},
+    #{<<"scope">> := Scope, <<"id">> := NodeId} = NodeDef
+) ->
     ModuleName = lists:nth(1, [
         case ered_erlmodule_exchange:find_module(N) of
             {ok, ModName} ->
@@ -134,6 +137,12 @@ handle_event({registered, WsName, _MyPid}, #{<<"scope">> := Scope} = NodeDef) ->
                                 element(1, sys:get_state(Pid)),
                                 "blue",
                                 "dot"
+                            ),
+                            %% capture i/o requests for process if required.
+                            ered_capture_io_exchange:pid_for(
+                                NodeId,
+                                Pid,
+                                WsName
                             ),
                             maps:put('_statem_pid', Pid, NodeDef);
                         {error, ErrMsg} ->
