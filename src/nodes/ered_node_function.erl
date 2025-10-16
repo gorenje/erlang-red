@@ -111,6 +111,7 @@
 -import(ered_nodered_comm, [
     node_status/5,
     node_status_clear/2,
+    node_status_clear_after/3,
     post_exception_or_debug/3
 ]).
 
@@ -258,7 +259,7 @@ validate_erlang_code(#{<<"func">> := Code} = NodeDef, WsName) ->
     case is_code_parsable(?WrapInFunction(Code)) of
         {ok, _ParsedCode} ->
             node_status(WsName, NodeDef, "parsed", "green", "dot"),
-            spawn(fun() -> clear_status_after_one_sec(WsName, NodeDef) end);
+            node_status_clear_after(1000, WsName, NodeDef);
         {error, {error, ErrorList}} ->
             Msg = ?AddWsName(#{
                 error => compiler_list_to_json_list(ErrorList)
@@ -269,10 +270,6 @@ validate_erlang_code(#{<<"func">> := Code} = NodeDef, WsName) ->
             io:format("ERROR : [~p] ~p ~n ", [Code, Error]),
             node_status(WsName, NodeDef, "unknown error", "red", "dot")
     end.
-
-clear_status_after_one_sec(WsName, NodeDef) ->
-    timer:sleep(1000),
-    node_status_clear(WsName, NodeDef).
 
 %%
 %% ErrorLists and WarnLists aren't JSON compatible therefore they need to be

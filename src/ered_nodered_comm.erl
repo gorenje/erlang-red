@@ -15,6 +15,7 @@
     debug_string/3,
     get_websocket_name/0,
     node_status_after/6,
+    node_status_clear_after/3,
     node_status_clear/2,
     node_status/5,
     post_exception_or_debug/3,
@@ -71,9 +72,15 @@ node_status(WsName, #{<<"id">> := NodeId}, Txt, Clr, Shp) ->
 
 node_status_after(TimeMillSec, WsName, NodeDef, Txt, Clr, Shp) ->
     timer:apply_after(
-      TimeMillSec,
-      fun () -> node_status(WsName, NodeDef, Txt, Clr, Shp) end
-     ).
+        TimeMillSec,
+        fun() -> node_status(WsName, NodeDef, Txt, Clr, Shp) end
+    ).
+
+node_status_clear_after(TimeMillSec, WsName, #{<<"id">> := NodeId}) ->
+    timer:apply_after(
+        TimeMillSec,
+        fun() -> send_on_if_ws(WsName, {status, NodeId, clear}) end
+    ).
 
 debug(WsName, Data, error) ->
     send_on_if_ws(WsName, {debug, Data, error});
