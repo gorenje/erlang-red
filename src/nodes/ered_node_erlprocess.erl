@@ -76,7 +76,6 @@ handle_event(
     #{erlpid := <<"dynamic">>} = NodeDef
 ) ->
     NodeDef;
-
 handle_event(
     {registered, WsName, _Pid},
     #{erlpid := ErlPid} = NodeDef
@@ -133,14 +132,12 @@ handle_msg(
                 maps:find(<<"msgtype">>, Msg)
             )
     end;
-
 handle_msg(
     {incoming, #{?PayloadIsSet, ?WsNameIsSet} = _Msg},
     #{erlpid := <<"dynamic">>} = NodeDef
 ) ->
     %% ignore messages without process ids
     {handled, NodeDef, dont_send_complete_msg};
-
 handle_msg(
     {incoming, #{?GetPayload, ?GetWsName} = Msg},
     #{erlpid := TgtPid} = NodeDef
@@ -158,7 +155,6 @@ handle_msg(
             node_status(WsName, NodeDef, "dead", "red", "dot"),
             {handled, maps:remove(erlpid, NodeDef), Msg}
     end;
-
 %%
 %% process is not available
 handle_msg(
@@ -169,7 +165,6 @@ handle_msg(
     node_status(WsName, NodeDef, "dead", "red", "dot"),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     {handled, NodeDef, dont_send_complete_msg};
-
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
@@ -194,7 +189,6 @@ obtain_pid(TgtPid) when is_binary(TgtPid) ->
                 whereis(binary_to_atom(TgtPid))
         end,
     obtain_pid(Thing).
-
 
 send_payload_to_process(NodeDef, Msg, Pid, Payload, {ok, <<"call">>}) ->
     Msg2 = Msg#{<<"payload">> => gen_server:call(Pid, Payload)},

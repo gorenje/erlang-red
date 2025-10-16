@@ -55,9 +55,11 @@ handle_call(
     State2 =
         case maps:find(NodeId, NodeWires) of
             error ->
-                State#{wires => NodeWires#{
-                      NodeId => lists:flatten([Wires])
-                }};
+                State#{
+                    wires => NodeWires#{
+                        NodeId => lists:flatten([Wires])
+                    }
+                };
             {ok, ExistingWires} ->
                 State#{
                     wires => NodeWires#{
