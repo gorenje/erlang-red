@@ -156,6 +156,9 @@ handle_cast(Msg, {Module, NodeDef}) ->
 %%
 
 %% Events generate by the system.
+handle_info({flow_started, WsName}, {Module, NodeDef}) ->
+    NodeDef2 = Module:handle_event({flow_started, WsName}, NodeDef),
+    {noreply, {Module, NodeDef2}};
 handle_info({reload}, {Module, NodeDef}) ->
     {ok, NodePid} = maps:find('_node_pid_', NodeDef),
     NodeDef2 = Module:handle_event(deploy, add_counters(NodeDef, NodePid)),

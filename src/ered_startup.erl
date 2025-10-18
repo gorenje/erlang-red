@@ -69,7 +69,8 @@ create_pids_for_nodes(AryAll, WsName) ->
 
     create_pids_for_nodes(ReducedAry, [], WsName).
 
-create_pids_for_nodes([], Pids, _WsName) ->
+create_pids_for_nodes([], Pids, WsName) ->
+    [Pid ! {flow_started, WsName} || Pid <- Pids],
     Pids;
 create_pids_for_nodes([NodeDef | MoreNodeDefs], Pids, WsName) ->
     case spin_up_node(NodeDef, WsName) of
