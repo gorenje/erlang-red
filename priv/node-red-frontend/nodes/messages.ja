@@ -1,4 +1,7 @@
 {
+    "@gorenje/erlang-red-kafka-brod/ered-kafka-broker": {},
+    "@gorenje/erlang-red-kafka-brod/ered-kafka-consumer": {},
+    "@gorenje/erlang-red-kafka-brod/ered-kafka-producer": {},
     "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig": {},

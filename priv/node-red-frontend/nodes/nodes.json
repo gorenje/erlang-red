@@ -829,5 +829,41 @@
         ],
         "user": false,
         "version": "0.1.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gorenje/erlang-red-kafka-brod/ered-kafka-broker",
+        "local": true,
+        "module": "@gorenje/erlang-red-kafka-brod",
+        "name": "ered-kafka-broker",
+        "types": [
+            "ered-kafka-broker"
+        ],
+        "user": false,
+        "version": "0.1.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gorenje/erlang-red-kafka-brod/ered-kafka-producer",
+        "local": true,
+        "module": "@gorenje/erlang-red-kafka-brod",
+        "name": "ered-kafka-producer",
+        "types": [
+            "ered-kafka-producer"
+        ],
+        "user": false,
+        "version": "0.1.0"
+    },
+    {
+        "enabled": true,
+        "id": "@gorenje/erlang-red-kafka-brod/ered-kafka-consumer",
+        "local": true,
+        "module": "@gorenje/erlang-red-kafka-brod",
+        "name": "ered-kafka-consumer",
+        "types": [
+            "ered-kafka-consumer"
+        ],
+        "user": false,
+        "version": "0.1.0"
     }
 ]

@@ -11846,6 +11846,714 @@ msg.cookies = {
     or directory gets deleted it may no longer be monitored even if it gets re-created.</p>
 </script>
 
+<!-- --- [red-module:@gorenje/erlang-red-kafka-brod/ered-kafka-broker] --- -->
+
+<script type="text/html" data-template-name="ered-kafka-broker">
+  <style>
+    .node-red-kafka-config .fa {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      text-align: center;
+    }
+    .node-red-kafka-config label i.fa:first-child {
+      margin-right: 4px;
+    }
+    .node-red-kafka-config .checkbox-aligned {
+      display: inline-block;
+      width: auto;
+      vertical-align: top;
+    }
+    .node-red-kafka-config .inner-form {
+      margin-left: 12px;
+      padding-left: 12px;
+      border-left: 1px solid #dfdfdf;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row {
+      display: flex;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row label {
+      width: 160px;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input,
+    .red-ui-editor .node-red-kafka-config .form-row select {
+      width: auto;
+      flex: 1 1 auto;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input[type=checkbox] {
+      flex: 0.1 1 auto;
+    }
+  </style>
+
+  <div class="node-red-kafka-config">
+    <div class="form-row">
+      <label for="node-config-input-name"><i class="fa fa-tag"></i>Name</label>
+      <input id="node-config-input-name" type="text" placeholder="Name" />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-brokers"><i class="fa fa-server"></i>Brokers</label>
+      <input id="node-config-input-brokers" type="text" placeholder="example1.com:9092,example2.com:9092,..." />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-clientid"><i class="fa fa-id-card-o"></i>Client ID</label>
+      <input id="node-config-input-clientid" type="text" placeholder="Client ID" />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-connectiontimeout" title="Connection Timeout"><i class="fa fa-clock-o"></i>Con. Timeout</label>
+      <input id="node-config-input-connectiontimeout" type="number" step="1" min="1" />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-requesttimeout" title="Request Timeout"><i class="fa fa-clock-o"></i>Req. Timeout</label>
+      <input id="node-config-input-requesttimeout" type="number" step="1" min="1" />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-loglevel"><i class="fa fa-file-text-o"></i>Log Level</label>
+      <select id="node-config-input-loglevel">
+        <option value="nothing">NOTHING</option>
+        <option value="error">ERROR</option>
+        <option value="warn">WARN</option>
+        <option value="info">INFO</option>
+        <option value="debug">DEBUG</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-auth"><i class="fa fa-file-text-o"></i>Auth</label>
+      <select id="node-config-input-auth">
+        <option value="none">NONE</option>
+        <option value="tls">TLS</option>
+        <option value="sasl">SASL</option>
+      </select>
+    </div>
+    <div id="node-config-tls" class="inner-form">
+      <div class="form-row">
+        <label for="node-config-input-tlscacert"><i class="fa fa-certificate"></i>CA Cert</label>
+        <input id="node-config-input-tlscacert" type="text" placeholder="/var/..." />
+      </div>
+
+      <div class="form-row">
+        <label for="node-config-input-tlsclientcert"><i class="fa fa-certificate"></i>Client Cert</label>
+        <input id="node-config-input-tlsclientcert" type="text" placeholder="/var/..." />
+      </div>
+
+      <div class="form-row">
+        <label for="node-config-input-tlsprivatekey"><i class="fa fa-tag"></i>Private Key</label>
+        <input id="node-config-input-tlsprivatekey" type="text" placeholder="/var/..." />
+      </div>
+
+      <div class="form-row">
+        <label for="node-config-input-tlspassphrase"><i class="fa fa-key"></i>Passphrase</label>
+        <input id="node-config-input-tlspassphrase" type="password" placeholder="Passphrase" />
+      </div>
+
+    </div>
+    <div id="node-config-sasl" class="inner-form">
+      <div class="form-row">
+        <label for="node-config-input-saslmechanism"><i class="fa fa-lock"></i>Mechanism</label>
+        <select id="node-config-input-saslmechanism">
+          <option value="plain">PLAIN</option>
+          <option value="scram-sha-256">SCRAM-SHA-256</option>
+          <option value="scram-sha-512">SCRAM-SHA-512</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-saslusername"><i class="fa fa-id-card-o"></i>Username</label>
+        <input id="node-config-input-saslusername" type="text" placeholder="Username" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-saslpassword"><i class="fa fa-key"></i>Password</label>
+        <input id="node-config-input-saslpassword" type="password" placeholder="Password" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-saslssl">Use SSL</label>
+        <input type="checkbox" id="node-config-input-saslssl" class="checkbox-aligned" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-saslselfsign">Self-signed certificates</label>
+        <input type="checkbox" id="node-config-input-saslselfsign" />
+      </div>
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-advancedretry" class="checkbox-aligned"><i class="fa fa-ellipsis-v"></i>Advanced Options</label>
+      <input id="node-config-input-advancedretry" type="checkbox" style="width:30%" />
+    </div>
+    <div id="node-config-advancedretry" class="inner-form">
+      <div class="form-row">
+        <label for="node-config-input-maxretrytime" title="Maximum Retry Time"><i class="fa fa-clock-o"></i>Max. Retry (ms)</label>
+        <input id="node-config-input-maxretrytime" type="number" step="1" min="1" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-initialretrytime" title="Initial Retry Time"><i class="fa fa-clock-o"></i>Init. Retry (ms)</label>
+        <input id="node-config-input-initialretrytime" type="number" step="1" min="1" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-factor"><i class="fa fa-calculator"></i>Factor</label>
+        <input id="node-config-input-factor" type="number" step="0.1" min="0" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-multiplier"><i class="fa fa-calculator"></i>Multiplier</label>
+        <input id="node-config-input-multiplier" type="number" step="1" min="1" />
+      </div>
+      <div class="form-row">
+        <label for="node-config-input-retries"><i class="fa fa-refresh"></i>Retries</label>
+        <input id="node-config-input-retries" type="number" step="1" min="1" />
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('ered-kafka-broker', {
+    category: 'config',
+    defaults: {
+      name: { required: false },
+      brokers: { value: [], required: true },
+      clientid: { required: true },
+      connectiontimeout: { value: 3000, required: true },
+      requesttimeout: { value: 25000, required: true },
+      loglevel: { value: 'error', required: true },
+
+      auth: { value: 'none', required: true },
+
+      tlscacert: { required: false },
+      tlsclientcert: { required: false },
+      tlsprivatekey: { required: false },
+      tlspassphrase: { required: false },
+
+      saslmechanism: { value: 'plain', required: false },
+      saslssl: { value: true, required: false },
+			saslselfsign: { value: false, required: false },
+
+      advancedretry: { value: false, required: true },
+
+      maxretrytime: { value: 30000, required: true },
+      initialretrytime: { value: 300, required: true },
+      factor: { value: 0.2, required: true },
+      multiplier: { value: 2, required: true },
+      retries: { value: 5, required: true },
+    },
+    credentials: {
+      saslusername: { type: 'text', required: false },
+      saslpassword: { type: 'password', required: false },
+    },
+    label: function () {
+      return this.name || 'kafkajs-broker';
+    },
+
+    oneditprepare: function () {
+      function checkAdvancedRetry(checked) {
+        if (checked) {
+          $('#node-config-advancedretry').show();
+        } else {
+          $('#node-config-advancedretry').hide();
+        }
+      }
+
+      function checkAuthMethod(val) {
+        if (val == 'tls') {
+          $('#node-config-sasl').hide();
+          $('#node-config-tls').show();
+        } else if (val == 'sasl') {
+          $('#node-config-tls').hide();
+          $('#node-config-sasl').show();
+        } else {
+          $('#node-config-sasl').hide();
+          $('#node-config-tls').hide();
+        }
+      }
+
+      checkAdvancedRetry($('#node-config-input-advancedretry').is(':checked'));
+      checkAuthMethod($('#node-config-input-auth').val());
+
+      $('#node-config-input-advancedretry').change(function () {
+        checkAdvancedRetry($(this).is(':checked'));
+      });
+
+      $('#node-config-input-auth').change(function () {
+        checkAuthMethod($(this).val());
+      });
+    },
+  });
+</script>
+<script type="text/html" data-help-name="ered-kafka-broker">
+  <p>Definition of ered-kafka-broker</p>
+  <p>Usage details can be found under https://github.com/asinino/node-red-kafkajs/blob/README.md</p>
+</script>
+<!-- --- [red-module:@gorenje/erlang-red-kafka-brod/ered-kafka-producer] --- -->
+
+
+<script type="text/html" data-template-name="ered-kafka-producer">
+  <style>
+    .node-red-kafka-config .flex-fill {
+      flex: 1 0 auto;
+    }
+    .node-red-kafka-config .fa {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      text-align: center;
+    }
+    .node-red-kafka-config label i.fa:first-child {
+      margin-right: 4px;
+    }
+    .node-red-kafka-config .checkbox-aligned {
+      display: inline-block;
+      width: auto;
+      vertical-align: top;
+    }
+    .node-red-kafka-config .inner-form {
+      margin-left: 12px;
+      padding-left: 12px;
+      border-left: 1px solid #dfdfdf;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row {
+      display: flex;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row label {
+      width: 160px;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input,
+    .red-ui-editor .node-red-kafka-config .form-row .red-ui-editableList,
+    .red-ui-editor .node-red-kafka-config .form-row select {
+      width: auto;
+      flex: 1 1 auto;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input[type='checkbox'] {
+      flex: 0.1 1 auto;
+    }
+    .red-ui-editor .node-red-kafka-config .message-header {
+      display: flex;
+    }
+    .red-ui-editor .node-red-kafka-config .message-header > * {
+      width: auto;
+      flex: 1 1 auto;
+    }
+  </style>
+
+  <div class="node-red-kafka-config">
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i>Name</label>
+      <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-broker"><i class="fa fa-plug"></i>Broker</label>
+      <input id="node-input-broker" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-link"></i>Topic</label>
+      <input type="text" id="node-input-topic" placeholder="Topic" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-keytype" class="checkbox-aligned"><i class="fa fa-braille"></i>Serialize key as</label>
+      <select id="node-input-keytype">
+        <option value="buffer">Buffer</option>
+        <option value="json">JSON</option>
+        <option value="string">String</option>
+        <option value="boolean">Boolean</option>
+        <option value="int8">Int8</option>
+        <option value="int16be">Int16_BE</option>
+        <option value="int16le">Int16_LE</option>
+        <option value="int32be">Int32_BE</option>
+        <option value="int32le">Int32_LE</option>
+        <option value="int64be">Int64_BE</option>
+        <option value="int64le">Int64_LE</option>
+        <option value="uint8">UInt8</option>
+        <option value="uint16be">UInt16_BE</option>
+        <option value="uint16le">UInt16_LE</option>
+        <option value="uint32be">UInt32_BE</option>
+        <option value="uint32le">UInt32_LE</option>
+        <option value="uint64be">UInt64_BE</option>
+        <option value="uint64le">UInt64_LE</option>
+        <option value="doublebe">Double_BE</option>
+        <option value="doublele">Double_LE</option>
+        <option value="floatbe">Float_BE</option>
+        <option value="floatle">Float_LE</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-valuetype" class="checkbox-aligned"><i class="fa fa-braille"></i>Serialize value as</label>
+      <select id="node-input-valuetype">
+        <option value="buffer">Buffer</option>
+        <option value="json">JSON</option>
+        <option value="string">String</option>
+        <option value="boolean">Boolean</option>
+        <option value="int8">Int8</option>
+        <option value="int16be">Int16_BE</option>
+        <option value="int16le">Int16_LE</option>
+        <option value="int32be">Int32_BE</option>
+        <option value="int32le">Int32_LE</option>
+        <option value="int64be">Int64_BE</option>
+        <option value="int64le">Int64_LE</option>
+        <option value="uint8">UInt8</option>
+        <option value="uint16be">UInt16_BE</option>
+        <option value="uint16le">UInt16_LE</option>
+        <option value="uint32be">UInt32_BE</option>
+        <option value="uint32le">UInt32_LE</option>
+        <option value="uint64be">UInt64_BE</option>
+        <option value="uint64le">UInt64_LE</option>
+        <option value="doublebe">Double_BE</option>
+        <option value="doublele">Double_LE</option>
+        <option value="floatbe">Float_BE</option>
+        <option value="floatle">Float_LE</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="node-input-advancedoptions" class="checkbox-aligned"><i class="fa fa-cogs"></i>Advanced Options</label>
+      <input id="node-input-advancedoptions" type="checkbox" />
+    </div>
+    <div id="node-advancedoptions" class="inner-form">
+      <div class="form-row">
+        <label for="node-input-acknowledge"><i class="fa fa-check-square "></i>Acks</label>
+        <select id="node-input-acknowledge">
+          <option value="all">ALL</option>
+          <option value="none">NONE</option>
+          <option value="leader">LEADER</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="node-input-partition"><i class="fa fa-hdd-o"></i>Partition</label>
+        <input id="node-input-partition" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-headers"><i class="fa fa-header"></i>Headers</label>
+        <ol id="node-input-headers" style="min-height:120px;"></ol>
+      </div>
+      <div class="form-row">
+        <label for="node-input-key"><i class="fa fa-tag"></i>Key</label>
+        <input id="node-input-key" type="text" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-responsetimeout"><i class="fa fa-clock-o"></i>Response Timeout</label>
+        <input id="node-input-responsetimeout" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-transactiontimeout"><i class="fa fa-clock-o"></i>Transaction Timeout</label>
+        <input id="node-input-transactiontimeout" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-metadatamaxage"><i class="fa fa-clock-o"></i>Metadata Max Age</label>
+        <input id="node-input-metadatamaxage" type="number" />
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('ered-kafka-producer', {
+    category: 'network',
+    defaults: {
+      name: { value: '', required: false },
+      broker: { value: '', required: true, type: 'ered-kafka-broker' },
+      topic: { value: '', required: false },
+      keytype: { value: 'buffer', required: true },
+      valuetype: { value: 'buffer', required: true },
+      advancedoptions: { value: false, required: true },
+      acknowledge: { value: 'all', required: true },
+      partition: { value: null, required: false },
+      headeritems: { value: {}, required: false },
+      key: { value: null, required: false },
+      responsetimeout: { value: 30000, required: true },
+      transactiontimeout: { value: 60000, required: true },
+      metadatamaxage: { value: 300000, required: true },
+    },
+    inputs: 1,
+    inputLabels: '',
+    outputs: 2,
+    outputLabels: ['success', 'failed'],
+    color: '#A6BBCF',
+    icon: 'Kafka.svg',
+    allign: 'left',
+    label: function () {
+      return this.name || 'kafkajs-producer';
+    },
+    paletteLabel: function() {
+      return 'kafka out';
+    },
+    labelStyle: function () {
+      return 'node_label_italic';
+    },
+    oneditprepare: function () {
+      function checkAdvancedOptions(checked) {
+        if (checked) {
+          $('#node-advancedoptions').show();
+        } else {
+          $('#node-advancedoptions').hide();
+        }
+      }
+
+      $('#node-input-headers').editableList({
+        addButton: 'add',
+        removable: true,
+        addItem: function (row, index, data) {
+          let key = data[0] || '';
+          let value = data[1] || '';
+
+          var root = $('<div/>', { cflass: 'message-header'}).appendTo(row);
+
+          $('<input/>', { class: 'message-header-key', type: 'text' }).appendTo(root).val(key);
+          $('<input/>', { class: 'message-header-value', type: 'text' }).appendTo(root).val(value);
+        },
+      });
+
+      for (const entry of Object.entries(this.headeritems)) {
+        $('#node-input-headers').editableList('addItem', entry);
+      }
+
+      checkAdvancedOptions($('#node-input-advancedoptions').val());
+      $('#node-input-advancedoptions').change(function () {
+        checkAdvancedOptions($(this).is(':checked'));
+      });
+    },
+    oneditsave: function () {
+      var items = $('#node-input-headers').editableList('items');
+      var node = this;
+
+      this.headeritems = {};
+      items.each(function (i, val) {
+        node.headeritems[val.find('.node-input-header-key').val()] = val.find('.node-input-header-value').val();
+      });
+    },
+  });
+</script>
+<script type="text/html" data-help-name="ered-kafka-producer">
+  <p>Definition of ered-kafka-producer</p>
+  <p>Usage details can be found under https://github.com/asinino/node-red-kafkajs/blob/README.md</p>
+</script>
+<!-- --- [red-module:@gorenje/erlang-red-kafka-brod/ered-kafka-consumer] --- -->
+
+
+<script type="text/html" data-template-name="ered-kafka-consumer">
+  <style>
+    .node-red-kafka-config .flex-fill {
+      flex: 1 0 auto;
+    }
+    .node-red-kafka-config .fa {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      text-align: center;
+    }
+    .node-red-kafka-config label i.fa:first-child {
+      margin-right: 4px;
+    }
+    .node-red-kafka-config .checkbox-aligned {
+      display: inline-block;
+      width: auto;
+      vertical-align: top;
+    }
+    .node-red-kafka-config .inner-form {
+      margin-left: 12px;
+      padding-left: 12px;
+      border-left: 1px solid #dfdfdf;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row {
+      display: flex;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row label {
+      width: 160px;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input,
+    .red-ui-editor .node-red-kafka-config .form-row .red-ui-editableList,
+    .red-ui-editor .node-red-kafka-config .form-row select {
+      width: auto;
+      flex: 1 1 auto;
+    }
+    .red-ui-editor .node-red-kafka-config .form-row input[type='checkbox'] {
+      flex: 0.1 1 auto;
+    }
+    .red-ui-editor .node-red-kafka-config .message-header {
+      display: flex;
+    }
+    .red-ui-editor .node-red-kafka-config .message-header > * {
+      width: auto;
+      flex: 1 1 auto;
+    }
+  </style>
+
+  <div class="node-red-kafka-config">
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i>Name</label>
+      <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-broker"><i class="fa fa-plug"></i>Broker</label>
+      <input type="text" id="node-input-broker" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i>Group ID</label>
+      <input type="text" id="node-input-groupid" placeholder="Group ID" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-link"></i>Topic</label>
+      <input type="text" id="node-input-topic" placeholder="Topic" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-keytype" class="checkbox-aligned"><i class="fa fa-braille"></i>Serialize key as</label>
+      <select id="node-input-keytype">
+        <option value="buffer">Buffer</option>
+        <option value="json">JSON</option>
+        <option value="string">String</option>
+        <option value="boolean">Boolean</option>
+        <option value="int8">Int8</option>
+        <option value="int16be">Int16_BE</option>
+        <option value="int16le">Int16_LE</option>
+        <option value="int32be">Int32_BE</option>
+        <option value="int32le">Int32_LE</option>
+        <option value="int64be">Int64_BE</option>
+        <option value="int64le">Int64_LE</option>
+        <option value="uint8">UInt8</option>
+        <option value="uint16be">UInt16_BE</option>
+        <option value="uint16le">UInt16_LE</option>
+        <option value="uint32be">UInt32_BE</option>
+        <option value="uint32le">UInt32_LE</option>
+        <option value="uint64be">UInt64_BE</option>
+        <option value="uint64le">UInt64_LE</option>
+        <option value="doublebe">Double_BE</option>
+        <option value="doublele">Double_LE</option>
+        <option value="floatbe">Float_BE</option>
+        <option value="floatle">Float_LE</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-valuetype" class="checkbox-aligned"><i class="fa fa-braille"></i>Serialize value as</label>
+      <select id="node-input-valuetype">
+        <option value="buffer">Buffer</option>
+        <option value="json">JSON</option>
+        <option value="string">String</option>
+        <option value="boolean">Boolean</option>
+        <option value="int8">Int8</option>
+        <option value="int16be">Int16_BE</option>
+        <option value="int16le">Int16_LE</option>
+        <option value="int32be">Int32_BE</option>
+        <option value="int32le">Int32_LE</option>
+        <option value="int64be">Int64_BE</option>
+        <option value="int64le">Int64_LE</option>
+        <option value="uint8">UInt8</option>
+        <option value="uint16be">UInt16_BE</option>
+        <option value="uint16le">UInt16_LE</option>
+        <option value="uint32be">UInt32_BE</option>
+        <option value="uint32le">UInt32_LE</option>
+        <option value="uint64be">UInt64_BE</option>
+        <option value="uint64le">UInt64_LE</option>
+        <option value="doublebe">Double_BE</option>
+        <option value="doublele">Double_LE</option>
+        <option value="floatbe">Float_BE</option>
+        <option value="floatle">Float_LE</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="node-input-advancedoptions" class="checkbox-aligned"><i class="fa  fa-cogs"></i>Advanced Options</label>
+      <input id="node-input-advancedoptions" type="checkbox" />
+    </div>
+    <div id="node-advancedoptions" class="inner-form">
+      <div class="form-row">
+        <label for="node-input-autocommitinterval"><i class="fa fa-clock-o"></i>Autocommit Interval</label>
+        <input id="node-input-autocommitinterval" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-autocommitthreshold"><i class="fa fa-tag"></i>Autocommit Threshold</label>
+        <input id="node-input-autocommitthreshold" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-sessiontimeout"><i class="fa fa-clock-o"></i>Session Timout (ms)</label>
+        <input id="node-input-sessiontimeout" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-rebalancetimeout"><i class="fa fa-clock-o"></i>Rebalance Timeout</label>
+        <input id="node-input-rebalancetimeout" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-heartbeatinterval"><i class="fa fa-clock-o"></i>Heartbeat Interval</label>
+        <input id="node-input-heartbeatinterval" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-metadatamaxage"><i class="fa fa-clock-o"></i>Metadata Max Age</label>
+        <input id="node-input-metadatamaxage" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-maxbytesperpartition"><i class="fa fa-tag"></i>Max Bytes Per Partition</label>
+        <input id="node-input-maxbytesperpartition" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-minbytes"><i class="fa fa-tag"></i>Min Bytes</label>
+        <input id="node-input-minbytes" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-maxbytes"><i class="fa fa-tag"></i>Max Bytes</label>
+        <input id="node-input-maxbytes" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-maxwaittimeinms"><i class="fa fa-tag"></i>Max Wait (ms)</label>
+        <input id="node-input-maxwaittimeinms" type="number" />
+      </div>
+      <div class="form-row">
+        <label for="node-input-frombeginning"><i class="fa fa-step-backward"></i>From Beginning</label>
+        <input type="checkbox" id="node-input-frombeginning" />
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('ered-kafka-consumer', {
+    category: 'network',
+    defaults: {
+      name: { value: '', required: false },
+      broker: { value: '', required: true, type: 'ered-kafka-broker' },
+      groupid: { value: '', required: false },
+      topic: { value: '', required: true },
+      keytype: { value: 'buffer', required: true },
+      valuetype: { value: 'buffer', required: true },
+
+      advancedoptions: { value: false },
+      autocommitinterval: { value: 5000, required: true },
+      autocommitthreshold: { value: 100, required: true },
+      sessiontimeout: { value: 30000, required: true },
+      rebalancetimeout: { value: 60000, required: true },
+      heartbeatinterval: { value: 3000, required: true },
+      metadatamaxage: { value: 300000, required: true },
+      maxbytesperpartition: { value: 1048576, required: true },
+      minbytes: { value: 1, required: true },
+      maxbytes: { value: 10485760, required: true },
+      maxwaittimeinms: { value: 5000, required: true },
+      frombeginning: { value: false, required: true },
+    },
+    inputs: 0,
+    outputs: 2,
+    outputLabels: ['New message', 'Subscribed'],
+    color: '#A6BBCF',
+    icon: 'Kafka.svg',
+    align: 'left',
+    label: function () {
+      return this.name || 'kafkajs-consumer';
+    },
+    paletteLabel: function() {
+      return 'kafka in';
+    },
+    labelStyle: function () {
+      return 'node_label_italic';
+    },
+    oneditprepare: function () {
+      function checkAdvancedOptions(checked) {
+        if (checked) {
+          $('#node-advancedoptions').show();
+        } else {
+          $('#node-advancedoptions').hide();
+        }
+      }
+
+      checkAdvancedOptions($('#node-input-advancedoptions').val());
+      $('#node-input-advancedoptions').change(function () {
+        checkAdvancedOptions($(this).is(':checked'));
+      });
+    },
+  });
+</script>
+<script type="text/html" data-help-name="ered-kafka-consumer">
+  <p>Definition of ered-kafka-consumer</p>
+  <p>Usage details can be found under https://github.com/asinino/node-red-kafkajs/blob/README.md</p>
+</script>
 <!-- --- [red-module:@gorenje/node-red-contrib-flowcompare/flowcompare] --- -->
 <script type="text/javascript">
 (function ($) {

@@ -1,4 +1,7 @@
 {
+    "@gorenje/erlang-red-kafka-brod": [
+        "Kafka.svg"
+    ],
     "@gorenje/node-red-contrib-flowcompare": [],
     "@gregoriusrippenstein/erlang-red-process-nodes": [],
     "@gregoriusrippenstein/erlang-red-supervisor-node": [],
