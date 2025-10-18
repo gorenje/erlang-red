@@ -67,16 +67,18 @@
 -import(ered_message_exchange, [
     post_completed/2
 ]).
+-import(ered_messages, [
+    create_outgoing_msg/1
+]).
 
 %%
 %%
 % erlfmt:ignore - alignment
 start(NodeDef, WsName) ->
-    %% TODO support repeat and once and crontab
+    %% TODO support repeat and crontab
     case check_node_config([
         {<<"repeat">>,  <<"">>},
-        {<<"crontab">>, <<"">>},
-        {<<"once">>,    false}
+        {<<"crontab">>, <<"">>}
     ], NodeDef, WsName) of
         ok ->
             ered_node:start(NodeDef, ?MODULE);
@@ -86,6 +88,15 @@ start(NodeDef, WsName) ->
 
 %%
 %%
+handle_event(
+    {flow_started, WsName},
+    #{<<"once">> := Once, <<"onceDelay">> := Delay} = NodeDef
+) when Once =:= true; Once =:= <<"true">> ->
+    {ok, TRef} = send_out_after(Delay, WsName),
+    NodeDef#{onceref => TRef};
+handle_event({stop, _WsName}, #{onceref := TRef} = NodeDef) ->
+    timer:cancel(TRef),
+    maps:remove(onceref, NodeDef);
 handle_event(_, NodeDef) ->
     NodeDef.
 
@@ -118,6 +129,17 @@ handle_msg(_, NodeDef) ->
 %%
 %% ------------------------ Helpers
 %%
+send_out_after(<<>>, WsName) ->
+    send_out_after(<<"0.1">>, WsName);
+send_out_after(Delay, WsName) ->
+    ToThisPid = self(),
+    timer:apply_after(
+        round(convert_to_num(Delay) * 1000),
+        fun() ->
+            %% simulate a button press
+            gen_server:cast(ToThisPid, create_outgoing_msg(WsName))
+        end
+    ).
 
 %%
 %%
