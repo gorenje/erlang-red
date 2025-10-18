@@ -101,9 +101,9 @@ handle_event(
     NodeDef;
 handle_event({stop, _WsName}, NodeDef) ->
     NodeDef;
-handle_event(M, NodeDef) ->
+handle_event(_Msg, NodeDef) ->
     %% what magic shall happen when monitoring existing processes?
-    io:format("ErlProcess not handled: ~p~n", [M]),
+    %io:format("ErlProcess not handled: ~p~n", [M]),
     NodeDef.
 
 %%
