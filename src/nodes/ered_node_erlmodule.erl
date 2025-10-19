@@ -149,6 +149,12 @@ errorinfo_list([ErrorInfo | Lst]) ->
     [errorinfo_tuple_to_list(ErrorInfo) | errorinfo_list(Lst)].
 
 %%
+errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) when is_list(Desc) ->
+    [
+        list_to_binary(io_lib:format("Line: ~p, Char: ~p", [Line, Char])),
+        Module,
+        list_to_binary(Desc)
+    ];
 errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) ->
     [
         list_to_binary(io_lib:format("Line: ~p, Char: ~p", [Line, Char])),
