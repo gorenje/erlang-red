@@ -56,11 +56,21 @@ end#{
 end).
 
 -define(ObtainFrom(NodeDef), begin
-    #{
-        <<"z">> := Zstr,
-        <<"id">> := IdStr,
-        <<"type">> := Type
-    } = NodeDef,
+
+    {Zstr, IdStr, Type} =
+        case NodeDef of
+            #{
+              <<"z">> := Zstr2,
+              <<"id">> := IdStr2,
+              <<"type">> := Type2
+             } ->
+                {Zstr2, IdStr2, Type2};
+            #{
+              <<"id">> := IdStr2,
+              <<"type">> := Type2
+             } ->
+                {<<"config node">>, IdStr2, Type2}
+        end,
 
     Name =
         case maps:find(<<"name">>, NodeDef) of
