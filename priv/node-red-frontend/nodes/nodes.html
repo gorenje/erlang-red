@@ -12036,7 +12036,7 @@ msg.cookies = {
       saslpassword: { type: 'password', required: false },
     },
     label: function () {
-      return this.name || 'kafkajs-broker';
+      return this.name || this.type;
     },
 
     oneditprepare: function () {
@@ -12264,7 +12264,7 @@ msg.cookies = {
     icon: 'Kafka.svg',
     allign: 'left',
     label: function () {
-      return this.name || 'kafkajs-producer';
+      return this.name || this.type;
     },
     paletteLabel: function() {
       return 'kafka out';
@@ -12526,7 +12526,7 @@ msg.cookies = {
     icon: 'Kafka.svg',
     align: 'left',
     label: function () {
-      return this.name || 'kafkajs-consumer';
+      return this.name || this.type;
     },
     paletteLabel: function() {
       return 'kafka in';
