@@ -32171,9 +32171,9 @@ RED.sidebar.info = (function() {
     function addTargetToExternalLinks(el) {
         $(el).find("a").each(function(el) {
             var href = $(this).attr('href');
-            if (/^https?:/.test(href)) {
+            // if (/^https?:/.test(href)) {
                 $(this).attr('target','_blank');
-            }
+            // }
         });
         return el;
     }
