@@ -13445,8 +13445,8 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
         id: 'node-input-erlmodule-editor',
         mode: 'ace/mode/erlang',
         value: this.code,
-        width: "Infinity",
-        height: "calc(80vh)",
+        // width: "Infinity",
+        // height: "calc(70vh)",
         focus: true
       });
 
@@ -13458,10 +13458,10 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
       }
       this.editor.onDidChangeModelContent(updateModuleName);
 
-      $('.template-button').on('click', (e) =>{
+      $('#erlmodule-replace-btn').on('click', (e) =>{
         let templateCode = {
           "module": atob("LW1vZHVsZSgpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
-          "server": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJczogaHR0cHM6Ly93d3cuZXJsYW5nLm9yZy9kb2MvYXBwcy9zdGRsaWIvZ2VuX3NlcnZlci5odG1sCiUlCgotYmVoYXZpb3VyKGdlbl9zZXJ2ZXIpLgoKLWV4cG9ydChbCiAgICBzdGFydF9saW5rLzAsCiAgICBpbml0LzEsCiAgICBoYW5kbGVfY2FsbC8zLAogICAgaGFuZGxlX2Nhc3QvMiwKICAgIGhhbmRsZV9pbmZvLzIsCiAgICBjb2RlX2NoYW5nZS8zLAogICAgdGVybWluYXRlLzIsCiAgICBzdG9wLzAKXSkuCgolJQolJSBFeHRlcm5lciBleHBvcnRzCi1leHBvcnQoWwogICBpbmNyZW1lbnQvMCwKICAgZGVjcmVtZW50LzAsCiAgIGdldF9jb3VudGVyLzAsCiAgIHNldF9jb3VudGVyLzEKXSkuCgolJQolJSBFeHRlcm5hbCBBUElzCmluY3JlbWVudCgpIC0+CiAgIGdlbl9zZXJ2ZXI6Y2FsbCg/TU9EVUxFLCBpbmNyZW1lbnQpLgoKZGVjcmVtZW50KCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGRlY3JlbWVudCkuCgpnZXRfY291bnRlcigpIC0+CiAgIGdlbl9zZXJ2ZXI6Y2FsbCg/TU9EVUxFLCBnZXRfY291bnRlcikuCgpzZXRfY291bnRlcihWYWx1ZSkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIHtzZXRfY291bnRlciwgVmFsdWV9KS4KCiUlCiUlCnN0YXJ0X2xpbmsoKSAtPgogICAgZ2VuX3NlcnZlcjpzdGFydF9saW5rKHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsICN7Y291bnRlciA9PiAwfSwgW10pLgoKaW5pdChBcmdzKSAtPgogICAge29rLCBBcmdzI3sgY291bnRlciA9PiAxIH19LgoKc3RvcCgpIC0+CiAgICBnZW5fc2VydmVyOmNhc3QoP01PRFVMRSwgc3RvcCkuCgp0ZXJtaW5hdGUobm9ybWFsLCBfU3RhdGUpIC0+CiAgICBvazsKdGVybWluYXRlKF9FdmVudCwgX1N0YXRlKSAtPgogICAgb2suCgpjb2RlX2NoYW5nZShfT2xkVmVyc2lvbiwgU3RhdGUsIF9FeHRyYSkgLT4KICAgIHtvaywgU3RhdGV9LgoKJSUKJSUKaGFuZGxlX2NhbGwoaW5jcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyICsgMX19OwoKaGFuZGxlX2NhbGwoZGVjcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyIC0gMX19OwoKaGFuZGxlX2NhbGwoZ2V0X2NvdW50ZXIsIF9Gcm9tLCAjeyBjb3VudGVyIDo9IENvdW50ZXIgfSA9IFN0YXRlKSAtPgogICAge3JlcGx5LCBDb3VudGVyLCBTdGF0ZX07CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIFBheWxvYWR9LCBfRnJvbSwgU3RhdGUpIHdoZW4gaXNfaW50ZWdlcihQYXlsb2FkKSAtPgogICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IFBheWxvYWR9fTsKCmhhbmRsZV9jYWxsKHtzZXRfY291bnRlciwgUGF5bG9hZH0sIF9Gcm9tLCBTdGF0ZSkgd2hlbiBpc19iaW5hcnkoUGF5bG9hZCk7IGlzX2xpc3QoUGF5bG9hZCkgLT4KICAgY2FzZSBzdHJpbmc6dG9faW50ZWdlcihQYXlsb2FkKSBvZgogICAgICB7ZXJyb3IsIF99IC0+CiAgICAgICAgICB7cmVwbHksIG5vdF9pbnRlZ2VyLCBTdGF0ZX07CiAgICAgIHtJbnRlZ2VyLCBffSAtPgogICAgICAgICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IEludGVnZXJ9fQogICBlbmQ7CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIF9QYXlsb2FkfSwgX0Zyb20sIFN0YXRlKSAtPgogICAge3JlcGx5LCBub3Rfc3VwcG9ydGVkLCBTdGF0ZX07CgpoYW5kbGVfY2FsbChfTXNnLCBfRnJvbSwgU3RhdGUpIC0+CiAgICB7cmVwbHksIG9rLCBTdGF0ZX0uCgolJQolJQpoYW5kbGVfY2FzdChzdG9wLCBTdGF0ZSkgLT4KICAgIHtzdG9wLCBub3JtYWwsIFN0YXRlfTsKaGFuZGxlX2Nhc3QoX01zZywgU3RhdGUpIC0+CiAgICB7bm9yZXBseSwgU3RhdGV9LgoKJSUKJSUKaGFuZGxlX2luZm8oXywgU3RhdGUpIC0+CiAgICB7bm9yZXBseSwgU3RhdGV9LgoK"),
+          "server": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJczogaHR0cHM6Ly93d3cuZXJsYW5nLm9yZy9kb2MvYXBwcy9zdGRsaWIvZ2VuX3NlcnZlci5odG1sCiUlCgotYmVoYXZpb3VyKGdlbl9zZXJ2ZXIpLgoKLWV4cG9ydChbCiAgICBzdGFydF9saW5rLzAsCiAgICBpbml0LzEsCiAgICBoYW5kbGVfY2FsbC8zLAogICAgaGFuZGxlX2Nhc3QvMiwKICAgIGhhbmRsZV9pbmZvLzIsCiAgICBoYW5kbGVfY29udGludWUvMiwKICAgIGNvZGVfY2hhbmdlLzMsCiAgICB0ZXJtaW5hdGUvMiwKICAgIHN0b3AvMApdKS4KCiUlCiUlIEV4dGVybmVyIGV4cG9ydHMKLWV4cG9ydChbCiAgIGluY3JlbWVudC8wLAogICBkZWNyZW1lbnQvMCwKICAgZ2V0X2NvdW50ZXIvMCwKICAgc2V0X2NvdW50ZXIvMQpdKS4KCiUlCiUlIEV4dGVybmFsIEFQSXMKaW5jcmVtZW50KCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGluY3JlbWVudCkuCgpkZWNyZW1lbnQoKSAtPgogICBnZW5fc2VydmVyOmNhbGwoP01PRFVMRSwgZGVjcmVtZW50KS4KCmdldF9jb3VudGVyKCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGdldF9jb3VudGVyKS4KCnNldF9jb3VudGVyKFZhbHVlKSAtPgogICBnZW5fc2VydmVyOmNhbGwoP01PRFVMRSwge3NldF9jb3VudGVyLCBWYWx1ZX0pLgoKJSUKJSUKc3RhcnRfbGluaygpIC0+CiAgICBnZW5fc2VydmVyOnN0YXJ0X2xpbmsoe2xvY2FsLCA/TU9EVUxFfSwgP01PRFVMRSwgI3tjb3VudGVyID0+IDB9LCBbXSkuCgppbml0KEFyZ3MpIC0+CiAgICB7b2ssIEFyZ3MjeyBjb3VudGVyID0+IDEgfX0uCgpzdG9wKCkgLT4KICAgIGdlbl9zZXJ2ZXI6Y2FzdCg/TU9EVUxFLCBzdG9wKS4KCnRlcm1pbmF0ZShub3JtYWwsIF9TdGF0ZSkgLT4KICAgIG9rOwp0ZXJtaW5hdGUoX0V2ZW50LCBfU3RhdGUpIC0+CiAgICBvay4KCmNvZGVfY2hhbmdlKF9PbGRWZXJzaW9uLCBTdGF0ZSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNhbGwKaGFuZGxlX2NhbGwoaW5jcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyICsgMX19OwoKaGFuZGxlX2NhbGwoZGVjcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyIC0gMX19OwoKaGFuZGxlX2NhbGwoZ2V0X2NvdW50ZXIsIF9Gcm9tLCAjeyBjb3VudGVyIDo9IENvdW50ZXIgfSA9IFN0YXRlKSAtPgogICAge3JlcGx5LCBDb3VudGVyLCBTdGF0ZX07CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIFBheWxvYWR9LCBfRnJvbSwgU3RhdGUpIHdoZW4gaXNfaW50ZWdlcihQYXlsb2FkKSAtPgogICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IFBheWxvYWR9fTsKCmhhbmRsZV9jYWxsKHtzZXRfY291bnRlciwgUGF5bG9hZH0sIF9Gcm9tLCBTdGF0ZSkgd2hlbiBpc19iaW5hcnkoUGF5bG9hZCk7IGlzX2xpc3QoUGF5bG9hZCkgLT4KICAgY2FzZSBzdHJpbmc6dG9faW50ZWdlcihQYXlsb2FkKSBvZgogICAgICB7ZXJyb3IsIF99IC0+CiAgICAgICAgICB7cmVwbHksIG5vdF9pbnRlZ2VyLCBTdGF0ZX07CiAgICAgIHtJbnRlZ2VyLCBffSAtPgogICAgICAgICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IEludGVnZXJ9fQogICBlbmQ7CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIF9QYXlsb2FkfSwgX0Zyb20sIFN0YXRlKSAtPgogICAge3JlcGx5LCBub3Rfc3VwcG9ydGVkLCBTdGF0ZX07CgpoYW5kbGVfY2FsbChfTXNnLCBfRnJvbSwgU3RhdGUpIC0+CiAgICB7cmVwbHksIG9rLCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNhc3QKaGFuZGxlX2Nhc3Qoc3RvcCwgU3RhdGUpIC0+CiAgICB7c3RvcCwgbm9ybWFsLCBTdGF0ZX07CmhhbmRsZV9jYXN0KF9Nc2csIFN0YXRlKSAtPgogICAge25vcmVwbHksIFN0YXRlfS4KCiUlCiUlIC0tLS0tLS0tLS0tLS0tLS0gaW5mbwpoYW5kbGVfaW5mbyhfLCBTdGF0ZSkgLT4KICAgIHtub3JlcGx5LCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNvbnRpbnVlCmhhbmRsZV9jb250aW51ZShfLCBTdGF0ZSkgLT4KICAgIHtub3JlcGx5LCBTdGF0ZX0uCg=="),
           "event": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKaW5pdChBcmdzKSAtPgogICAge29rLCBBcmdzfS4KCmhhbmRsZV9ldmVudChfRXZlbnQsIFN0YXRlKSAtPgogICAge29rLCBTdGF0ZX0uCgpoYW5kbGVfY2FsbChfUmVxdWVzdCwgU3RhdGUpIC0+CiAgICB7b2ssIG9rLCBTdGF0ZX0uCgpoYW5kbGVfaW5mbyhfSW5mbywgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCnRlcm1pbmF0ZShfUmVhc29uLCBfU3RhdGUpIC0+CiAgICBvay4KCmNvZGVfY2hhbmdlKF9PbGRWc24sIFN0YXRlLCBfRXh0cmEpIC0+CiAgICB7b2ssIFN0YXRlfS4K"),
           "state": atob("LW1vZHVsZSgpLgoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9IG5vX3N0YXRlLCAKICAgIERhdGEgPSAwLAogICAge29rLFN0YXRlLERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9mZiwKICBEYXRhCikgLT4KICAgIHtuZXh0X3N0YXRlLCBvbiwgRGF0YSArIDEsIFt7cmVwbHksIEZyb20sIDw8Im9rIj4+fV19OwoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9uLAogIERhdGEKKSAtPgogICAge25leHRfc3RhdGUsIG9mZiwgRGF0YSwgW3tyZXBseSwgRnJvbSwgPDwib2siPj59XX07CgpoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIDw8ImdldF9jb3VudCI+PiwKICBfQ3VyclN0YXRlLAogIERhdGEKKSAtPgogICAge2tlZXBfc3RhdGUsIERhdGEsIFt7cmVwbHksIEZyb20sIERhdGF9XX07CgolJQolJSBGYWxsIHRocm91Z2guCmhhbmRsZV9ldmVudCh7Y2FsbCwgRnJvbX0gPSBFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YSkgLT4KICAgIGlvOmZvcm1hdCgiVEVTVCAoY2FsbCk6IH5wIH5wIH5wIH5wfm4iLFtFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YV0pLAogICAgP0tFRVBfU1RBVEUoPDwibm90X2FsbG93ZWQiPj4pOwoKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg=="),
           "eventwithmsg": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKLWltcG9ydChlcmVkX25vZGVzLCBbCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMvMgpdKS4KCmluaXQoQXJncykgLT4KICAgIHtvaywgQXJnc30uCgpoYW5kbGVfZXZlbnQoe0V2ZW50TmFtZSwgTXNnLCBFdmVudEhhbmRsZXJOb2RlRGVmfSwgU3RhdGUpIC0+CiAgICBTdGF0ZTIgPSBpbmNyZW1lbnRfY291bnRlcl9mb3IoRXZlbnROYW1lLCBTdGF0ZSksCgogICAgTXNnMiA9IE1zZyN7IAogICAgICAgIDw8ImNvdW50Ij4+ID0+IG1hcHM6Z2V0KEV2ZW50TmFtZSwgbWFwczpnZXQoY291bnRlciwgU3RhdGUyKSksCiAgICAgICAgPDwiaGFuZGxlciI+PiA9PiBtb2R1bGVfZXZlbnRfY291bnRlcgogICAgfSwKCiAgICBzZW5kX21zZ190b19jb25uZWN0ZWRfbm9kZXMoRXZlbnRIYW5kbGVyTm9kZURlZiwgTXNnMiksCgogICAge29rLCBTdGF0ZTJ9OwoKaGFuZGxlX2V2ZW50KF9FdmVudCwgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCmhhbmRsZV9jYWxsKF9SZXF1ZXN0LCBTdGF0ZSkgLT4KICAgIHtvaywgb2ssIFN0YXRlfS4KCmhhbmRsZV9pbmZvKF9JbmZvLCBTdGF0ZSkgLT4KICAgIHtvaywgU3RhdGV9LgoKdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSkgLT4KICAgIG9rLgoKY29kZV9jaGFuZ2UoX09sZFZzbiwgU3RhdGUsIF9FeHRyYSkgLT4KICAgIHtvaywgU3RhdGV9LgoKJSUKJSUgLS0tLS0tLS0tLS0tLSBoZWxwZXJzCiUlCmluY3JlbWVudF9jb3VudGVyX2ZvcihFdmVudE5hbWUsIFN0YXRlKSAtPgogICAgQ291bnRlciA9IG1hcHM6Z2V0KGNvdW50ZXIsIFN0YXRlKSwKCiAgICBDb3VudGVyMiA9IGNhc2UgbWFwczpmaW5kKEV2ZW50TmFtZSwgQ291bnRlcikgb2YgCiAgICAgICAge29rLCBWYWx9IC0+CiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gVmFsICsgMSB9OwogICAgICAgIF8gLT4gCiAgICAgICAgICAgIENvdW50ZXIjeyBFdmVudE5hbWUgPT4gMSB9CiAgICBlbmQsCgogICAgU3RhdGUjeyBjb3VudGVyID0+IENvdW50ZXIyIH0u"),
@@ -13469,9 +13469,12 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
         
         e.preventDefault()
         
-        let content = templateCode[$(e.target).data('template-type')]
+        let content = templateCode[$('#erlmodule-boiler-type').val()]
+        
         if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?") ) {
           this.editor.setValue(content)
+        } else {
+          RED.notify("action not confirmed", { type: "errro"})
         }
       })
     },
@@ -13488,9 +13491,18 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
     },
 
     oneditresize: function(size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height() + 30;
+      for (var i = 0; i < rows.length; i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
+
+      $("#dialog-form .node-text-editor").css("height", height + "px");
+      this.editor.resize();      
     },
-
-
   });
 })();
 
@@ -13502,18 +13514,21 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
     <input type="text" id="node-input-module_name" data-i18n="[placeholder]erlmodule.label.module_name">
   </div>
   
-  <div class="form-row">
+  <div class="form-row node-text-editor-row">
       <div style="height: 73vh; min-height:150px;" class="node-text-editor" id="node-input-erlmodule-editor"></div>
   </div>
 
   <div class="form-row">
     <label for="checkmarkconfirm"><span data-i18n="erlmodule.label.template"></span></label>
+    <select name="erlmodule-boiler-type" id='erlmodule-boiler-type'>
+      <option value="module">Module</option>
+      <option value="event">Eventmachine</option>
+      <option value="eventwithmsg">Event Machine w/ Msg</option>
+      <option value="state">State Machine</option>
+      <option value="server">Gen Server</option>
+    </select>
     <input id="checkmarkconfirm" type="checkbox" checked style="width: 5%"></input>
-    <button type=button class="template-button ui-button" data-template-type="module">Module</button>
-    <button type=button class="template-button ui-button" data-template-type="event">Event</button>
-    <button type=button class="template-button ui-button" data-template-type="eventwithmsg">Event w/ Msg</button>
-    <button type=button class="template-button ui-button" data-template-type="state">State</button>
-    <button type=button class="template-button ui-button" data-template-type="server">Server</button>
+    <button id="erlmodule-replace-btn" type="button" class="ui-button"><span data-i18n="erlmodule.label.replace_btn"></span></button>
   </div>
 
   <div class="form-row" style="padding-bottom: 20px; margin-bottom: 10px;">
@@ -13640,7 +13655,7 @@ Modules are installed in the Eshell that, for example, the docker image drops in
         }
       ).on('treelistselect', function (event, item) {
         if (item && item.nodeid) {
-          //RED.view.reveal(item.nodeid);
+          // RED.view.reveal(item.nodeid);
           RED.view.select(item.nodeid);
         }
       }).on('treelistconfirm', function (event, item) {
