@@ -56,19 +56,18 @@ end#{
 end).
 
 -define(ObtainFrom(NodeDef), begin
-
     {Zstr, IdStr, Type} =
         case NodeDef of
             #{
-              <<"z">> := Zstr2,
-              <<"id">> := IdStr2,
-              <<"type">> := Type2
-             } ->
+                <<"z">> := Zstr2,
+                <<"id">> := IdStr2,
+                <<"type">> := Type2
+            } ->
                 {Zstr2, IdStr2, Type2};
             #{
-              <<"id">> := IdStr2,
-              <<"type">> := Type2
-             } ->
+                <<"id">> := IdStr2,
+                <<"type">> := Type2
+            } ->
                 {<<"config node">>, IdStr2, Type2}
         end,
 
