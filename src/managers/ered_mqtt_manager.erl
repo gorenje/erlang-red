@@ -35,6 +35,7 @@
 %% TODO require more work so LIFL - leave it for later!
 %%
 start(NodePid, MqttOptions) ->
+    {ok, _} = application:ensure_all_started(emqtt),
     gen_server:start(?MODULE, [NodePid, MqttOptions], []).
 
 init([NodePid, MqttOptions]) ->
