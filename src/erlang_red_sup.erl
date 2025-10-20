@@ -103,7 +103,14 @@ init([]) ->
                     module => [ered_capture_io_exchange]
                 },
                 #{
-                    id => ered_ch13_red_web,
+                    id => ered_ch13_kafka_client_manager,
+                    start => {ered_kafka_client_manager, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_kafka_client_manager]
+                },
+                #{
+                    id => ered_ch14_red_web,
                     start => {ered_webserver, start, []},
                     restart => permanent,
                     type => worker,

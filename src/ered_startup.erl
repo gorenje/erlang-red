@@ -349,6 +349,17 @@ node_type_to_module(<<"rbe">>)               -> ered_node_rbe;
 node_type_to_module(<<"range">>)             -> ered_node_range;
 node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
 node_type_to_module(<<"erlcaptureio">>)      -> ered_node_erlcaptureio;
+
+%% TODO: don't do this again! The kafka nodes are based on an existing
+%% TODO: Node-RED node package --> @asinino/node-red-kafkajs that uses
+%% TODO: different node types (node-red-kafkajs-XXX) which I mapped to
+%% TODO: ered-kafka-XXX - that was a mistake. Because copying these nodes
+%% TODO: between Node-RED and Erlang-Red now won't work. In fact it will
+%% TODO: just break. Pity but the naming convention of 'node-red-kafkajs...'
+%% TODO: isn't suited here.
+node_type_to_module(<<"ered-kafka-consumer">>) -> ered_node_kafka_consumer;
+node_type_to_module(<<"ered-kafka-producer">>) -> ered_node_kafka_producer;
+
 %
 % These are "frontend-only" nodes, they don't have any backend functionality.
 node_type_to_module(<<"mermaid-state-start">>) -> ered_node_ignore;
@@ -388,6 +399,7 @@ is_config_node(<<"FlowHubCfg">>)         -> true;
 is_config_node(<<"ScratchPadCfg">>)      -> true;
 is_config_node(<<"websocket-listener">>) -> true;
 is_config_node(<<"erlconfigCfg">>)       -> true;
+is_config_node(<<"ered-kafka-broker">>)  -> true;
 is_config_node(_)                        -> false.
 
 %%

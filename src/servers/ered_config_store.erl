@@ -33,7 +33,9 @@
 %%
 %% TODO: scope this on the websocket, probably best just to spin up a
 %% TODO: new store per websocket connection. Have a supervisor instance
-%% TODO: take care of that.
+%% TODO: take care of that. This is what the captureIO server does - it spins
+%% TODO: up a gen_server per websocket connection. This should definitely do
+%% TODO: the same.
 %%
 
 start() ->
