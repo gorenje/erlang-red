@@ -2,7 +2,7 @@
 ## Development docker image - used for local development.
 ## assumes codebase happens to be located at /mnt/github/erlang-red ...
 build-docker-container:
-	docker build -f docker/Dockerfile.dev -t erlang-shell .
+	docker build -f dockerfiles/Dockerfile.dev -t erlang-shell .
 
 start-docker-shell: build-docker-container
 	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data --hostname erlang-red -p 9090:8080 -w /code --rm erlang-shell bash
@@ -16,7 +16,7 @@ enter-docker-shell:
 ##
 ## Heroku docker image
 heroku-build:
-	docker build -f docker/Dockerfile.heroku -t heroku-red-erik .
+	docker build -f dockerfiles/Dockerfile.heroku -t heroku-red-erik .
 heroku-run: heroku-build
 	docker run -it -p 7070:8080 -t heroku-red-erik
 heroku-enter:
@@ -38,7 +38,7 @@ fly-io-enter:
 ## hub.docker image
 HUB_RELEASE := $(shell awk '/vsn/ && match($$0, /[0-9]+.[0-9]+.[0-9]+/) { printf substr($$0, RSTART, RLENGTH) }' src/erlang_red.app.src)
 hub-docker-build:
-	docker build -f docker/Dockerfile.hub -t gorenje/erlang-red:${HUB_RELEASE} .
+	docker build -f dockerfiles/Dockerfile.hub -t gorenje/erlang-red:${HUB_RELEASE} .
 hub-docker-run: hub-docker-build
 	docker run -it -p 6060:8080 -t gorenje/erlang-red:${HUB_RELEASE}
 hub-docker-push: hub-docker-build
@@ -47,7 +47,7 @@ hub-docker-push: hub-docker-build
 ##
 ## For local testing, start a kafka broker
 kafka-start:
-	IMAGE=apache/kafka:latest docker-compose -f docker/docker-compose-kafka.yml up
+	IMAGE=apache/kafka:latest docker-compose -f dockerfiles/docker-compose-kafka.yml up
 
 ##
 ## Elixir compile example
