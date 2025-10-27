@@ -51,7 +51,7 @@ handle_call(
 
     {reply, ClientId,
         State#{nodeids => [{ClientId, KafkaNodeId, WsName} | NodeClients]},
-        {continue, {start_client, ClientId, CfgNodeId}}};
+        {continue, {start_client, ClientId, CfgNodeId, WsName}}};
 %%
 handle_call(state, _From, State) ->
     {reply, State, State};
@@ -64,7 +64,7 @@ handle_call(C, _From, State) ->
 %%
 %% ------------------- continue
 handle_continue(
-    {start_client, ClientId, CfgNodeId},
+    {start_client, ClientId, CfgNodeId, WsName},
     #{clients := Clients} = State
 ) ->
     case lists:keyfind(ClientId, 1, Clients) of
@@ -77,7 +77,7 @@ handle_continue(
                 <<"requesttimeout">> := ReqTimeout,
                 <<"saslssl">> := _SaslSsl,
                 <<"type">> := <<"ered-kafka-broker">>
-            }} = ered_config_store:retrieve_config_node(CfgNodeId),
+            }} = ered_config_store:retrieve_config_node(CfgNodeId, WsName),
 
             ClientConfig = [
                 {reconnect_cool_down_seconds, 10},

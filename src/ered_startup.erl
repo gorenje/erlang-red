@@ -255,13 +255,13 @@ supervisor_filter_nodes(
 %% by nodes that use the config nodes.
 store_config_nodes([], _WsName) ->
     ok;
-store_config_nodes([NodeDef | OtherNodeDefs], WsName) ->
-    case is_config_node(maps:get(<<"type">>, NodeDef)) of
+store_config_nodes(
+    [#{<<"type">> := NodeType} = NodeDef | OtherNodeDefs],
+    WsName
+) ->
+    case is_config_node(NodeType) of
         true ->
-            ered_config_store:store_config_node(
-                maps:get(<<"id">>, NodeDef),
-                NodeDef
-            );
+            ered_config_store:store_config_node(NodeDef, WsName);
         _ ->
             ignore
     end,
@@ -393,6 +393,7 @@ node_type_to_module(Unknown) ->
 %% a flow is executed
 %% erlfmt:ignore alignment
 is_config_node(<<"mqtt-broker">>)        -> true;
+is_config_node(<<"tls-config">>)         -> true;
 is_config_node(<<"FlowCompareCfg">>)     -> true;
 is_config_node(<<"Flow2MermaidCfg">>)    -> true;
 is_config_node(<<"FlowHubCfg">>)         -> true;

@@ -215,6 +215,8 @@ flow_editor_routes() ->
 
         {"/debug/:nodeid/:action", ered_http_nodered_debug_node_active, []},
 
+        {"/credentials/:nodetype/:nodeid", ered_http_nodered_credentials, []},
+
         %%
         %% GET handlers for delivery of the static content
         %%
@@ -244,7 +246,6 @@ flow_editor_routes() ->
 
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
-        {"/credentials/[...]", ered_http_nodered_empty_json, []},
         {"/context/[...]", ered_http_nodered_empty_json, []},
 
         {"/erlang-reddebug/view/view.html", ered_http_redirect,

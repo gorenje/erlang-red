@@ -202,7 +202,7 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
 foreach_testflow_test_() ->
     %% pg is required for the catch nodes
     pg:start_link(),
-    ered_config_store:start(),
+    ered_config_store:start_link(),
     ered_csv_parser_store:start(),
     ered_msgtracer_manager:start_link(),
     ered_erlmodule_exchange:start_link(),

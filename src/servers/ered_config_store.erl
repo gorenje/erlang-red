@@ -1,4 +1,5 @@
 -module(ered_config_store).
+
 -behaviour(gen_server).
 
 %% gen_server interface
@@ -10,68 +11,59 @@
     handle_info/2,
     terminate/2,
     stop/0,
-    start/0
+    start_link/0
 ]).
 
 %% actually functionality
 -export([
     store_config_node/2,
-    retrieve_config_node/1
+    retrieve_config_node/2
 ]).
 
 %%
-%% Store for maintaining a collection of config nodes. These can be referenced
-%% by those nodes that need them.
-%%
-%% Config nodes are used in Node-RED to share configuration of services
-%% amongst many nodes. For example external network protocols (e.g. MQTT,
-%% websocket) have a single configuration node and many nodes that use that
-%% configuration.
-%%
-%% This store only has a store and retrieve API, there is no update and a
-%% store call will overwrite any existing config node.
-%%
-%% TODO: scope this on the websocket, probably best just to spin up a
-%% TODO: new store per websocket connection. Have a supervisor instance
-%% TODO: take care of that. This is what the captureIO server does - it spins
-%% TODO: up a gen_server per websocket connection. This should definitely do
-%% TODO: the same.
+%% This maintains a lookup between WebSocket and config store.
 %%
 
-start() ->
+start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %%
 %%
 init([]) ->
-    {ok, #{}}.
+    {ok, #{storage => []}}.
 
 %%
 %% store implementaion
--spec store_config_node(NodeId :: binary(), NodeDef :: map()) -> ok.
-store_config_node(NodeId, NodeDef) ->
-    gen_server:call(?MODULE, {store_config, NodeId, NodeDef}).
+-spec store_config_node(NodeDef :: map(), WsName :: atom()) -> ok.
+store_config_node(NodeDef, WsName) ->
+    gen_server:call(?MODULE, {store_config, NodeDef, WsName}).
 
--spec retrieve_config_node(NodeId :: binary()) ->
+-spec retrieve_config_node(NodeId :: binary(), WsName :: atom()) ->
     {ok, Config :: map()} | unavailable.
-retrieve_config_node(NodeId) ->
-    gen_server:call(?MODULE, {get_config, NodeId}).
+retrieve_config_node(NodeId, WsName) ->
+    gen_server:call(?MODULE, {get_config, NodeId, WsName}).
 
 %%
-handle_call({store_config, NodeId, NodeDef}, _From, ConfigStore) ->
-    ConfigStoreNew = maps:put(NodeId, NodeDef, ConfigStore),
-    {reply, ok, ConfigStoreNew};
-handle_call({get_config, NodeId}, _From, ConfigStore) ->
-    Reply =
-        case maps:find(NodeId, ConfigStore) of
-            {ok, Cfg} ->
-                {ok, Cfg};
-            _ ->
-                unavailble
-        end,
-    {reply, Reply, ConfigStore};
+handle_call(
+    {store_config, #{<<"id">> := NodeId, <<"type">> := NodeType} = NodeDef,
+        WsName},
+    _From,
+    State
+) ->
+    {Storage, State2} = get_storage(State, WsName),
+    R = gen_server:call(Storage, {store_config, NodeId, NodeType, NodeDef}),
+    {reply, R, State2};
+%%
+handle_call({get_config, NodeId, WsName}, _From, State) ->
+    {Storage, State2} = get_storage(State, WsName),
+    R = gen_server:call(Storage, {get_config, NodeId}),
+    {reply, R, State2};
+%%
+handle_call(state, _From, Store) ->
+    {reply, Store, Store};
+%%
 handle_call(_Msg, _From, Store) ->
-    {reply, Store, Store}.
+    {reply, ok, Store}.
 
 stop() ->
     gen_server:cast(?MODULE, stop).
@@ -96,3 +88,15 @@ handle_info(stop, Store) ->
 
 code_change(_OldVersion, Store, _Extra) ->
     {ok, Store}.
+
+%%
+%% --------------------- helpers
+%%
+get_storage(#{storage := Storers} = State, WsName) ->
+    case lists:keyfind(WsName, 1, Storers) of
+        false ->
+            {ok, Str} = ered_cfg_storage:start_link(WsName),
+            {Str, State#{storage => [{WsName, Str} | Storers]}};
+        {WsName, Str} ->
+            {Str, State}
+    end.

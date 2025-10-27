@@ -81,7 +81,7 @@
 %%
 
 -import(ered_config_store, [
-    retrieve_config_node/1
+    retrieve_config_node/2
 ]).
 -import(ered_nodered_comm, [
     node_status/5
@@ -282,18 +282,29 @@ copy_attributes([Attr | Attrs], Msg, MqttDataPacket) ->
     ).
 
 %% erlfmt:ignore alignment
-create_mqtt_manager(Cfg) ->
+create_mqtt_manager(#{
+        <<"broker">>          := Host,
+        <<"port">>            := Port,
+        <<"usetls">>          := UseTls,
+        <<"cleansession">>    := CleanStart,
+        <<"keepalive">>       := KeepAlive,
+        <<"willTopic">>       := WillTopic,
+        <<"willQos">>         := WillQoS,
+        <<"willRetain">>      := WillRetain,
+        <<"willMsg">>         := WillMsg,
+        <<"protocolVersion">> := ProtoVer
+} = Cfg, WsName) ->
     Options = [
-        {host,        maps:get(<<"broker">>,             Cfg)},
-        {port,        convert_to_num(maps:get(<<"port">>, Cfg))},
-        {ssl,         maps:get(<<"usetls">>,                Cfg)},
-        {clean_start, maps:get(<<"cleansession">>,            Cfg)},
-        {proto_ver,   maps:get(<<"protocolVersion">>,           Cfg)},
-        {keepalive,   convert_to_num(maps:get(<<"keepalive">>,  Cfg))},
-        {will_topic,  maps:get(<<"willTopic">>,                 Cfg)},
-        {will_qos,    convert_to_num(maps:get(<<"willQos">>,  Cfg))},
-        {will_retain, to_bool(maps:get(<<"willRetain">>,     Cfg))},
-        {will_props,  maps:get(<<"willMsg">>,               Cfg)},
+        {host,        Host},
+        {port,        convert_to_num(Port)},
+        {ssl,         to_bool(UseTls)},
+        {clean_start, CleanStart},
+        {proto_ver,   to_ver_atom(ProtoVer)},
+        {keepalive,   convert_to_num(KeepAlive)},
+        {will_topic,  WillTopic},
+        {will_qos,    convert_to_num(WillQoS)},
+        {will_retain, to_bool(WillRetain)},
+        {will_props,  WillMsg},
         {force_ping,  true}
         %% TODO respect the client id but we don't
         %% {clientid, maps:get(<<"clientid">>, Cfg)},
@@ -301,18 +312,41 @@ create_mqtt_manager(Cfg) ->
         %% {properties, maps:get(<<"userProps">>, Cfg)}
     ],
 
-    {ok, MqttMgrPid} = ered_mqtt_manager:start(self(), Options),
+    %% Credentials set?
+    Opts2 =
+        case maps:find(<<"credentials">>, Cfg) of
+            {ok, Creds} ->
+                Options ++ add_user_and_pass(Creds);
+            _ ->
+                Options
+        end,
+
+    %% verify ssl certificates?
+    Opts3 =
+        case {to_bool(UseTls), maps:find(<<"tls">>, Cfg)} of
+            {true, {ok, TlsCfgId}} ->
+                case retrieve_config_node(TlsCfgId, WsName) of
+                    {ok, #{<<"verifyservercert">> := false} = _TlsCfg} ->
+                        Opts2 ++ [{ssl_opts, [{verify, verify_none}]}];
+                    _ ->
+                        Opts2
+                end;
+            _ ->
+                Opts2
+        end,
+
+    {ok, MqttMgrPid} = ered_mqtt_manager:start(self(), Opts3),
 
     MqttMgrPid.
 
 setup_mqtt_manager(NodeDef, WsName) ->
     case maps:find(<<"broker">>, NodeDef) of
         {ok, CfgNodeId} ->
-            case retrieve_config_node(CfgNodeId) of
+            case retrieve_config_node(CfgNodeId, WsName) of
                 {ok, Cfg} ->
                     ?NodeStatus("connecting", "yellow", "dot"),
 
-                    MqttMgrPid = create_mqtt_manager(Cfg),
+                    MqttMgrPid = create_mqtt_manager(Cfg, WsName),
 
                     erlang:monitor(process, MqttMgrPid),
 
@@ -334,3 +368,30 @@ setup_mqtt_manager(NodeDef, WsName) ->
             ?NodeStatus("connecting (no broker)", "yellow", "dot"),
             NodeDef
     end.
+
+%%
+%% ----------------- helpers
+%%
+to_ver_atom(V) when is_list(V) ->
+    list_to_atom("v" ++ V);
+to_ver_atom(V) when is_binary(V) ->
+    to_ver_atom(binary_to_list(V));
+to_ver_atom(V) when is_integer(V) ->
+    to_ver_atom(integer_to_list(V)).
+
+%%
+%%
+add_user_and_pass(#{<<"user">> := <<>>, <<"password">> := <<>>}) ->
+    [];
+add_user_and_pass(#{<<"user">> := <<>>, <<"password">> := Pword}) ->
+    [{password, Pword}];
+add_user_and_pass(#{<<"user">> := User, <<"password">> := <<>>}) ->
+    [{username, User}];
+add_user_and_pass(#{<<"user">> := User, <<"password">> := Pword}) ->
+    [{username, User}, {password, Pword}];
+add_user_and_pass(#{<<"user">> := User}) ->
+    [{username, User}];
+add_user_and_pass(#{<<"password">> := Pword}) ->
+    [{password, Pword}];
+add_user_and_pass(_) ->
+    [].

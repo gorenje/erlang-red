@@ -48,7 +48,7 @@ init([]) ->
                 },
                 #{
                     id => ered_ch6_config_store,
-                    start => {ered_config_store, start, []},
+                    start => {ered_config_store, start_link, []},
                     restart => permanent,
                     type => worker,
                     module => [ered_config_store]
