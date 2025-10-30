@@ -349,6 +349,7 @@ node_type_to_module(<<"rbe">>)               -> ered_node_rbe;
 node_type_to_module(<<"range">>)             -> ered_node_range;
 node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
 node_type_to_module(<<"erlcaptureio">>)      -> ered_node_erlcaptureio;
+node_type_to_module(<<"amqp-in">>)           -> ered_node_amqp_in;
 
 %% TODO: don't do this again! The kafka nodes are based on an existing
 %% TODO: Node-RED node package --> @asinino/node-red-kafkajs that uses
@@ -393,6 +394,7 @@ node_type_to_module(Unknown) ->
 %% a flow is executed
 %% erlfmt:ignore alignment
 is_config_node(<<"mqtt-broker">>)        -> true;
+is_config_node(<<"amqp-broker">>)        -> true;
 is_config_node(<<"tls-config">>)         -> true;
 is_config_node(<<"FlowCompareCfg">>)     -> true;
 is_config_node(<<"Flow2MermaidCfg">>)    -> true;

@@ -71,6 +71,9 @@ format_error(Reason, Req) ->
 %%
 %% ---------------- helpers
 %%
+%% Repond with a has_password flag but don't send the password over the wire.
+%% This is what this API endpoint does: prevent the sending of passwords over
+%% wires - even bard wires.
 response_for_cfgtype(
     <<"mqtt-broker">>,
     #{<<"credentials">> := #{<<"user">> := User, <<"password">> := <<>>}}
@@ -86,8 +89,31 @@ response_for_cfgtype(
     #{<<"credentials">> := #{<<"user">> := User}}
 ) ->
     #{<<"user">> => User, <<"has_password">> => false};
+%%
+%% amqp broker usres "username", mqtt broker uses "user".
 response_for_cfgtype(
-    _CfgType,
-    _Cfg
+    <<"amqp-broker">>,
+    #{<<"credentials">> := #{<<"username">> := User, <<"password">> := <<>>}}
 ) ->
+    #{<<"username">> => User, <<"has_password">> => false};
+response_for_cfgtype(
+    <<"amqp-broker">>,
+    #{<<"credentials">> := #{<<"username">> := User, <<"password">> := _P}}
+) ->
+    #{<<"username">> => User, <<"has_password">> => true};
+response_for_cfgtype(
+    <<"amqp-broker">>,
+    #{<<"credentials">> := #{<<"username">> := User}}
+) ->
+    #{<<"username">> => User, <<"has_password">> => false};
+%%
+%% Fall through and warn.
+response_for_cfgtype(
+    CfgType,
+    Cfg
+) ->
+    io:format(
+        "Warning: Empty credentials for unknown nodetype: ~p with ~p~n",
+        [CfgType, Cfg]
+    ),
     #{}.
