@@ -44,6 +44,12 @@ init(WsName) ->
     {ok, #{}}.
 
 %%
+
+%
+%%%%% store_config
+%
+
+% Handle mqtt broker config
 handle_call(
     {store_config, NodeId, <<"mqtt-broker">>,
         #{<<"credentials">> := Creds} = NodeDef},
@@ -66,15 +72,33 @@ handle_call(
         _ ->
             {reply, ok, maps:put(NodeId, NodeDef, ConfigStore)}
     end;
-%
+% Handle amqp broker config
 handle_call(
-    {store_config, NodeId, <<"mqtt-broker">>, NodeDef},
+    {store_config, NodeId, <<"amqp-broker">>,
+        #{<<"credentials">> := Creds} = NodeDef},
     _From,
     ConfigStore
 ) ->
+    %% amqp uses "username" instead of "user" in the credentials, this
+    %% needs to be respected when doing the merge.
+    case maps:find(NodeId, ConfigStore) of
+        {ok, #{<<"credentials">> := OldCreds}} ->
+            NodeDef2 = NodeDef#{
+                <<"credentials">> => merge_username_creds(OldCreds, Creds)
+            },
+            {reply, ok, maps:put(NodeId, NodeDef2, ConfigStore)};
+        _ ->
+            {reply, ok, maps:put(NodeId, NodeDef, ConfigStore)}
+    end;
+% Handle amqp and mqtt since their logic is the same if no creds is provided
+handle_call(
+    {store_config, NodeId, NodeType, NodeDef},
+    _From,
+    ConfigStore
+) when NodeType =:= <<"mqtt-broker">>; NodeType =:= <<"amqp-broker">> ->
     %% This the case that no credentials were provided, that means we do
-    %% no update to an existing credentials hash, if there is an existing
-    %% entry in our store.
+    %% no update to an existing credentials hash, instead if there are
+    %% existing credentials, then add them to the new config values.
     case maps:find(NodeId, ConfigStore) of
         {ok, #{<<"credentials">> := OldCreds}} ->
             NodeDef2 = NodeDef#{<<"credentials">> => OldCreds},
@@ -87,6 +111,8 @@ handle_call({store_config, NodeId, _NodeType, NodeDef}, _From, ConfigStore) ->
     ConfigStoreNew = maps:put(NodeId, NodeDef, ConfigStore),
     {reply, ok, ConfigStoreNew};
 %
+%%%%% get_config
+%
 handle_call({get_config, NodeId}, _From, ConfigStore) ->
     Reply =
         case maps:find(NodeId, ConfigStore) of
@@ -96,6 +122,7 @@ handle_call({get_config, NodeId}, _From, ConfigStore) ->
                 unavailble
         end,
     {reply, Reply, ConfigStore};
+%
 handle_call(_Msg, _From, Store) ->
     {reply, Store, Store}.
 
@@ -152,6 +179,40 @@ merge_creds(
 ) ->
     #{<<"user">> => User, <<"password">> => Password};
 merge_creds(
+    OldCreds,
+    #{} = _NewCreds
+) ->
+    OldCreds.
+
+%%
+%% AMQP broker uses "username" not "user".
+%%
+merge_username_creds(
+    _OldCreds,
+    #{<<"username">> := <<>>, <<"password">> := <<>>} = _NewCreds
+) ->
+    #{};
+merge_username_creds(
+    _OldCreds,
+    #{<<"username">> := User, <<"password">> := <<>>} = _NewCreds
+) ->
+    #{<<"username">> => User};
+merge_username_creds(
+    _OldCreds,
+    #{<<"username">> := _User, <<"password">> := _Password} = NewCreds
+) ->
+    NewCreds;
+merge_username_creds(
+    #{<<"username">> := _, <<"password">> := Password} = _OldCreds,
+    #{<<"username">> := User} = _NewCreds
+) ->
+    #{<<"username">> => User, <<"password">> => Password};
+merge_username_creds(
+    #{<<"username">> := User, <<"password">> := _} = _OldCreds,
+    #{<<"password">> := Password} = _NewCreds
+) ->
+    #{<<"username">> => User, <<"password">> => Password};
+merge_username_creds(
     OldCreds,
     #{} = _NewCreds
 ) ->
