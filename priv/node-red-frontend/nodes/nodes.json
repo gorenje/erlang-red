@@ -865,5 +865,53 @@
         ],
         "user": false,
         "version": "0.1.0"
+    },
+    {
+        "enabled": true,
+        "id": "@greyorange/node-red-contrib-amqp/amqp-in",
+        "local": true,
+        "module": "@greyorange/node-red-contrib-amqp",
+        "name": "amqp-in",
+        "types": [
+            "amqp-in"
+        ],
+        "user": false,
+        "version": "2.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@greyorange/node-red-contrib-amqp/amqp-out",
+        "local": true,
+        "module": "@greyorange/node-red-contrib-amqp",
+        "name": "amqp-out",
+        "types": [
+            "amqp-out"
+        ],
+        "user": false,
+        "version": "2.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@greyorange/node-red-contrib-amqp/amqp-broker",
+        "local": true,
+        "module": "@greyorange/node-red-contrib-amqp",
+        "name": "amqp-broker",
+        "types": [
+            "amqp-broker"
+        ],
+        "user": false,
+        "version": "2.4.0"
+    },
+    {
+        "enabled": true,
+        "id": "@greyorange/node-red-contrib-amqp/amqp-in-manual-ack",
+        "local": true,
+        "module": "@greyorange/node-red-contrib-amqp",
+        "name": "amqp-in-manual-ack",
+        "types": [
+            "amqp-in-manual-ack"
+        ],
+        "user": false,
+        "version": "2.4.0"
     }
 ]

@@ -377,6 +377,10 @@
     "@gregoriusrippenstein/node-red-contrib-introspection/sendflow": {},
     "@gregoriusrippenstein/node-red-contrib-introspection/sink": {},
     "@gregoriusrippenstein/node-red-scratchpad/scratchpad": {},
+    "@greyorange/node-red-contrib-amqp/amqp-broker": {},
+    "@greyorange/node-red-contrib-amqp/amqp-in": {},
+    "@greyorange/node-red-contrib-amqp/amqp-in-manual-ack": {},
+    "@greyorange/node-red-contrib-amqp/amqp-out": {},
     "node-red-contrib-binary/binary": {},
     "node-red-contrib-i2c/i2c": {},
     "node-red-node-markdown/markdown": {}

@@ -19,6 +19,9 @@
         "switch-inject-to-change.svg"
     ],
     "@gregoriusrippenstein/node-red-scratchpad": [],
+    "@greyorange/node-red-contrib-amqp": [
+        "snaggy.svg"
+    ],
     "node-red": [
         "alert.svg",
         "arduino.svg",
