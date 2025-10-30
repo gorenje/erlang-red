@@ -44,7 +44,6 @@
 ]).
 
 -import(ered_messages, [
-    create_outgoing_msg/1,
     get_prop/2
 ]).
 
