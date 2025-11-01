@@ -44,14 +44,9 @@ retrieve_config_node(NodeId, WsName) ->
     gen_server:call(?MODULE, {get_config, NodeId, WsName}).
 
 %%
-handle_call(
-    {store_config, #{<<"id">> := NodeId, <<"type">> := NodeType} = NodeDef,
-        WsName},
-    _From,
-    State
-) ->
+handle_call({store_config, NodeDef, WsName}, _From, State) ->
     {Storage, State2} = get_storage(State, WsName),
-    R = gen_server:call(Storage, {store_config, NodeId, NodeType, NodeDef}),
+    R = gen_server:call(Storage, {store_config, NodeDef}),
     {reply, R, State2};
 %%
 handle_call({get_config, NodeId, WsName}, _From, State) ->

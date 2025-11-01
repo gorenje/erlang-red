@@ -141,7 +141,10 @@ handle_cast(_Msg, Store) ->
 %%
 %%
 handle_info({store_main_flow, FlowData}, State) ->
-    {ok, NodeAry} = maps:find(<<"flows">>, json:decode(FlowData)),
+    {ok, NodeAryWithCreds} = maps:find(<<"flows">>, json:decode(FlowData)),
+
+    %% remove any reference to <<"credentials">>
+    NodeAry = remove_credentials(NodeAryWithCreds),
 
     DestFileName = io_lib:format(
         "~s/flows.json",
@@ -162,7 +165,10 @@ handle_info({store_main_flow, FlowData}, State) ->
     {noreply, State};
 handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
     FlowMap = json:decode(JsonText),
-    {ok, NodeAry} = maps:find(<<"flow">>, FlowMap),
+    {ok, NodeAryWithCreds} = maps:find(<<"flow">>, FlowMap),
+
+    %% remove any reference to <<"credentials">>
+    NodeAry = remove_credentials(json:decode(NodeAryWithCreds)),
 
     DestFileName = io_lib:format(
         "~s/testflows/~s/flows.json",
@@ -170,7 +176,7 @@ handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
     ),
 
     filelib:ensure_dir(DestFileName),
-    case file:write_file(DestFileName, NodeAry) of
+    case file:write_file(DestFileName, encode_json(NodeAry)) of
         ok ->
             ignore_all_went_well;
         R ->
@@ -208,8 +214,26 @@ terminate(Event, _State) ->
     ok.
 
 %%
+%% --------------- helpers
 %%
+remove_credentials(NodeAry) ->
+    remove_credentials(NodeAry, []).
 
+remove_credentials([], S) ->
+    lists:reverse(S);
+remove_credentials(
+    [#{<<"type">> := <<"FlowHubCfg">>} = NodeDef | Rest], Store
+) ->
+    remove_credentials(
+        Rest,
+        [
+            NodeDef#{<<"apiToken">> => <<>>, <<"tokens">> => []} | Store
+        ]
+    );
+remove_credentials([NodeDef | Rest], Store) ->
+    remove_credentials(Rest, [maps:remove(<<"credentials">>, NodeDef) | Store]).
+
+%%
 compile_file_list() ->
     {ok, MP} = re:compile("([A-Z0-9]{16})/flows.json", [caseless]),
 

@@ -43,73 +43,41 @@ init(WsName) ->
     erlang:register(binary_to_atom(jstr("cfg_storage_~s", [WsName])), self()),
     {ok, #{}}.
 
-%%
-
 %
 %%%%% store_config
 %
+handle_call(
+    {store_config, #{<<"id">> := NodeId} = NodeDef},
+    _From,
+    ConfigStore
+) ->
+    NewConfigStore =
+        case
+            merge(
+                error_to_none(maps:find(<<"credentials">>, NodeDef)),
+                ered_credentials_store:retrieve(NodeId),
+                creds_from_store(maps:find(NodeId, ConfigStore))
+            )
+        of
+            {update_stores, Creds} ->
+                ered_credentials_store:store(NodeId, Creds),
+                maps:put(
+                    NodeId,
+                    NodeDef#{<<"credentials">> => Creds},
+                    ConfigStore
+                );
+            delete_stores ->
+                ered_credentials_store:remove(NodeId),
+                maps:put(
+                    NodeId,
+                    maps:remove(<<"credentials">>, NodeDef),
+                    ConfigStore
+                );
+            no_credentials ->
+                maps:put(NodeId, NodeDef, ConfigStore)
+        end,
 
-% Handle mqtt broker config
-handle_call(
-    {store_config, NodeId, <<"mqtt-broker">>,
-        #{<<"credentials">> := Creds} = NodeDef},
-    _From,
-    ConfigStore
-) ->
-    %% mqtt brokers have a <<"credentials">> hash that might or might not be
-    %% set. If its not set but we have something stored, then no change. If
-    %% the <<"user">> is set, then we update the user in our store.
-    %% If <<"password">> is set, then we update the password in our store.
-    %% Is either empty, we remove them from our store.
-    %% Is there no value set for the config node, then just store what we
-    %% get.
-    case maps:find(NodeId, ConfigStore) of
-        {ok, #{<<"credentials">> := OldCreds}} ->
-            NodeDef2 = NodeDef#{
-                <<"credentials">> => merge_creds(OldCreds, Creds)
-            },
-            {reply, ok, maps:put(NodeId, NodeDef2, ConfigStore)};
-        _ ->
-            {reply, ok, maps:put(NodeId, NodeDef, ConfigStore)}
-    end;
-% Handle amqp broker config
-handle_call(
-    {store_config, NodeId, <<"amqp-broker">>,
-        #{<<"credentials">> := Creds} = NodeDef},
-    _From,
-    ConfigStore
-) ->
-    %% amqp uses "username" instead of "user" in the credentials, this
-    %% needs to be respected when doing the merge.
-    case maps:find(NodeId, ConfigStore) of
-        {ok, #{<<"credentials">> := OldCreds}} ->
-            NodeDef2 = NodeDef#{
-                <<"credentials">> => merge_username_creds(OldCreds, Creds)
-            },
-            {reply, ok, maps:put(NodeId, NodeDef2, ConfigStore)};
-        _ ->
-            {reply, ok, maps:put(NodeId, NodeDef, ConfigStore)}
-    end;
-% Handle amqp and mqtt since their logic is the same if no creds is provided
-handle_call(
-    {store_config, NodeId, NodeType, NodeDef},
-    _From,
-    ConfigStore
-) when NodeType =:= <<"mqtt-broker">>; NodeType =:= <<"amqp-broker">> ->
-    %% This the case that no credentials were provided, that means we do
-    %% no update to an existing credentials hash, instead if there are
-    %% existing credentials, then add them to the new config values.
-    case maps:find(NodeId, ConfigStore) of
-        {ok, #{<<"credentials">> := OldCreds}} ->
-            NodeDef2 = NodeDef#{<<"credentials">> => OldCreds},
-            {reply, ok, maps:put(NodeId, NodeDef2, ConfigStore)};
-        _ ->
-            {reply, ok, maps:put(NodeId, NodeDef, ConfigStore)}
-    end;
-%
-handle_call({store_config, NodeId, _NodeType, NodeDef}, _From, ConfigStore) ->
-    ConfigStoreNew = maps:put(NodeId, NodeDef, ConfigStore),
-    {reply, ok, ConfigStoreNew};
+    {reply, ok, NewConfigStore};
 %
 %%%%% get_config
 %
@@ -153,67 +121,59 @@ code_change(_OldVersion, Store, _Extra) ->
 %%
 %% ----------------- helpers
 %%
-merge_creds(
-    _OldCreds,
-    #{<<"user">> := <<>>, <<"password">> := <<>>} = _NewCreds
-) ->
-    #{};
-merge_creds(
-    _OldCreds,
-    #{<<"user">> := User, <<"password">> := <<>>} = _NewCreds
-) ->
-    #{<<"user">> => User};
-merge_creds(
-    _OldCreds,
-    #{<<"user">> := _User, <<"password">> := _Password} = NewCreds
-) ->
-    NewCreds;
-merge_creds(
-    #{<<"user">> := _, <<"password">> := Password} = _OldCreds,
-    #{<<"user">> := User} = _NewCreds
-) ->
-    #{<<"user">> => User, <<"password">> => Password};
-merge_creds(
-    #{<<"user">> := User, <<"password">> := _} = _OldCreds,
-    #{<<"password">> := Password} = _NewCreds
-) ->
-    #{<<"user">> => User, <<"password">> => Password};
-merge_creds(
-    OldCreds,
-    #{} = _NewCreds
-) ->
-    OldCreds.
 
 %%
-%% AMQP broker uses "username" not "user".
 %%
-merge_username_creds(
-    _OldCreds,
-    #{<<"username">> := <<>>, <<"password">> := <<>>} = _NewCreds
-) ->
-    #{};
-merge_username_creds(
-    _OldCreds,
-    #{<<"username">> := User, <<"password">> := <<>>} = _NewCreds
-) ->
-    #{<<"username">> => User};
-merge_username_creds(
-    _OldCreds,
-    #{<<"username">> := _User, <<"password">> := _Password} = NewCreds
-) ->
-    NewCreds;
-merge_username_creds(
-    #{<<"username">> := _, <<"password">> := Password} = _OldCreds,
-    #{<<"username">> := User} = _NewCreds
-) ->
-    #{<<"username">> => User, <<"password">> => Password};
-merge_username_creds(
-    #{<<"username">> := User, <<"password">> := _} = _OldCreds,
-    #{<<"password">> := Password} = _NewCreds
-) ->
-    #{<<"username">> => User, <<"password">> => Password};
-merge_username_creds(
-    OldCreds,
-    #{} = _NewCreds
-) ->
-    OldCreds.
+creds_from_store({ok, #{<<"credentials">> := Creds}}) ->
+    Creds;
+creds_from_store(_) ->
+    none.
+%%
+%%
+error_to_none({ok, Creds}) ->
+    Creds;
+error_to_none(_) ->
+    none.
+
+%%
+%% What happen here?
+%%
+%%    Credentials defined in ...
+%%
+%%    | this Store | NodeDef | Creds Store |
+%%    | -----------+---------+-------------|
+%%    |      -     |   Yes   |     -       | --> Update Stores
+%%    |     Yes    |   Yes   |     -       | --> Compare NodeDef to store and update both stores
+%%    |     Yes    |    -    |     -       | --> update cred store
+%%    |     Yes    |    -    |    Yes      | --> update store from cred store (initialisation)
+%%    |     Yes    |   Yes   |    Yes      | --> update cred store with nodedef and update both stores
+%%    |      -     |   Yes   |    Yes      | --> update the creds store with data from NodeDef and then updatet this store.
+%%    |      -     |    -    |    Yes      | --> update this store with credentils from cred store (initialisation)
+%%    |      -     |    -    |     -       | --> store nodedef in this store, no change in cred store
+%%
+%% When the initial load of the flow happens, the creds store has already been
+%% filled. What we want to do here is have all the credentials in this store
+%% as this store is used by other nodes to configure their services.
+%%
+%% All updates of the config nodes go through here. All initialisations
+%% goes over this. So this is the final point of unity betwee all three
+%% sources of credential information.
+%%
+%% Basically the creds store is used to update this store on initialisation,
+%% when something is changed, this store is update and the credentials store.
+%% This duplication is useful because the creds store is responsible for
+%% maintaining the flows_cred.json file which is used at initialisation to
+%% update this store.
+%%
+merge(none, none, none) ->
+    no_credentials;
+merge(none, none, _) ->
+    delete_stores;
+merge(none, CredsFromCredsStore, _) ->
+    {update_stores, CredsFromCredsStore};
+merge(Creds, none, none) ->
+    {update_stores, Creds};
+merge(CredsNodeDef, none, CredsFromCfgStore) ->
+    {update_stores, maps:merge(CredsFromCfgStore, CredsNodeDef)};
+merge(CredsNodeDef, CredsStore, _CredsFromCfgStore) ->
+    {update_stores, maps:merge(CredsStore, CredsNodeDef)}.

@@ -26,6 +26,13 @@ init([]) ->
                     module => [ered_flow_store_server]
                 },
                 #{
+                    id => ered_ch2b_credentials_store,
+                    start => {ered_credentials_store, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_credentials_store]
+                },
+                #{
                     id => ered_ch3_ws_event_exchange,
                     start => {ered_ws_event_exchange, start, []},
                     restart => permanent,

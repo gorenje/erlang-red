@@ -8,6 +8,16 @@
     format_error/2
 ]).
 
+%%
+%% This endpoint is used by Node-RED to retrieve the "sensitive" crendentials
+%% and ensure that these are defined. Things such as passwords or pass keys.
+%%
+%% This api removes passwords and instead just informs the frontend that a
+%% password has been sent. The password is stored in the config store
+%% and the credentials store and will be persisted in the credentials store
+%% while being removed from the flows.json file if that gets stored.
+%%
+
 -import(ered_messages, [
     encode_json/1
 ]).
@@ -19,6 +29,12 @@
 -import(ered_config_store, [
     retrieve_config_node/2
 ]).
+
+-define(RemovePassword(Cfg, St), begin
+    maps:remove(<<"password">>, Cfg)
+end#{
+    <<"has_password">> => St
+}).
 
 init(Req, State) ->
     {cowboy_rest, Req, State}.
@@ -48,10 +64,14 @@ handle_get_response(Req, State) ->
                 #{};
             {_WsName, _, undefined} ->
                 #{};
-            {WsName, NodeType, NodeId} ->
-                case retrieve_config_node(NodeId, WsName) of
-                    {ok, Cfg} ->
-                        response_for_cfgtype(NodeType, Cfg);
+            {WsName, _NodeType, NodeId} ->
+                case ered_credentials_store:retrieve(NodeId, WsName) of
+                    #{<<"password">> := <<>>} = Cfg ->
+                        ?RemovePassword(Cfg, false);
+                    #{<<"password">> := _P} = Cfg ->
+                        ?RemovePassword(Cfg, true);
+                    Cfg when is_map(Cfg) ->
+                        ?RemovePassword(Cfg, false);
                     _ ->
                         #{}
                 end
@@ -67,53 +87,3 @@ format_error(Reason, Req) ->
         ],
         Req
     }.
-
-%%
-%% ---------------- helpers
-%%
-%% Repond with a has_password flag but don't send the password over the wire.
-%% This is what this API endpoint does: prevent the sending of passwords over
-%% wires - even bard wires.
-response_for_cfgtype(
-    <<"mqtt-broker">>,
-    #{<<"credentials">> := #{<<"user">> := User, <<"password">> := <<>>}}
-) ->
-    #{<<"user">> => User, <<"has_password">> => false};
-response_for_cfgtype(
-    <<"mqtt-broker">>,
-    #{<<"credentials">> := #{<<"user">> := User, <<"password">> := _P}}
-) ->
-    #{<<"user">> => User, <<"has_password">> => true};
-response_for_cfgtype(
-    <<"mqtt-broker">>,
-    #{<<"credentials">> := #{<<"user">> := User}}
-) ->
-    #{<<"user">> => User, <<"has_password">> => false};
-%%
-%% amqp broker usres "username", mqtt broker uses "user".
-response_for_cfgtype(
-    <<"amqp-broker">>,
-    #{<<"credentials">> := #{<<"username">> := User, <<"password">> := <<>>}}
-) ->
-    #{<<"username">> => User, <<"has_password">> => false};
-response_for_cfgtype(
-    <<"amqp-broker">>,
-    #{<<"credentials">> := #{<<"username">> := User, <<"password">> := _P}}
-) ->
-    #{<<"username">> => User, <<"has_password">> => true};
-response_for_cfgtype(
-    <<"amqp-broker">>,
-    #{<<"credentials">> := #{<<"username">> := User}}
-) ->
-    #{<<"username">> => User, <<"has_password">> => false};
-%%
-%% Fall through and warn.
-response_for_cfgtype(
-    CfgType,
-    Cfg
-) ->
-    io:format(
-        "Warning: Empty credentials for unknown nodetype: ~p with ~p~n",
-        [CfgType, Cfg]
-    ),
-    #{}.
