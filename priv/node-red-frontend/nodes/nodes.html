@@ -15391,7 +15391,11 @@ If this node isn't reached, then the test will fail.
 
         var label = $('<label>', { "data-id": nde.id, onmouseover: "RED.view.reveal($(this).data('id'),true);RED.view.redraw();", onmouseout: "RED.view.redraw();" })
 
-        label.append('<i class="fa fa-map-marker"></i>&nbsp;')
+        if (nde.type == "mermaid-state-end") {
+          label.append('<i class="fa fa-bullseye"></i>&nbsp;')
+        } else {
+          label.append('<i class="fa fa-map-marker"></i>&nbsp;')
+        }
 
         label.append($("<span>").text(RED.utils.getNodeLabel(nde) + (nde.id == this.id ? " <b>keep state</b>" : "")))
 
@@ -15479,13 +15483,6 @@ Used to define a state machine diagram.
 <script type="text/javascript">
   (function(){
   
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
   
   RED.nodes.registerType('mermaid-state-state',{
     color: '#D7D7A0',
@@ -15542,6 +15539,9 @@ Used to define a state machine diagram.
         if (nde.id == this.id) {
           label.append('<i class="fa fa-rotate-right"></i>&nbsp;')
           label.append($("<span>").text(RED.utils.getNodeLabel(nde) + " (this state)"))
+        } else if (nde.type == "mermaid-state-end") {
+          label.append('<i class="fa fa-bullseye"></i>&nbsp;')
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde))) 
         } else {
           label.append('<i class="fa fa-map-marker"></i>&nbsp;')
           label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
