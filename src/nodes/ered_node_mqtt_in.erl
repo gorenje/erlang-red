@@ -19,7 +19,7 @@
 %%        "name": "MQTT In",
 %%        "topic": "",
 %%        "qos": "2",
-%%        "datatype": "auto-detect",
+%%        "datatype": "auto-detect",  <<----- json and auto-detect is supported
 %%        "broker": "da2f91c287ad12f7",
 %%        "nl": false,
 %%        "rap": true,
@@ -211,7 +211,18 @@ handle_event(_, NodeDef) ->
 %%
 
 handle_msg(
-    {mqtt_incoming, MqttDataPacket}, #{?GetWsName} = NodeDef
+    {mqtt_incoming, MqttDataPacket},
+    #{?GetWsName, <<"datatype">> := <<"json">>} = NodeDef
+) ->
+    {outgoing, Msg} = create_outgoing_msg(WsName),
+    Msg2 = copy_attributes([payload, topic, retain, qos], Msg, MqttDataPacket),
+    #{?GetPayload} = Msg2,
+    Msg3 = Msg2#{?AddPayload(json:decode(Payload))},
+    send_msg_to_connected_nodes(NodeDef, Msg3),
+    {handled, NodeDef, Msg3};
+handle_msg(
+    {mqtt_incoming, MqttDataPacket},
+    #{?GetWsName} = NodeDef
 ) ->
     {outgoing, Msg} = create_outgoing_msg(WsName),
     Msg2 = copy_attributes([payload, topic, retain, qos], Msg, MqttDataPacket),
