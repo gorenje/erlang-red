@@ -239,6 +239,9 @@ handle_info(
     {noreply, {Module, NodeDef2}};
 %%
 %% Now this is bad. Stopping is really the last thing that should happen.
+handle_info({join_send_message_buffer, WsName} = Evt, {Module, NodeDef}) ->
+    NodeDef2 = Module:handle_event(Evt, NodeDef),
+    {noreply, {Module, NodeDef2}};
 handle_info({stop, WsName}, {Module, NodeDef}) ->
     Module:handle_event({stop, WsName}, NodeDef),
     {stop, normal, {Module, NodeDef}};

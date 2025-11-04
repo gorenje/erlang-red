@@ -50,13 +50,31 @@
 
 %%
 %%
-start(#{<<"timeout">> := Timeout} = NodeDef, WsName) when Timeout =/= <<>> ->
-    %% TODO the simplest implementation of the timeout would be to start
-    %% TODO a timer in the registered event and have the timer send the process
-    %% TODO a regular complete message to empty the buffer.
-    ErrMsg = jstr("Timeout ~p", [NodeDef]),
-    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
-    ered_node:start(NodeDef, ered_node_ignore);
+start(
+    #{
+        <<"mode">> := <<"custom">>,
+        <<"build">> := <<"array">>,
+        <<"timeout">> := Timeout,
+        <<"useparts">> := false,
+        <<"accumulate">> := false
+    } = NodeDef,
+    WsName
+) when Timeout =/= <<>> ->
+    case convert_to_int(Timeout) of
+        V when V > 0 ->
+            ered_node:start(
+                NodeDef#{
+                    '_timeout' => V,
+                    '_counter' => 0,
+                    '_store' => undefined
+                },
+                ered_node_join_timeout
+            );
+        _ ->
+            ErrMsg = jstr("Timeout ~p", [NodeDef]),
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+            ered_node:start(NodeDef, ered_node_ignore)
+    end;
 %%
 %% consider parts attribute on messages
 %%
