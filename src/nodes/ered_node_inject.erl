@@ -62,6 +62,7 @@
     jsbuffer_to_binary/1,
     set_prop_value/3,
     timestamp/0,
+    timestamp/1,
     to_bool/1
 ]).
 -import(ered_message_exchange, [
@@ -143,6 +144,8 @@ send_out_after(Delay, WsName) ->
 
 %%
 %%
+value_for_proptype(<<"date">>, <<"iso">>, Prop, _NodeDef, Msg) ->
+    set_prop_value(Prop, timestamp(iso), Msg);
 value_for_proptype(<<"date">>, _Val, Prop, _NodeDef, Msg) ->
     set_prop_value(Prop, timestamp(), Msg);
 value_for_proptype(<<"json">>, Val, Prop, _NodeDef, Msg) ->
