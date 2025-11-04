@@ -16,12 +16,10 @@
 %% This ignores the "useparts" object.
 %%
 -import(ered_nodes, [
-    jstr/2,
     send_msg_to_connected_nodes/2
 ]).
 -import(ered_nodered_comm, [
-    node_status/5,
-    unsupported/3
+    node_status/5
 ]).
 -import(ered_message_exchange, [
     post_completed/2
@@ -42,6 +40,8 @@ handle_event(
     {registered, WsName, _MyPid},
     #{'_timeout' := TimeOutInSeconds} = NodeDef
 ) ->
+    node_status(WsName, NodeDef, 0, "blue", "ring"),
+
     Store = ets:new(
         ered_node_join_store_timeout,
         [ordered_set, private, {write_concurrency, true}]
@@ -63,6 +63,7 @@ handle_event(
     {outgoing, Msg} = create_outgoing_msg(WsName),
     Batch = ets:foldl(fun({_, M}, Acc) -> [M | Acc] end, [], Store),
     ets:delete_all_objects(Store),
+    node_status(WsName, NodeDef, 0, "blue", "ring"),
     %% send out the messages and bang on another timer to cook the eggs
     begin
         send_out_collected_messages(NodeDef, Msg, lists:reverse(Batch))
@@ -84,12 +85,13 @@ handle_event(_, NodeDef) ->
 %%
 %%
 handle_msg(
-    {incoming, Msg},
+    {incoming, #{?GetWsName} = Msg},
     #{
         '_store' := Store,
         '_counter' := Counter
     } = NodeDef
 ) ->
+    node_status(WsName, NodeDef, Counter + 1, "blue", "ring"),
     true = ets:insert(Store, {Counter, term_to_binary(Msg)}),
     {handled, NodeDef#{'_counter' => Counter + 1}, dont_send_complete_msg};
 %%
