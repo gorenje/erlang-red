@@ -58,6 +58,7 @@
     delete_prop/2,
     get_prop/2,
     set_prop_value/3,
+    timestamp/1,
     timestamp/0,
     to_bool/1
 ]).
@@ -170,6 +171,8 @@ do_change_str({ok, Prop}, {ok, FromStr}, {ok, ToStr}, Msg) ->
 %%
 do_set_value(Prop, Value, <<"num">>, Msg, _NodeDef) ->
     set_prop_value(Prop, convert_to_num(Value), Msg);
+do_set_value(Prop, <<"iso">>, <<"date">>, Msg, _NodeDef) ->
+    set_prop_value(Prop, timestamp(iso), Msg);
 do_set_value(Prop, _Value, <<"date">>, Msg, _NodeDef) ->
     set_prop_value(Prop, timestamp(), Msg);
 do_set_value(Prop, Value, <<"str">>, Msg, _NodeDef) ->
