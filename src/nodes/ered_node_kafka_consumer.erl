@@ -95,14 +95,20 @@ handle_event(
         ok ->
             %% TODO: this is hardcoded on partition 0 - is there a way to
             %% TODO: connect to all partitions or specify a series of partitions.
-            {ok, _Pid} = brod:subscribe(
-                KafkaClientId,
-                self(),
-                KafkaTopic,
-                0,
-                []
-            ),
-            node_status(WsName, NodeDef, "connected", "green", "dot")
+            case
+                brod:subscribe(
+                    KafkaClientId,
+                    self(),
+                    KafkaTopic,
+                    0,
+                    []
+                )
+            of
+                {ok, _Pid} ->
+                    node_status(WsName, NodeDef, "connected", "green", "dot");
+                _ ->
+                    node_status(WsName, NodeDef, "error", "red", "dot")
+            end
     end,
     NodeDef;
 handle_event(
@@ -112,7 +118,7 @@ handle_event(
     [dispatch_kafka_message(KafkaMsg, KMsg, NodeDef) || KafkaMsg <- MsgLst],
     NodeDef;
 handle_event(R, NodeDef) ->
-    io:format("Cons un ~p~n", [R]),
+    io:format("Kafka Unknown Event ~p~n", [R]),
     NodeDef.
 
 %%

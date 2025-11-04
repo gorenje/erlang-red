@@ -156,39 +156,47 @@ send_out_collected_messages(
     #{<<"parts">> := #{<<"parts">> := SubParts}} = Msg,
     Store
 ) ->
-    send_out_collected_messages(NodeDef,
-                                Msg#{<<"parts">> => SubParts},
-                                Store,
-                                Store);
+    send_out_collected_messages(
+        NodeDef,
+        Msg#{<<"parts">> => SubParts},
+        Store,
+        Store
+    );
 send_out_collected_messages(
     #{<<"propertyType">> := <<"full">>} = NodeDef,
     Msg,
     Store
 ) ->
-    send_out_collected_messages(NodeDef,
-                                maps:remove(<<"parts">>, Msg),
-                                Store,
-                                Store);
+    send_out_collected_messages(
+        NodeDef,
+        maps:remove(<<"parts">>, Msg),
+        Store,
+        Store
+    );
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
     #{<<"parts">> := #{<<"parts">> := SubParts}} = Msg,
     Store
 ) ->
     Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
-    send_out_collected_messages(NodeDef,
-                                Msg#{<<"parts">> => SubParts},
-                                Store,
-                                Lst2);
+    send_out_collected_messages(
+        NodeDef,
+        Msg#{<<"parts">> => SubParts},
+        Store,
+        Lst2
+    );
 send_out_collected_messages(
     #{<<"propertyType">> := <<"msg">>, <<"property">> := PropName} = NodeDef,
     Msg,
     Store
 ) ->
     Lst2 = [retrieve_prop_value(PropName, M) || M <- Store],
-    send_out_collected_messages(NodeDef,
-                                maps:remove(<<"parts">>, Msg),
-                                Store,
-                                Lst2).
+    send_out_collected_messages(
+        NodeDef,
+        maps:remove(<<"parts">>, Msg),
+        Store,
+        Lst2
+    ).
 
 %%
 send_out_collected_messages(NodeDef, Msg, AllMsgs, PayloadForNodes) ->

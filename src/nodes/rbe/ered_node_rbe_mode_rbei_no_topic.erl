@@ -22,7 +22,7 @@
     get_prop/2
 ]).
 
-start(_,_) ->
+start(_, _) ->
     throw(should_not_be_called).
 
 %%
@@ -35,16 +35,13 @@ handle_event(_, NodeDef) ->
 %%
 %% Not per-topic filtering
 handle_msg(
-    {incoming,
-     #{ <<"reset">> := Value } = Msg},
+    {incoming, #{<<"reset">> := Value} = Msg},
     NodeDef
 ) when Value =:= true; Value =:= <<"true">>; Value =:= 1 ->
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef#{'_lastvalue' => undefined}, Msg};
-
 handle_msg(
-    {incoming,
-     #{<<"reset">> := _Value } = Msg},
+    {incoming, #{<<"reset">> := _Value} = Msg},
     NodeDef
 ) ->
     send_msg_to_connected_nodes(NodeDef, Msg),
@@ -60,7 +57,8 @@ handle_msg(
 ) ->
     case get_prop(PropName, Msg) of
         {ok, Payload, _} ->
-            {handled, NodeDef#{'_lastvalue' => Payload}, dont_send_complete_msg};
+            {handled, NodeDef#{'_lastvalue' => Payload},
+                dont_send_complete_msg};
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end;
@@ -81,7 +79,6 @@ handle_msg(
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end;
-
 %%
 %% fall through
 handle_msg(_, NodeDef) ->

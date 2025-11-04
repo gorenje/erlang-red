@@ -193,13 +193,14 @@ does_rule_match(<<"jsonata_exp">>, undefined, _MsgVal) ->
 does_rule_match(<<"jsonata_exp">>, OpCompVal, _MsgVal) ->
     to_bool(OpCompVal);
 does_rule_match(
-  <<"hask">>, OpCompVal, MsgVal
- ) when is_binary(OpCompVal), is_map(MsgVal) ->
+    <<"hask">>, OpCompVal, MsgVal
+) when is_binary(OpCompVal), is_map(MsgVal) ->
     maps:is_key(OpCompVal, MsgVal);
 does_rule_match(<<"hask">>, OpCompVal, MsgVal) ->
     false;
 does_rule_match(Op, OpCompVal, MsgVal) ->
-    {unsupported, jstr("unsupported rule ~p [~p] [~p]", [Op,OpCompVal,MsgVal])}.
+    {unsupported,
+        jstr("unsupported rule ~p [~p] [~p]", [Op, OpCompVal, MsgVal])}.
 
 does_rule_match(Op, Type, OpVal, MsgVal, NodeDef, Msg) ->
     case obtain_operator_value(Type, OpVal, Msg) of

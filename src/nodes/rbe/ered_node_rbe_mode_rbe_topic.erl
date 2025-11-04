@@ -24,7 +24,7 @@
     get_prop/2
 ]).
 
-start(_,_) ->
+start(_, _) ->
     throw(should_not_be_called).
 
 %%
@@ -35,7 +35,6 @@ handle_event({registered, _WsName, _MyPid}, NodeDef) ->
         [set, private, {write_concurrency, true}]
     ),
     NodeDef#{'_store' => Store};
-
 handle_event(_, NodeDef) ->
     NodeDef.
 
@@ -43,12 +42,11 @@ handle_event(_, NodeDef) ->
 %%
 %% handle the reset messages
 handle_msg(
-    {incoming,
-     #{<<"reset">> := ResetValue} = Msg},
+    {incoming, #{<<"reset">> := ResetValue} = Msg},
     #{
         <<"topi">> := GrpPropName,
         '_store' := Store
-     } = NodeDef
+    } = NodeDef
 ) when ResetValue =:= true; ResetValue =:= <<"true">>; ResetValue =:= 1 ->
     case get_prop(GrpPropName, Msg) of
         {ok, Topic, _} ->
@@ -60,21 +58,19 @@ handle_msg(
     {handled, NodeDef, Msg};
 %%
 handle_msg(
-    {incoming,
-     #{<<"reset">> := _ResetValue} = Msg},
+    {incoming, #{<<"reset">> := _ResetValue} = Msg},
     NodeDef
 ) ->
     %% Ignore any messages with reset set to something invalid.
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
-
 %% handle a new value - potentially
 handle_msg(
     {incoming, Msg},
     #{
         <<"topi">> := GrpPropName,
         <<"property">> := PropName
-     } = NodeDef
+    } = NodeDef
 ) ->
     case get_prop(PropName, Msg) of
         {ok, Payload, _} ->
@@ -87,7 +83,6 @@ handle_msg(
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end;
-
 %%
 handle_msg(
     {incoming, _Msg},
@@ -104,10 +99,10 @@ handle_msg(_, NodeDef) ->
 %% ------------------ helpers
 %%
 check_topic_value(
-  Topic,
-  Payload,
-  #{'_store' := Store} = NodeDef,
-  Msg
+    Topic,
+    Payload,
+    #{'_store' := Store} = NodeDef,
+    Msg
 ) ->
     case ets:select(Store, [{{Topic, '_'}, [], ['$_']}]) of
         [{Topic, CurrentValue}] when CurrentValue =/= Payload ->

@@ -39,50 +39,44 @@
     get_prop/2
 ]).
 
-start(_,_) ->
+start(_, _) ->
     throw(should_not_be_called).
 
 %%
 %%
 handle_event(
-  {registered, _WsName, _MyPid},
-  #{<<"start">> := <<>>, <<"gap">> := Gap} = NodeDef
+    {registered, _WsName, _MyPid},
+    #{<<"start">> := <<>>, <<"gap">> := Gap} = NodeDef
 ) ->
     maps:merge(
-      NodeDef#{'_lastvalue' => undefined},
-      gap_convert(binary_to_list(Gap))
-     );
-
+        NodeDef#{'_lastvalue' => undefined},
+        gap_convert(binary_to_list(Gap))
+    );
 handle_event(
-  {registered, _WsName, _MyPid},
-  #{<<"start">> := Value, <<"gap">> := Gap} = NodeDef
+    {registered, _WsName, _MyPid},
+    #{<<"start">> := Value, <<"gap">> := Gap} = NodeDef
 ) ->
     maps:merge(
-      NodeDef#{'_lastvalue' => convert_to_num(Value)},
-      gap_convert(binary_to_list(Gap))
-     );
-
+        NodeDef#{'_lastvalue' => convert_to_num(Value)},
+        gap_convert(binary_to_list(Gap))
+    );
 handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
 %% Reset messages
 handle_msg(
-    {incoming,
-     #{<<"reset">> := Value} = Msg},
+    {incoming, #{<<"reset">> := Value} = Msg},
     NodeDef
 ) when Value =:= true; Value =:= <<"true">>; Value =:= 1 ->
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef#{'_lastvalue' => undefined}, Msg};
-
 handle_msg(
-    {incoming,
-     #{<<"reset">> := _Value} = Msg},
+    {incoming, #{<<"reset">> := _Value} = Msg},
     NodeDef
 ) ->
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
-
 %%
 %%
 handle_msg(
@@ -110,16 +104,15 @@ handle_msg(
     case get_prop(PropName, Msg) of
         {ok, Payload, _} ->
             NodeDef2 = is_greater_equal_to(
-                         LastValue,
-                         convert_to_num(Payload),
-                         NodeDef,
-                         Msg
-                        ),
+                LastValue,
+                convert_to_num(Payload),
+                NodeDef,
+                Msg
+            ),
             {handled, NodeDef2, Msg};
         _ ->
             {handled, NodeDef, dont_send_complete_msg}
     end;
-
 %%
 %% fall through
 handle_msg(_, NodeDef) ->
@@ -129,26 +122,25 @@ handle_msg(_, NodeDef) ->
 %% -------------- helpers
 %%
 is_greater_equal_to(
-  LastValue,
-  PayloadNum,
-  #{
-     '_gap' := Gap,
-     <<"inout">> := <<"in">>
-   } = NodeDef,
-  Msg
+    LastValue,
+    PayloadNum,
+    #{
+        '_gap' := Gap,
+        <<"inout">> := <<"in">>
+    } = NodeDef,
+    Msg
 ) ->
     (abs(PayloadNum - LastValue) < Gap) andalso
         send_msg_to_connected_nodes(NodeDef, Msg),
     NodeDef#{'_lastvalue' => PayloadNum};
-
 is_greater_equal_to(
-  LastValue,
-  PayloadNum,
-  #{
-     '_gap' := Gap,
-     <<"inout">> := <<"out">>
-   } = NodeDef,
-  Msg
+    LastValue,
+    PayloadNum,
+    #{
+        '_gap' := Gap,
+        <<"inout">> := <<"out">>
+    } = NodeDef,
+    Msg
 ) ->
     case (abs(PayloadNum - LastValue) < Gap) of
         true ->
@@ -159,27 +151,26 @@ is_greater_equal_to(
     end;
 %%
 is_greater_equal_to(
-  LastValue,
-  PayloadNum,
-  #{
-     '_gappercent' := GapPercent,
-     <<"inout">> := <<"in">>
-   } = NodeDef,
-  Msg
+    LastValue,
+    PayloadNum,
+    #{
+        '_gappercent' := GapPercent,
+        <<"inout">> := <<"in">>
+    } = NodeDef,
+    Msg
 ) ->
     Gap = erlang:abs(LastValue * GapPercent),
     (abs(PayloadNum - LastValue) < Gap) andalso
         send_msg_to_connected_nodes(NodeDef, Msg),
     NodeDef#{'_lastvalue' => PayloadNum};
-
 is_greater_equal_to(
-  LastValue,
-  PayloadNum,
-  #{
-     '_gappercent' := GapPercent,
-     <<"inout">> := <<"out">>
-   } = NodeDef,
-  Msg
+    LastValue,
+    PayloadNum,
+    #{
+        '_gappercent' := GapPercent,
+        <<"inout">> := <<"out">>
+    } = NodeDef,
+    Msg
 ) ->
     Gap = erlang:abs(LastValue * GapPercent),
     case (abs(PayloadNum - LastValue) < Gap) of
@@ -196,7 +187,7 @@ gap_convert(Gap) ->
     case lists:suffix("%", Gap) of
         true ->
             %% Percent value
-            [$%|Num] = lists:reverse(Gap),
+            [$% | Num] = lists:reverse(Gap),
             Val = convert_to_num(lists:reverse(Num)),
             #{'_gappercent' => Val / 100};
         false ->

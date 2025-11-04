@@ -171,13 +171,16 @@ convert_units_to_milliseconds(A, B) ->
 timestamp(iso) ->
     %% {return, binary} did not work for me, so list_to_binary(...)
     list_to_binary(
-      calendar:system_time_to_rfc3339(
-        erlang:system_time(millisecond),
-        [{unit, millisecond},
-         {time_designator, $T},
-         {offset, "Z"},
-         {return, string}]
-       )).
+        calendar:system_time_to_rfc3339(
+            erlang:system_time(millisecond),
+            [
+                {unit, millisecond},
+                {time_designator, $T},
+                {offset, "Z"},
+                {return, string}
+            ]
+        )
+    ).
 timestamp() ->
     erlang:system_time(millisecond).
 
