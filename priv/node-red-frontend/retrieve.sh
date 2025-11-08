@@ -20,9 +20,7 @@
 # other things will need to be updated manually.
 
 ### TODO change the following.
-# NODERED_URL=http://nodered-host:1880/httpAdminRoot
-
-NODERED_URL=http://renderbox:1890/cfg
+NODERED_URL=http://localhost:1890/cfg
 
 ### TODO remove this also
 echo "Edit retrieve.sh before use"
