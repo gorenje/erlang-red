@@ -21,11 +21,11 @@ jobs:
       SHELL: /bin/bash
       LANG: C.UTF-8
       NUMBER_OF_FLOWTESTS_IN_PARALLEL: 10
-      
+
     strategy:
       matrix:
         otp: ['27.3.3', '28.1.1']
-        rebar3: ['3.24.0', '3.24.0']
+        rebar3: ['3.24.0', '3.25.1']
     steps:
       - uses: actions/checkout@v4
       - uses: awalsh128/cache-apt-pkgs-action@latest
@@ -38,4 +38,3 @@ jobs:
           rebar3-version: ${{matrix.rebar3}}
       - run: rebar3 compile
       - run: rebar3 do eunit, ct
-      
