@@ -24,8 +24,8 @@ jobs:
       
     strategy:
       matrix:
-        otp: ['27.3.3']
-        rebar3: ['3.24.0']
+        otp: ['27.3.3', '28.1.1']
+        rebar3: ['3.24.0', '3.24.0']
     steps:
       - uses: actions/checkout@v4
       - uses: awalsh128/cache-apt-pkgs-action@latest
