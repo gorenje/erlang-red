@@ -260,6 +260,19 @@ handle_msg(_, NodeDef) ->
 
 % send_message_on_state_change/6
 
+%% If a state handler response with "dont_send_message", then its telling us
+%% to do exactly that. Basically because the handle_event(...) has a From
+%% it has to send a reply, but sometimes we don't want to pass on that reply.
+send_message_on_state_change(
+    NodeDef,
+    _Msg,
+    dont_send_message,
+    _Action,
+    _CurrS,
+    _PrevS
+) ->
+    {handled, NodeDef, dont_send_complete_msg};
+
 send_message_on_state_change(
     NodeDef,
     #{<<"payload">> := OrigPayload} = Msg,
@@ -283,6 +296,19 @@ send_message_on_state_change(NodeDef, Msg, Result, Action, CurrS, PrevS) ->
     end.
 
 % always_send_message/6
+
+%% If a state handler response with "dont_send_message", then its telling us
+%% to do exactly that. Basically because the handle_event(...) has a From
+%% it has to send a reply, but sometimes we don't want to pass on that reply.
+always_send_message(
+    NodeDef,
+    _Msg,
+    dont_send_message,
+    _Action,
+    _CurrS,
+    _PrevS
+) ->
+    {handled, NodeDef, dont_send_complete_msg};
 
 always_send_message(
     NodeDef,
