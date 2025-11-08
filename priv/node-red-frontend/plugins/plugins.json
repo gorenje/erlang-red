@@ -14,6 +14,18 @@
     {
         "editor": true,
         "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.1.0"
+    },
+    {
+        "editor": true,
+        "enabled": true,
         "id": "@gregoriusrippenstein/erlang-red-unittest/unittesting_sidebar",
         "local": true,
         "module": "@gregoriusrippenstein/erlang-red-unittest",
@@ -26,18 +38,6 @@
     {
         "editor": true,
         "enabled": true,
-        "id": "@gregoriusrippenstein/node-red-contrib-flowhub/flowhub_sidebar",
-        "local": true,
-        "module": "@gregoriusrippenstein/node-red-contrib-flowhub",
-        "name": "flowhub_sidebar",
-        "plugins": [],
-        "runtime": false,
-        "user": false,
-        "version": "0.9.0"
-    },
-    {
-        "editor": true,
-        "enabled": true,
         "id": "@gregoriusrippenstein/node-red-contrib-flow2uml/sidebar-plugin",
         "local": true,
         "module": "@gregoriusrippenstein/node-red-contrib-flow2uml",
@@ -46,6 +46,18 @@
         "runtime": false,
         "user": false,
         "version": "0.4.1"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flowhub/flowhub_sidebar",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flowhub",
+        "name": "flowhub_sidebar",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.9.0"
     },
     {
         "editor": true,
@@ -70,17 +82,5 @@
         "runtime": false,
         "user": false,
         "version": "0.0.8"
-    },
-    {
-        "editor": true,
-        "enabled": true,
-        "id": "@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin",
-        "local": true,
-        "module": "@gregoriusrippenstein/erlang-red-process-nodes",
-        "name": "sidebar-plugin",
-        "plugins": [],
-        "runtime": false,
-        "user": false,
-        "version": "0.1.0"
     }
 ]
