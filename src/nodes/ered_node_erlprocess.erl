@@ -121,6 +121,7 @@ handle_msg(
     case obtain_pid(DynPid) of
         false ->
             node_status(WsName, NodeDef, "dynamic", "red", "dot"),
+            send_msg_to_connected_nodes(NodeDef, Msg),
             {handled, maps:remove(erlpid, NodeDef), dont_send_complete_msg};
         TgtPid ->
             node_status(WsName, NodeDef, "dynamic", "green", "dot"),
@@ -133,10 +134,12 @@ handle_msg(
             )
     end;
 handle_msg(
-    {incoming, #{?PayloadIsSet, ?WsNameIsSet} = _Msg},
+    {incoming, #{?PayloadIsSet, ?GetWsName} = Msg},
     #{erlpid := <<"dynamic">>} = NodeDef
 ) ->
     %% ignore messages without process ids
+    node_status(WsName, NodeDef, "dynamic - no pid", "red", "dot"),
+    send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
 handle_msg(
     {incoming, #{?GetPayload, ?GetWsName} = Msg},
@@ -153,6 +156,7 @@ handle_msg(
             );
         false ->
             node_status(WsName, NodeDef, "dead", "red", "dot"),
+            send_msg_to_connected_nodes(NodeDef, Msg),
             {handled, maps:remove(erlpid, NodeDef), Msg}
     end;
 %%
@@ -164,7 +168,9 @@ handle_msg(
     ErrMsg = jstr("process is dead"),
     node_status(WsName, NodeDef, "dead", "red", "dot"),
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
+    send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
+
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
@@ -189,13 +195,15 @@ obtain_pid(TgtPid) when is_binary(TgtPid) ->
                 whereis(binary_to_atom(TgtPid))
         end,
     obtain_pid(Thing).
-
+%%
+%%
 send_payload_to_process(NodeDef, Msg, Pid, Payload, {ok, <<"call">>}) ->
     Msg2 = Msg#{<<"payload">> => gen_server:call(Pid, Payload)},
     send_msg_to_connected_nodes(NodeDef, Msg2),
     {handled, NodeDef, Msg};
 send_payload_to_process(NodeDef, Msg, Pid, Payload, {ok, <<"cast">>}) ->
     gen_server:call(Pid, Payload),
+    send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, Msg};
 send_payload_to_process(NodeDef, Msg, Pid, Payload, _) ->
     Pid ! Payload,
