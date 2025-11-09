@@ -32,6 +32,7 @@
             "label": {
                 "capture_io": "Capture I/O?",
                 "process": "Process Id",
+                "process_name": "Process Name",
                 "statusset": "Status Set"
             },
             "status": {

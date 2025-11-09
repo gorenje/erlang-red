@@ -466,7 +466,7 @@
             "ered-kafka-broker"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -478,7 +478,7 @@
             "ered-kafka-producer"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -490,7 +490,7 @@
             "ered-kafka-consumer"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -514,7 +514,7 @@
             "erlconfigCfg"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -526,7 +526,7 @@
             "erlprocess"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -538,7 +538,7 @@
             "erlcaptureio"
         ],
         "user": false,
-        "version": "0.1.0"
+        "version": "0.1.1"
     },
     {
         "enabled": true,
@@ -670,7 +670,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.4.1"
+        "version": "0.4.2"
     },
     {
         "enabled": true,
@@ -682,7 +682,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.4.1"
+        "version": "0.4.2"
     },
     {
         "enabled": true,
@@ -694,7 +694,7 @@
             "mermaid-state-start"
         ],
         "user": false,
-        "version": "0.4.1"
+        "version": "0.4.2"
     },
     {
         "enabled": true,
@@ -706,7 +706,7 @@
             "mermaid-state-state"
         ],
         "user": false,
-        "version": "0.4.1"
+        "version": "0.4.2"
     },
     {
         "enabled": true,
@@ -718,7 +718,7 @@
             "mermaid-state-end"
         ],
         "user": false,
-        "version": "0.4.1"
+        "version": "0.4.2"
     },
     {
         "enabled": true,
@@ -838,7 +838,7 @@
             "amqp-in"
         ],
         "user": false,
-        "version": "2.4.0"
+        "version": "2.6.5"
     },
     {
         "enabled": true,
@@ -850,7 +850,7 @@
             "amqp-out"
         ],
         "user": false,
-        "version": "2.4.0"
+        "version": "2.6.5"
     },
     {
         "enabled": true,
@@ -862,7 +862,7 @@
             "amqp-broker"
         ],
         "user": false,
-        "version": "2.4.0"
+        "version": "2.6.5"
     },
     {
         "enabled": true,
@@ -874,7 +874,7 @@
             "amqp-in-manual-ack"
         ],
         "user": false,
-        "version": "2.4.0"
+        "version": "2.6.5"
     },
     {
         "enabled": true,

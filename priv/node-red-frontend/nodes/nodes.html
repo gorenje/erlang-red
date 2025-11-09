@@ -12036,7 +12036,7 @@ msg.cookies = {
       saslpassword: { type: 'password', required: false },
     },
     label: function () {
-      return this.name || this.type;
+      return this.name || 'kafkajs-broker';
     },
 
     oneditprepare: function () {
@@ -12264,7 +12264,7 @@ msg.cookies = {
     icon: 'Kafka.svg',
     allign: 'left',
     label: function () {
-      return this.name || this.type;
+      return this.name || 'kafkajs-producer';
     },
     paletteLabel: function() {
       return 'kafka out';
@@ -12526,7 +12526,7 @@ msg.cookies = {
     icon: 'Kafka.svg',
     align: 'left',
     label: function () {
-      return this.name || this.type;
+      return this.name || 'kafkajs-consumer';
     },
     paletteLabel: function() {
       return 'kafka in';
@@ -12605,15 +12605,6 @@ msg.cookies = {
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-process-nodes/erlprocess] --- -->
 <script type="text/javascript">
   (function(){
-  
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
-  
   RED.nodes.registerType('erlprocess',{
     color: '#FFCC66',
     icon: "font-awesome/fa-genderless",
@@ -12626,6 +12617,10 @@ msg.cookies = {
       pid: {
         value: "",
         required: false
+      },
+      pidname: {
+        value: "",
+        required: false
       }
     },
 
@@ -12634,7 +12629,7 @@ msg.cookies = {
     outputs: 1,
 
     label: function() {
-      return (this.name || this._def.paletteLabel);
+      return (this.name || this.pidname || this.pid || this._def.paletteLabel);
     },
 
     labelStyle: function() {
@@ -12681,6 +12676,11 @@ msg.cookies = {
     <label for="node-input-pid"><i class="fa fa-circle"></i> <span data-i18n="erlprocess.label.process"></span></label>
     <input type="text" id="node-input-pid" data-i18n="[placeholder]erlprocess.label.process">
   </div>
+
+  <div class="form-row">
+    <label for="node-input-pidname"><i class="fa fa-square"></i> <span data-i18n="erlprocess.label.process_name"></span></label>
+    <input type="text" id="node-input-pidname" data-i18n="[placeholder]erlprocess.label.process_name">
+  </div>
 </script>
 <script type="text/markdown" data-help-name="erlprocess">
 Represent an existing Erlang process by name, number or rank.
@@ -12689,6 +12689,7 @@ Represent an existing Erlang process by name, number or rank.
 
 : payload (any) : The messager payload to send the process.
 : *msgtype* (string) : (optional) either `info`, `cast` or `call`. Defaults to `info`.
+: *pid* (pid | string) : (optiona) override the defined process and use this pid instead.
 
 ### Outputs
 
@@ -15329,15 +15330,6 @@ If this node isn't reached, then the test will fail.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-start] --- -->
 <script type="text/javascript">
   (function(){
-  
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
-  
   RED.nodes.registerType('mermaid-state-start',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-circle",
@@ -15482,8 +15474,6 @@ Used to define a state machine diagram.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-state] --- -->
 <script type="text/javascript">
   (function(){
-  
-  
   RED.nodes.registerType('mermaid-state-state',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-map-marker",
@@ -15541,7 +15531,7 @@ Used to define a state machine diagram.
           label.append($("<span>").text(RED.utils.getNodeLabel(nde) + " (this state)"))
         } else if (nde.type == "mermaid-state-end") {
           label.append('<i class="fa fa-bullseye"></i>&nbsp;')
-          label.append($("<span>").text(RED.utils.getNodeLabel(nde))) 
+          label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
         } else {
           label.append('<i class="fa fa-map-marker"></i>&nbsp;')
           label.append($("<span>").text(RED.utils.getNodeLabel(nde)))
@@ -15639,15 +15629,6 @@ Used to define a state machine diagram.
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end] --- -->
 <script type="text/javascript">
   (function(){
-  
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
-  
   RED.nodes.registerType('mermaid-state-end',{
     color: '#D7D7A0',
     icon: "font-awesome/fa-bullseye",
@@ -16821,7 +16802,7 @@ Functionality:
   }
   div.wide-label-amqp-in input {
     width: 65% !important;
-  } 
+  }
   div.form-tips {
     overflow: scroll;
   }
@@ -17150,15 +17131,16 @@ Functionality:
       will be auto-generated and sent along with the published message. <br>
       The message consumer will need to send a response using those fields <br>
       for this node to then consume and send to output. <br>
-      See the <a href="https://www.rabbitmq.com/tutorials/tutorial-six-javascript.html" target="_blank">RabbitMQ RPC Tutorial</a> for more info. <br>
+      See the <a href="https://www.rabbitmq.com/tutorials/tutorial-six-javascript.html" target="_blank">RabbitMQ RPC
+  Tutorial</a> for more info. <br>
       If the consumer for whatever reason does not send a response <br>
       the request will timeout (configurable here with a default of 3000ms) <br>
-       and the rpc consumer will be cancelled.
+      and the rpc consumer will be cancelled.
       <br />
       <br />
-       <b>Note</b>: You <em>can</em> override the <em>correlationId</em> and <em>replyTo</em> <br>
-       AMQP properties by specifying them above or sending them via the <br>
-       node input but it is not recommended except for special use cases.
+      <b>Note</b>: You <em>can</em> override the <em>correlationId</em> and <em>replyTo</em> <br>
+      AMQP properties by specifying them above or sending them via the <br>
+      node input but it is not recommended except for special use cases.
     </div>
   </span>
 </script>
@@ -17861,6 +17843,10 @@ Functionality:
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
+    <div class="form-row">
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
+        <input type="text" id="node-input-property" style="width:70%;"/>
+    </div>
 </script>
 
 
@@ -17870,16 +17856,23 @@ Functionality:
         category: 'parser',
         color:"#DEBD5C",
         defaults: {
-            name: {value:""}
+            name: {value:""},
+            property: {value:"payload",required:true}
         },
         inputs:1,
         outputs:1,
         icon: "parser-markdown.png",
         label: function() {
-            return this.name||"markdown";
+            return this.name||("msg." + this.property)||"markdown";
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+            $("#node-input-property").typedInput({default:'msg',types:['msg']});
         }
     });
 </script>

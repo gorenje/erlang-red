@@ -858,6 +858,424 @@ function showNextChangeButtonPressed(e) {
   </div>
 </div>
 </script>
+<!-- --- [red-plugin:@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin] --- -->
+<script type="text/javascript">
+(function() {
+   var globalYourConfigNode = null;
+
+   function dagreLR(payload, callback) {
+      var allnodes = payload.allnodes;
+      var alledges = payload.alledges;
+      var fixedNodeId = payload.fixedNodeId;
+
+      var g = new dagre.graphlib.Graph();
+      
+      g.setGraph({});
+      g.setDefaultEdgeLabel(function () { return {}; });
+
+      for (var idx = 0; idx < allnodes.length; idx++) {
+         var n = allnodes[idx];
+         g.setNode(n.id, {
+               ...n,
+         })
+      }
+
+      for (var idx = 0; idx < alledges.length; idx++) {
+         var e = alledges[idx];
+         g.setEdge(e.sources[0], e.targets[0])
+      }
+
+      g.graph().rankdir = "LR"
+      g.graph().marginx = 20
+      g.graph().marginy = 20
+      g.graph().nodesep = 30
+      g.graph().ranksep = 50
+
+      dagre.layout(g)
+
+      callback({
+         type: "movenodes",
+         fixedNodeId: fixedNodeId,
+         nodes: g.nodes().map(function (v) {
+               return {
+                     ...g.node(v)
+                  }
+         })            
+      })
+   }
+
+   function getProcesses(opts, cb) {
+
+      $.ajax({
+         url: `erlprocess/processes?by=${opts.by}`,
+         type: "GET",
+         data: {},
+         contentType: 'application/json',
+         processData: false,
+         success: function(resp) {
+            let processes = resp.data.processes;
+            let pid2node = {}
+            
+            processes.forEach( proc => {
+               pid2node[proc.pid] = {
+                  pid: proc.pid,
+                  label: proc.name || proc.pid,
+                  sortby: (proc.name || proc.pid).replace(/^[<]/, "zzz"), // ensure <1.2.3> Pids go to the bottom of the listing
+                  parentpid: proc.parent,
+                  sublabel: proc.pid,
+                  selected: false,
+                  checkbox: false,
+                  children: []
+               }
+            })
+
+            let hasparent = []
+            processes.forEach( p => {
+               if ( pid2node[p.parent] && (p.parent != p.pid) ) {
+                  pid2node[p.parent].children.push(pid2node[p.pid])
+                  hasparent.push(p.pid)
+               }
+            })
+
+            Object.values(pid2node).forEach( d => {
+               if (d.children.length == 0 ) { d.children = undefined }
+               else { d.children.sort( (a, b) => a.sortby > b.sortby ) }
+            })
+
+            cb(Object.values(pid2node).filter( d => !hasparent.includes(d.pid) ), opts)
+         },
+         error: function(resp) {},
+         complete: function() {}
+      })
+   }
+
+   function setupTreelistForProcesses(items, opts) {
+      if (items.length == 0) {
+         RED.notify("No Processes Found", {
+               type: "success",
+               timeout: 2000
+         });
+
+         try {
+               $("#node-input-erlprocess-target-container-div").treeList('empty')
+         } catch (ex) { }
+      } else {
+         try {
+               $("#node-input-erlprocess-target-container-div").treeList('empty')
+         } catch (ex) {
+               $("#node-input-erlprocess-target-container-div").css({
+                  width: "100%",
+                  height: "calc(100%)"
+               }).treeList(
+                  {
+                     multi: false
+                  }
+               ).on("treelistitemmouseover", function (e, item) {
+                  /*
+                  if (item.node && item.node.z == RED.workspaces.active()) {
+                     RED.view.reveal(item.node.id, true);
+                     RED.view.redraw();
+                  }
+                  */
+               }).on("treelistitemmouseout", function (e, item) {
+               }).on('treelistselect', function (event, item) {
+                  /* here we do nothing, that is desired */
+               }).on('treelistconfirm', function (event, item) {
+                  if (item.pid) {
+                     let nde = {
+                        "id": RED.nodes.id(),
+                        "type": "erlprocess",
+                        "pid": item.pid, 
+                        "pidname": item.label,
+                        "name": "",
+                        "capture_io": false,
+                        "l": !$('#erlprocess-import-compact-node-size').is(":checked")
+                     }
+                     RED.view.importNodes([nde])
+                  }
+               });
+
+               $("#node-input-erlprocess-target-container-filter").show();
+
+               var search = $("#node-input-erlprocess-target-container-filter").searchBox({
+                  style: "compact",
+                  delay: 300,
+                  change: function () {
+                     var val = $(this).val().trim().toLowerCase();
+                     if (val === "") {
+                           $("#node-input-erlprocess-target-container-div").treeList("filter", null);
+                           search.searchBox("count", "");
+                     } else {
+                           var count = $("#node-input-erlprocess-target-container-div").treeList("filter", function (item) {
+                              return item.label.toLowerCase().indexOf(val) > -1 || item.pid.toLowerCase().indexOf(val) > -1
+                           });
+
+                           search.searchBox("count", count + " / " + $("#node-input-erlprocess-target-container-div").treeList("data").length);
+                     }
+                  }
+               });
+         }
+         $("#node-input-erlprocess-target-container-div").treeList("data", items.sort((a, b) => a.sortby > b.sortby))
+      }
+   }
+
+   function ensureYourConfigNodeExists() {
+      // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
+      // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
+
+      // If we had found it previously, check if it has been deleted by the user behind our back
+      if (globalYourConfigNode !== null) {
+         var configNode = RED.nodes.node(globalYourConfigNode.id);
+         if (configNode === null) { globalYourConfigNode = null; }
+      }
+
+      // If not found previously, let's go find it
+      if (globalYourConfigNode === null) {
+         var configNodes = [];
+         RED.nodes.eachConfig(function(configNode) {
+             if (configNode.type === 'erlconfigCfg') { 
+                 configNodes.push(configNode); 
+             }
+         });
+
+         // Make sure we only have 1 config node
+         while (configNodes.length > 1) {
+             var configNode = configNodes.pop();
+             RED.nodes.remove(configNode.id);
+             RED.nodes.dirty(true);
+         }
+
+         // When we found a config node, let's use that one
+         if (configNodes.length === 1) { globalYourConfigNode = configNodes[0]; }
+      }
+
+      // When it doesn't exist yet, create it if required
+      if (globalYourConfigNode === null) {
+         // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
+         // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
+         // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
+         // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
+         globalYourConfigNode = {
+             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
+             _def: RED.nodes.getType("erlconfigCfg"),
+             type: "erlconfigCfg",
+             hasUsers: false, 
+             users: [],
+             name: "Processes",
+             label: function() { return "config" || this.name },
+             /* values and data defined by this config node */
+             data: "some default value", // Default data
+         }
+
+         // Add the new config node to the collection of Node-RED nodes
+         RED.nodes.add(globalYourConfigNode);
+
+         // Make sure the "Deploy" button becomes active
+         RED.nodes.dirty(true);
+      }      
+   }
+
+   // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
+   var initialiseConfigNodeOnce = () => {
+      RED.events.off('runtime-state', initialiseConfigNodeOnce);
+
+      // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
+      var content = $($('script[type="text/x-red"][data-template-name="erlconfig"]').i18n().html());
+    
+      // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
+      // --> more details: https://nodered.org/docs/api/ui/sidebar/
+      RED.sidebar.addTab({
+         id: "erlconfig",
+         label: "Processes", // short name for the tab
+         name: "Processes", // long name for the menu
+         content: content,
+         closeable: true,
+         // disableOnEdit: true,
+         enableOnEdit: true,
+         iconClass: "fa fa-circle" // your fontawesome icon
+      });
+
+      ensureYourConfigNodeExists();
+
+      // At startup load your config node data into the plugin sidebar html elements
+      $("#node-input-data").val(globalYourConfigNode.data);
+
+      // When the user has entered new data in the sidebar, then store it into the config node
+      $("#node-input-data").on("change", function() {
+        ensureYourConfigNodeExists();
+
+        let data = $(this).val();
+
+         if (globalYourConfigNode.data != data) {
+            globalYourConfigNode.data = data;
+            // Since the config node has been updated, the 'Deploy' button should become active
+            RED.nodes.dirty(true);
+         }
+      })
+
+      $('#node-input-erlprocess-refresh-leaders-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+            getProcesses({"by":"leader"}, (items,opts) => {
+               setupTreelistForProcesses(items,opts)
+            })
+      })
+
+      $('#node-input-erlprocess-refresh-links-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+            getProcesses({"by":"links"}, (items,opts) => {
+               setupTreelistForProcesses(items,opts)
+            })
+      })
+
+      $('#node-input-erlprocess-import-process-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         
+         let item = $("#node-input-erlprocess-target-container-div").treeList('selected')
+         
+         if ( !item ) { return }
+
+         let nde = {
+            "id": RED.nodes.id(),
+            "type": "erlprocess",
+            "pid": item.pid,
+            "pidname": item.label,
+            "name": "",
+            "capture_io": false,
+            "l": !$('#erlprocess-import-compact-node-size').is(":checked")
+         }
+         RED.view.importNodes([nde])         
+      })
+      
+      $('#node-input-erlprocess-import-tree-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+
+         let mapChildren = (ary) => {
+            return ary.map( d => {
+               if ( d.children) {
+                  return [d, mapChildren(d.children)]
+               } else {
+                  return [d]
+               }
+            })
+         }
+
+         let process = $("#node-input-erlprocess-target-container-div").treeList('selected')
+
+         if ( !process ) { return }
+
+         let processes = [process];
+         if ( process.children ) {
+            processes = [process, ...mapChildren(process.children)].flat(100)
+         }
+
+         let pid2node = {};
+
+         processes.forEach( p => {
+            pid2node[p.pid] = {
+               "id": RED.nodes.id(),
+               "type": "erlprocess",
+               "pid": p.pid,
+               "pidname": p.label,
+               "name": "",
+               "capture_io": false,
+               "l": !$('#erlprocess-import-compact-node-size').is(":checked"),
+               "wires": [[]]
+            }
+         })
+
+         let alledges = []
+
+         if ( !$('#erlprocess-import-reverse-tree').is(":checked")) {
+            processes.forEach( p => {
+               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
+                  pid2node[p.parentpid].wires[0].push(pid2node[p.pid].id)
+                  alledges.push({
+                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
+                     sources: [pid2node[p.parentpid].id],
+                     targets: [pid2node[p.pid].id]
+                  })
+               }
+            })
+         } else {
+            processes.forEach( p => {
+               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
+                  pid2node[p.pid].wires[0].push(pid2node[p.parentpid].id)
+
+                  alledges.push({
+                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
+                     targets: [pid2node[p.parentpid].id],
+                     sources: [pid2node[p.pid].id]
+                  })
+               }
+            })
+         }
+
+         let allnodes = Object.values(pid2node).map( d => {
+            d.height = 20;
+            d.width = $('#erlprocess-import-compact-node-size').is(":checked") ? 30 : 150;
+            return d
+         })
+
+         if ( typeof dagre == "object") {
+            dagreLR({
+               "allnodes": allnodes,
+               "alledges": alledges,
+               "fixedNodeId": pid2node[process.pid].id
+            }, (data) => { RED.view.importNodes(data.nodes) });
+         } else {
+            RED.view.importNodes(allnodes)
+         }
+      })
+
+      $('#node-input-erlprocess-select-none-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = false; return d })) 
+      })
+      $('#node-input-erlprocess-select-all-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = true; return d })) 
+      })
+      $('#node-input-erlprocess-select-inverse-but').on('click', (e) => {
+         if ( e ) { e.preventDefault() }
+         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = !d.selected; return d })) 
+      })
+
+   };
+   RED.events.on('runtime-state', initialiseConfigNodeOnce);
+})();
+</script>
+
+<!-- The html for the right sidebar plugin screen -->
+<script type="text/x-red" data-template-name="erlconfig">
+
+   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
+      <button class="red-ui-button" id="node-input-erlprocess-refresh-leaders-but"><i class="fa fa-rotate-left"></i> Refresh by Group Leader</button>
+      <button style="margin-left: 10px;" class="red-ui-button" id="node-input-erlprocess-refresh-links-but"><i class="fa fa-rotate-right"></i> Refresh by Links</button>
+   </div>
+
+   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
+      <button class="red-ui-button" style="" id="node-input-erlprocess-import-tree-but"><i class="fa fa-tree"></i> Import Tree</button>
+      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-process-but"><i class="fa fa-genderless"></i> Import Process</button>
+   </div>
+
+   <div class="form-row" style="margin-left: 10px;">
+      <input style="width: 5%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
+      <label for="erlprocess-import-reverse-tree" style="width: 30%;"><i class="fa fa-refresh" ></i> Reverse Tree?</label>
+
+      <input style="margin-left: 20px; width: 5%;" type="checkbox" id="erlprocess-import-compact-node-size"/>
+      <label for="erlprocess-import-compact-node-size" style="width: 30%;"><i class="fa fa-compress" ></i> Compact Nodes?</label>
+   </div>
+
+   <div class="form-row"
+      style="margin-left: 10px; position: relative; min-height: 300px; height: 650px; margin-right: 15px;">
+      <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
+         <input type="text" id="node-input-erlprocess-target-container-filter" style="display: none;">
+      </div>
+      <div id="node-input-erlprocess-target-container-div"></div>
+   </div>
+</script>
+
+
 <!-- --- [red-plugin:@gregoriusrippenstein/erlang-red-unittest/unittesting_sidebar] --- -->
 <script type="text/javascript">
   (function() {
@@ -1553,6 +1971,502 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 <!--func-unittesting-tabs-content-->
 </script>
 
+<!-- --- [red-plugin:@gregoriusrippenstein/node-red-contrib-flow2uml/sidebar-plugin] --- -->
+<script type="text/javascript">
+(function() {
+   var globalYourConfigNode = null;
+
+   (()=>{function O(e,a,t){switch(e.arrow||"arrow"){case"--":case"line":a=""!==t?` -- "${t}" --- `:" --- ";break;case"--\x3e":case"arrow":a=""!==t?` -- "${t}" --> `:" --\x3e ";break;case"==>":case"thickarrow":a=""!==t?` == "${t}" ==> `:" ==> ";break;case"-.->":case"dotarrow":a=""!==t?` -. "${t}" .-> `:" -.-> ";break;case"-.-":a=""!==t?` -. "${t}" -.- `:" -.- ";break;case"==":a=""!==t?` == "${t}" === `:" === ";break;case"<--\x3e":a=""!==t?` <-- "${t}" --> `:" <---\x3e ";break;case"<-.->":a=""!==t?` <-. "${t}" .-> `:" <-.-> ";break;case"<==>":a=""!==t?` <== "${t}" ==> `:" <===> ";break;case"--x":a=""!==t?` -- "${t}" --x `:" --x ";break;case"-.-x":a=""!==t?` -. "${t}" .-x `:" -.-x ";break;case"==x":a=""!==t?` == "${t}" ==x `:" ===x ";break;case"x--x":a=""!==t?` x-- "${t}" --x `:" x--x ";break;case"x-.-x":a=""!==t?` x-. "${t}" .-x `:" x-.-x ";break;case"x==x":a=""!==t?` x== "${t}" ==x `:" x===x ";break;case"--o":a=""!==t?` -- "${t}" --o `:" --o ";break;case"-.-o":a=""!==t?` -. "${t}" .-o `:" -.-o ";break;case"==o":a=""!==t?` == "${t}" ==o `:" ===o ";break;case"o--o":a=""!==t?` o-- "${t}" --o `:" o--o ";break;case"o-.-o":a=""!==t?` o-. "${t}" .-o `:" o-.-o ";break;case"o==o":a=""!==t?` o== "${t}" ==o `:" o===o "}return a}function U(e){return e.every(e=>e.type.startsWith("mermaid-state-"))}window.FlowToMermaid={constructMermaid:function(e,a="TB",t=void 0){for(var r={payload:e},n={},e=r.payload.filter(e=>("group"==e.type&&(n[e.id]={nodesids:[...e.nodes||[]],name:e.name||`**missing name ${e.id}**`,env:[...e.env||[]]}),"tab"!=e.type&&"group"!=e.type)),o={},i=0;i<e.length;i++){var l=e[i];o[l.id]=l}var s=t?t:{nodes:{node:e=>o[e],subflow:e=>o[e]}};if(U(e)){for(var d=e,c=o,p=["%% Generated by the Flow2UML Node @ https://flowhub.org/flow2uml","%% change direction to LR for Node-RED left-to-right UML","stateDiagram","    direction "+a],m=(e,a,t,r)=>t?r?`    ${e} --> ${a} : ${t}(${r})`:`    ${e} --> ${a} : `+t:`    ${e} --> `+a,h=0;h<d.length;h++){var f=d[h],u=f.wirecfgs;if("mermaid-state-end"!=f.type)for(var g="mermaid-state-start"==f.type?"[*]":f.name,k=0;k<u.length;k++){var w=u[k];if("self"==w.id)p.push(m(g,g,w.action,w.payload));else{let e=c[w.id]&&c[w.id].name||"[?]";c[w.id]&&"mermaid-state-end"==c[w.id].type&&(e="[*]"),p.push(m(g,e,w.action,w.payload))}}}return p.filter(e=>e).join("\n")}var v=e=>e&&{nnull:"not null",eq:"==",neq:"!=",lt:"<",lte:"<=",gt:">",gte:">=",hask:"has key",cont:"contains"}[e]||e,y=e=>e.replaceAll("&","&amp;").replaceAll("#","#35;").replaceAll("[","#91;").replaceAll("]","#93;").replaceAll("(","#40;").replaceAll(")","#41;").replaceAll("|","#124;").replaceAll(">","&gt;").replaceAll("<","&lt;").replaceAll("{","#123;").replaceAll("}","#125;").replaceAll("/","#47;").replaceAll('"',"#34;"),b=(e,a=void 0)=>{if(!e)return"";var t=e.name||e.type;switch(a=a?'|"'+y(a)+'"| ':"",t=y(t),e.type){case"switch":case"join":case"split":return a+e.id+'{"'+t+'"}';case"link call":case"link out":if(e.mode&&"return"==e.mode)return a+e.id+"[\\Link Return/]";if(!e.name||e.name.match(/^link out/)){if("dynamic"==e.linkType)return a+e.id+'{{"'+(t="\\Dynamic Target/")+'"}}';var r=e.links&&0<e.links.length&&(o[e.links[0]]||s.nodes.node(e.links[0])),t=y(r&&r.name||e.type)}return a+e.id+'{{"'+t+'"}}';case"link in":return t=y(e.name||e.links&&0<e.links.length&&o[e.links[0]]&&o[e.links[0]].name||e.type),a+e.id+'{{"'+t+'"}}';case"junction":return a+e.id+'(("conn"))';case"inject":case"debug":return a+e.id+'(["'+t+'"])';case"http in":return a+e.id+'["'+y("["+e.method+"] "+e.url)+'"]';case"mermaid-flowchart":return e.id+`@{ shape: "${e.shape}", label: "${t}" }`;default:return e.type.startsWith("subflow:")?(r=s.nodes.subflow(e.type.replace(/subflow:/,"")),t=y(r&&r.name||e.type),a+e.id+'[/"'+t+'"/]'):a+e.id+'["'+t+'"]'}};r.mermaid=["%% Generated by the Flow2UML Node @ https://flowhub.org/flow2uml","%% change direction to LR for Node-RED left-to-right UML","flowchart "+a],console.log("FLOW2UML: WARNING when copy & pasting flow chart nodes, their connections details are losts."),console.log("FLOW2UML: WARNING This is because the configuration of wires is based on node ids, these "),console.log("FLOW2UML: WARNING node ids change on copy and paste but aren't updated in the configuration "),console.log("FLOW2UML: WARNING of individual flowchart nodes.");for(var x,i=0;i<e.length;i++){var _=e[i];if(_.links&&0<_.links.length&&"link out"==_.type)for(var D=0;D<_.links.length;D++)o[_.links[D]]&&r.mermaid.push(b(_)+" -.-> "+_.links[D]);if(_.wires&&0<_.wires.length)if("mermaid-flowchart"==_.type){(_.wirecfgs||[]).forEach(e=>{var a,t;e.id!=_.id&&"self"!=e.id||(t=_.id,o[t]&&(t=" --\x3e ",a=y(e.name||""),t=O(e," --\x3e ",a),r.mermaid.push(b(_)+t+b(_))))});for(var F=0;F<_.wires.length;F++)for(var A=0;A<_.wires[F].length;A++){var L=_.wires[F][A];(_.wirecfgs||[]).forEach(e=>{var a,t;e.id==L&&o[L]&&(t=" --\x3e ",a=y(e.name||""),t=O(e," --\x3e ",a),r.mermaid.push(b(_)+t+b(o[_.wires[F][A]],E&&E[F]||void 0)))})}}else if("switch"==_.type)for(F=0;F<_.wires.length;F++)for(A=0;A<_.wires[F].length;A++)o[_.wires[F][A]]&&r.mermaid.push(b(_)+" --\x3e "+b(o[_.wires[F][A]],(x=_.rules[F]).v&&x.t?v(x.t)+" "+x.v:x.v&&!x.t?x.v:v(x.t)));else{var N,E=_.outputLabels;_.type.startsWith("subflow:")&&(N=s.nodes.subflow(_.type.replace(/subflow:/,"")),E=N&&N.outputLabels||E);for(F=0;F<_.wires.length;F++)for(A=0;A<_.wires[F].length;A++)o[_.wires[F][A]]&&r.mermaid.push(b(_)+" --\x3e "+b(o[_.wires[F][A]],E&&E[F]||void 0))}}for(var M=Object.keys(n),j=new Set,I=e=>{var a;0<e.nodesids.length&&(r.mermaid.push(`subgraph "${y(e.name)}"`),(a=(e.env.filter(e=>"MERMAID_DIRECTION"==e.name)[0]||{value:void 0}).value)&&r.mermaid.push("direction "+a),e.nodesids.forEach(e=>{"object"==typeof e?I(e):r.mermaid.push(e)}),r.mermaid.push("end"))},R=e=>"object"==typeof e||M.indexOf(e)<0,W=0;j.size<M.length&&W<2*M.length;)M.forEach(e=>{(!(n[e]&&0<n[e].nodesids.length)||(n[e].nodesids=n[e].nodesids.map(e=>{var a;return-1<M.indexOf(e)&&j.has(e)?(a={...n[e]},delete n[e],a):e}),n[e].nodesids.every(R)))&&j.add(e)}),W+=1;return Object.keys(n).forEach(e=>{0<n[e].nodesids.length&&I(n[e])}),r.mermaid.join("\n")},constructErlangStatem:function(e){let o=[];for(var i={},a=0;a<e.length;a++){var t=e[a];i[t.id]=t}if(U(e=e.filter(e=>"tab"!=e.type&&"group"!=e.type))){var r=e;var l=i;let n=[];for(var s=0;s<r.length;s++){var d=r[s];if("mermaid-state-end"!=d.type){let r=(d.name||("mermaid-state-start"==d.type?"start":"")||"unknown_state").replaceAll(/[\s\t\n ]/g,"_").toLowerCase();n.push(`
+%%
+%% Definitions from '${d.name}' - #${d.id}
+%%
+`),(d.wirecfgs||[]).forEach(a=>{var t=l[("self"==a.id?d:a).id];if(t){t=(t.name||("mermaid-state-end"==t.type?"done":"")||"unknown_state").toLowerCase().replaceAll(/[\s\t\n ]/g,"_");if(a.action){let e="";e=d.id==a.id||"self"==a.id?a.payload?`handle_event(
+    {call, From},
+    {<<"${a.action}">>, <<"${a.payload}">>},
+    ${r},
+    Data
+) ->
+    {keep_state, Data, [{ reply, From, ok }]};`:`handle_event(
+    {call, From},
+    <<"${a.action}">>,
+    ${r},
+    Data
+) ->
+    {keep_state, Data, [{ reply, From, ok }]};`:a.payload?`handle_event(
+    {call, From},
+    {<<"${a.action}">>, <<"${a.payload}">>},
+    ${r},
+    Data
+) ->
+    {next_state, ${t}, Data, [{ reply, From, ok }]};`:`handle_event(
+    {call, From},
+    <<"${a.action}">>,
+    ${r},
+    Data
+) ->
+    {next_state, ${t}, Data, [{ reply, From, ok }]};`,n.push(e)}else n.push(`
+%
+% Ignoring un-named link to '${t}' - #${("self"==a.id?d:a).id}
+%
+`)}else n.push(`
+%
+% Ignoring unknown target #${a.id}
+%
+`)})}}return n.join("\n")}for(a=0;a<e.length;a++){var c=e[a];if("mermaid-flowchart"==c.type){let n=(c.name||"unknown_state").replaceAll(/[\s\t\n ]/g,"_").toLowerCase();o.push(`
+%%
+%% Definition from '${c.name}' - #${c.id}
+%%
+`),(c.wirecfgs||[]).forEach(a=>{var t=a.name.split(";").map(e=>e.trim()),r=(i[("self"==a.id?c:a).id].name||"unknown_state").toLowerCase().replaceAll(/[\s\t\n ]/g,"_");if(1==t.length&&""==t[0])o.push(`
+%
+% Ignoring un-named link to '${r}' - #${("self"==a.id?c:a).id}
+%
+`);else{let e="";e=c.id==a.id||"self"==a.id?1==t.length?`handle_event(
+    {call, From},
+    <<"${t[0]}">>,
+    ${n},
+    Data
+) ->
+    {keep_state, Data, [{ reply, From, ${t[2]||"ok"} }]};`:`handle_event(
+    {call, From},
+    {<<"${t[0]}">>, <<"${t[1]}">>},
+    ${n},
+    Data
+) ->
+    {keep_state, Data, [{ reply, From, ${t[2]||"ok"} }]};`:1==t.length?`handle_event(
+    {call, From},
+    <<"${t[0]}">>,
+    ${n},
+    Data
+) ->
+    {next_state, ${r}, Data, [{ reply, From, ${t[2]||"ok"} }]};`:`handle_event(
+    {call, From},
+    {<<"${t[0]}">>, <<"${t[1]}">>},
+    ${n},
+    Data
+) ->
+    {next_state, ${r}, Data, [{ reply, From, ${t[2]||"ok"} }]};`,o.push(e)}})}}return o.join("\n")},retrieveInitialState:function(e){for(var a=0;a<e.length;a++)if("mermaid-state-start"==e[a].type)return e[a].name;return"start"}}})();
+  
+   function obtainCurrentActiveFlow() {
+      // check whether there is a current selection of nodes: if so, use that instead
+      // of the current active tab.
+      if ( Object.keys(RED.view.selection()).length > 0 && RED.view.selection().nodes.length > 0 ) {
+         return RED.nodes.createExportableNodeSet(RED.view.selection().nodes)
+      }
+
+      var activeWorkspace = RED.workspaces.active();
+      var nodes = RED.nodes.groups(activeWorkspace);
+
+      nodes = nodes.concat(RED.nodes.junctions(activeWorkspace));
+      nodes = nodes.concat(RED.nodes.filterNodes({ z: activeWorkspace }));
+
+      RED.nodes.eachConfig(function (n) {
+        if (n.z === RED.workspaces.active() && n._def.hasUsers === false) {
+          // Grab any config nodes scoped to this flow that don't
+          // require any flow-nodes to use them
+          nodes.push(n);
+        }
+      });
+
+      var parentNode = RED.nodes.workspace(
+        activeWorkspace
+      ) || RED.nodes.subflow(activeWorkspace);
+
+      nodes.unshift(parentNode);
+
+      return RED.nodes.createExportableNodeSet(nodes)
+   };
+
+   function getMermaidLink(mermaidTxt) {
+      /* 
+       * this snippet isn't taken from
+       *   https://github.com/mermaid-js/mermaid-live-editor/blob/develop/src/lib/util/serde.ts
+       * but it comes from there. Using base64 instead of pako because
+       * base64 does not require installing any extras.
+       */
+      let payload = {
+         "code":mermaidTxt,
+         "mermaid":"{\n  \"theme\": \"default\"\n}",
+         "autoSync":false,
+         "updateDiagram":false,
+         "panZoom":true,
+         "pan": {
+            "x":261.5279541015625,
+            "y":80.74539184570312
+         },
+         "zoom": 0.829212067225414,
+         "editorMode":"code"
+      }
+      return "https://mermaid.live/edit#base64:" + btoa( JSON.stringify(payload) )
+   };
+   
+   function ensureYourConfigNodeExists() {
+      // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
+      // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
+
+      // If we had found it previously, check if it has been deleted by the user behind our back
+      if (globalYourConfigNode !== null) {
+         var configNode = RED.nodes.node(globalYourConfigNode.id);
+         if (configNode === null) { globalYourConfigNode = null; }
+      }
+
+      // If not found previously, let's go find it
+      if (globalYourConfigNode === null) {
+         var configNodes = [];
+         RED.nodes.eachConfig(function(configNode) {
+             if (configNode.type === 'Flow2MermaidCfg') { 
+                 configNodes.push(configNode); 
+             }
+         });
+
+         // Make sure we only have 1 config node
+         while (configNodes.length > 1) {
+             var configNode = configNodes.pop();
+             RED.nodes.remove(configNode.id);
+             RED.nodes.dirty(true);
+         }
+
+         // When we found a config node, let's use that one
+         if (configNodes.length === 1) { globalYourConfigNode = configNodes[0]; }
+      }
+
+      // When it doesn't exist yet, create it if required
+      if (globalYourConfigNode === null) {
+         // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
+         // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
+         // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
+         // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
+         globalYourConfigNode = {
+             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
+             _def: RED.nodes.getType("Flow2MermaidCfg"),
+             type: "Flow2MermaidCfg",
+             hasUsers: false, 
+             users: [],
+             name: "Flow2Uml",
+             label: function() { return this.name || "Flow2Uml"},
+             /* values and data defined by this config node */
+             direction: "TB", // Default data
+             genmereditor: ""
+         }
+
+         // Add the new config node to the collection of Node-RED nodes
+         RED.nodes.add(globalYourConfigNode);
+
+         // Make sure the "Deploy" button becomes active
+         RED.nodes.dirty(true);
+      }      
+   }
+
+   // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
+   var initialiseConfigNodeOnce = () => {
+      RED.events.off('runtime-state', initialiseConfigNodeOnce);
+
+      // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
+      var content = $($('script[type="text/x-red"][data-template-name="Flow2Mermaid"]').i18n().html());
+    
+      // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
+      // --> more details: https://nodered.org/docs/api/ui/sidebar/
+      RED.sidebar.addTab({
+         id: "Flow2Mermaid",
+         label: "Flow2Uml", // short name for the tab
+         name: "Flow to UML", // long name for the menu
+         content: content,
+         closeable: false,
+         enableOnEdit: true,
+         iconClass: "fa fa-shower", // your fontawesome icon
+         onchange: () => { } /* called when tab becomes visible */
+      });
+
+      ensureYourConfigNodeExists();
+      /* Upgrading node causes errors here since the genmereditor attribute is defined on the "old" config
+         node. Hence define it here incase this is the "old" config ndoe. The new config node has this
+         attribute *but* has the same type so the new config isn't installed.
+      */
+      if ( !globalYourConfigNode.genmereditor ) { globalYourConfigNode.genmereditor = ""; RED.nodes.dirty(true); }
+
+      $('#node-input-genmereditor-mermaid-code').html("<code>" + globalYourConfigNode.genmereditor.replaceAll("\n","<br>") + "</code>");
+      $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(globalYourConfigNode.genmereditor))
+      $('#genmermaid-view-uml-link').attr('href', getMermaidLink(globalYourConfigNode.genmereditor));
+
+      $("#btn_genmercopy").on('click', (e) => {
+         if ( e ) e.preventDefault();
+         RED.clipboard.copyText(atob($('#node-input-genmereditor-mermaid-code').data('mermaid')))
+         RED.notify("Mermaid UML has been copied to pasteboard.", "success");
+      })
+
+      $("#btn_genmersave").on('click', (e) => {
+         var data = atob($('#node-input-genmereditor-mermaid-code').data('mermaid'));
+         ensureYourConfigNodeExists();
+         
+         if (globalYourConfigNode.genmereditor != data) {
+            globalYourConfigNode.genmereditor = data;
+            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(data));
+            RED.nodes.dirty(true);
+         }
+      })
+
+      var doSomething = (e) => {
+         if (e) { e.preventDefault(); }
+         ensureYourConfigNodeExists();
+
+         var mermaidTxt = FlowToMermaid.constructMermaid(obtainCurrentActiveFlow(), globalYourConfigNode.direction, RED);         
+
+         try {
+            /*
+            * using encode and unescape here becuase the contents can cause an error:
+            * ==> Uncaught DOMException: String contains an invalid character
+            * from Stackoverflow, unescape & encode can fix that:
+            * ==> https://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
+            * But this can alter the text because the encoding isn't Utf8 but encode & unescape forces the encoding to become Utf8.
+            */
+            $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(mermaidTxt))
+         } catch (ex) {
+            $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(unescape(encodeURIComponent(mermaidTxt))))
+         }
+
+         try {
+            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(mermaidTxt));
+         } catch (ex ) {
+            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(unescape(encodeURIComponent(mermaidTxt))))
+         }
+
+         try {
+            $('#btn_genmersave').attr('href', "data:text/plain;base64," + btoa(mermaidTxt));
+         } catch (ex ) {
+         }
+
+         try {
+            $('#node-input-genmereditor-mermaid-code').html("<code>" + mermaidTxt.replaceAll("\n","<br>") + "</code>");
+         } catch ( ex ) {
+            $('#node-input-genmereditor-mermaid-code').html("<code>" + unescape(encodeURIComponent(mermaidTxt)).replaceAll("\n","<br>") + "</code>");
+         }
+      }
+
+      RED.actions.remove("flow2mermaid:convert-flow-to-uml")
+      RED.actions.add("flow2mermaid:convert-flow-to-uml",function() {
+        doSomething();
+        var data = atob($('#node-input-genmereditor-mermaid-code').data('mermaid'));
+
+        RED.clipboard.copyText(data)
+        $('#genmermaid-view-uml-link').attr('href', getMermaidLink(data));
+
+        RED.notify("Mermaid UML has been copied to pasteboard.", "success");
+      });
+
+      $('#node-input-generate-diagram-but').on('click', (e) => {
+         doSomething(e);
+      })
+
+      $('#genmermaid-generate-statem').on('click', (e) => {
+         e.preventDefault();
+
+         ensureYourConfigNodeExists();
+         
+         let statemDef = FlowToMermaid.constructErlangStatem(obtainCurrentActiveFlow());
+         let initState = FlowToMermaid.retrieveInitialState(obtainCurrentActiveFlow());
+
+         let moduleName = `statem_def_${RED.nodes.id()}`
+
+         let nde = {
+            "id": RED.nodes.id(),
+            "type": "erlmodule",
+            "name": "",
+            "module_name": moduleName,
+            "code": atob("LW1vZHVsZSglJSBNT0RVTEUgTkFNRSAlJSkuCgolJQolJSBDb2RlIGdlbmVyYXRlZCBieSBGbG93MlVNTCBOb2RlIEAgaHR0cHM6Ly9mbG93aHViLm9yZy9mbG93MnVtbAolJQoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9ICUlJSBJTklUSUFMIFNUQVJUIFNUQVRFICUlJSwgCiAgICBEYXRhID0gMCwKICAgIHtvaywgU3RhdGUsIERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKJSUlJSUlIFJFUExBQ0UgV0lUSCBDT0RFIEhFUkUgJSUlJSUKICAgICAgICAgICAgICAgICAgICAgICAgCiUlIEZhbGwgdGhyb3VnaApoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIF9BY3Rpb24sCiAgX0N1cnJTdGF0ZSwKICBEYXRhCikgLT4KICAgID9LRUVQX1NUQVRFKGlnbm9yZWQpOwoKCiUlJSBBYnNvbHV0ZSBmYWxsIHRocm91Z2gKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg==").replace("%%%%%% REPLACE WITH CODE HERE %%%%%", statemDef).replace("%% MODULE NAME %%", moduleName).replace("%%% INITIAL START STATE %%%",initState),
+            "wires": []
+         }
+
+         if (!RED.nodes.getType("erlmodule")) {
+            nde.type      = "template"
+            nde.format    = "text"
+            nde.field     = moduleName
+            nde.fieldType = "msg"
+            nde.syntax    = "plain"
+            nde.template  = nde.code
+            nde.output    =  "str"
+            
+            delete nde.code
+            delete nde.module_name
+         }
+         
+         RED.view.importNodes([nde])
+      })
+
+      $('#node-input-generate-and-view-diagram-but').on('click', (e) => {
+         doSomething(e);
+         setTimeout(() => { $('#genmermaid-view-uml-link')[0].click() }, 100)
+      })
+
+      // When the user has entered new data in the sidebar, then store it into the config node
+      $("#node-input-genmerdirection").on("change", function() {
+        ensureYourConfigNodeExists();
+
+        let data = $(this).val();
+
+         if (globalYourConfigNode.direction != data) {
+            globalYourConfigNode.direction = data;
+            // Since the config node has been updated, the 'Deploy' button should become active
+            RED.nodes.dirty(true);
+         }
+      })
+
+      $("#node-input-genmerdirection").typedInput({
+            types: [
+               {
+                  value: "genmerdirection",
+                  
+                  options: [
+                        { "value":"TB", "label": "Top to Bottom"},
+                        { "value":"LR", "label": "Left to Right"},
+                        { "value":"BT", "label": "Bottom to Top"},
+                        { "value":"RL", "label": "Right to Left"}
+                 ]
+               }
+            ]
+      });
+      // At startup load your config node data into the plugin sidebar html elements
+      $('#node-input-genmerdirection').val(globalYourConfigNode.direction)
+
+      // Allow dynamic re-size after init. appearance 
+      setTimeout(function () {
+            $('#node-props').css('width', '100%');
+      }, 30);
+   };
+   RED.events.on('runtime-state', initialiseConfigNodeOnce);
+})();
+</script>
+
+<style>
+   .red-ui-tray-content #dialog-form {
+    white-space: nowrap;
+}
+
+.full-row .red-ui-typedInput-container {
+    min-width: 70%;
+}
+
+.col input {
+    min-width: 100%;
+}
+
+.sml-lbl {
+    height: 66px;
+}
+
+.sml-lbl label {
+    font-size: smaller;
+    margin-bottom: 0px;
+    display: block !important;
+}
+
+.reg-lbl label {
+    white-space: nowrap;
+    margin-top: 5px;
+    height: 0px;
+}
+
+.red-ui-editor .form-row label.full-lbl {
+    white-space: normal;
+    width: 100%;
+}
+
+.col {
+    float: left;
+    margin-right: 5px;
+    min-height: 36px;
+}
+
+.col .red-ui-typedInput-container {
+    width: 100% !important;
+}
+
+.col-50 {
+    width: 50%;
+}
+
+.col-33 {
+    width: 33%;
+}
+
+.col-66 {
+    width: 66%;
+}
+
+.col-25 {
+    width: 25%;
+}
+
+.col-75 {
+    width: 75%;
+}
+
+.col-100 .red-ui-typedInput-container {
+    width: 70% !important;
+}
+
+.col-100.no-label .red-ui-typedInput-container {
+    width: 100% !important;
+}
+
+.txtarea {
+    padding-bottom: 26px;
+}
+
+.txtarea label {
+    vertical-align: top;
+    margin-top: 3px;
+}
+
+.txtarea textarea {
+    width: 70%;
+    margin-bottom: -28px !important;
+}
+
+.btn-regular {
+    margin-bottom: 14px !important;
+}
+
+</style>
+
+<!-- The html for the right sidebar plugin screen -->
+<script type="text/x-red" data-template-name="Flow2Mermaid">
+   <div id="node-props" style="width: 460px; height: 100%; margin-left: 10px; margin-right: 15px; margin-top: 30px;">
+      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
+         <button id="node-input-generate-diagram-but" type="button" class="red-ui-button btn-regular"><i class="fa fa-plug"></i> Generate Mermaid Diagram</button>
+         <button id="node-input-generate-and-view-diagram-but" 
+                   type="button" class="red-ui-button btn-regular"><i class="fa fa-eye"></i> Generate & View Diagram</button>      
+      </div>
+
+      <!--form-row-->
+      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
+         <div class="col-100">
+            <label for="node-input-genmerdirection"><i class="fa fa-compass"></i> Direction</label>
+            <input type="text" id="node-input-genmerdirection">
+         </div>
+      </div>
+
+      <!--form-row-->
+      <div class="form-row"
+         style="min-height: 250px; overflow: scroll; margin-left: 10px; margin-right: 15px; height: calc(100% - 300px); overflow: hidden;">
+         <label for="node-input-genmereditor-mermaid-code"><i class="fa fa-pencil"></i> Mermaid</label>
+         <div id="node-input-genmereditor-mermaid-code" style="border: 1px rgb(196, 196, 196) solid; border-radius: 5px; overflow: scroll; height: calc(100% - 80px);"></div>
+      </div>
+
+      <!--form-row-->
+      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
+            <a href="#" download="flow.mermaid" id="btn_genmersave" type="button"
+               class="red-ui-button btn-regular"><i class="fa fa-save"></i> Save</a>
+               
+            <a id="btn_genmercopy" style="margin-left: 5px;" type="button" class="red-ui-button btn-regular"><i class="fa fa-copy"></i> Copy to Clipboard</a>
+
+            <a type="button"
+               class="red-ui-button btn-regular" id="genmermaid-view-uml-link" style="margin-left: 5px;" target="_blank" href="#"><i class="fa fa-external-link"></i> View</a>
+
+            <a type="button" class="red-ui-button btn-regular" id="genmermaid-generate-statem" style="margin-left: 10px;">Erlang Statem Def</a>
+      </div>
+   </div>
+   <!--node-props-->
+
+</script>
 <!-- --- [red-plugin:@gregoriusrippenstein/node-red-contrib-flowhub/flowhub_sidebar] --- -->
 <script src="FlowHubLib/jslib/diff.min.js"></script>
 
@@ -2279,502 +3193,6 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
 <!--func-flowhub-tabs-content-->
 </script>
 
-<!-- --- [red-plugin:@gregoriusrippenstein/node-red-contrib-flow2uml/sidebar-plugin] --- -->
-<script type="text/javascript">
-(function() {
-   var globalYourConfigNode = null;
-
-   (()=>{function O(e,a,t){switch(e.arrow||"arrow"){case"--":case"line":a=""!==t?` -- "${t}" --- `:" --- ";break;case"--\x3e":case"arrow":a=""!==t?` -- "${t}" --> `:" --\x3e ";break;case"==>":case"thickarrow":a=""!==t?` == "${t}" ==> `:" ==> ";break;case"-.->":case"dotarrow":a=""!==t?` -. "${t}" .-> `:" -.-> ";break;case"-.-":a=""!==t?` -. "${t}" -.- `:" -.- ";break;case"==":a=""!==t?` == "${t}" === `:" === ";break;case"<--\x3e":a=""!==t?` <-- "${t}" --> `:" <---\x3e ";break;case"<-.->":a=""!==t?` <-. "${t}" .-> `:" <-.-> ";break;case"<==>":a=""!==t?` <== "${t}" ==> `:" <===> ";break;case"--x":a=""!==t?` -- "${t}" --x `:" --x ";break;case"-.-x":a=""!==t?` -. "${t}" .-x `:" -.-x ";break;case"==x":a=""!==t?` == "${t}" ==x `:" ===x ";break;case"x--x":a=""!==t?` x-- "${t}" --x `:" x--x ";break;case"x-.-x":a=""!==t?` x-. "${t}" .-x `:" x-.-x ";break;case"x==x":a=""!==t?` x== "${t}" ==x `:" x===x ";break;case"--o":a=""!==t?` -- "${t}" --o `:" --o ";break;case"-.-o":a=""!==t?` -. "${t}" .-o `:" -.-o ";break;case"==o":a=""!==t?` == "${t}" ==o `:" ===o ";break;case"o--o":a=""!==t?` o-- "${t}" --o `:" o--o ";break;case"o-.-o":a=""!==t?` o-. "${t}" .-o `:" o-.-o ";break;case"o==o":a=""!==t?` o== "${t}" ==o `:" o===o "}return a}function U(e){return e.every(e=>e.type.startsWith("mermaid-state-"))}window.FlowToMermaid={constructMermaid:function(e,a="TB",t=void 0){for(var r={payload:e},n={},e=r.payload.filter(e=>("group"==e.type&&(n[e.id]={nodesids:[...e.nodes||[]],name:e.name||`**missing name ${e.id}**`,env:[...e.env||[]]}),"tab"!=e.type&&"group"!=e.type)),o={},i=0;i<e.length;i++){var l=e[i];o[l.id]=l}var s=t?t:{nodes:{node:e=>o[e],subflow:e=>o[e]}};if(U(e)){for(var d=e,c=o,p=["%% Generated by the Flow2UML Node @ https://flowhub.org/flow2uml","%% change direction to LR for Node-RED left-to-right UML","stateDiagram","    direction "+a],m=(e,a,t,r)=>t?r?`    ${e} --> ${a} : ${t}(${r})`:`    ${e} --> ${a} : `+t:`    ${e} --> `+a,h=0;h<d.length;h++){var f=d[h],u=f.wirecfgs;if("mermaid-state-end"!=f.type)for(var g="mermaid-state-start"==f.type?"[*]":f.name,k=0;k<u.length;k++){var w=u[k];if("self"==w.id)p.push(m(g,g,w.action,w.payload));else{let e=c[w.id]&&c[w.id].name||"[?]";c[w.id]&&"mermaid-state-end"==c[w.id].type&&(e="[*]"),p.push(m(g,e,w.action,w.payload))}}}return p.filter(e=>e).join("\n")}var v=e=>e&&{nnull:"not null",eq:"==",neq:"!=",lt:"<",lte:"<=",gt:">",gte:">=",hask:"has key",cont:"contains"}[e]||e,y=e=>e.replaceAll("&","&amp;").replaceAll("#","#35;").replaceAll("[","#91;").replaceAll("]","#93;").replaceAll("(","#40;").replaceAll(")","#41;").replaceAll("|","#124;").replaceAll(">","&gt;").replaceAll("<","&lt;").replaceAll("{","#123;").replaceAll("}","#125;").replaceAll("/","#47;").replaceAll('"',"#34;"),b=(e,a=void 0)=>{if(!e)return"";var t=e.name||e.type;switch(a=a?'|"'+y(a)+'"| ':"",t=y(t),e.type){case"switch":case"join":case"split":return a+e.id+'{"'+t+'"}';case"link call":case"link out":if(e.mode&&"return"==e.mode)return a+e.id+"[\\Link Return/]";if(!e.name||e.name.match(/^link out/)){if("dynamic"==e.linkType)return a+e.id+'{{"'+(t="\\Dynamic Target/")+'"}}';var r=e.links&&0<e.links.length&&(o[e.links[0]]||s.nodes.node(e.links[0])),t=y(r&&r.name||e.type)}return a+e.id+'{{"'+t+'"}}';case"link in":return t=y(e.name||e.links&&0<e.links.length&&o[e.links[0]]&&o[e.links[0]].name||e.type),a+e.id+'{{"'+t+'"}}';case"junction":return a+e.id+'(("conn"))';case"inject":case"debug":return a+e.id+'(["'+t+'"])';case"http in":return a+e.id+'["'+y("["+e.method+"] "+e.url)+'"]';case"mermaid-flowchart":return e.id+`@{ shape: "${e.shape}", label: "${t}" }`;default:return e.type.startsWith("subflow:")?(r=s.nodes.subflow(e.type.replace(/subflow:/,"")),t=y(r&&r.name||e.type),a+e.id+'[/"'+t+'"/]'):a+e.id+'["'+t+'"]'}};r.mermaid=["%% Generated by the Flow2UML Node @ https://flowhub.org/flow2uml","%% change direction to LR for Node-RED left-to-right UML","flowchart "+a],console.log("FLOW2UML: WARNING when copy & pasting flow chart nodes, their connections details are losts."),console.log("FLOW2UML: WARNING This is because the configuration of wires is based on node ids, these "),console.log("FLOW2UML: WARNING node ids change on copy and paste but aren't updated in the configuration "),console.log("FLOW2UML: WARNING of individual flowchart nodes.");for(var x,i=0;i<e.length;i++){var _=e[i];if(_.links&&0<_.links.length&&"link out"==_.type)for(var D=0;D<_.links.length;D++)o[_.links[D]]&&r.mermaid.push(b(_)+" -.-> "+_.links[D]);if(_.wires&&0<_.wires.length)if("mermaid-flowchart"==_.type){(_.wirecfgs||[]).forEach(e=>{var a,t;e.id!=_.id&&"self"!=e.id||(t=_.id,o[t]&&(t=" --\x3e ",a=y(e.name||""),t=O(e," --\x3e ",a),r.mermaid.push(b(_)+t+b(_))))});for(var F=0;F<_.wires.length;F++)for(var A=0;A<_.wires[F].length;A++){var L=_.wires[F][A];(_.wirecfgs||[]).forEach(e=>{var a,t;e.id==L&&o[L]&&(t=" --\x3e ",a=y(e.name||""),t=O(e," --\x3e ",a),r.mermaid.push(b(_)+t+b(o[_.wires[F][A]],E&&E[F]||void 0)))})}}else if("switch"==_.type)for(F=0;F<_.wires.length;F++)for(A=0;A<_.wires[F].length;A++)o[_.wires[F][A]]&&r.mermaid.push(b(_)+" --\x3e "+b(o[_.wires[F][A]],(x=_.rules[F]).v&&x.t?v(x.t)+" "+x.v:x.v&&!x.t?x.v:v(x.t)));else{var N,E=_.outputLabels;_.type.startsWith("subflow:")&&(N=s.nodes.subflow(_.type.replace(/subflow:/,"")),E=N&&N.outputLabels||E);for(F=0;F<_.wires.length;F++)for(A=0;A<_.wires[F].length;A++)o[_.wires[F][A]]&&r.mermaid.push(b(_)+" --\x3e "+b(o[_.wires[F][A]],E&&E[F]||void 0))}}for(var M=Object.keys(n),j=new Set,I=e=>{var a;0<e.nodesids.length&&(r.mermaid.push(`subgraph "${y(e.name)}"`),(a=(e.env.filter(e=>"MERMAID_DIRECTION"==e.name)[0]||{value:void 0}).value)&&r.mermaid.push("direction "+a),e.nodesids.forEach(e=>{"object"==typeof e?I(e):r.mermaid.push(e)}),r.mermaid.push("end"))},R=e=>"object"==typeof e||M.indexOf(e)<0,W=0;j.size<M.length&&W<2*M.length;)M.forEach(e=>{(!(n[e]&&0<n[e].nodesids.length)||(n[e].nodesids=n[e].nodesids.map(e=>{var a;return-1<M.indexOf(e)&&j.has(e)?(a={...n[e]},delete n[e],a):e}),n[e].nodesids.every(R)))&&j.add(e)}),W+=1;return Object.keys(n).forEach(e=>{0<n[e].nodesids.length&&I(n[e])}),r.mermaid.join("\n")},constructErlangStatem:function(e){let o=[];for(var i={},a=0;a<e.length;a++){var t=e[a];i[t.id]=t}if(U(e=e.filter(e=>"tab"!=e.type&&"group"!=e.type))){var r=e;var l=i;let n=[];for(var s=0;s<r.length;s++){var d=r[s];if("mermaid-state-end"!=d.type){let r=(d.name||("mermaid-state-start"==d.type?"start":"")||"unknown_state").replaceAll(/[\s\t\n ]/g,"_").toLowerCase();n.push(`
-%%
-%% Definitions from '${d.name}' - #${d.id}
-%%
-`),(d.wirecfgs||[]).forEach(a=>{var t=l[("self"==a.id?d:a).id];if(t){t=(t.name||("mermaid-state-end"==t.type?"done":"")||"unknown_state").toLowerCase().replaceAll(/[\s\t\n ]/g,"_");if(a.action){let e="";e=d.id==a.id||"self"==a.id?a.payload?`handle_event(
-    {call, From},
-    {<<"${a.action}">>, <<"${a.payload}">>},
-    ${r},
-    Data
-) ->
-    {keep_state, Data, [{ reply, From, ok }]};`:`handle_event(
-    {call, From},
-    <<"${a.action}">>,
-    ${r},
-    Data
-) ->
-    {keep_state, Data, [{ reply, From, ok }]};`:a.payload?`handle_event(
-    {call, From},
-    {<<"${a.action}">>, <<"${a.payload}">>},
-    ${r},
-    Data
-) ->
-    {next_state, ${t}, Data, [{ reply, From, ok }]};`:`handle_event(
-    {call, From},
-    <<"${a.action}">>,
-    ${r},
-    Data
-) ->
-    {next_state, ${t}, Data, [{ reply, From, ok }]};`,n.push(e)}else n.push(`
-%
-% Ignoring un-named link to '${t}' - #${("self"==a.id?d:a).id}
-%
-`)}else n.push(`
-%
-% Ignoring unknown target #${a.id}
-%
-`)})}}return n.join("\n")}for(a=0;a<e.length;a++){var c=e[a];if("mermaid-flowchart"==c.type){let n=(c.name||"unknown_state").replaceAll(/[\s\t\n ]/g,"_").toLowerCase();o.push(`
-%%
-%% Definition from '${c.name}' - #${c.id}
-%%
-`),(c.wirecfgs||[]).forEach(a=>{var t=a.name.split(";").map(e=>e.trim()),r=(i[("self"==a.id?c:a).id].name||"unknown_state").toLowerCase().replaceAll(/[\s\t\n ]/g,"_");if(1==t.length&&""==t[0])o.push(`
-%
-% Ignoring un-named link to '${r}' - #${("self"==a.id?c:a).id}
-%
-`);else{let e="";e=c.id==a.id||"self"==a.id?1==t.length?`handle_event(
-    {call, From},
-    <<"${t[0]}">>,
-    ${n},
-    Data
-) ->
-    {keep_state, Data, [{ reply, From, ${t[2]||"ok"} }]};`:`handle_event(
-    {call, From},
-    {<<"${t[0]}">>, <<"${t[1]}">>},
-    ${n},
-    Data
-) ->
-    {keep_state, Data, [{ reply, From, ${t[2]||"ok"} }]};`:1==t.length?`handle_event(
-    {call, From},
-    <<"${t[0]}">>,
-    ${n},
-    Data
-) ->
-    {next_state, ${r}, Data, [{ reply, From, ${t[2]||"ok"} }]};`:`handle_event(
-    {call, From},
-    {<<"${t[0]}">>, <<"${t[1]}">>},
-    ${n},
-    Data
-) ->
-    {next_state, ${r}, Data, [{ reply, From, ${t[2]||"ok"} }]};`,o.push(e)}})}}return o.join("\n")},retrieveInitialState:function(e){for(var a=0;a<e.length;a++)if("mermaid-state-start"==e[a].type)return e[a].name;return"start"}}})();
-  
-   function obtainCurrentActiveFlow() {
-      // check whether there is a current selection of nodes: if so, use that instead
-      // of the current active tab.
-      if ( Object.keys(RED.view.selection()).length > 0 && RED.view.selection().nodes.length > 0 ) {
-         return RED.nodes.createExportableNodeSet(RED.view.selection().nodes)
-      }
-
-      var activeWorkspace = RED.workspaces.active();
-      var nodes = RED.nodes.groups(activeWorkspace);
-
-      nodes = nodes.concat(RED.nodes.junctions(activeWorkspace));
-      nodes = nodes.concat(RED.nodes.filterNodes({ z: activeWorkspace }));
-
-      RED.nodes.eachConfig(function (n) {
-        if (n.z === RED.workspaces.active() && n._def.hasUsers === false) {
-          // Grab any config nodes scoped to this flow that don't
-          // require any flow-nodes to use them
-          nodes.push(n);
-        }
-      });
-
-      var parentNode = RED.nodes.workspace(
-        activeWorkspace
-      ) || RED.nodes.subflow(activeWorkspace);
-
-      nodes.unshift(parentNode);
-
-      return RED.nodes.createExportableNodeSet(nodes)
-   };
-
-   function getMermaidLink(mermaidTxt) {
-      /* 
-       * this snippet isn't taken from
-       *   https://github.com/mermaid-js/mermaid-live-editor/blob/develop/src/lib/util/serde.ts
-       * but it comes from there. Using base64 instead of pako because
-       * base64 does not require installing any extras.
-       */
-      let payload = {
-         "code":mermaidTxt,
-         "mermaid":"{\n  \"theme\": \"default\"\n}",
-         "autoSync":false,
-         "updateDiagram":false,
-         "panZoom":true,
-         "pan": {
-            "x":261.5279541015625,
-            "y":80.74539184570312
-         },
-         "zoom": 0.829212067225414,
-         "editorMode":"code"
-      }
-      return "https://mermaid.live/edit#base64:" + btoa( JSON.stringify(payload) )
-   };
-   
-   function ensureYourConfigNodeExists() {
-      // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
-      // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
-
-      // If we had found it previously, check if it has been deleted by the user behind our back
-      if (globalYourConfigNode !== null) {
-         var configNode = RED.nodes.node(globalYourConfigNode.id);
-         if (configNode === null) { globalYourConfigNode = null; }
-      }
-
-      // If not found previously, let's go find it
-      if (globalYourConfigNode === null) {
-         var configNodes = [];
-         RED.nodes.eachConfig(function(configNode) {
-             if (configNode.type === 'Flow2MermaidCfg') { 
-                 configNodes.push(configNode); 
-             }
-         });
-
-         // Make sure we only have 1 config node
-         while (configNodes.length > 1) {
-             var configNode = configNodes.pop();
-             RED.nodes.remove(configNode.id);
-             RED.nodes.dirty(true);
-         }
-
-         // When we found a config node, let's use that one
-         if (configNodes.length === 1) { globalYourConfigNode = configNodes[0]; }
-      }
-
-      // When it doesn't exist yet, create it if required
-      if (globalYourConfigNode === null) {
-         // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
-         // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
-         // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
-         // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
-         globalYourConfigNode = {
-             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
-             _def: RED.nodes.getType("Flow2MermaidCfg"),
-             type: "Flow2MermaidCfg",
-             hasUsers: false, 
-             users: [],
-             name: "Flow2Uml",
-             label: function() { return this.name || "Flow2Uml"},
-             /* values and data defined by this config node */
-             direction: "TB", // Default data
-             genmereditor: ""
-         }
-
-         // Add the new config node to the collection of Node-RED nodes
-         RED.nodes.add(globalYourConfigNode);
-
-         // Make sure the "Deploy" button becomes active
-         RED.nodes.dirty(true);
-      }      
-   }
-
-   // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
-   var initialiseConfigNodeOnce = () => {
-      RED.events.off('runtime-state', initialiseConfigNodeOnce);
-
-      // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
-      var content = $($('script[type="text/x-red"][data-template-name="Flow2Mermaid"]').i18n().html());
-    
-      // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
-      // --> more details: https://nodered.org/docs/api/ui/sidebar/
-      RED.sidebar.addTab({
-         id: "Flow2Mermaid",
-         label: "Flow2Uml", // short name for the tab
-         name: "Flow to UML", // long name for the menu
-         content: content,
-         closeable: false,
-         enableOnEdit: true,
-         iconClass: "fa fa-shower", // your fontawesome icon
-         onchange: () => { } /* called when tab becomes visible */
-      });
-
-      ensureYourConfigNodeExists();
-      /* Upgrading node causes errors here since the genmereditor attribute is defined on the "old" config
-         node. Hence define it here incase this is the "old" config ndoe. The new config node has this
-         attribute *but* has the same type so the new config isn't installed.
-      */
-      if ( !globalYourConfigNode.genmereditor ) { globalYourConfigNode.genmereditor = ""; RED.nodes.dirty(true); }
-
-      $('#node-input-genmereditor-mermaid-code').html("<code>" + globalYourConfigNode.genmereditor.replaceAll("\n","<br>") + "</code>");
-      $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(globalYourConfigNode.genmereditor))
-      $('#genmermaid-view-uml-link').attr('href', getMermaidLink(globalYourConfigNode.genmereditor));
-
-      $("#btn_genmercopy").on('click', (e) => {
-         if ( e ) e.preventDefault();
-         RED.clipboard.copyText(atob($('#node-input-genmereditor-mermaid-code').data('mermaid')))
-         RED.notify("Mermaid UML has been copied to pasteboard.", "success");
-      })
-
-      $("#btn_genmersave").on('click', (e) => {
-         var data = atob($('#node-input-genmereditor-mermaid-code').data('mermaid'));
-         ensureYourConfigNodeExists();
-         
-         if (globalYourConfigNode.genmereditor != data) {
-            globalYourConfigNode.genmereditor = data;
-            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(data));
-            RED.nodes.dirty(true);
-         }
-      })
-
-      var doSomething = (e) => {
-         if (e) { e.preventDefault(); }
-         ensureYourConfigNodeExists();
-
-         var mermaidTxt = FlowToMermaid.constructMermaid(obtainCurrentActiveFlow(), globalYourConfigNode.direction, RED);         
-
-         try {
-            /*
-            * using encode and unescape here becuase the contents can cause an error:
-            * ==> Uncaught DOMException: String contains an invalid character
-            * from Stackoverflow, unescape & encode can fix that:
-            * ==> https://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
-            * But this can alter the text because the encoding isn't Utf8 but encode & unescape forces the encoding to become Utf8.
-            */
-            $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(mermaidTxt))
-         } catch (ex) {
-            $('#node-input-genmereditor-mermaid-code').data('mermaid', btoa(unescape(encodeURIComponent(mermaidTxt))))
-         }
-
-         try {
-            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(mermaidTxt));
-         } catch (ex ) {
-            $('#genmermaid-view-uml-link').attr('href', getMermaidLink(unescape(encodeURIComponent(mermaidTxt))))
-         }
-
-         try {
-            $('#btn_genmersave').attr('href', "data:text/plain;base64," + btoa(mermaidTxt));
-         } catch (ex ) {
-         }
-
-         try {
-            $('#node-input-genmereditor-mermaid-code').html("<code>" + mermaidTxt.replaceAll("\n","<br>") + "</code>");
-         } catch ( ex ) {
-            $('#node-input-genmereditor-mermaid-code').html("<code>" + unescape(encodeURIComponent(mermaidTxt)).replaceAll("\n","<br>") + "</code>");
-         }
-      }
-
-      RED.actions.remove("flow2mermaid:convert-flow-to-uml")
-      RED.actions.add("flow2mermaid:convert-flow-to-uml",function() {
-        doSomething();
-        var data = atob($('#node-input-genmereditor-mermaid-code').data('mermaid'));
-
-        RED.clipboard.copyText(data)
-        $('#genmermaid-view-uml-link').attr('href', getMermaidLink(data));
-
-        RED.notify("Mermaid UML has been copied to pasteboard.", "success");
-      });
-
-      $('#node-input-generate-diagram-but').on('click', (e) => {
-         doSomething(e);
-      })
-
-      $('#genmermaid-generate-statem').on('click', (e) => {
-         e.preventDefault();
-
-         ensureYourConfigNodeExists();
-         
-         let statemDef = FlowToMermaid.constructErlangStatem(obtainCurrentActiveFlow());
-         let initState = FlowToMermaid.retrieveInitialState(obtainCurrentActiveFlow());
-
-         let moduleName = `statem_def_${RED.nodes.id()}`
-
-         let nde = {
-            "id": RED.nodes.id(),
-            "type": "erlmodule",
-            "name": "",
-            "module_name": moduleName,
-            "code": atob("LW1vZHVsZSglJSBNT0RVTEUgTkFNRSAlJSkuCgolJQolJSBDb2RlIGdlbmVyYXRlZCBieSBGbG93MlVNTCBOb2RlIEAgaHR0cHM6Ly9mbG93aHViLm9yZy9mbG93MnVtbAolJQoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9ICUlJSBJTklUSUFMIFNUQVJUIFNUQVRFICUlJSwgCiAgICBEYXRhID0gMCwKICAgIHtvaywgU3RhdGUsIERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKJSUlJSUlIFJFUExBQ0UgV0lUSCBDT0RFIEhFUkUgJSUlJSUKICAgICAgICAgICAgICAgICAgICAgICAgCiUlIEZhbGwgdGhyb3VnaApoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIF9BY3Rpb24sCiAgX0N1cnJTdGF0ZSwKICBEYXRhCikgLT4KICAgID9LRUVQX1NUQVRFKGlnbm9yZWQpOwoKCiUlJSBBYnNvbHV0ZSBmYWxsIHRocm91Z2gKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg==").replace("%%%%%% REPLACE WITH CODE HERE %%%%%", statemDef).replace("%% MODULE NAME %%", moduleName).replace("%%% INITIAL START STATE %%%",initState),
-            "wires": []
-         }
-
-         if (!RED.nodes.getType("erlmodule")) {
-            nde.type      = "template"
-            nde.format    = "text"
-            nde.field     = moduleName
-            nde.fieldType = "msg"
-            nde.syntax    = "plain"
-            nde.template  = nde.code
-            nde.output    =  "str"
-            
-            delete nde.code
-            delete nde.module_name
-         }
-         
-         RED.view.importNodes([nde])
-      })
-
-      $('#node-input-generate-and-view-diagram-but').on('click', (e) => {
-         doSomething(e);
-         setTimeout(() => { $('#genmermaid-view-uml-link')[0].click() }, 100)
-      })
-
-      // When the user has entered new data in the sidebar, then store it into the config node
-      $("#node-input-genmerdirection").on("change", function() {
-        ensureYourConfigNodeExists();
-
-        let data = $(this).val();
-
-         if (globalYourConfigNode.direction != data) {
-            globalYourConfigNode.direction = data;
-            // Since the config node has been updated, the 'Deploy' button should become active
-            RED.nodes.dirty(true);
-         }
-      })
-
-      $("#node-input-genmerdirection").typedInput({
-            types: [
-               {
-                  value: "genmerdirection",
-                  
-                  options: [
-                        { "value":"TB", "label": "Top to Bottom"},
-                        { "value":"LR", "label": "Left to Right"},
-                        { "value":"BT", "label": "Bottom to Top"},
-                        { "value":"RL", "label": "Right to Left"}
-                 ]
-               }
-            ]
-      });
-      // At startup load your config node data into the plugin sidebar html elements
-      $('#node-input-genmerdirection').val(globalYourConfigNode.direction)
-
-      // Allow dynamic re-size after init. appearance 
-      setTimeout(function () {
-            $('#node-props').css('width', '100%');
-      }, 30);
-   };
-   RED.events.on('runtime-state', initialiseConfigNodeOnce);
-})();
-</script>
-
-<style>
-   .red-ui-tray-content #dialog-form {
-    white-space: nowrap;
-}
-
-.full-row .red-ui-typedInput-container {
-    min-width: 70%;
-}
-
-.col input {
-    min-width: 100%;
-}
-
-.sml-lbl {
-    height: 66px;
-}
-
-.sml-lbl label {
-    font-size: smaller;
-    margin-bottom: 0px;
-    display: block !important;
-}
-
-.reg-lbl label {
-    white-space: nowrap;
-    margin-top: 5px;
-    height: 0px;
-}
-
-.red-ui-editor .form-row label.full-lbl {
-    white-space: normal;
-    width: 100%;
-}
-
-.col {
-    float: left;
-    margin-right: 5px;
-    min-height: 36px;
-}
-
-.col .red-ui-typedInput-container {
-    width: 100% !important;
-}
-
-.col-50 {
-    width: 50%;
-}
-
-.col-33 {
-    width: 33%;
-}
-
-.col-66 {
-    width: 66%;
-}
-
-.col-25 {
-    width: 25%;
-}
-
-.col-75 {
-    width: 75%;
-}
-
-.col-100 .red-ui-typedInput-container {
-    width: 70% !important;
-}
-
-.col-100.no-label .red-ui-typedInput-container {
-    width: 100% !important;
-}
-
-.txtarea {
-    padding-bottom: 26px;
-}
-
-.txtarea label {
-    vertical-align: top;
-    margin-top: 3px;
-}
-
-.txtarea textarea {
-    width: 70%;
-    margin-bottom: -28px !important;
-}
-
-.btn-regular {
-    margin-bottom: 14px !important;
-}
-
-</style>
-
-<!-- The html for the right sidebar plugin screen -->
-<script type="text/x-red" data-template-name="Flow2Mermaid">
-   <div id="node-props" style="width: 460px; height: 100%; margin-left: 10px; margin-right: 15px; margin-top: 30px;">
-      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
-         <button id="node-input-generate-diagram-but" type="button" class="red-ui-button btn-regular"><i class="fa fa-plug"></i> Generate Mermaid Diagram</button>
-         <button id="node-input-generate-and-view-diagram-but" 
-                   type="button" class="red-ui-button btn-regular"><i class="fa fa-eye"></i> Generate & View Diagram</button>      
-      </div>
-
-      <!--form-row-->
-      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
-         <div class="col-100">
-            <label for="node-input-genmerdirection"><i class="fa fa-compass"></i> Direction</label>
-            <input type="text" id="node-input-genmerdirection">
-         </div>
-      </div>
-
-      <!--form-row-->
-      <div class="form-row"
-         style="min-height: 250px; overflow: scroll; margin-left: 10px; margin-right: 15px; height: calc(100% - 300px); overflow: hidden;">
-         <label for="node-input-genmereditor-mermaid-code"><i class="fa fa-pencil"></i> Mermaid</label>
-         <div id="node-input-genmereditor-mermaid-code" style="border: 1px rgb(196, 196, 196) solid; border-radius: 5px; overflow: scroll; height: calc(100% - 80px);"></div>
-      </div>
-
-      <!--form-row-->
-      <div class="form-row" style="margin-left: 10px; margin-right: 15px;">
-            <a href="#" download="flow.mermaid" id="btn_genmersave" type="button"
-               class="red-ui-button btn-regular"><i class="fa fa-save"></i> Save</a>
-               
-            <a id="btn_genmercopy" style="margin-left: 5px;" type="button" class="red-ui-button btn-regular"><i class="fa fa-copy"></i> Copy to Clipboard</a>
-
-            <a type="button"
-               class="red-ui-button btn-regular" id="genmermaid-view-uml-link" style="margin-left: 5px;" target="_blank" href="#"><i class="fa fa-external-link"></i> View</a>
-
-            <a type="button" class="red-ui-button btn-regular" id="genmermaid-generate-statem" style="margin-left: 10px;">Erlang Statem Def</a>
-      </div>
-   </div>
-   <!--node-props-->
-
-</script>
 <!-- --- [red-plugin:@gregoriusrippenstein/node-red-contrib-introspection/screenshot] --- -->
 <script type="text/javascript">
 (function() {
@@ -3738,417 +4156,3 @@ function ensureYourConfigNodeExists() {
    <div id="node-input-scratchpad-fields">
    </div>
 </script>
-<!-- --- [red-plugin:@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin] --- -->
-<script type="text/javascript">
-(function() {
-   var globalYourConfigNode = null;
-
-   function dagreLR(payload, callback) {
-      var allnodes = payload.allnodes;
-      var alledges = payload.alledges;
-      var fixedNodeId = payload.fixedNodeId;
-
-      var g = new dagre.graphlib.Graph();
-      
-      g.setGraph({});
-      g.setDefaultEdgeLabel(function () { return {}; });
-
-      for (var idx = 0; idx < allnodes.length; idx++) {
-         var n = allnodes[idx];
-         g.setNode(n.id, {
-               ...n,
-         })
-      }
-
-      for (var idx = 0; idx < alledges.length; idx++) {
-         var e = alledges[idx];
-         g.setEdge(e.sources[0], e.targets[0])
-      }
-
-      g.graph().rankdir = "LR"
-      g.graph().marginx = 20
-      g.graph().marginy = 20
-      g.graph().nodesep = 30
-      g.graph().ranksep = 50
-
-      dagre.layout(g)
-
-      callback({
-         type: "movenodes",
-         fixedNodeId: fixedNodeId,
-         nodes: g.nodes().map(function (v) {
-               return {
-                     ...g.node(v)
-                  }
-         })            
-      })
-   }
-
-   function getProcesses(opts, cb) {
-
-      $.ajax({
-         url: `erlprocess/processes?by=${opts.by}`,
-         type: "GET",
-         data: {},
-         contentType: 'application/json',
-         processData: false,
-         success: function(resp) {
-            let processes = resp.data.processes;
-            let pid2node = {}
-            
-            processes.forEach( proc => {
-               pid2node[proc.pid] = {
-                  pid: proc.pid,
-                  label: proc.name || proc.pid,
-                  sortby: (proc.name || proc.pid).replace(/^[<]/, "zzz"), // ensure <1.2.3> Pids go to the bottom of the listing
-                  parentpid: proc.parent,
-                  sublabel: proc.pid,
-                  selected: false,
-                  checkbox: false,
-                  children: []
-               }
-            })
-
-            let hasparent = []
-            processes.forEach( p => {
-               if ( pid2node[p.parent] && (p.parent != p.pid) ) {
-                  pid2node[p.parent].children.push(pid2node[p.pid])
-                  hasparent.push(p.pid)
-               }
-            })
-
-            Object.values(pid2node).forEach( d => {
-               if (d.children.length == 0 ) { d.children = undefined }
-               else { d.children.sort( (a, b) => a.sortby > b.sortby ) }
-            })
-
-            cb(Object.values(pid2node).filter( d => !hasparent.includes(d.pid) ), opts)
-         },
-         error: function(resp) {},
-         complete: function() {}
-      })
-   }
-
-   function setupTreelistForProcesses(items, opts) {
-      if (items.length == 0) {
-         RED.notify("No Processes Found", {
-               type: "success",
-               timeout: 2000
-         });
-
-         try {
-               $("#node-input-erlprocess-target-container-div").treeList('empty')
-         } catch (ex) { }
-      } else {
-         try {
-               $("#node-input-erlprocess-target-container-div").treeList('empty')
-         } catch (ex) {
-               $("#node-input-erlprocess-target-container-div").css({
-                  width: "100%",
-                  height: "calc(100%)"
-               }).treeList(
-                  {
-                     multi: false
-                  }
-               ).on("treelistitemmouseover", function (e, item) {
-                  /*
-                  if (item.node && item.node.z == RED.workspaces.active()) {
-                     RED.view.reveal(item.node.id, true);
-                     RED.view.redraw();
-                  }
-                  */
-               }).on("treelistitemmouseout", function (e, item) {
-               }).on('treelistselect', function (event, item) {
-                  /* here we do nothing, that is desired */
-               }).on('treelistconfirm', function (event, item) {
-                  if (item.pid) {
-                     let nde = {
-                        "id": RED.nodes.id(),
-                        "type": "erlprocess",
-                        "pid": item.label, // this is either the registered name or the pid - name is better since it will survive restarts
-                        "name": item.label,
-                        "capture_io": false,
-                        "l": !$('#erlprocess-import-compact-node-size').is(":checked")
-                     }
-                     RED.view.importNodes([nde])
-                  }
-               });
-
-               $("#node-input-erlprocess-target-container-filter").show();
-
-               var search = $("#node-input-erlprocess-target-container-filter").searchBox({
-                  style: "compact",
-                  delay: 300,
-                  change: function () {
-                     var val = $(this).val().trim().toLowerCase();
-                     if (val === "") {
-                           $("#node-input-erlprocess-target-container-div").treeList("filter", null);
-                           search.searchBox("count", "");
-                     } else {
-                           var count = $("#node-input-erlprocess-target-container-div").treeList("filter", function (item) {
-                              return item.label.toLowerCase().indexOf(val) > -1 || item.pid.toLowerCase().indexOf(val) > -1
-                           });
-
-                           search.searchBox("count", count + " / " + $("#node-input-erlprocess-target-container-div").treeList("data").length);
-                     }
-                  }
-               });
-         }
-         $("#node-input-erlprocess-target-container-div").treeList("data", items.sort((a, b) => a.sortby > b.sortby))
-      }
-   }
-
-   function ensureYourConfigNodeExists() {
-      // This function makes sure there is 1 instance of your config node is available, and that the globalYourConfigNode variable refers to it.
-      // Explained in the next step of this tutorial... --> https://discourse.nodered.org/t/tutorial-create-a-sidebar-plugin-and-persist-the-data-in-a-config-node/82020
-
-      // If we had found it previously, check if it has been deleted by the user behind our back
-      if (globalYourConfigNode !== null) {
-         var configNode = RED.nodes.node(globalYourConfigNode.id);
-         if (configNode === null) { globalYourConfigNode = null; }
-      }
-
-      // If not found previously, let's go find it
-      if (globalYourConfigNode === null) {
-         var configNodes = [];
-         RED.nodes.eachConfig(function(configNode) {
-             if (configNode.type === 'erlconfigCfg') { 
-                 configNodes.push(configNode); 
-             }
-         });
-
-         // Make sure we only have 1 config node
-         while (configNodes.length > 1) {
-             var configNode = configNodes.pop();
-             RED.nodes.remove(configNode.id);
-             RED.nodes.dirty(true);
-         }
-
-         // When we found a config node, let's use that one
-         if (configNodes.length === 1) { globalYourConfigNode = configNodes[0]; }
-      }
-
-      // When it doesn't exist yet, create it if required
-      if (globalYourConfigNode === null) {
-         // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
-         // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
-         // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
-         // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
-         globalYourConfigNode = {
-             id: RED.nodes.id(), // on the server side, this is called RED.util.generateId()
-             _def: RED.nodes.getType("erlconfigCfg"),
-             type: "erlconfigCfg",
-             hasUsers: false, 
-             users: [],
-             name: "Processes",
-             label: function() { return "config" || this.name },
-             /* values and data defined by this config node */
-             data: "some default value", // Default data
-         }
-
-         // Add the new config node to the collection of Node-RED nodes
-         RED.nodes.add(globalYourConfigNode);
-
-         // Make sure the "Deploy" button becomes active
-         RED.nodes.dirty(true);
-      }      
-   }
-
-   // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
-   var initialiseConfigNodeOnce = () => {
-      RED.events.off('runtime-state', initialiseConfigNodeOnce);
-
-      // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
-      var content = $($('script[type="text/x-red"][data-template-name="erlconfig"]').i18n().html());
-    
-      // Add a "Your sidebar" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
-      // --> more details: https://nodered.org/docs/api/ui/sidebar/
-      RED.sidebar.addTab({
-         id: "erlconfig",
-         label: "Processes", // short name for the tab
-         name: "Processes", // long name for the menu
-         content: content,
-         closeable: true,
-         // disableOnEdit: true,
-         enableOnEdit: true,
-         iconClass: "fa fa-circle" // your fontawesome icon
-      });
-
-      ensureYourConfigNodeExists();
-
-      // At startup load your config node data into the plugin sidebar html elements
-      $("#node-input-data").val(globalYourConfigNode.data);
-
-      // When the user has entered new data in the sidebar, then store it into the config node
-      $("#node-input-data").on("change", function() {
-        ensureYourConfigNodeExists();
-
-        let data = $(this).val();
-
-         if (globalYourConfigNode.data != data) {
-            globalYourConfigNode.data = data;
-            // Since the config node has been updated, the 'Deploy' button should become active
-            RED.nodes.dirty(true);
-         }
-      })
-
-      $('#node-input-erlprocess-refresh-leaders-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-            getProcesses({"by":"leader"}, (items,opts) => {
-               setupTreelistForProcesses(items,opts)
-            })
-      })
-
-      $('#node-input-erlprocess-refresh-links-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-            getProcesses({"by":"links"}, (items,opts) => {
-               setupTreelistForProcesses(items,opts)
-            })
-      })
-
-      $('#node-input-erlprocess-import-process-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-         
-         let item = $("#node-input-erlprocess-target-container-div").treeList('selected')
-         
-         if ( !item ) { return }
-
-         let nde = {
-            "id": RED.nodes.id(),
-            "type": "erlprocess",
-            "pid": item.label, // this is either the registered name or the pid - name is better since it will survive restarts
-            "name": item.label,
-            "capture_io": false,
-            "l": !$('#erlprocess-import-compact-node-size').is(":checked")
-         }
-         RED.view.importNodes([nde])         
-      })
-      
-      $('#node-input-erlprocess-import-tree-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-
-         let mapChildren = (ary) => {
-            return ary.map( d => {
-               if ( d.children) {
-                  return [d, mapChildren(d.children)]
-               } else {
-                  return [d]
-               }
-            })
-         }
-
-         let process = $("#node-input-erlprocess-target-container-div").treeList('selected')
-
-         if ( !process ) { return }
-
-         let processes = [process];
-         if ( process.children ) {
-            processes = [process, ...mapChildren(process.children)].flat(100)
-         }
-
-         let pid2node = {};
-
-         processes.forEach( p => {
-            pid2node[p.pid] = {
-               "id": RED.nodes.id(),
-               "type": "erlprocess",
-               "pid": p.label,
-               "name": p.label,
-               "capture_io": false,
-               "l": !$('#erlprocess-import-compact-node-size').is(":checked"),
-               "wires": [[]]
-            }
-         })
-
-         let alledges = []
-
-         if ( !$('#erlprocess-import-reverse-tree').is(":checked")) {
-            processes.forEach( p => {
-               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
-                  pid2node[p.parentpid].wires[0].push(pid2node[p.pid].id)
-                  alledges.push({
-                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
-                     sources: [pid2node[p.parentpid].id],
-                     targets: [pid2node[p.pid].id]
-                  })
-               }
-            })
-         } else {
-            processes.forEach( p => {
-               if ( pid2node[p.parentpid] && (p.parentpid != p.pid) ) {
-                  pid2node[p.pid].wires[0].push(pid2node[p.parentpid].id)
-
-                  alledges.push({
-                     id: pid2node[p.parentpid].id + pid2node[p.pid].id,
-                     targets: [pid2node[p.parentpid].id],
-                     sources: [pid2node[p.pid].id]
-                  })
-               }
-            })
-         }
-
-         let allnodes = Object.values(pid2node).map( d => {
-            d.height = 20;
-            d.width = $('#erlprocess-import-compact-node-size').is(":checked") ? 30 : 150;
-            return d
-         })
-
-         if ( typeof dagre == "object") {
-            dagreLR({
-               "allnodes": allnodes,
-               "alledges": alledges,
-               "fixedNodeId": pid2node[process.pid].id
-            }, (data) => { RED.view.importNodes(data.nodes) });
-         } else {
-            RED.view.importNodes(allnodes)
-         }
-      })
-
-      $('#node-input-erlprocess-select-none-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = false; return d })) 
-      })
-      $('#node-input-erlprocess-select-all-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = true; return d })) 
-      })
-      $('#node-input-erlprocess-select-inverse-but').on('click', (e) => {
-         if ( e ) { e.preventDefault() }
-         $("#node-input-erlprocess-target-container-div").treeList('data', $("#node-input-erlprocess-target-container-div").treeList('data').map( d => { d.selected = !d.selected; return d })) 
-      })
-
-   };
-   RED.events.on('runtime-state', initialiseConfigNodeOnce);
-})();
-</script>
-
-<!-- The html for the right sidebar plugin screen -->
-<script type="text/x-red" data-template-name="erlconfig">
-
-   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
-      <button class="red-ui-button" id="node-input-erlprocess-refresh-leaders-but"><i class="fa fa-rotate-left"></i> Refresh by Group Leader</button>
-      <button style="margin-left: 10px;" class="red-ui-button" id="node-input-erlprocess-refresh-links-but"><i class="fa fa-rotate-right"></i> Refresh by Links</button>
-   </div>
-
-   <div class="form-row" style="margin-left: 10px; margin-top: 15px">
-      <button class="red-ui-button" style="" id="node-input-erlprocess-import-tree-but"><i class="fa fa-tree"></i> Import Tree</button>
-      <button class="red-ui-button" style="margin-left: 10px;" id="node-input-erlprocess-import-process-but"><i class="fa fa-genderless"></i> Import Process</button>
-   </div>
-
-   <div class="form-row" style="margin-left: 10px;">
-      <input style="width: 5%;" type="checkbox" id="erlprocess-import-reverse-tree"/>
-      <label for="erlprocess-import-reverse-tree" style="width: 30%;"><i class="fa fa-refresh" ></i> Reverse Tree?</label>
-
-      <input style="margin-left: 20px; width: 5%;" type="checkbox" id="erlprocess-import-compact-node-size"/>
-      <label for="erlprocess-import-compact-node-size" style="width: 30%;"><i class="fa fa-compress" ></i> Compact Nodes?</label>
-   </div>
-
-   <div class="form-row"
-      style="margin-left: 10px; position: relative; min-height: 300px; height: 650px; margin-right: 15px;">
-      <div style="margin-bottom: 5px; width: 35%; padding-left: 60%;">
-         <input type="text" id="node-input-erlprocess-target-container-filter" style="display: none;">
-      </div>
-      <div id="node-input-erlprocess-target-container-div"></div>
-   </div>
-</script>
-
