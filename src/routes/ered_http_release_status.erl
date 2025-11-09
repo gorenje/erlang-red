@@ -35,19 +35,25 @@ handle_get_response(Req, State) ->
     %% concatenations.  As a mere status page it doesn't seem
     %% worth complicating.
     Status =
-        case release_handler:which_releases() of
-            %% This should actually only be one for now
-            %% But we'll take the first if we messed up
-            [{Name, Vsn, Apps, RelStat} | _] ->
-                [
-                    {name, Name},
-                    {version, Vsn},
-                    {apps, lists:sort(Apps)},
-                    {status, RelStat}
-                ];
-            _ ->
+        try
+            case release_handler:which_releases() of
+                %% This should actually only be one for now
+                %% But we'll take the first if we messed up
+                [{Name, Vsn, Apps, RelStat} | _] ->
+                    [
+                       {name, Name},
+                       {version, Vsn},
+                       {apps, lists:sort(Apps)},
+                       {status, RelStat}
+                    ];
+                _ ->
+                    []
+            end
+        catch
+            _E:_F:_S ->
                 []
         end,
+
     case status_tmpl:render(Status) of
         {ok, Res} -> {Res, Req, State};
         {error, Err} -> {format_error(Err, Req), Req, State}
