@@ -26,6 +26,7 @@
 
 -import(ered_messages, [
     convert_to_num/1,
+    create_outgoing_msg/1,
     convert_units_to_milliseconds/2
 ]).
 -import(ered_nodes, [
@@ -43,11 +44,46 @@ start(NodeDef, _WsName) ->
 
 %%
 %%
+handle_event({registered, WsName, Pid}, #{<<"extend">> := true} = NodeDef) ->
+    ConversionResult = convert_units_to_milliseconds(
+        maps:find(<<"units">>, NodeDef),
+        maps:find(<<"duration">>, NodeDef)
+    ),
+
+    case ConversionResult of
+        {ok, ExtendDelay} when ExtendDelay > 0 ->
+            Fun = fun() ->
+                gen_server:cast(Pid, create_outgoing_msg(WsName))
+            end,
+            {ok, TRef} = timer:apply_after(ExtendDelay, Fun),
+            NodeDef#{'_extenddelay' => ExtendDelay, '_extendref' => TRef};
+        {ok, _V} ->
+            unsupported(NodeDef, {websocket, WsName}, "Zero or negative time"),
+            NodeDef#{<<"extend">> := false};
+        {error, ErrMsg} ->
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+            NodeDef#{<<"extend">> := false}
+    end;
 handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
 %%
+handle_msg(
+    {incoming, #{?GetWsName} = _Msg},
+    #{
+        <<"extend">> := true,
+        '_extenddelay' := ExtendDelay,
+        '_extendref' := TRef
+    } = NodeDef
+) ->
+    timer:cancel(TRef),
+    ThisPid = self(),
+    Fun = fun() ->
+        gen_server:cast(ThisPid, create_outgoing_msg(WsName))
+    end,
+    {ok, NewTRef} = timer:apply_after(ExtendDelay, Fun),
+    {handled, NodeDef#{'_extendref' => NewTRef}, dont_send_complete_msg};
 handle_msg(
     {incoming, #{?GetWsName} = Msg},
     #{<<"wires">> := Wires, <<"outputs">> := Outputs} = NodeDef
