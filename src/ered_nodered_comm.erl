@@ -174,32 +174,12 @@ send_to_debug_sidebar(
     } = NodeDef,
     Msg
 ) ->
-    %% This isn't conform to Node-RED because it should be sending out
-    %% something like this:
-    %% {
-    %%     "topic": "debug",
-    %%     "data": {
-    %%         "id": "36f01aa9aa9d120c",
-    %%         "z": "8017c686fe4e892c",
-    %%         "path": "8017c686fe4e892c",
-    %%         "name": "debug 430",
-    %%         "topic": "",
-    %%         "property": "payload", <<---- property name
-    %%         "msg": "adasdasd",     <<---- value
-    %%         "format": "string[8]"  <<---- this is "number" or "string[x]" or
-    %%     }                                 something else again depending on
-    %% }                                     property type.
-    %% This function does not do that.
-
-    %% format is important here.
-    %% Triggery for large files and I don't know what. Using format
-    %% of "object" as opposed to "Object" (capital-o) causes less
-    %% breakage. Definitely something to investigate.
-    %% See info for test id: c4690c0a085d6ef5 for more details.
+    PropValue = retrieve_prop_value(PropName, Msg),
     Data = ?ObtainFrom(NodeDef)#{
         <<"topic">> => ?TopicFrom(Msg),
-        <<"msg">> => #{PropName => retrieve_prop_value(PropName, Msg)},
-        <<"format">> => <<"object">>
+        <<"msg">> => PropValue,
+        <<"format">> => type_to_node_red_debug_type(PropValue),
+        <<"property">> => PropName
     },
 
     debug(ws_from(Msg), Data, normal);
@@ -301,3 +281,17 @@ post_exception_or_debug(NodeDef, Msg, ErrMsg) ->
                 NodeDef, Msg#{<<"error_msg">> => jstr(ErrMsg)}
             )
     end.
+
+%%
+%% Helper to convert Erlang types to Node-RED debug types.
+%%
+type_to_node_red_debug_type(V) when is_map(V) ->
+    <<"object">>;
+type_to_node_red_debug_type(V) when is_list(V) ->
+    <<"array">>;
+type_to_node_red_debug_type(V) when is_number(V) ->
+    <<"number">>;
+type_to_node_red_debug_type(V) when is_binary(V) ->
+    <<"string">>;
+type_to_node_red_debug_type(V) ->
+    <<"object">>.
