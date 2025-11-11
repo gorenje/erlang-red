@@ -95,6 +95,17 @@ spin_up_node(#{<<"id">> := IdStr, <<"type">> := TypeStr} = NodeDef, WsName) ->
     %% the PID with the corresponding pg group
     {ok, Pid} = Module:start(add_counters(NodeDef, GrpName), WsName),
 
+    %% Give the process a name to improve understandable when being part
+    %% of the process tree.
+    %% PidName =
+    %%     case NodeDef of
+    %%         #{<<"name">> := HasAName} when HasAName =/= <<>> ->
+    %%             binary_to_atom(ered_nodes:jstr("pid_for_~s_~s",[HasAName, IdStr]));
+    %%         _ ->
+    %%             binary_to_atom(ered_nodes:jstr("pid_for_~s_~s",[TypeStr, IdStr]))
+    %%     end,
+    %% erlang:register(PidName, Pid),
+
     %% Perform any Post spawn activities. This is mostly registering with
     %% collectors of events as subscribers, see catch and complete nodes
     %% for examples. This is done after the spawn because to register
