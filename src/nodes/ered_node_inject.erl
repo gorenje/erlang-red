@@ -25,10 +25,10 @@
 %%          "vt": "str"
 %%      }
 %%  ],
-%%  "repeat": "",  <<----+- if node is trigger automagically via "once",
-%%  "crontab": "", <<---/ then repeat can be used to continue the inject
-%%  "once": false, <<--/ but this isn't supported. ('once' either true or false).
-%%  "onceDelay": 0.1,
+%%  "repeat": "",  <<--- repeatedly trigger inject, value in seconds
+%%  "crontab": "", <<--- a crontab-like definition when to trigger this inject
+%%  "once": false, <<--- trigger inject once after delay seconds
+%%  "onceDelay": 0.1, <<<---- this is in seconds
 %%  "topic": "",
 %%  "payload": "donothing",
 %%  "payloadType": "str",
@@ -76,9 +76,8 @@
 %%
 % erlfmt:ignore - alignment
 start(NodeDef, WsName) ->
-    %% TODO support repeat and crontab
+    %% TODO support crontab
     case check_node_config([
-        {<<"repeat">>,  <<"">>},
         {<<"crontab">>, <<"">>}
     ], NodeDef, WsName) of
         ok ->
@@ -89,15 +88,21 @@ start(NodeDef, WsName) ->
 
 %%
 %%
+handle_event({registered, WsName, _Pid}, NodeDef) ->
+    setup_triggers(NodeDef, WsName);
 handle_event(
-    {flow_started, WsName},
-    #{<<"once">> := Once, <<"onceDelay">> := Delay} = NodeDef
-) when Once =:= true; Once =:= <<"true">> ->
-    {ok, TRef} = send_out_after(Delay, WsName),
-    NodeDef#{onceref => TRef};
+    {stop, _WsName},
+    #{onceref := OnceRef, repeatref := RepeatRef} = NodeDef
+) ->
+    timer:cancel(OnceRef),
+    timer:cancel(RepeatRef),
+    maps:remove(repeatref, maps:remove(onceref, NodeDef));
 handle_event({stop, _WsName}, #{onceref := TRef} = NodeDef) ->
     timer:cancel(TRef),
     maps:remove(onceref, NodeDef);
+handle_event({stop, _WsName}, #{repeatref := TRef} = NodeDef) ->
+    timer:cancel(TRef),
+    maps:remove(repeatref, NodeDef);
 handle_event(_, NodeDef) ->
     NodeDef.
 
@@ -130,6 +135,48 @@ handle_msg(_, NodeDef) ->
 %%
 %% ------------------------ Helpers
 %%
+%%
+%%
+setup_triggers(
+    #{
+        <<"once">> := false,
+        <<"repeat">> := <<>>
+    } = NodeDef,
+    _WsName
+) ->
+    NodeDef;
+setup_triggers(
+    #{
+        <<"once">> := false,
+        <<"repeat">> := RepeatEverySeconds
+    } = NodeDef,
+    WsName
+) ->
+    {ok, TRef} = send_out_repeatedly(RepeatEverySeconds, WsName),
+    NodeDef#{repeatref => TRef};
+setup_triggers(
+    #{
+        <<"once">> := true,
+        <<"onceDelay">> := Delay,
+        <<"repeat">> := <<>>
+    } = NodeDef,
+    WsName
+) ->
+    {ok, TRef} = send_out_after(Delay, WsName),
+    NodeDef#{onceref => TRef};
+setup_triggers(
+    #{
+        <<"once">> := true,
+        <<"onceDelay">> := Delay,
+        <<"repeat">> := RepeatEverySeconds
+    } = NodeDef,
+    WsName
+) ->
+    {ok, TRefRepeat} = send_out_repeatedly(RepeatEverySeconds, WsName),
+    {ok, TRef} = send_out_after(Delay, WsName),
+    NodeDef#{onceref => TRef, repeatref => TRefRepeat}.
+
+%%
 send_out_after(<<>>, WsName) ->
     send_out_after(<<"0.1">>, WsName);
 send_out_after(Delay, WsName) ->
@@ -138,6 +185,16 @@ send_out_after(Delay, WsName) ->
         round(convert_to_num(Delay) * 1000),
         fun() ->
             %% simulate a button press
+            gen_server:cast(ToThisPid, create_outgoing_msg(WsName))
+        end
+    ).
+
+%%
+send_out_repeatedly(RepeatEverySeconds, WsName) ->
+    ToThisPid = self(),
+    timer:apply_interval(
+        round(convert_to_num(RepeatEverySeconds) * 1000),
+        fun() ->
             gen_server:cast(ToThisPid, create_outgoing_msg(WsName))
         end
     ).
