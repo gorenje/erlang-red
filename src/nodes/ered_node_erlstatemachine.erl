@@ -272,7 +272,6 @@ send_message_on_state_change(
     _PrevS
 ) ->
     {handled, NodeDef, dont_send_complete_msg};
-
 send_message_on_state_change(
     NodeDef,
     #{<<"payload">> := OrigPayload} = Msg,
@@ -309,7 +308,6 @@ always_send_message(
     _PrevS
 ) ->
     {handled, NodeDef, dont_send_complete_msg};
-
 always_send_message(
     NodeDef,
     #{<<"payload">> := OrigPayload} = Msg,

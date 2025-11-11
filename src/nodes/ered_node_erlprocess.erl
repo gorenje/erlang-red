@@ -170,7 +170,6 @@ handle_msg(
     post_exception_or_debug(NodeDef, Msg, ErrMsg),
     send_msg_to_connected_nodes(NodeDef, Msg),
     {handled, NodeDef, dont_send_complete_msg};
-
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
 
