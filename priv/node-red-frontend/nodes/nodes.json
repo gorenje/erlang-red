@@ -754,7 +754,7 @@
             "Seeker"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
@@ -766,7 +766,7 @@
             "Sink"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
@@ -778,7 +778,7 @@
             "ClientCode"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
@@ -790,7 +790,7 @@
             "GetFlows"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
@@ -802,7 +802,7 @@
             "SendFlow"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
@@ -814,7 +814,7 @@
             "InstallPackage"
         ],
         "user": false,
-        "version": "0.11.1"
+        "version": "0.11.2"
     },
     {
         "enabled": true,
