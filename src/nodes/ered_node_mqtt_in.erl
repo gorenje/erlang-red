@@ -219,6 +219,9 @@ handle_msg(
     #{?GetPayload} = Msg2,
     Msg3 = Msg2#{?AddPayload(json:decode(Payload))},
     send_msg_to_connected_nodes(NodeDef, Msg3),
+    %% the ered_node behaviour covers incoming and outgoing messages but
+    %% not node specific messages as in this case.
+    ered_msgtracer_manager:node_received_msg(NodeDef, self(), Msg3),
     {handled, NodeDef, Msg3};
 handle_msg(
     {mqtt_incoming, MqttDataPacket},
@@ -227,6 +230,9 @@ handle_msg(
     {outgoing, Msg} = create_outgoing_msg(WsName),
     Msg2 = copy_attributes([payload, topic, retain, qos], Msg, MqttDataPacket),
     send_msg_to_connected_nodes(NodeDef, Msg2),
+    %% the ered_node behaviour covers incoming and outgoing messages but
+    %% not node specific messages as in this case.
+    ered_msgtracer_manager:node_received_msg(NodeDef, self(), Msg2),
     {handled, NodeDef, Msg2};
 handle_msg(
     {incoming, #{<<"action">> := <<"connect">>} = Msg},

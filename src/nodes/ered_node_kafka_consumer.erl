@@ -140,7 +140,7 @@ dispatch_kafka_message(
         headers = Headers
     },
     {kafka_message_set, Topic, Partition, _CurrentOffset, _},
-    #{?GetWsName, <<"wires">> := [MsgPort, _InfoPort]} = _NodeDef
+    #{?GetWsName, <<"wires">> := [MsgPort, _InfoPort]} = NodeDef
 ) ->
     {outgoing, Msg} = create_outgoing_msg(WsName),
     Msg2 = Msg#{
@@ -154,4 +154,9 @@ dispatch_kafka_message(
             <<"ts">> => Ts
         }
     },
+
+    %% the ered_node behaviour covers incoming and outgoing messages but
+    %% not node specific messages as in this case.
+    ered_msgtracer_manager:node_received_msg(NodeDef, self(), Msg2),
+
     send_msg_on(MsgPort, Msg2).

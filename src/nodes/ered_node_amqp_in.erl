@@ -206,15 +206,16 @@ loop_get_content(
     case get_content(Queue, Channel, to_bool(MsgNoAck)) of
         {Tag, Content} ->
             {outgoing, Msg} = create_outgoing_msg(WsName),
-            send_msg_to_connected_nodes(
-                NodeDef,
-                Msg#{<<"tag">> => Tag, <<"payload">> => Content}
-            );
+            Msg2 = Msg#{<<"tag">> => Tag, <<"payload">> => Content},
+            send_msg_to_connected_nodes(NodeDef, Msg2),
+            %% the ered_node behaviour covers incoming and outgoing messages but
+            %% not node specific messages as in this case.
+            ered_msgtracer_manager:node_received_msg(NodeDef, self(), Msg2);
         empty ->
             ignore
     end,
 
     timer:apply_after(
-        0,
-        fun() -> loop_get_content(Queue, Channel, NodeDef) end
+      0,
+      fun() -> loop_get_content(Queue, Channel, NodeDef) end
     ).
