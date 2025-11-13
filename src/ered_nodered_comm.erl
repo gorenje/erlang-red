@@ -286,12 +286,12 @@ post_exception_or_debug(NodeDef, Msg, ErrMsg) ->
 %% Helper to convert Erlang types to Node-RED debug types.
 %%
 type_to_node_red_debug_type(V) when is_map(V) ->
-    <<"object">>;
+    <<"Object">>;
 type_to_node_red_debug_type(V) when is_list(V) ->
     <<"array">>;
 type_to_node_red_debug_type(V) when is_number(V) ->
     <<"number">>;
 type_to_node_red_debug_type(V) when is_binary(V) ->
     <<"string">>;
-type_to_node_red_debug_type(V) ->
-    <<"object">>.
+type_to_node_red_debug_type(_) ->
+    <<"Object">>.
