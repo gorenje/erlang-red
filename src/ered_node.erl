@@ -79,6 +79,10 @@ handle_call({registered, _WsName, _Pid} = Msg, _From, {Module, NodeDef}) ->
     rand:seed(default),
     NodeDef2 = Module:handle_event(Msg, NodeDef),
     {reply, NodeDef2, {Module, NodeDef2}};
+handle_call(<<"get_nodedef">>, _From, {Module, NodeDef}) ->
+    %% this is a cheat code to access state machine internals via a
+    %% a function node in a flow.
+    {reply, NodeDef, {Module, NodeDef}};
 handle_call(Msg, _From, {Module, NodeDef}) ->
     io:format(
         "Node ~p, ~p Received unsupported call {{{ ~p }}}~n",
