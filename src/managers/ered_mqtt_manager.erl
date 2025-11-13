@@ -60,16 +60,14 @@ handle_call(start_mqtt, _From, State) ->
         Error ->
             {reply, Error, State}
     end;
-handle_call(connect, _From, State) ->
-    ConnPid = maps:get(emqtt_client_id, State),
+handle_call(connect, _From, #{emqtt_client_id := ConnPid} = State) ->
     case emqtt:connect(ConnPid) of
         {ok, Props} ->
             {reply, {ok, Props}, State};
         Reason ->
             {reply, Reason, State}
     end;
-handle_call(disconnect, _From, State) ->
-    ConnPid = maps:get(emqtt_client_id, State),
+handle_call(disconnect, _From, #{emqtt_client_id := ConnPid} = State) ->
     case emqtt:disconnect(ConnPid) of
         ok ->
             {reply, ok, State};
