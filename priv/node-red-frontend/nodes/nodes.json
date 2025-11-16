@@ -730,7 +730,7 @@
             "FlowHubPull"
         ],
         "user": false,
-        "version": "0.9.0"
+        "version": "0.9.1"
     },
     {
         "enabled": true,
@@ -742,7 +742,7 @@
             "FlowHubCfg"
         ],
         "user": false,
-        "version": "0.9.0"
+        "version": "0.9.1"
     },
     {
         "enabled": true,
