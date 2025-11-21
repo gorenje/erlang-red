@@ -216,6 +216,6 @@ loop_get_content(
     end,
 
     timer:apply_after(
-      0,
-      fun() -> loop_get_content(Queue, Channel, NodeDef) end
+        0,
+        fun() -> loop_get_content(Queue, Channel, NodeDef) end
     ).
