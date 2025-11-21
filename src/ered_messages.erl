@@ -247,6 +247,16 @@ encoder(Other, Encode) when is_binary(Other) ->
             io:format("Json Encoding Error ~p ~p~n", [E, S]),
             json:encode_value(binary_to_list(Other), Encode)
     end;
+encoder(Other, Encode) when is_map(Other) ->
+    %% need to handle "#{{tuple} => Value}" maps, assume that if an encoding
+    %% error does happen, that converting the map to a list will fix the
+    %% issue - this does work for the tuple-as-key issue.
+    try
+        json:encode_value(Other, Encode)
+    catch
+        error:_E:_S ->
+            json:encode_value(maps:to_list(Other), Encode)
+    end;
 encoder(Other, Encode) ->
     json:encode_value(Other, Encode).
 
