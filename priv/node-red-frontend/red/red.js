@@ -47918,6 +47918,11 @@ RED.search = (function() {
                         currentIndex = i;
                         reveal(node);
                     });
+                    div.on("mouseover", function(evt) {
+                        if ( node.z == RED.workspaces.active() ) {
+                           RED.view.reveal(node.id)
+                        }
+                    });
                 }
             },
             scrollOnAdd: false
