@@ -4107,13 +4107,15 @@ function ensureYourConfigNodeExists() {
             RED.nodes.dirty(true)
          }
          
-         $(obj).find(".scratchpad-content-field").val( 
-            globalYourConfigNode.scratches[idx].txt 
-         ).css( 
-            'width', globalYourConfigNode.scratches[idx].wdh || "360px"
-         ).css(
-            'height', globalYourConfigNode.scratches[idx].hgt || "150px"
-         )
+         if ( globalYourConfigNode.scratches[idx] ) {
+            $(obj).find(".scratchpad-content-field").val( 
+               globalYourConfigNode.scratches[idx].txt 
+            ).css( 
+               'width', globalYourConfigNode.scratches[idx].wdh || "360px"
+            ).css(
+               'height', globalYourConfigNode.scratches[idx].hgt || "150px"
+            )
+         }
       })
 
       addEventHandlers(globalYourConfigNode)
