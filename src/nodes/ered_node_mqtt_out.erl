@@ -41,6 +41,15 @@
 
 %%
 %%
+start(#{<<"qos">> := <<>>, <<"retain">> := <<>>} = NodeDef, _WsName) ->
+    ered_node:start(
+        NodeDef#{<<"qos">> => <<"0">>, <<"retain">> => false},
+        ?MODULE
+    );
+start(#{<<"retain">> := <<>>} = NodeDef, _WsName) ->
+    ered_node:start(NodeDef#{<<"retain">> => false}, ?MODULE);
+start(#{<<"qos">> := <<>>} = NodeDef, _WsName) ->
+    ered_node:start(NodeDef#{<<"qos">> => <<"0">>}, ?MODULE);
 start(NodeDef, _WsName) ->
     ered_node:start(NodeDef, ?MODULE).
 
@@ -146,6 +155,18 @@ handle_event(_, NodeDef) ->
 handle_msg(
     {incoming,
         #{
+            <<"topic">> := MsgTopic
+        } = Msg},
+    #{
+        <<"topic">> := NodeTopic
+    } = NodeDef
+) when NodeTopic =:= <<>>, MsgTopic =:= <<>> ->
+    ErrMsg = jstr("Error: invalid topic specified"),
+    post_exception_or_debug(NodeDef, Msg, ErrMsg),
+    {handled, NodeDef, dont_send_complete_msg};
+handle_msg(
+    {incoming,
+        #{
             <<"topic">> := MsgTopic,
             ?GetPayload
         } = Msg},
@@ -155,7 +176,12 @@ handle_msg(
         <<"retain">> := Retain,
         ?MQTT_MGR_PID
     } = NodeDef
-) when NodeTopic == <<>>, MsgTopic =/= <<>> ->
+) when
+    NodeTopic =:= <<>>,
+    MsgTopic =/= <<>>,
+    MsgTopic =/= "",
+    MsgTopic =/= []
+->
     Data = {
         publish_payload,
         Payload,
@@ -171,6 +197,15 @@ handle_msg(
     ),
 
     {handled, NodeDef, Msg};
+handle_msg(
+    {incoming, Msg},
+    #{
+        <<"topic">> := NodeTopic
+    } = NodeDef
+) when NodeTopic =:= <<>> ->
+    ErrMsg = jstr("Error: invalid topic specified"),
+    post_exception_or_debug(NodeDef, Msg, ErrMsg),
+    {handled, NodeDef, dont_send_complete_msg};
 handle_msg(
     {incoming,
         #{
@@ -201,7 +236,7 @@ handle_msg(
 %%
 %% No MQTT manager process id
 handle_msg(
-    ?MSG_INCOMING,
+    {incoming, Msg},
     NodeDef
 ) ->
     ErrMsg = jstr("no connection available"),

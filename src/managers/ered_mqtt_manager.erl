@@ -92,6 +92,44 @@ handle_call(Msg, _From, State) ->
 
 %%
 %%
+%% publishing floats or integers leads to the client failing with:
+%%
+%% * 1st argument: not an iodata term
+%%
+%%     :erlang.iolist_to_binary(12121.121212)
+%%     (emqtt 1.14.4) /code/_build/default/lib/emqtt/src/emqtt.erl:538: :emqtt.publish_via/6
+%%     (erlang_red 0.3.6) /code/src/managers/ered_mqtt_manager.erl:106: :ered_mqtt_manager.handle_cast/2
+%%
+%% hence these values are converted to binaries
+handle_cast(
+    {publish_payload, Payload, Topic, QoS, Retain}, State
+) when is_integer(Payload) ->
+    handle_cast(
+        {publish_payload, integer_to_binary(Payload), Topic, QoS, Retain},
+        State
+    );
+handle_cast(
+    {publish_payload, Payload, Topic, QoS, Retain}, State
+) when is_float(Payload) ->
+    handle_cast(
+        {publish_payload, float_to_binary(Payload), Topic, QoS, Retain},
+        State
+    );
+handle_cast(
+    {publish_payload, Payload, Topic, QoS, Retain}, State
+) when is_map(Payload) ->
+    handle_cast(
+        {publish_payload, ered_messages:encode_json(Payload), Topic, QoS,
+            Retain},
+        State
+    );
+handle_cast(
+    {publish_payload, Payload, Topic, QoS, Retain}, State
+) when is_list(Topic) ->
+    handle_cast(
+        {publish_payload, Payload, list_to_binary(Topic), QoS, Retain},
+        State
+    );
 handle_cast(Msg = {publish_payload, Payload, Topic, QoS, Retain}, State) ->
     %% this is an MQTT out node sending out a message to MQTT broker.
     %% publish is perhaps a misnomer here since there is already a
