@@ -69,7 +69,11 @@ start(
     %% overwrite ==> true ==> overwrite file.
     ered_node:start(NodeDef, ?MODULE);
 start(NodeDef, WsName) ->
-    unsupported(NodeDef, {websocket, WsName}, "configuration"),
+    unsupported(
+        NodeDef,
+        {websocket, WsName},
+        "configuration, only overwrite file and encoding none is supported"
+    ),
     ered_node:start(NodeDef, ered_node_ignore).
 
 %%
