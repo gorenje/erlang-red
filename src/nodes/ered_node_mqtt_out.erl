@@ -32,6 +32,7 @@
     post_exception_or_debug/3
 ]).
 -import(ered_messages, [
+    any_to_binary/1,
     convert_to_num/1,
     to_bool/1
 ]).
@@ -185,7 +186,7 @@ handle_msg(
     Data = {
         publish_payload,
         Payload,
-        MsgTopic,
+        any_to_binary(MsgTopic),
         convert_to_num(QoS),
         to_bool(Retain)
     },
@@ -221,7 +222,7 @@ handle_msg(
     Data = {
         publish_payload,
         Payload,
-        NodeTopic,
+        any_to_binary(NodeTopic),
         convert_to_num(QoS),
         to_bool(Retain)
     },
