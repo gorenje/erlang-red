@@ -141,8 +141,8 @@ install_module_node_code([], _WsName) ->
     ok;
 install_module_node_code([NodeDef | ModeNodeDefs], WsName) ->
     case {is_module_node(NodeDef), disabled(NodeDef)} of
-        {true, false} ->
-            ered_node_erlmodule:install(NodeDef, WsName);
+        {{true, ModuleHandler}, false} ->
+            ModuleHandler:install(NodeDef, WsName);
         _ ->
             ignore
     end,
@@ -361,6 +361,7 @@ node_type_to_module(<<"range">>)             -> ered_node_range;
 node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
 node_type_to_module(<<"erlcaptureio">>)      -> ered_node_erlcaptureio;
 node_type_to_module(<<"amqp-in">>)           -> ered_node_amqp_in;
+node_type_to_module(<<"elxmodule">>)         -> ered_node_elxmodule;
 
 %% TODO: don't do this again! The kafka nodes are based on an existing
 %% TODO: Node-RED node package --> @asinino/node-red-kafkajs that uses
@@ -431,6 +432,8 @@ is_supervisor(_) ->
 is_module_node(NodeDef) when is_map(NodeDef) ->
     is_module_node(maps:get(<<"type">>, NodeDef));
 is_module_node(<<"erlmodule">>) ->
-    true;
+    {true, ered_node_erlmodule};
+is_module_node(<<"elxmodule">>) ->
+    {true, ered_node_elxmodule};
 is_module_node(_) ->
-    false.
+    {false, undefined}.
