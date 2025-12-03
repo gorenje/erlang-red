@@ -21,8 +21,7 @@ end#{
 %%
 %% Message types
 %%
--define(MSG_STOP, {stop, _WsName}).
--define(MSG_STOP_WS, {stop, WsName}).
+-define(StopEvent, {stop, _WsName}).
 -define(MSG_INCOMING, {incoming, Msg}).
 -define(MSG_REGISTERED, {registered, WsName, NodePid}).
 

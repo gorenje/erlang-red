@@ -30,6 +30,11 @@
     send_out_debug_warning/2
 ]).
 
+-import(ered_erlmodule_exchange, [
+    remove_module_for_nodeid/1,
+    add_module/2
+]).
+
 %%
 %%
 start(
@@ -49,8 +54,8 @@ start(NodeDef, _WsName) ->
 
 %%
 %%
-handle_event(?MSG_STOP, #{<<"id">> := NodeId} = NodeDef) ->
-    ered_erlmodule_exchange:remove_module_for_nodeid(NodeId),
+handle_event(?StopEvent, #{<<"id">> := NodeId} = NodeDef) ->
+    remove_module_for_nodeid(NodeId),
     NodeDef;
 handle_event(_, NodeDef) ->
     NodeDef.
@@ -173,4 +178,4 @@ clear_status_after_one_sec(WsName, NodeDef) ->
 
 install_compiled_module_code(NodeId, ModuleName, Binary) ->
     {module, ModuleName} = code:load_binary(ModuleName, [], Binary),
-    ered_erlmodule_exchange:add_module(NodeId, ModuleName).
+    add_module(NodeId, ModuleName).

@@ -135,14 +135,14 @@ handle_event(
     setup_mqtt_manager(NodeDef, WsName);
 %%
 %% stop event - with timer or without, with mqtt mgr process or not.
-handle_event(?MSG_STOP, #{?TIMER, ?MQTT_MGR_PID} = NodeDef) ->
+handle_event(?StopEvent, #{?TIMER, ?MQTT_MGR_PID} = NodeDef) ->
     erlang:cancel_timer(TRef),
     gen_server:cast(MqttMgrPid, stop),
     NodeDef;
-handle_event(?MSG_STOP, #{?TIMER} = NodeDef) ->
+handle_event(?StopEvent, #{?TIMER} = NodeDef) ->
     erlang:cancel_timer(TRef),
     NodeDef;
-handle_event(?MSG_STOP, #{?MQTT_MGR_PID} = NodeDef) ->
+handle_event(?StopEvent, #{?MQTT_MGR_PID} = NodeDef) ->
     gen_server:cast(MqttMgrPid, stop),
     NodeDef;
 %%
