@@ -184,7 +184,15 @@ These nodes represent specific Erlang features as nodes and as such, could be im
 
 These nodes can be installed using the corresponding Node-RED [node package](https://flows.nodered.org/node/@gregoriusrippenstein/erlang-red-supervisor-node). In Node-RED these nodes are placebos, doing nothing.
 
-### Erlang Processes
+### Elixir Support
+
+| Node | Comment | Example Flow |
+| ---- | ------- | ------------ |
+| [elxmodule](src/nodes/ered_node_elxmodule.erl) | Basic support for Elixir code in form of modules. |  [Flow](https://flows.red-erik.org/f/963265474ffd443b) |
+
+An initial throw of the dice for Elixir support inside Erlang-Red. There is nothing special happening here other than Elixir code being compiled into the BEAM process and them modules being accessible using the 'Elixir.' prefix.
+
+### BEAM Processes
 
 | Node | Comment | Example Flow |
 | ---- | ------- | ------------ |
