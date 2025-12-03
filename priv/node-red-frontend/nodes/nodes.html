@@ -13401,10 +13401,10 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
   (function(){
   
   RED.nodes.registerType('erlmodule',{
-    color: '#fdd0a2',
-    icon: "font-awesome/fa-keyboard-o",
+    color: 'rgb(232,8,8)',
+    icon: "erlang.svg",
     category: 'function',
-    paletteLabel: 'Module Code',
+    paletteLabel: 'Erlang Module',
     defaults: {
       name: {
         value: "",
@@ -13415,7 +13415,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
         validate: RED.validators.regex(/^[a-z0-9_]+$/)        
       },
       code: {
-        value: atob("LW1vZHVsZSgpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
+        value: atob("LW1vZHVsZShteV9tb2R1bGUpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
         required: true
       }
     },
@@ -13458,10 +13458,12 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
         }
       }
       this.editor.onDidChangeModelContent(updateModuleName);
+      
+      $('#node-input-module_name').val(moduleNameRegExp.exec(this.code)[1]).trigger('change')
 
       $('#erlmodule-replace-btn').on('click', (e) =>{
         let templateCode = {
-          "module": atob("LW1vZHVsZSgpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
+          "module": atob("LW1vZHVsZShteV9tb2R1bGUpLgoKLWltcG9ydChtb2R1bGUsIFsKICAgZnVuY3QvMQpdKS4KCgotZXhwb3J0KFsKICAgc29tZXRoaW5nLzEKXSkuCgpzb21ldGhpbmcoVikgLT4KICBpbzpmb3JtYXQoImhlbGxvIHdvcmxkIH5wIH5uIixbVl0pLgoK"),
           "server": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJczogaHR0cHM6Ly93d3cuZXJsYW5nLm9yZy9kb2MvYXBwcy9zdGRsaWIvZ2VuX3NlcnZlci5odG1sCiUlCgotYmVoYXZpb3VyKGdlbl9zZXJ2ZXIpLgoKLWV4cG9ydChbCiAgICBzdGFydF9saW5rLzAsCiAgICBpbml0LzEsCiAgICBoYW5kbGVfY2FsbC8zLAogICAgaGFuZGxlX2Nhc3QvMiwKICAgIGhhbmRsZV9pbmZvLzIsCiAgICBoYW5kbGVfY29udGludWUvMiwKICAgIGNvZGVfY2hhbmdlLzMsCiAgICB0ZXJtaW5hdGUvMiwKICAgIHN0b3AvMApdKS4KCiUlCiUlIEV4dGVybmVyIGV4cG9ydHMKLWV4cG9ydChbCiAgIGluY3JlbWVudC8wLAogICBkZWNyZW1lbnQvMCwKICAgZ2V0X2NvdW50ZXIvMCwKICAgc2V0X2NvdW50ZXIvMQpdKS4KCiUlCiUlIEV4dGVybmFsIEFQSXMKaW5jcmVtZW50KCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGluY3JlbWVudCkuCgpkZWNyZW1lbnQoKSAtPgogICBnZW5fc2VydmVyOmNhbGwoP01PRFVMRSwgZGVjcmVtZW50KS4KCmdldF9jb3VudGVyKCkgLT4KICAgZ2VuX3NlcnZlcjpjYWxsKD9NT0RVTEUsIGdldF9jb3VudGVyKS4KCnNldF9jb3VudGVyKFZhbHVlKSAtPgogICBnZW5fc2VydmVyOmNhbGwoP01PRFVMRSwge3NldF9jb3VudGVyLCBWYWx1ZX0pLgoKJSUKJSUKc3RhcnRfbGluaygpIC0+CiAgICBnZW5fc2VydmVyOnN0YXJ0X2xpbmsoe2xvY2FsLCA/TU9EVUxFfSwgP01PRFVMRSwgI3tjb3VudGVyID0+IDB9LCBbXSkuCgppbml0KEFyZ3MpIC0+CiAgICB7b2ssIEFyZ3MjeyBjb3VudGVyID0+IDEgfX0uCgpzdG9wKCkgLT4KICAgIGdlbl9zZXJ2ZXI6Y2FzdCg/TU9EVUxFLCBzdG9wKS4KCnRlcm1pbmF0ZShub3JtYWwsIF9TdGF0ZSkgLT4KICAgIG9rOwp0ZXJtaW5hdGUoX0V2ZW50LCBfU3RhdGUpIC0+CiAgICBvay4KCmNvZGVfY2hhbmdlKF9PbGRWZXJzaW9uLCBTdGF0ZSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNhbGwKaGFuZGxlX2NhbGwoaW5jcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyICsgMX19OwoKaGFuZGxlX2NhbGwoZGVjcmVtZW50LCBfRnJvbSwgI3sgY291bnRlciA6PSBDb3VudGVyIH0gPSBTdGF0ZSkgLT4KICAgIHtyZXBseSwgb2ssIFN0YXRlI3sgY291bnRlciA9PiBDb3VudGVyIC0gMX19OwoKaGFuZGxlX2NhbGwoZ2V0X2NvdW50ZXIsIF9Gcm9tLCAjeyBjb3VudGVyIDo9IENvdW50ZXIgfSA9IFN0YXRlKSAtPgogICAge3JlcGx5LCBDb3VudGVyLCBTdGF0ZX07CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIFBheWxvYWR9LCBfRnJvbSwgU3RhdGUpIHdoZW4gaXNfaW50ZWdlcihQYXlsb2FkKSAtPgogICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IFBheWxvYWR9fTsKCmhhbmRsZV9jYWxsKHtzZXRfY291bnRlciwgUGF5bG9hZH0sIF9Gcm9tLCBTdGF0ZSkgd2hlbiBpc19iaW5hcnkoUGF5bG9hZCk7IGlzX2xpc3QoUGF5bG9hZCkgLT4KICAgY2FzZSBzdHJpbmc6dG9faW50ZWdlcihQYXlsb2FkKSBvZgogICAgICB7ZXJyb3IsIF99IC0+CiAgICAgICAgICB7cmVwbHksIG5vdF9pbnRlZ2VyLCBTdGF0ZX07CiAgICAgIHtJbnRlZ2VyLCBffSAtPgogICAgICAgICAge3JlcGx5LCBvaywgU3RhdGUjeyBjb3VudGVyID0+IEludGVnZXJ9fQogICBlbmQ7CgpoYW5kbGVfY2FsbCh7c2V0X2NvdW50ZXIsIF9QYXlsb2FkfSwgX0Zyb20sIFN0YXRlKSAtPgogICAge3JlcGx5LCBub3Rfc3VwcG9ydGVkLCBTdGF0ZX07CgpoYW5kbGVfY2FsbChfTXNnLCBfRnJvbSwgU3RhdGUpIC0+CiAgICB7cmVwbHksIG9rLCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNhc3QKaGFuZGxlX2Nhc3Qoc3RvcCwgU3RhdGUpIC0+CiAgICB7c3RvcCwgbm9ybWFsLCBTdGF0ZX07CmhhbmRsZV9jYXN0KF9Nc2csIFN0YXRlKSAtPgogICAge25vcmVwbHksIFN0YXRlfS4KCiUlCiUlIC0tLS0tLS0tLS0tLS0tLS0gaW5mbwpoYW5kbGVfaW5mbyhfLCBTdGF0ZSkgLT4KICAgIHtub3JlcGx5LCBTdGF0ZX0uCgolJQolJSAtLS0tLS0tLS0tLS0tLS0tIGNvbnRpbnVlCmhhbmRsZV9jb250aW51ZShfLCBTdGF0ZSkgLT4KICAgIHtub3JlcGx5LCBTdGF0ZX0uCg=="),
           "event": atob("LW1vZHVsZSgpLgoKJSUKJSUgQVBJcyBodHRwczovL3d3dy5lcmxhbmcub3JnL2RvYy9hcHBzL3N0ZGxpYi9nZW5fZXZlbnQuaHRtbAolJQoKLWJlaGF2aW91cihnZW5fZXZlbnQpLgoKLWV4cG9ydChbCiAgICBpbml0LzEsCiAgICBoYW5kbGVfZXZlbnQvMiwKICAgIGhhbmRsZV9jYWxsLzIsCiAgICBoYW5kbGVfaW5mby8yLAogICAgdGVybWluYXRlLzIsCiAgICBjb2RlX2NoYW5nZS8zCl0pLgoKaW5pdChBcmdzKSAtPgogICAge29rLCBBcmdzfS4KCmhhbmRsZV9ldmVudChfRXZlbnQsIFN0YXRlKSAtPgogICAge29rLCBTdGF0ZX0uCgpoYW5kbGVfY2FsbChfUmVxdWVzdCwgU3RhdGUpIC0+CiAgICB7b2ssIG9rLCBTdGF0ZX0uCgpoYW5kbGVfaW5mbyhfSW5mbywgU3RhdGUpIC0+CiAgICB7b2ssIFN0YXRlfS4KCnRlcm1pbmF0ZShfUmVhc29uLCBfU3RhdGUpIC0+CiAgICBvay4KCmNvZGVfY2hhbmdlKF9PbGRWc24sIFN0YXRlLCBfRXh0cmEpIC0+CiAgICB7b2ssIFN0YXRlfS4K"),
           "state": atob("LW1vZHVsZSgpLgoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9IG5vX3N0YXRlLCAKICAgIERhdGEgPSAwLAogICAge29rLFN0YXRlLERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9mZiwKICBEYXRhCikgLT4KICAgIHtuZXh0X3N0YXRlLCBvbiwgRGF0YSArIDEsIFt7cmVwbHksIEZyb20sIDw8Im9rIj4+fV19OwoKaGFuZGxlX2V2ZW50KAogIHtjYWxsLCBGcm9tfSwKICA8PCJwdXNoIj4+LAogIG9uLAogIERhdGEKKSAtPgogICAge25leHRfc3RhdGUsIG9mZiwgRGF0YSwgW3tyZXBseSwgRnJvbSwgPDwib2siPj59XX07CgpoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIDw8ImdldF9jb3VudCI+PiwKICBfQ3VyclN0YXRlLAogIERhdGEKKSAtPgogICAge2tlZXBfc3RhdGUsIERhdGEsIFt7cmVwbHksIEZyb20sIERhdGF9XX07CgolJQolJSBGYWxsIHRocm91Z2guCmhhbmRsZV9ldmVudCh7Y2FsbCwgRnJvbX0gPSBFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YSkgLT4KICAgIGlvOmZvcm1hdCgiVEVTVCAoY2FsbCk6IH5wIH5wIH5wIH5wfm4iLFtFdmVudFR5cGUsIFN0aWZmLCBTdGF0ZSwgRGF0YV0pLAogICAgP0tFRVBfU1RBVEUoPDwibm90X2FsbG93ZWQiPj4pOwoKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg=="),
@@ -13475,7 +13477,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
         if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?") ) {
           this.editor.setValue(content)
         } else {
-          RED.notify("action not confirmed", { type: "errro"})
+          RED.notify("action not confirmed", { type: "error"})
         }
       })
     },
@@ -13503,7 +13505,7 @@ Nodes can be selected visually and a supervisor cannot supervise itself, doing s
 
       $("#dialog-form .node-text-editor").css("height", height + "px");
       this.editor.resize();      
-    },
+    }
   });
 })();
 
@@ -14186,6 +14188,167 @@ supervisor node to create a supervisor for the genserver node.
 - [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html)
 - [learn you some Erlang](https://learnyousomeerlang.com/clients-and-servers)
 
+
+</script>
+
+<!-- --- [red-module:@gregoriusrippenstein/erlang-red-supervisor-node/elxmodule] --- -->
+<script type="text/javascript">
+  (function(){  
+  RED.nodes.registerType('elxmodule',{
+    color: 'rgb(166,131,187)',
+    icon: "font-awesome/fa-tint",
+    category: 'function',
+    paletteLabel: 'Elixir Module',
+    defaults: {
+      name: {
+        value:"",
+      },
+      module_name: {
+        value: "",
+        required: true,
+        validate: RED.validators.regex(/^[A-Za-z0-9_]+$/)
+      },
+      code: {
+        value: atob("ZGVmbW9kdWxlIE15TW9kdWxlIGRvCiAgQHR5cGVkb2MgIlRoaXMgdHlwZSIKICBAdHlwZWRvYyBzaW5jZTogIjEuMS4wIgogIEB0eXBlIHQgOjogdGVybQoKICBAZG9jICJIZWxsbyB3b3JsZCIKICBAZG9jIHNpbmNlOiAiMS4xLjAiCiAgZGVmIGhlbGxvIGRvCiAgICAid29ybGQiCiAgZW5kCgogIEBkb2MgIiIiCiAgU3VtcyBgYWAgdG8gYGJgLgogICIiIgogIGRlZiBzdW0oYSwgYikgZG8KICAgIGEgKyBiCiAgZW5kCmVuZA=="),
+        required: true
+      }      
+    },
+
+    inputs: 0,
+
+    outputs: 0,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function () {
+      var node = this;
+      var moduleNameRegExp = new RegExp(/defmodule[\s]+([^\s]+)[\s]+do/);
+
+      this.editor = RED.editor.createEditor({
+        id: 'node-input-elxmodule-editor',
+        mode: 'ace/mode/elixir',
+        value: this.code,
+        // width: "Infinity",
+        // height: "calc(70vh)",
+        focus: true
+      });
+
+      let updateModuleName = (e) => {
+        let code = node.editor.getValue();
+        if (moduleNameRegExp.test(code)) {
+          $('#node-input-module_name').val(moduleNameRegExp.exec(code)[1]).trigger('change')
+        }
+      }
+      this.editor.onDidChangeModelContent(updateModuleName);
+
+      // one time to update the module name for an initial node
+      $('#node-input-module_name').val(moduleNameRegExp.exec(this.code)[1]).trigger('change')
+
+      $('#elxmodule-replace-btn').on('click', (e) => {
+        let templateCode = {
+          "module": atob("ZGVmbW9kdWxlIE15TW9kdWxlIGRvCiAgQHR5cGVkb2MgIlRoaXMgdHlwZSIKICBAdHlwZWRvYyBzaW5jZTogIjEuMS4wIgogIEB0eXBlIHQgOjogdGVybQoKICBAZG9jICJIZWxsbyB3b3JsZCIKICBAZG9jIHNpbmNlOiAiMS4xLjAiCiAgZGVmIGhlbGxvIGRvCiAgICAid29ybGQiCiAgZW5kCgogIEBkb2MgIiIiCiAgU3VtcyBgYWAgdG8gYGJgLgogICIiIgogIGRlZiBzdW0oYSwgYikgZG8KICAgIGEgKyBiCiAgZW5kCmVuZA==")
+        }
+
+        e.preventDefault()
+
+        let content = templateCode[$('#elxmodule-boiler-type').val()]
+
+        if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?")) {
+          this.editor.setValue(content)
+        } else {
+          RED.notify("action not confirmed", { type: "error" })
+        }
+      })
+    },
+
+    oneditcancel: function () {
+      this.editor.destroy();
+      delete this.editor;
+    },
+
+    oneditsave: function () {
+      this.code = this.editor.getValue();
+      this.editor.destroy();
+      delete this.editor;
+    },
+
+    oneditresize: function (size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height() + 30;
+      for (var i = 0; i < rows.length; i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
+
+      $("#dialog-form .node-text-editor").css("height", height + "px");
+      this.editor.resize();
+    },
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="elxmodule">
+  <div class="form-row">
+    <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="elxmodule.label.module_name"></span></label>
+    <input type="text" id="node-input-module_name" data-i18n="[placeholder]elxmodule.label.module_name">
+  </div>
+  
+  <div class="form-row node-text-editor-row">
+    <div style="height: 73vh; min-height:150px;" class="node-text-editor" id="node-input-elxmodule-editor"></div>
+  </div>
+  
+  <div class="form-row">
+    <label for="checkmarkconfirm"><span data-i18n="elxmodule.label.template"></span></label>
+    <select name="elxmodule-boiler-type" id='elxmodule-boiler-type'>
+        <option value="module">Module</option>
+    </select>
+    <input id="checkmarkconfirm" type="checkbox" checked style="width: 5%"></input>
+    <button id="elxmodule-replace-btn" type="button" class="ui-button"><span data-i18n="elxmodule.label.replace_btn"></span></button>
+  </div>
+  
+  <div class="form-row" style="padding-bottom: 20px; margin-bottom: 10px;">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="elxmodule.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]elxmodule.label.name">
+  </div>
+</script>
+<script type="text/markdown" data-help-name="elxmodule">
+Node for encapsulating Elixir module code.
+
+### Inputs
+
+None.
+
+### Outputs
+
+None.
+
+### Description
+
+Node for encapsulating Elixir module code.
+
+<!-- [Markdown documentation details](https://nodered.org/docs/creating-nodes/help-style-guide) -->
 
 </script>
 

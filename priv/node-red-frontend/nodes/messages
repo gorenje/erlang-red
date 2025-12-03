@@ -41,6 +41,25 @@
             }
         }
     },
+    "@gregoriusrippenstein/erlang-red-supervisor-node/elxmodule": {
+        "elxmodule": {
+            "label": {
+                "module_name": "Module Name",
+                "name": "Name",
+                "replace_btn": "Replace Code",
+                "statusset": "Status Set",
+                "tab": {
+                    "code": "Code",
+                    "config": "Settings"
+                },
+                "template": "Boilerplate"
+            },
+            "status": {
+                "timeout": "No more time to waiting",
+                "waiting": "Waiting for Godot"
+            }
+        }
+    },
     "@gregoriusrippenstein/erlang-red-supervisor-node/erleventhandler": {
         "erleventhandler": {
             "label": {

@@ -550,7 +550,7 @@
             "erlsupervisor"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -562,7 +562,7 @@
             "erlmodule"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -574,7 +574,7 @@
             "erlstatemachine"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -586,7 +586,7 @@
             "erleventhandler"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -598,7 +598,19 @@
             "erlgenserver"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/erlang-red-supervisor-node/elxmodule",
+        "local": true,
+        "module": "@gregoriusrippenstein/erlang-red-supervisor-node",
+        "name": "elxmodule",
+        "types": [
+            "elxmodule"
+        ],
+        "user": false,
+        "version": "0.4.4"
     },
     {
         "enabled": true,

@@ -6,6 +6,7 @@
     "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlprocess": {},
+    "@gregoriusrippenstein/erlang-red-supervisor-node/elxmodule": {},
     "@gregoriusrippenstein/erlang-red-supervisor-node/erleventhandler": {},
     "@gregoriusrippenstein/erlang-red-supervisor-node/erlgenserver": {},
     "@gregoriusrippenstein/erlang-red-supervisor-node/erlmodule": {},
