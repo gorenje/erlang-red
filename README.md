@@ -345,6 +345,11 @@ Questions and Answers at either the [Erlang Forum](https://erlangforums.com/t/er
 
 Also for more details, there was also a discussion on [Hacker News](https://news.ycombinator.com/item?id=44006231).
 
+Sponsors
+---
+
+This work is sponsored in part by the [EEF](https://erlef.org).
+
 Acknowledgement
 ---
 
