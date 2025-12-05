@@ -192,6 +192,9 @@ These nodes can be installed using the corresponding Node-RED [node package](htt
 
 An initial throw of the dice for Elixir support inside Erlang-Red. There is nothing special happening here other than Elixir code being compiled into the BEAM process and them modules being accessible using the 'Elixir.' prefix.
 
+More substantial Elixir helpers can be added to [erlang-red-elixir-helpers](https://github.com/gorenje/erlang-red-elixir-helpers) repository.
+
+
 ### BEAM Processes
 
 | Node | Comment | Example Flow |
@@ -220,16 +223,7 @@ These nodes can be installed using the corresponding Node-RED [node package](htt
 - Contexts are **not supported**, so there is no setting things on `flow`, `node` or `global`.
 - [JSONata](https://jsonata.org) has been **partially implemented** by the [Erlang JSONata Parser](https://github.com/gorenje/erlang-red-jsonata).
 
-Elixir & Erlang-Red
----
-
-Elixir helpers can be added to [erlang-red-elixir-helpers](https://github.com/gorenje/erlang-red-elixir-helpers) repository.
-
-There is nothing stopping anyone from creating a complete node in Elixir provided there is a Erlang "node-wrapper", i.e., a bit of Erlang code in the [src/nodes](src/nodes) directory that references the Elixir node.
-
-The initial example [markdown node](https://github.com/gorenje/erlang-red/blob/42f10112baac5a5f916ecd805eafc87382632dec/src/nodes/ered_node_markdown.erl#L38) is an Erlang node that references Elixir code. I also wrote an Elixir wrapper function whereby I could have just as easily referenced Earmark directly from the Erlang code. That was a stylist choice.
-
-I intend to use Elixir code for importing Elixir libraries to the project and less coding nodes in Elixir. I simply prefer Erlang syntax. But each to their own :)
+### Development
 
 Build
 -----
@@ -258,7 +252,7 @@ I use docker to develop this so for me, the following works:
     git clone git@github.com:gorenje/erlang-red.git
     cd erlang-red
 
-    docker run -it -v $(pwd)/erlang-red:/code -v $(pwd)/data:/data -p 8080:8080 -w /code --rm erlang bash
+    make start-docker-image
 
     ## inside docker shell:
     rebar3 shell --apps erlang_red
@@ -279,45 +273,6 @@ A [release](https://github.com/gorenje/erlang-red/blob/3cf3b6a33b59a808ffc865b00
 All static frontend code (for the Node-RED flow editor) and the test flow files in `priv/testflows` are bundled into the release.
 
 Cowboy server will started on port 8080 unless the `PORT` env variable is set.
-
-Fly.io Deployment
----
-
-A sample Dockerfile `Dockerfile.fly` is provided to allow for easy launching of an instance as a fly application.
-The provided shell script (`fly_er.sh`) sets some common expected parameters for the launch.
-Advanced users may wish to examine the `fly launch` line therein and adjust for their requirements.
-
-Heroku Deployment
----
-
-Using the container stack at heroku, deployment becomes a `git push heroku` after the usual heroku setup:
-
-- `heroku login` --> `heroku git:remote -a <app name>` --> `heroku stack:set container` --> `git push heroku`
-
-However the [Dockerfile.heroku](Dockerfile.heroku) does not start the flow editor, the image is designed to run a set of flows, in this case (at time of writing) a simple website with a single page.
-
-Basically this [flow](https://github.com/gorenje/erlang-red/blob/main/priv/testflows/flow.499288ab4007ac6a.json) is the [red-erik.org](https://red-erik.org) site.
-
-The image does this by setting the following ENV variables:
-
-- `COMPUTEFLOW`=`499288ab4007ac6a` - flow to be used. This can also be a comma separated list of flows that are all started.
-- `DISABLE_FLOWEDITOR`=`YES` - any value will do, if set the flow editor is disabled.
-
-Also be aware that Erlang-Red supports a `PORT` env variable to specifying the port upon which Cowboy will listen on for connections. The default is 8080.
-
-Heroku uses this to specify the port to connect for a docker image so that its load balancer can get it right.
-
-
-Example
----
-
-![img](.images/erlang-red.gif)
-
-What the gif shows is executing a [simple flow](https://flowhub.org/f/ea246f68766c8630) using Erlang as a backend. The flow demonstrates the difference in the switch node of 'check all' or 'stop at first match'.
-
-All nodes are are processes - these are shown on the left in the terminal window.
-
-This example is extremely trivial but it does lay the groundwork for expansion.
 
 Testing
 ---
@@ -370,8 +325,7 @@ Contributions very much welcome in the form of Erlang code or as Node-RED test-f
 
 Each test flow should test exactly one feature and use the assert nodes to check correctness of expected results. Tests can also be pending to indicate that the corresponding Erlang functionality is still missing.
 
-
-Sibling Repos
+Additional Repositories
 ---
 
 An overview of the sibling projects for both the reader and me:
@@ -422,7 +376,6 @@ No Artificial Intelligence was harmed in the creation of this codebase. This cod
 
 AI contributions can be made according to the rules defined in [.aiignore](.aiignore).
 
-Coffee Time
-----
+---
 
-<a href="https://www.buymeacoffee.com/gorenje" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Tee" style="height: 42px !important;width: 152px !important;" ></a>
+<a href="https://www.buymeacoffee.com/gorenje" target="_blank">Coffee</a> | [Deployment](Deployment.md)
