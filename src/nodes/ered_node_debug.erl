@@ -31,6 +31,13 @@
 %%     "wires": []
 %% }
 
+%%
+%% There is an initial setup of the debug node whereby the 'complete' property
+%% os "false" while but "targetType" property is not set. This is the same as
+%% targetType 'msg' and 'complete' 'payload'. Need to handle this in the
+%% start function.
+%%
+
 -import(ered_nodered_comm, [
     node_status/5,
     send_to_debug_sidebar/2,
@@ -54,9 +61,9 @@ start(
     WsName
 ) ->
     node_status(WsName, NodeDef, 0, "blue", "ring"),
-    ered_node:start(NodeDef, ?MODULE);
+    ered_node:start(fix_default_setup(NodeDef), ?MODULE);
 start(NodeDef, _WsName) ->
-    ered_node:start(NodeDef, ?MODULE).
+    ered_node:start(fix_default_setup(NodeDef), ?MODULE).
 
 %%
 %%
@@ -152,3 +159,32 @@ handle_status_setting(
     unsupported(NodeDef, Msg, jstr("StatusType: ~p", [StatusType]));
 handle_status_setting(#{<<"tostatus">> := false}, _) ->
     ok.
+
+%%
+%% {
+%%     "type": "debug",
+%%     ...
+%%     "complete": "false",
+%%     ...
+%% }
+%% becomes
+%% {
+%%     "type": "debug",
+%%     ...
+%%     "complete": "payload",
+%%     "targetType": "msg",
+%%     ...
+%% }
+%%
+fix_default_setup(#{<<"complete">> := <<"false">>} = NodeDef) ->
+    case maps:find(<<"targetType">>, NodeDef) of
+        error ->
+            NodeDef#{
+                <<"complete">> => <<"payload">>,
+                <<"targetType">> => <<"msg">>
+            };
+        _ ->
+            NodeDef
+    end;
+fix_default_setup(NodeDef) ->
+    NodeDef.
