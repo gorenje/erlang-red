@@ -337,6 +337,7 @@ An overview of the sibling projects for both the reader and me:
 - [Supervisor and Behaviour nodes](https://github.com/gorenje/erlang-red-supervisor-node) and other Erlang behaviours as Node-RED nodes. Node package includes `gen_statem` and `gen_event` as nodes that can be used with Erlang-Red flows. These nodes can also be installed into Node-RED but there they do nothing.
 - [Type parsers](https://github.com/gorenje/erlang-red-type-parsers) for parsing specific Node-RED types such as Number or Buffer. Also for handling attribute access of maps and arrays.
 - [Erlang Processes Nodes](https://github.com/gorenje/erlang-red-process-nodes) provide structured access to existing Erlang processes allowing message interaction with processes and capturing I/O from existing processes.
+- [Node-RED frontend for Erlang-Red](https://github.com/gorenje/erlang-red-editor-template) provides the Javascript frontend code for the floweditor. This is the code that ends up in [priv/node-red-frontend](priv/node-red-frontend) by using `make retrieve`.
 
 FAQs
 ---
