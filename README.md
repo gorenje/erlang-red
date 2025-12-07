@@ -83,6 +83,9 @@ Thanks to [Alan @ TADSummit](https://blog.tadsummit.com), I was able to do a [wa
 
 For that walkthrough, I created a collection of [flows](https://github.com/gorenje/tadsummit_diameter) that can be imported into Erlang-Red (or Node-RED or [Browser-Red](https://cdn.flowhub.org)).
 
+**Erlang-Red and Node-RED combined to implement VDA5050**
+
+VDA5050 is a protocol for controlling Automated Guided Vehicles by a central “brain”. The basis of the communication between the two is MQTT. That makes the VDA5050 specification a perfect chance to combine Erlang-Red and Node-RED to implement a holistic system. I created a [set of screencasts](https://github.com/gorenje/vda5050_erlang_red) presenting how to do this.
 
 Embedding
 ---
