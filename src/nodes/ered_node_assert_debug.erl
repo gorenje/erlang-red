@@ -18,10 +18,14 @@
     node_status/5
 ]).
 -import(ered_nodes, [
-    jstr/2
+    jstr/2,
+    send_msg_to_connected_nodes/2
 ]).
 -import(ered_ws_event_exchange, [
     subscribe/5
+]).
+-import(ered_messages, [
+    create_outgoing_msg/1
 ]).
 
 -define(TestSuccess, '_failed_' := false).
@@ -100,7 +104,15 @@ handle_websocket(
     ErrMsg = jstr("No debug expected from ~p\n", [NodeId]),
     assert_failure(NodeDef, WsName, ErrMsg),
     NodeDef#{'_failed_' => true};
-handle_websocket(_, NodeDef) ->
+handle_websocket({debug, WsName, NodeId, Type, Data}, NodeDef) ->
+    {outgoing, Msg} = create_outgoing_msg(WsName),
+    send_msg_to_connected_nodes(NodeDef, Msg#{
+       <<"debug">> => #{
+          <<"type">> => Type,
+          <<"nodeid">> => NodeId
+       },
+       <<"payload">> => Data
+    }),
     NodeDef.
 
 %%
