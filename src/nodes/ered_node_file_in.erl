@@ -61,7 +61,7 @@ handle_incoming(NodeDef, Msg) ->
         {ok, FileName} ->
             case file:read_file(unpriv(FileName)) of
                 {ok, FileData} ->
-                    Msg2 = maps:put(<<"payload">>, FileData, Msg),
+                    Msg2 = Msg#{<<"payload">> => FileData},
                     send_msg_to_connected_nodes(NodeDef, Msg2),
                     {NodeDef, Msg2};
                 _ ->

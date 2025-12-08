@@ -47,8 +47,7 @@
     ws_from/1
 ]).
 -import(ered_nodes, [
-    jstr/2,
-    send_msg_to_connected_nodes/2
+    jstr/2
 ]).
 -import(ered_messages, [
     convert_to_num/1,

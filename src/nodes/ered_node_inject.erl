@@ -56,6 +56,7 @@
 ]).
 -import(ered_messages, [
     convert_to_num/1,
+    create_outgoing_msg/1,
     decode_json/1,
     delete_prop/2,
     get_prop/2,
@@ -67,9 +68,6 @@
 ]).
 -import(ered_message_exchange, [
     post_completed/2
-]).
--import(ered_messages, [
-    create_outgoing_msg/1
 ]).
 
 %%
