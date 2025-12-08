@@ -10244,10 +10244,10 @@ RED.utils = (function() {
     function formatNumber(element,obj,sourceId,path,cycle,initialFormat) {
         var format = (formattedPaths[sourceId] && formattedPaths[sourceId][path] && formattedPaths[sourceId][path]['number']) || initialFormat || "dec";
         if (cycle) {
-            if (format === 'dec') {
-                if ((obj.toString().length===13) && (obj<=2147483647000)) {
+            if (format === 'oct') {
+                if ( (obj.toString().length>=13) && (obj<=2147483647000) ) {
                     format = 'dateMS';
-                } else if ((obj.toString().length===10) && (obj<=2147483647)) {
+                } else if ( /*(obj.toString().length===10) && */ (obj<=2147483647000)) {
                     format = 'dateS';
                 } else {
                     format = 'hex'
@@ -10255,15 +10255,19 @@ RED.utils = (function() {
             } else if (format === 'dateMS' || format == 'dateS') {
                 if ((obj.toString().length===13) && (obj<=2147483647000)) {
                     format = 'dateML';
-                } else if ((obj.toString().length===10) && (obj<=2147483647)) {
+                } else if (/*(obj.toString().length===10) && */ (obj<=2147483647000)) {
                     format = 'dateL';
                 } else {
                     format = 'hex'
                 }
             } else if (format === 'dateML' || format == 'dateL') {
                 format = 'hex';
-            } else {
+            } else if (format === "hex" ) {
                 format = 'dec';
+            } else if ( format === "dec" ) {
+                format = 'bin';
+            } else {
+                format = "oct"
             }
             formattedPaths[sourceId] = formattedPaths[sourceId]||{};
             formattedPaths[sourceId][path] = formattedPaths[sourceId][path]||{};
@@ -10285,8 +10289,9 @@ RED.utils = (function() {
         } else if (format === 'dateL') {
             var ddl = new Date(obj*1000);
             element.text(ddl.toLocaleString() + "  [UTC" + ( ddl.getTimezoneOffset()/-60 <=0?"":"+" ) + ddl.getTimezoneOffset()/-60 +"]");
-        } else if (format === 'hex') {
-            element.text("0x"+(obj).toString(16));
+        } else if (format === 'hex' || format === "oct" || format == "bin") {
+          let unary = { "hex": ['x',16], "oct": ['o',8], "bin": ['b',2] }[format];
+          element.text((obj < 0 ? "-" : "") + "0" + unary[0]+(Math.abs(obj)).toString(unary[1]));
         }
     }
 
@@ -10433,7 +10438,7 @@ RED.utils = (function() {
         } else if (typeof obj === 'number') {
             e = $('<span class="red-ui-debug-msg-type-number"></span>').appendTo(entryObj);
 
-            if (Number.isInteger(obj) && (obj >= 0)) { // if it's a +ve integer
+            if (Number.isInteger(obj)) {
                 e.addClass("red-ui-debug-msg-type-number-toggle");
                 e.on("click", function(evt) {
                     evt.preventDefault();
