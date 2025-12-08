@@ -67,7 +67,7 @@ jsonata_eval_or_error_msg(Jsonata, Msg) ->
                 "JSONATA EXCEP:~n~n~p~n~nCaused:~n~n~p~n~n~p~n~n~p~n",
                 [Jsonata, E, M, S]
             ),
-            jstr("jsonata exception: ~p", [M])
+            jstr("Invalid JSONata expression: ~p (~p)", [M,Jsonata])
     end.
 
 %%
@@ -437,6 +437,8 @@ escape_specials(Str) when is_integer(Str) ->
     escape_specials(integer_to_binary(Str));
 escape_specials(Str) when is_atom(Str) ->
     escape_specials(atom_to_binary(Str));
+escape_specials(Str) when is_map(Str) ->
+    escape_specials(encode_json(Str));
 escape_specials(Str) when is_tuple(Str) ->
     [escape_specials(A) || A <- tuple_to_list(Str)];
 escape_specials(Str) ->
