@@ -137,9 +137,9 @@ jstr(Str) when is_binary(Str) ->
 jstr(Str) when is_atom(Str) ->
     atom_to_binary(Str);
 jstr(Str) when is_integer(Str) ->
-     integer_to_binary(Str);
+    integer_to_binary(Str);
 jstr(Str) when is_float(Str) ->
-     float_to_binary(Str);
+    float_to_binary(Str);
 jstr(Str) ->
     list_to_binary(lists:flatten(Str)).
 

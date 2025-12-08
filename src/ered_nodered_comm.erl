@@ -160,10 +160,12 @@ send_to_debug_sidebar(
     %% of "object" as opposed to "Object" (capital-o) causes less
     %% breakage. Definitely something to investigate.
     %% See info for test id: c4690c0a085d6ef5 for more details.
+    Result = jsonata_eval_or_error_msg(Jsonata, Msg),
+
     Data = ?ObtainFrom(NodeDef)#{
         <<"topic">> => ?TopicFrom(Msg),
-        <<"msg">> => jstr(jsonata_eval_or_error_msg(Jsonata, Msg)),
-        <<"format">> => <<"string">>
+        <<"msg">> => Result,
+        <<"format">> => type_to_node_red_debug_type(Result)
     },
 
     debug(ws_from(Msg), Data, normal);
