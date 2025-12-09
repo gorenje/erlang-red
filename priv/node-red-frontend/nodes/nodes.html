@@ -15080,10 +15080,14 @@ If this node isn't reached, then the test will fail.
       name: {
         value:"",
       },
+
+      scope: { value: null, type: "*[]", required: true },
+
       nodeid: {
         value: "",
         required: true
-      },      
+      }, 
+
       msgtype: {
         value: "normal",
         required: true
@@ -15099,9 +15103,14 @@ If this node isn't reached, then the test will fail.
     outputs: 1,
 
     label: function() {
-      if (this.nodeid && !this.name ) {
-        let nodeLabel = `[${this.nodeid}]`;
-        let node = RED.nodes.node(this.nodeid)
+
+      if (this.nodeid && (!this.scope || !this.scope[0])) {
+        this.scope = [this.nodeid]
+      }
+
+      if (this.scope && this.scope[0] && !this.name ) {
+        let nodeLabel = `[${this.scope[0]}]`;
+        let node = RED.nodes.node(this.scope[0])
         if (node) {
           nodeLabel = RED.utils.getNodeLabel(node)
         }
@@ -15115,7 +15124,11 @@ If this node isn't reached, then the test will fail.
     },
 
     labelStyle: function() {
-      return (this.name || this.nodeid) ? "node_label_italic" : "";
+      if (this.nodeid && (!this.scope || !this.scope[0])) {
+        this.scope = [this.nodeid]
+      }
+
+      return (this.name || (this.scope && this.scope[0])) ? "node_label_italic" : "";
     },
 
     onpaletteadd: function() {
@@ -15125,6 +15138,10 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditprepare: function() {
+      if (this.nodeid && (!this.scope || !this.scope[0])) {
+        this.scope = [this.nodeid]
+      }
+
       $('#node-input-inverse').on('change', () => {
         if ($('#node-input-inverse').is(":checked")) {
           $('#ut-assert-debug-opts-to-hide-on-inverse').fadeOut(300);
@@ -15135,10 +15152,11 @@ If this node isn't reached, then the test will fail.
 
       var dirList = $("#node-input-assert-debug-target-container-div").css({
         width: "100%",
-        height: "calc(100%)"        
+        height: "100%"        
       }).treeList(
         {
-          multi: false
+          multi: false,
+          sortable: false
         }
       ).on('treelistselect', function (event, item) {
         if (item && item.nodeid) {
@@ -15180,7 +15198,7 @@ If this node isn't reached, then the test will fail.
             nodeid: nde.id,
             node: nde,
             sublabel: nde.type,
-            selected: nde.id == this.nodeid,
+            selected: this.scope && (this.scope[0] == nde.id),
             checkbox: false,
             radio: true,
             children: undefined
@@ -15194,7 +15212,11 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditsave: function() {
-      this.nodeid = $("#node-input-assert-debug-target-container-div").treeList('selected').nodeid 
+      if ($("#node-input-assert-debug-target-container-div").treeList('selected').nodeid) {
+        this.scope = [$("#node-input-assert-debug-target-container-div").treeList('selected').nodeid]
+      } else {
+        this.scope = []
+      }
     },
 
     oneditresize: function(size) {

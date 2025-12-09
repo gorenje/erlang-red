@@ -622,7 +622,7 @@
             "ut-assert-failure"
         ],
         "user": false,
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     {
         "enabled": true,
@@ -634,7 +634,7 @@
             "ut-assert-values"
         ],
         "user": false,
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     {
         "enabled": true,
@@ -646,7 +646,7 @@
             "ut-assert-success"
         ],
         "user": false,
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     {
         "enabled": true,
@@ -658,7 +658,7 @@
             "ut-assert-status"
         ],
         "user": false,
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     {
         "enabled": true,
@@ -670,7 +670,7 @@
             "ut-assert-debug"
         ],
         "user": false,
-        "version": "0.12.1"
+        "version": "0.12.2"
     },
     {
         "enabled": true,
