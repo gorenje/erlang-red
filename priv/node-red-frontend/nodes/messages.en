@@ -1,4 +1,5 @@
 {
+    "@bartbutenaers/node-red-autolayout-sidebar/auto_layout_config": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-broker": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-consumer": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-producer": {},

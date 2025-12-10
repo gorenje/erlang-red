@@ -4170,3 +4170,664 @@ function ensureYourConfigNodeExists() {
    <div id="node-input-scratchpad-fields">
    </div>
 </script>
+<!-- --- [red-plugin:@bartbutenaers/node-red-autolayout-sidebar/sidebar-plugin] --- -->
+<!--
+  Copyright 2023, Bart Butenaers & Gerrit Riessen
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<script src="auto_layout_config/lib/elkjs"></script>
+<script src="auto_layout_config/lib/dagrejs"></script>
+
+<script type="text/javascript">
+(function() {
+    var globalAutoLayoutConfigNode = null;
+    
+    function findSelectedNodes(/*thisNode*/) {
+        /*
+         * Take the selection and create a nodeset from it.
+         */
+        var selection = RED.view.selection();
+        var fixedNodeId = undefined;
+        var ns = undefined;
+
+        if (!selection.nodes || selection.nodes.length == 0) {
+            RED.notify("Select exactly one node.");
+            return;
+        }
+
+        if ( selection.nodes.length == 1 ) {
+            // This is not applicable for the sidebar plugin
+            //if (selection.nodes[0].id == thisNode.id || selection.nodes[0].type == thisNode.type) {
+            //    RED.notify("Please do not select the align node.");
+            //    return;
+            //}
+
+            if ( selection.nodes[0].type == "group") {
+                ns = RED.group.getNodes(selection.nodes[0])
+                if ( ns.length == 0 ) {
+                    RED.notify("Empty group selected, very funny.");
+                    return;
+                }
+                fixedNodeId = ns[0].id;
+            } else {
+                ns = RED.nodes.getAllFlowNodes(selection.nodes[0])
+                fixedNodeId = selection.nodes[0].id;
+            }
+        }
+
+        if ( selection.nodes.length > 1 ) {
+            ns = []
+            for ( var idx = 0 ; idx < selection.nodes.length ; idx++ ) {
+                if ( selection.nodes[idx].type == "group") {
+                    ns = ns.concat(RED.group.getNodes(selection.nodes[idx]))
+                } else {
+                    ns.push(selection.nodes[idx])
+                    fixedNodeId ||= selection.nodes[idx].id;
+                }
+          }
+
+          fixedNodeId ||= ns[0].id;
+        }
+
+        if ( !ns ) {
+            RED.notify("No nodes selected.");
+            return;
+        }
+
+        /* 
+         * From here it's all nodeset based.
+         */
+
+        // Convert nodes to flows.json format since all the wires, i.e. links, are 
+        // contained in one simple json format.
+        let fixedNode = RED.nodes.node(fixedNodeId)
+        var allnodes = RED.nodes.createExportableNodeSet(ns).filter((n) => {
+            return n.type != "tab" && n.type != 'subflow' && n.type != "group" && n.z == fixedNode.z
+        });
+
+        var alledges = [];
+        var allNodeIds = allnodes.map( d => d.id);
+
+        allnodes.forEach((n) => {
+            // Only continue if the node has wires (e.g. a ui_group has no wires)
+            if (n.wires) {
+                for (var widx = 0; widx < (n.wires || []).length; widx++) {
+                    for (var xidx = 0; xidx < n.wires[widx].length; xidx++) {
+                        if ( allNodeIds.indexOf(n.wires[widx][xidx])> -1){
+                            alledges.push({
+                                id: n.id + n.wires[widx][xidx],
+                                sources: [n.id],
+                                targets: [n.wires[widx][xidx]]
+                            });
+                        }
+                    }
+                }
+            }
+        })
+
+        allnodes = allnodes.map((n) => {
+            let bbox = ( ( document.getElementById(n.id) && document.getElementById(n.id).getBBox && document.getElementById(n.id) ) || {
+              getBBox: () => {
+                return {
+                  width: 0,
+                  height: 0
+                }
+              }
+            });
+
+            return {
+                id: n.id,
+                width: bbox.getBBox().width + 3,
+                height: bbox.getBBox().height + 3,
+            }
+        });
+
+        return {
+            allnodes: allnodes,
+            alledges: alledges,
+            fixedNodeId: fixedNodeId
+        };
+    }
+    
+    function moveNodes(fixedNodeId, children) {
+        //var children = payload.nodes;
+        //var fixedNodeId = payload.fixedNodeId;
+
+        var changedNodes = [];
+
+        // Before moving anything we get the offset (x,y) - this is the amount that our
+        // fixed Node moved - our fixed node does not move, this means everything is offset
+        // by the distance it moved.
+        var offsetX = 0;
+        var offsetY = 0;
+        children.forEach((c) => {
+            if (c.id == fixedNodeId) {
+                var nd = RED.nodes.node(c.id) || RED.nodes.junction(c.id);
+                offsetX = c.x - nd.x;
+                offsetY = c.y - nd.y;
+            }
+        });
+
+        children.forEach((c) => {
+            var nd = RED.nodes.node(c.id) || RED.nodes.junction(c.id);
+
+            changedNodes.push({
+                n: nd,
+                ox: nd.x,
+                oy: nd.y,
+                moved: nd.moved
+            });
+
+            nd.x = c.x - offsetX;
+            nd.y = c.y - offsetY;
+            nd.dirty = true;
+        });
+
+        RED.history.push({ t: "move", nodes: changedNodes, dirty: RED.nodes.dirty() });
+        RED.nodes.dirty(true);
+        RED.view.redraw(true);
+    }
+    
+    function getDefaultSettings() {
+        return {
+            "dagre_lr": {
+                "rankdir": "LR",
+                "marginx": 20,
+                "marginy": 20,
+                "nodesep": 30,
+                "ranksep": 50
+            },
+            "dagre_longest_path": {
+                "rankdir": "LR",
+                "marginx": 2,
+                "marginy": 2,
+                "ranker": "longest-path",
+                "nodesep": 2,
+                "ranksep": 2
+            },
+            "elkjs_mr_tree": {
+                "algorithm": "mrtree",
+                "childAreaHeight": 4500,
+                "childAreaWidth": 4500,
+                "org.eclipse.elk.direction": "RIGHT"
+            },
+            "elkjs_layered_upwards": {
+                "algorithm": "org.eclipse.elk.layered",
+                "elk.direction": "UP",
+                "cycleBreaking.strategy": "INTERACTIVE",
+                "layering.strategy": "INTERACTIVE",
+                "crossingMinimization.semiInteractive": true,
+                "separateConnectedComponents": true,
+                "nodePlacement.strategy": "NETWORK_SIMPLEX",
+                "spacing.nodeNode": 70,
+                "spacing.nodeNodeBetweenLayers": 25,
+                "spacing.edgeNode": 25,
+                "spacing.edgeNodeBetweenLayers": 20,
+                "spacing.edgeEdge": 20,
+                "spacing.edgeEdgeBetweenLayers": 15,
+                "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+                "elk.layered.spacing.edgeNodeBetweenLayers": 40,
+                "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
+                "layering.layerConstraint": "FIRST"
+            },
+            "elkjs_layered_downwards": {
+                "algorithm": "org.eclipse.elk.layered",
+                "elk.direction": "DOWN",
+                "cycleBreaking.strategy": "INTERACTIVE",
+                "layering.strategy": "INTERACTIVE",
+                "crossingMinimization.semiInteractive": true,
+                "separateConnectedComponents": true,
+                "nodePlacement.strategy": "NETWORK_SIMPLEX",
+                "spacing.nodeNode": 70,
+                "spacing.nodeNodeBetweenLayers": 25,
+                "spacing.edgeNode": 25,
+                "spacing.edgeNodeBetweenLayers": 20,
+                "spacing.edgeEdge": 20,
+                "spacing.edgeEdgeBetweenLayers": 15
+            },
+            "elkjs_box": {
+                "algorithm": "org.eclipse.elk.box",
+                "childAreaHeight": 3000,
+                "childAreaWidth": 3000
+            },
+            "pull_request_2267": {
+                // TODO
+            }
+        }
+    }
+  
+    // Ensure that the globalAutoLayoutConfigNode (still) exists, because the user might have deleted it meanwhile...
+    // !!!!!!!!!!!!!!! CALL THIS FUNCTION EVERYWHERE THE globalAutoLayoutConfigNode IS BEING USED !!!!!!!!!!!!!!!
+    function ensureAutoLayoutConfigNode() {
+        // If we had found it previously, check if it has been deleted by the user behind our back
+        if (globalAutoLayoutConfigNode !== null) {
+            var configNode = RED.nodes.node(globalAutoLayoutConfigNode.id);
+            if (configNode === null) { globalAutoLayoutConfigNode = null; }
+        }
+
+        // If not found previously, let's go find it
+        if (globalAutoLayoutConfigNode === null) {
+            var configNodes = [];
+            RED.nodes.eachConfig(function(configNode) {
+                if (configNode.type === 'auto_layout_config') { 
+                    configNodes.push(configNode); 
+                }
+            });
+
+            // Make sure we only have 1 config node
+            while (configNodes.length > 1) {
+                var configNode = configNodes.pop();
+                RED.nodes.remove(configNode.id);
+                RED.nodes.dirty(true);
+            }
+
+            // When we found a config node, let's use that one
+            if (configNodes.length === 1) { globalAutoLayoutConfigNode = configNodes[0]; }
+        }
+
+        // When it doesn't exist yet, create it if required
+        if (globalAutoLayoutConfigNode === null) {
+            // TODO controleren of de defaults door de config node code zelf toegepast worden????
+
+            // Remark: since this config node is dynamically created (and only used in this sidebar which isn't another node), the config
+            // node is in fact "unused".  But since we don't want it to appear "unused" in the "config nodes" panel, we need to set hasUsers
+            // to false (see https://github.com/node-red/node-red/blob/master/CHANGELOG.md#0161-maintenance-release).
+            // The hasUsers needs also to be specified in the RED.nodes.registerType statement!
+            globalAutoLayoutConfigNode = {
+                id: RED.nodes.id(),
+                _def: RED.nodes.getType("auto_layout_config"),
+                type: "auto_layout_config",
+                hasUsers: false, 
+                users: [],
+                // TODO default values for all properties
+                name: "AutoLayout",
+                label: function() { return this.name || "AutoLayout"},
+                algorithm: "dagre_lr", // Default algorithm
+                settings: JSON.stringify(getDefaultSettings()) // Start with the default settings per algorithm
+            }
+
+            // Add the new config node to the collection of Node-RED nodes
+            RED.nodes.add(globalAutoLayoutConfigNode);
+
+            // Make sure the "Deploy" button becomes active
+            RED.nodes.dirty(true);
+        }
+    }
+
+    function executeAutoLayout() {
+        ensureAutoLayoutConfigNode();
+
+        let currentAlgorithm = globalAutoLayoutConfigNode.algorithm;
+        let currentAlgorithmSettings = JSON.parse(globalAutoLayoutConfigNode.settings)[currentAlgorithm];
+
+        let selection = findSelectedNodes();
+
+        if (!selection) {
+            return;
+        }
+
+        switch(currentAlgorithm) {
+            case "dagre_lr":
+            case "dagre_longest_path":
+                // Code take from https://pastebin.com/TJRFD3mg
+                // Which came from https://discourse.nodered.org/t/read-flows-json-and-position-the-nodes-in-most-efficient-readable-way/78158/12
+                var g = new dagre.graphlib.Graph();
+                g.setGraph(currentAlgorithmSettings);
+                g.setDefaultEdgeLabel(function () { return {}; });                       
+
+                for (var idx = 0; idx < selection.allnodes.length; idx++) {
+                    var n = selection.allnodes[idx];
+                    g.setNode(n.id, {
+                        ...n,
+                    })
+                }
+                
+                // The above loop can be replaced by :
+                // for (var idx = 0; idx < selection.allnodes.length; idx++) {
+                //     var node = selection.allnodes[idx];
+                //     var clonedNode = Object.assign({}, node);
+                //     g.setNode(n.id, clonedNode);
+                // }
+
+
+                for (var idx = 0; idx < selection.alledges.length; idx++) {
+                    var e = selection.alledges[idx];
+                    g.setEdge(e.sources[0], e.targets[0])
+                }
+
+                dagre.layout(g);
+                
+                var nodes = g.nodes().map(function (v) {
+                     return {
+                          ...g.node(v)
+                        }
+                })   
+                
+                try {
+                    moveNodes(selection.fixedNodeId, nodes);
+                } catch ( ex ) {
+                    console.error( "Dagre exception moving nodes", ex)
+                    // ensure that dagre errors are also shown as notifications in Node-RED.
+                    RED.notify("Dagre autoroute error: " + ex);
+                }
+                break;
+            case "elkjs_mr_tree": 
+            case "elkjs_layered_upwards": 
+            case "elkjs_layered_downwards": 
+            case "elkjs_box": 
+                // see https://github.com/kieler/elkjs#api for more details
+                var graph = {
+                    id: "root",
+                    layoutOptions: currentAlgorithmSettings,
+                    children: selection.allnodes,
+                    edges: selection.alledges
+                };
+
+                const elk = new ELK();
+
+                elk.layout(graph)
+                    .then((g) => {
+                        moveNodes(selection.fixedNodeId, g.children);
+                    })
+                    .catch((ex) => {
+                        console.error( "ELKjs exception moving nodes", ex)
+                        RED.notify("ElkJs autoroute error: " + ex);
+                    });
+                break;
+            
+            case "pull_request_2267": 
+                // Code Taken from https://github.com/node-red/node-red/pull/2267/files
+                // I only replaced 'selection' by 'selection_', but it would be better to use the above 'selection' variable.
+                var selection_ = RED.view.selection();
+                
+                if (!selection_.nodes || selection_.nodes.length !== 1) {
+                    RED.notify("Select exactly one node");
+                    return;
+                }
+                
+                var ns = undefined;
+                if (selection_.nodes[0].type == "group") {
+                    ns = RED.group.getNodes(selection_.nodes[0])
+                } else {
+                    ns = RED.nodes.getAllFlowNodes(selection_.nodes[0]);
+                }
+
+                // Find Input node
+
+                var nodes = {};
+                var minRank = 0;
+                var stack = [];
+                var candidateInputs = {};
+                var candidateOutputs = {};
+                ns.forEach(function (n) {
+                    candidateInputs[n.id] = n;
+                    candidateOutputs[n.id] = n;
+                    nodes[n.id] = {
+                        n: n,
+                        i: [],
+                        o: [],
+                        d: -1, // depth from start
+                        r: -1, // rank order at that depth
+                        downstream: 0
+                    }
+                });
+                RED.nodes.eachLink(function (link) {
+                    if (nodes[link.source.id] || nodes[link.target.id]) {
+                        nodes[link.source.id].o.push(link.target.id);
+                        nodes[link.target.id].i.push(link.source.id);
+                        delete candidateInputs[link.target.id]
+                        delete candidateOutputs[link.source.id]
+                    }
+                })
+
+                var inputs = Object.keys(candidateInputs);
+                var outputs = Object.keys(candidateOutputs);
+
+                if (inputs.length > 1) {
+                    RED.notify("Multiple start points - bailing")
+                    return;
+                }
+
+                if (outputs.length === 0) {
+                    RED.notify("No outputs - is this a big loop? Bailing");
+                    return;
+                }
+
+                function applyDepth(id, d) {
+                    if (nodes[id].d < d) {
+                        nodes[id].d = d;
+                        nodes[id].o.forEach(function (nid) {
+                            applyDepth(nid, d + 1);
+                        })
+                    }
+                }
+                applyDepth(inputs[0], 0)
+
+                function calculateDownstream(id, downstream) {
+                    nodes[id].downstream += downstream;
+                    nodes[id].i.forEach(function (nid) {
+                        calculateDownstream(nid, nodes[id].downstream + 1);
+                    })
+                }
+                outputs.forEach(function (id) {
+                    calculateDownstream(id, 0)
+                })
+
+                var ranks = {};
+                function rankNodes(node) {
+                    if (node.r === -1) {
+                        ranks[node.d] = ranks[node.d] || [];
+                        node.r = ranks[node.d].length;
+                        ranks[node.d].push(node);
+                        node.o.sort(function (a, b) {
+                            return nodes[b].downstream - nodes[a].downstream
+                        })
+                        node.o.forEach(function (nid) {
+                            rankNodes(nodes[nid])
+                        })
+                    }
+                }
+                rankNodes(nodes[inputs[0]]);
+                function shuffleRanks(node) {
+                    var pushed = false;
+                    if (node.o.length > 1) {
+                        var outputs = node.o.slice(0);
+                        outputs.sort(function (a, b) {
+                            if (nodes[a].d === nodes[b].d) {
+                                return nodes[a].r - nodes[b].r;
+                            } else {
+                                return nodes[b].d - nodes[a].d;
+                            }
+                        })
+                        // outputs.forEach(function(o,i) { console.log(" ",i," + "+nodes[o].n.type," d:",nodes[o].d," r:",nodes[o].r)});
+                        var rank = nodes[outputs[0]].r;
+                        var depth = nodes[outputs[0]].d;
+                        for (var i = 1; i < outputs.length; i++) {
+                            // console.log(outputs[i]);
+                            var n = nodes[outputs[i]];
+                            if (n.d !== depth && n.r === rank) {
+                                // need to move n down one.
+                                var r = n.r;
+                                ns.forEach(function (_n) {
+                                    var nn = nodes[_n.id];
+                                    if (nn.d >= n.d && nn.d < depth && nn.r >= r) {
+                                        pushed = true;
+                                        nn.r++;
+                                    }
+                                })
+                            }
+                            depth = n.d;
+                            rank = n.r;
+                        }
+                    }
+                    node.o.forEach(function (n) {
+                        pushed = pushed || shuffleRanks(nodes[n])
+                    })
+                    return pushed;
+                }
+                var shuffle = function () {
+                    if (shuffleRanks(nodes[inputs[0]])) {
+                        shuffle();
+                    }
+                }
+                shuffle();
+
+
+                var x = nodes[inputs[0]].n.x;
+                var y = nodes[inputs[0]].n.y;
+                var changedNodes = [];
+                ns.forEach(function (n) {
+                    var d = nodes[n.id].d;
+                    var r = nodes[n.id].r;
+
+                    changedNodes.push({
+                        n: n,
+                        ox: n.x,
+                        oy: n.y,
+                        moved: n.moved
+                    });
+
+                    n.x = x + d * 200;
+                    n.y = y + r * 50;
+                    n.dirty = true;
+                    // n.dirtyStatus = true;
+                    // n.status = {
+                    //     text:"d"+d+" : r"+r+" : ds"+nodes[n.id].downstream
+                    // }
+                });
+
+                if (changedNodes.length > 0) {
+                    RED.history.push({ t: "move", nodes: changedNodes, dirty: RED.nodes.dirty() });
+                    RED.nodes.dirty(true);
+                    RED.view.redraw(true);
+                }
+                
+                break;
+
+        }
+    }
+
+    RED.plugins.registerPlugin("autolayout-sidebar-plugin", {});
+
+    // Make sure the editor is completely loaded, before filling the sidebar with content.
+    // Because only just before that, RED.nodes will be loaded.  Otherwise RED.nodes.getType("auto_layout_config") would 
+    // return undefined, and RED.nodes.add would throw an exception...
+    // The problem is that Node-RED does not offer an "editor-loaded" event.
+    // I did a feature request for that, but for some obscure reason it was not accepted...
+    // (see https://discourse.nodered.org/t/new-editor-event-when-all-nodes-have-been-loaded/60314)
+    // On Discourse there was a workaround shared, but the 'workspace:change' is emitted a bit too early.
+    // Because it is emitted just before the config nodes are loaded, so RED.nodes.eachConfig above would not find our config node.
+    // (see https://discourse.nodered.org/t/add-sidebar-tab-on-app-start-not-working/64726/4).
+    // I found that the 'runtime-state' event is triggered just after the config nodes are loaded, so it works fine. 
+    // But it is a non-official unpublished event, so it might be changed or removed in the future...
+    var dothisOneTimePlease = () => {
+        RED.events.off('runtime-state', dothisOneTimePlease )
+
+        // Register an action so the user could bind a keyboard shortcut to show the auto-layout sidebar
+        // but avoid an "Error: Cannot override existing action" error in the browser console:
+        if( RED.actions.list().filter( (d) => { return d.id == "core:auto-layout-flow"} ).length == 0 ) {
+            RED.actions.add("core:auto-layout-flow", executeAutoLayout);
+        }
+        
+        // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
+        var content = $($('script[type="text/x-red"][data-template-name="auto_layout_sidebar"]').i18n().html());
+       
+        // Add a "Auto Layout" tabsheet to the right sidebar panel, in which this sidebar panel can be displayed
+        RED.sidebar.addTab({
+            id: "sidebar-auto-layout",
+            label: "auto_layout", // short name for the tab
+            name: "Auto Layout", // long name for the menu
+            content: content,
+            closeable: true,
+            disableOnEdit: true,
+            iconClass: "fa fa-outdent"
+        });
+
+        // Show the algorithm settings as json in a typedinput element (in the sidebar)
+        $("#node-input-settings").typedInput({
+            default: 'json',
+            types:['json']
+        });
+
+        // When the algorithm properties are changed in the sidebar, then store them into the config node
+        $("#node-input-settings").on("change", function() {
+            ensureAutoLayoutConfigNode();
+
+            let currentAlgorithmSettings = $(this).typedInput('value');
+            let currentAlgorithm = globalAutoLayoutConfigNode.algorithm;
+
+            // When the property value has changed, save it in the config node and activate the 'deploy' button.
+            // Remark: don't check the input type (i.e. use != instead of  !==) because we will get the number values as strings...
+            //if (globalAutoLayoutConfigNode.settings[currentAlgorithm] != currentAlgorithmSettings) {
+                let settingsObj = JSON.parse(globalAutoLayoutConfigNode.settings);
+                settingsObj[currentAlgorithm] = JSON.parse(currentAlgorithmSettings);
+                globalAutoLayoutConfigNode.settings = JSON.stringify(settingsObj);
+                RED.nodes.dirty(true);
+            //}
+        })
+
+        // When the algorithm is changed in the sidebar, then store it into the config node
+        $("#node-input-algorithm").on("change", function() {
+            ensureAutoLayoutConfigNode();
+
+            let currentAlgorithm = $(this).val();
+            let currentAlgorithmSettings = JSON.parse(globalAutoLayoutConfigNode.settings)[currentAlgorithm];
+
+            // When the property value has changed, save it in the config node and activate the 'deploy' button.
+            // Remark: don't check the input type (i.e. use != instead of  !==) because we will get the number values as strings...
+            if (globalAutoLayoutConfigNode.algorithm != currentAlgorithm) {
+                globalAutoLayoutConfigNode.algorithm = currentAlgorithm;
+                RED.nodes.dirty(true);
+            }
+            
+            $("#node-input-settings").typedInput('value', JSON.stringify(currentAlgorithmSettings));
+        })
+        $("#node-input-algorithm").change();
+
+        $("#auto-layout-button").click( executeAutoLayout );
+
+        $("#auto-layout-revert-button").click(function() {
+            // revert the last change by calling undo but also maintain the 
+            // original selection, making it easier to try out different 
+            // algorithms.
+            var sle = RED.view.selection();
+
+            // this will clear the selection, hence make a copy beforehand
+            RED.actions.invoke("core:undo");
+
+            RED.view.select(sle);
+        })
+    };
+    RED.events.on('runtime-state', dothisOneTimePlease )
+})();
+</script>
+
+<script type="text/x-red" data-template-name="auto_layout_sidebar">
+    <div style="position: relative; height: 100%; margin: 15px;">
+        <label for="node-input-algorithm" style="margin-top: 25px"><i class="fa fa-terminal"></i> Algorithm</label>
+        <select id="node-input-algorithm">
+            <option value="dagre_lr">Dagre LR</option>
+            <option value="dagre_longest_path">Dagre Longest Path</option>
+            <option value="elkjs_mr_tree">ELKjs Mr. Tree</option>
+            <option value="elkjs_layered_upwards">ELKjs Layered Upwards</option>
+            <option value="elkjs_layered_downwards">ELKjs Layered Downwards</option>
+            <option value="elkjs_box">ELKjs Box</option>
+            <option value="pull_request_2267">Pull Request 2267</option></select>
+        </select>
+
+        <label for="node-input-settings" style="margin-top: 15px"><i class="fa fa-cog"></i> Settings</label>
+        <input type="text" id="node-input-settings" style="width: 100%; margin-top: 30px">
+        
+        <button type="button" id="auto-layout-button" style="font-size: larger;width:100%;background-color: yellowgreen;color:white;border: none;height: 32px;margin-top: 30px;">Execute auto-layout</button>
+
+        <button type="button" id="auto-layout-revert-button" style="font-size: smaller;width:50%;background-color: rgb(225, 119, 129); color: rgb(246, 246, 246); border: 1px solid rgb(173, 22, 37); height: 32px; margin-top: 30px;"><i class="fa fa-undo"></i> Undo</button>
+    </div>
+</script>

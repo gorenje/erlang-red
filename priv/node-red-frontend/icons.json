@@ -1,4 +1,5 @@
 {
+    "@bartbutenaers/node-red-autolayout-sidebar": [],
     "@gorenje/erlang-red-kafka-brod": [
         "Kafka.svg"
     ],

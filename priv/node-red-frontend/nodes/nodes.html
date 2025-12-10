@@ -11846,6 +11846,46 @@ msg.cookies = {
     or directory gets deleted it may no longer be monitored even if it gets re-created.</p>
 </script>
 
+<!-- --- [red-module:@bartbutenaers/node-red-autolayout-sidebar/auto_layout_config] --- -->
+<!--
+  Copyright 2023, Bart Butenaers & Gerrit Riessen
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<script type="text/javascript">
+(function ($) {
+    RED.nodes.registerType('auto_layout_config', {
+        category: 'config',
+        hasUsers: false,
+        defaults: {
+            name: { value: "AutoLayout" },
+            algorithm: { value: "dagre_lr" },
+            settings: { value: {} }
+        },
+        paletteLabel: 'AutoLayout',
+        label: function () {
+            return this.name;
+        }
+    });
+})(jQuery);
+</script>
+
+<!-- The html for the config node does NOT include input fields, because the data only arrives from user input in the sidebar screen. -->
+<script type="text/x-red" data-template-name="auto_layout_config">
+    <div class="form-tips">This config node is read-only, because it stores the information entered in the 'Auto Layout' sidebar.</div>
+</script>
+
+
+<script type="text/x-red" data-help-name="auto_layout_config">
+    <p>Configuration for the 'Auto Layout' sidebar.</p>
+</script>
 <!-- --- [red-module:@gorenje/erlang-red-kafka-brod/ered-kafka-broker] --- -->
 
 <script type="text/html" data-template-name="ered-kafka-broker">

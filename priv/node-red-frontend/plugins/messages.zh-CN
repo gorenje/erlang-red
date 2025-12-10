@@ -1,4 +1,5 @@
 {
+    "@bartbutenaers/node-red-autolayout-sidebar/sidebar-plugin": {},
     "@gorenje/node-red-contrib-flowcompare/sidebar-plugin": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin": {},
     "@gregoriusrippenstein/erlang-red-unittest/unittesting_sidebar": {},

@@ -82,5 +82,17 @@
         "runtime": false,
         "user": false,
         "version": "0.0.9"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@bartbutenaers/node-red-autolayout-sidebar/sidebar-plugin",
+        "local": true,
+        "module": "@bartbutenaers/node-red-autolayout-sidebar",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.4.1"
     }
 ]
