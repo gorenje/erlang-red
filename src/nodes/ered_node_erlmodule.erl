@@ -35,6 +35,9 @@
     add_module/2
 ]).
 
+-import(ered_messages, [
+    any_to_binary/1
+]).
 %%
 %%
 start(
@@ -143,7 +146,7 @@ compiler_list_to_json_list(
     ];
 compiler_list_to_json_list(NoMatch) ->
     io:format("NO MACH: ~p~n", [NoMatch]),
-    ["error stack creation errror"].
+    [<<"error stack creation errror">>].
 
 %%
 errorinfo_list([]) ->
@@ -166,9 +169,14 @@ errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) ->
         Module,
         list_to_binary(io_lib:format("~p", [Desc]))
     ];
+errorinfo_tuple_to_list({none, compile,{Eror,Msg}}) ->
+    [
+     any_to_binary(Eror),
+     any_to_binary(Msg)
+    ];
 errorinfo_tuple_to_list(NoMatch) ->
     io:format("NO MACH (tuple): ~p~n", [NoMatch]),
-    ["error tuple not converted"].
+    [<<"error tuple not converted">>].
 
 %%
 %%
