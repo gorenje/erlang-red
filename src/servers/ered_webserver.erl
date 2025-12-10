@@ -244,6 +244,11 @@ flow_editor_routes() ->
         {"/vendor/dagre.min.js", cowboy_static,
             {priv_file, erlang_red, "vendor/dagre.min.js"}},
 
+        {"/auto_layout_config/lib/elkjs", cowboy_static,
+            {priv_file, erlang_red, "vendor/elkjs"}},
+        {"/auto_layout_config/lib/dagrejs", cowboy_static,
+            {priv_file, erlang_red, "vendor/dagrejs"}},
+
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
         {"/context/[...]", ered_http_nodered_empty_json, []},

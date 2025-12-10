@@ -415,6 +415,7 @@ is_config_node(<<"ScratchPadCfg">>)      -> true;
 is_config_node(<<"websocket-listener">>) -> true;
 is_config_node(<<"erlconfigCfg">>)       -> true;
 is_config_node(<<"ered-kafka-broker">>)  -> true;
+is_config_node(<<"auto_layout_config">>) -> true;
 is_config_node(_)                        -> false.
 
 %%
