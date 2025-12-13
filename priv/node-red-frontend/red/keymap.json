@@ -34,6 +34,7 @@
     },
     "red-ui-workspace": {
         "ctrl-e": "core:show-export-dialog",
+        "ctrl-shift-l": "core:auto-layout-flow",
         "ctrl-shift-e": "unittesting:test-current-workspace",
         "ctrl-shift-x": "flowcompare:compare-flow-to-remote",
         "backspace": "core:delete-selection",
