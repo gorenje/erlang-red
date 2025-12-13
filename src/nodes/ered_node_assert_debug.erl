@@ -39,7 +39,7 @@ handle_event(
     {registered, WsName, _Pid},
     #{
         <<"inverse">> := true,
-        <<"nodeid">> := TgtNodeId,
+        <<"scope">> := [TgtNodeId],
         ?NodePid
     } = NodeDef
 ) ->
@@ -52,7 +52,7 @@ handle_event(
     {registered, WsName, _Pid},
     #{
         <<"inverse">> := false,
-        <<"nodeid">> := TgtNodeId,
+        <<"scope">> := [TgtNodeId],
         <<"msgtype">> := MsgType,
         ?NodePid
     } = NodeDef
@@ -69,7 +69,7 @@ handle_event(
     {stop, WsName},
     #{<<"inverse">> := false, '_mc_websocket' := 0, ?NodePid} = NodeDef
 ) ->
-    {ok, NodeId} = maps:find(<<"nodeid">>, NodeDef),
+    {ok, [NodeId]} = maps:find(<<"scope">>, NodeDef),
     ErrMsg = jstr("Expected debug from ~p\n", [NodeId]),
     assert_failure(NodeDef, WsName, ErrMsg),
     ered_ws_event_exchange:unsubscribe(WsName, NodePid),

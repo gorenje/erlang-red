@@ -25,7 +25,7 @@
 %%
 -export([init/1, handle_call/3, handle_cast/2]).
 -export([handle_info/2, terminate/2, code_change/3]).
--export([stop/0, start/0]).
+-export([stop/0, start_link/0]).
 
 %% subscribe to specific events
 -export([subscribe/4]).
@@ -46,7 +46,7 @@
 %%
 %%%%%
 %%%
-start() ->
+start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 debug_msg({ok, WsName}, Type, #{<<"id">> := NodeId} = Data) ->

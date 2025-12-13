@@ -3,7 +3,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 ensure_unsubscribe_is_working_test() ->
-    ered_ws_event_exchange:start(),
+    ered_ws_event_exchange:start_link(),
     ered_ws_event_exchange:clear(),
 
     ered_ws_event_exchange:subscribe(wsname, nodeid, status, cb1234),

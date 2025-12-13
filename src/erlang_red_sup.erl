@@ -34,7 +34,7 @@ init([]) ->
                 },
                 #{
                     id => ered_ch3_ws_event_exchange,
-                    start => {ered_ws_event_exchange, start, []},
+                    start => {ered_ws_event_exchange, start_link, []},
                     restart => permanent,
                     type => worker,
                     module => [ered_ws_event_exchange]
