@@ -51,7 +51,7 @@ duplicates([H | T], Acc) ->
 %% Scan each file and collect all IDs. Each ID should only appear in one
 %% filename, if that is not the case, then this test fails.
 ensure_universally_unique_nodeids_test() ->
-    {_Cnt, FileNames} = filelib:fold_files(
+    {_Cnt, FileNamesD} = filelib:fold_files(
         code:priv_dir(erlang_red) ++ "/testflows/",
         "flows.json",
         true,
@@ -60,6 +60,15 @@ ensure_universally_unique_nodeids_test() ->
         end,
         {0, []}
     ),
+
+    %% remove the main flows.json file from the test cases.
+    FileNames =
+        FileNamesD --
+            [
+                filename:join([
+                    code:priv_dir(erlang_red), "testflows", "flows.json"
+                ])
+            ],
 
     MapOfNodeIds = map_of_nodeids(FileNames, #{}),
 

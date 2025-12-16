@@ -40,13 +40,19 @@ websocket_faker(WsName) ->
             ered_ws_event_exchange:debug_msg({ok, WsName}, normal, Data),
             websocket_faker(WsName);
         {debug, Data, notice} ->
-            ered_ws_event_exchange:debug_msg({ok, WsName}, notice, Data#{ level => 40}),
+            ered_ws_event_exchange:debug_msg({ok, WsName}, notice, Data#{
+                level => 40
+            }),
             websocket_faker(WsName);
         {debug, Data, warning} ->
-            ered_ws_event_exchange:debug_msg({ok, WsName}, warning, Data#{ level => 30}),
+            ered_ws_event_exchange:debug_msg({ok, WsName}, warning, Data#{
+                level => 30
+            }),
             websocket_faker(WsName);
         {debug, Data, error} ->
-            ered_ws_event_exchange:debug_msg({ok, WsName}, error, Data#{ level => 20}),
+            ered_ws_event_exchange:debug_msg({ok, WsName}, error, Data#{
+                level => 20
+            }),
             websocket_faker(WsName);
         {status, NodeId, T, C, S} ->
             ered_ws_event_exchange:node_status({ok, WsName}, NodeId, T, C, S),
@@ -210,8 +216,8 @@ foreach_testflow_test_() ->
     ered_capture_io_exchange:start_link(),
     ered_credentials_store:start_link(),
 
-    {_Cnt, FileNames} = filelib:fold_files(
-        io_lib:format("~s/testflows", [code:priv_dir(erlang_red)]),
+    {_Cnt, FileNamesD} = filelib:fold_files(
+        filename:join([code:priv_dir(erlang_red), "testflows"]),
         "flows.json",
         true,
         fun(Fname, Acc) ->
@@ -221,6 +227,14 @@ foreach_testflow_test_() ->
         {0, []}
     ),
 
+    %% remove the main flows.json file from the test cases.
+    FileNames =
+        FileNamesD --
+            [
+                filename:join([
+                    code:priv_dir(erlang_red), "testflows", "flows.json"
+                ])
+            ],
     TestList = create_test_for_flow_file(FileNames, []),
 
     %% Tests start failing when all are run in parallel.
