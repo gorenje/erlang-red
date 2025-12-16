@@ -26,6 +26,7 @@ COPY .git .git/
 COPY src src/
 COPY include include/
 COPY priv priv/
+COPY config config/
 
 RUN rebar3 as prod release -n erlang_red
 
@@ -41,6 +42,9 @@ COPY --from=builder --chown=nobody:root /builder/_build/prod/rel/erlang_red ./
 
 ## needed for erlexec
 ENV SHELL=/bin/sh
+## vm.args.src
+ENV NODE_NAME=nonode@example.com
+RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." >> sys.config
 
 USER nobody
 
