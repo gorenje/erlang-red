@@ -21,8 +21,7 @@ rebar3.crashdump
 .local_testing
 fly.toml
 data
-priv/flows.json
 diameter_gen_access_rfc7155.erl
 diameter_gen_access_rfc7155.hrl
-priv/flows_cred.json
 .DS_Store
+config/sys.config
