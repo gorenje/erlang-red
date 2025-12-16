@@ -29,5 +29,9 @@ RUN useradd -s /bin/bash -m -G users -G sudo erlang
 RUN passwd --delete erlang
 USER erlang
 
+ENV NODE_NAME=erlang-red@spreads-the.love
+
 # promt> make c-tab-tab-ompile
+RUN rebar3 completion -f /home/erlang/.rebar3_completion
+RUN echo ". /home/erlang/.rebar3_completion" >> /home/erlang/.bashrc
 RUN echo ". /etc/bash_completion" >> /home/erlang/.bashrc
