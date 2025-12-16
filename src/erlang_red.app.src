@@ -12,7 +12,6 @@
     {env, []},
     {mod, {erlang_red, []}},
     {modules, [
-        pg,
         ered_webserver,
         ered_ws_event_exchange,
         ered_unittest_engine,
