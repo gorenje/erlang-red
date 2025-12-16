@@ -134,7 +134,8 @@ terminate(Event, _State) ->
 %% ----------------- helpers
 %%
 load_initial_credentials() ->
-    FileName = io_lib:format("~s/flows_cred.json", [code:priv_dir(erlang_red)]),
+    FileName = filename:join(ered_flow_store:store_flow(), "flows_cred.json"),
+
     case filelib:is_regular(FileName) of
         false ->
             #{store => #{}};
@@ -144,7 +145,7 @@ load_initial_credentials() ->
     end.
 
 store_credentials_to_disk(#{store := Hsh} = _State) ->
-    FileName = io_lib:format("~s/flows_cred.json", [code:priv_dir(erlang_red)]),
+    FileName = filename:join(ered_flow_store:store_flow(), "flows_cred.json"),
 
     case file:write_file(FileName, json:encode(Hsh)) of
         ok ->

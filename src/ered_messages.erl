@@ -67,7 +67,7 @@ jsonata_eval_or_error_msg(Jsonata, Msg) ->
                 "JSONATA EXCEP:~n~n~p~n~nCaused:~n~n~p~n~n~p~n~n~p~n",
                 [Jsonata, E, M, S]
             ),
-            jstr("Invalid JSONata expression: ~p (~p)", [M,Jsonata])
+            jstr("Invalid JSONata expression: ~p (~p)", [M, Jsonata])
     end.
 
 %%

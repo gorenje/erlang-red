@@ -122,10 +122,7 @@ handle_call({filename, FlowId}, _From, FlowStore) ->
             {reply, error, FlowStore}
     end;
 handle_call({retrieve_main_flow}, _From, FlowStore) ->
-    SrcFileName = io_lib:format(
-        "~s/flows.json",
-        [code:priv_dir(erlang_red)]
-    ),
+    SrcFileName = ered_flow_store:store_main_flow(),
 
     {reply, file:read_file(SrcFileName), FlowStore};
 handle_call(_Msg, _From, FlowStore) ->
@@ -146,10 +143,7 @@ handle_info({store_main_flow, FlowData}, State) ->
     %% remove any reference to <<"credentials">>
     NodeAry = remove_credentials(NodeAryWithCreds),
 
-    DestFileName = io_lib:format(
-        "~s/flows.json",
-        [code:priv_dir(erlang_red)]
-    ),
+    DestFileName = ered_flow_store:store_main_flow(),
 
     filelib:ensure_dir(DestFileName),
     case file:write_file(DestFileName, encode_json(NodeAry)) of
@@ -170,10 +164,7 @@ handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
     %% remove any reference to <<"credentials">>
     NodeAry = remove_credentials(json:decode(NodeAryWithCreds)),
 
-    DestFileName = io_lib:format(
-        "~s/testflows/~s/flows.json",
-        [code:priv_dir(erlang_red), FlowId]
-    ),
+    DestFileName = ered_flow_store:store_flow_id(FlowId),
 
     filelib:ensure_dir(DestFileName),
     case file:write_file(DestFileName, encode_json(NodeAry)) of
@@ -237,12 +228,10 @@ remove_credentials([NodeDef | Rest], Store) ->
 compile_file_list() ->
     {ok, MP} = re:compile("([A-Z0-9]{16})/flows.json", [caseless]),
 
-    TestFlowDir = io_lib:format("~s/testflows/", [code:priv_dir(erlang_red)]),
+    TestFlowDir = filename:join(code:priv_dir(erlang_red), "testflows"),
+    StoreFlowDir = ered_flow_store:store_flow(),
 
-    FileNames = filelib:fold_files(
-        TestFlowDir,
-        "flows.json",
-        true,
+    Fun =
         fun(Fname, Acc) ->
             case re:run(Fname, MP) of
                 {match, [{_, _}, {S, L}]} ->
@@ -251,9 +240,11 @@ compile_file_list() ->
                     Acc
             end
         end,
-        []
-    ),
-    FileNames.
+
+    FileNames0 = filelib:fold_files(TestFlowDir, "flows.json", true, Fun, []),
+    FileNames1 = filelib:fold_files(StoreFlowDir, "flows.json", true, Fun, []),
+
+    FileNames0 ++ FileNames1.
 
 %% erlfmt:ignore lining stuff up
 compile_file_store([], FileStore) ->
