@@ -11219,7 +11219,7 @@ RED.utils = (function() {
         } else if ((format === 'number') && (payload === "-Infinity")) {
             payload = -Infinity;
         } else if (format === 'Object' || /^(array|set|map)/.test(format) || format === 'boolean' || format === 'number' ) {
-            try { payload = JSON.parse(payload) } catch(e) { console.log( `json parse error: content was ${payload}`) ;  }
+            try { payload = JSON.parse(payload) } catch(e) {}
         } else if (/error/i.test(format)) {
             payload = JSON.parse(payload);
             payload = (payload.name?payload.name+": ":"")+payload.message;
