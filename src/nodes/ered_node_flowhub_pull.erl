@@ -69,7 +69,7 @@ handle_msg(_, NodeDef) ->
 %%
 
 handle_flowid(FlowId, Msg, #{<<"wires">> := [WiresPort1 | _]} = NodeDef) ->
-    FileName = ered_flow_store:store_flow_id(FlowId),
+    FileName = ered_flow_store:find_flow_id(FlowId),
 
     case file:read_file(FileName) of
         {ok, FileData} ->
