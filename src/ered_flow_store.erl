@@ -5,13 +5,16 @@
 store_flow_id(FlowId) when is_binary(FlowId) ->
     store_flow_id(binary_to_list(FlowId));
 store_flow_id(FlowId) when is_list(FlowId) ->
-    filename:join([get_store_flow(), FlowId, "flows.json"]).
+    Node = erlang:node(),
+    filename:join([get_store_flow(), Node, FlowId, "flows.json"]).
 
 store_flow() ->
-    get_store_flow().
+    Node = erlang:node(),
+    filename:join(get_store_flow(), Node).
 
 store_main_flow() ->
-    filename:join([get_store_flow(), "flows.json"]).
+    Node = erlang:node(),
+    filename:join([get_store_flow(), Node, "flows.json"]).
 
 get_store_flow() ->
     application:get_env(
