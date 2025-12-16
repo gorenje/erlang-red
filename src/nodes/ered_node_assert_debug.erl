@@ -107,11 +107,11 @@ handle_websocket(
 handle_websocket({debug, WsName, NodeId, Type, Data}, NodeDef) ->
     {outgoing, Msg} = create_outgoing_msg(WsName),
     send_msg_to_connected_nodes(NodeDef, Msg#{
-       <<"debug">> => #{
-          <<"type">> => Type,
-          <<"nodeid">> => NodeId
-       },
-       <<"payload">> => Data
+        <<"debug">> => #{
+            <<"type">> => Type,
+            <<"nodeid">> => NodeId
+        },
+        <<"payload">> => Data
     }),
     NodeDef.
 
