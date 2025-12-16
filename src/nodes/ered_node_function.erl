@@ -268,11 +268,16 @@ validate_erlang_code(#{<<"func">> := Code} = NodeDef, WsName) ->
                     node_status_clear_after(1000, WsName, NodeDef);
                 {error, {error, ErrorList}} ->
                     Msg = ?AddWsName(#{
-                          error => compiler_list_to_json_list(ErrorList)
+                        error => compiler_list_to_json_list(ErrorList)
                     }),
                     post_exception_or_debug(NodeDef, Msg, <<"compile failed">>),
-                    node_status(WsName, NodeDef,
-                                "invalid Erlang code", "red", "dot");
+                    node_status(
+                        WsName,
+                        NodeDef,
+                        "invalid Erlang code",
+                        "red",
+                        "dot"
+                    );
                 Error ->
                     io:format("ERROR : [~p] ~p ~n ", [Code, Error]),
                     node_status(WsName, NodeDef, "unknown error", "red", "dot")

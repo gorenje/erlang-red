@@ -169,10 +169,10 @@ errorinfo_tuple_to_list({{Line, Char}, Module, Desc}) ->
         Module,
         list_to_binary(io_lib:format("~p", [Desc]))
     ];
-errorinfo_tuple_to_list({none, compile,{Eror,Msg}}) ->
+errorinfo_tuple_to_list({none, compile, {Eror, Msg}}) ->
     [
-     any_to_binary(Eror),
-     any_to_binary(Msg)
+        any_to_binary(Eror),
+        any_to_binary(Msg)
     ];
 errorinfo_tuple_to_list(NoMatch) ->
     io:format("NO MACH (tuple): ~p~n", [NoMatch]),
