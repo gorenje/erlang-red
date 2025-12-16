@@ -1,0 +1,3 @@
+[{erlang_red,
+    [{flow_store, "/code/priv/testflows"}]
+}].
