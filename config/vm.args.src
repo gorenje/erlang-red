@@ -1,0 +1,5 @@
+## Name of the node
+-name ${NODE_NAME:-erlang-red}
+
+## Cookie for distributed Erlang
+-setcookie erlang-red
