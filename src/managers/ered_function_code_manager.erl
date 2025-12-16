@@ -16,7 +16,8 @@
 -export([
     execute_sync/3,
     perform_func_code/3,
-    is_code_parsable/1
+    is_code_parsable/1,
+    is_function_code/1
 ]).
 
 %%
@@ -258,6 +259,23 @@ is_code_parsable(ErlangCode) ->
     case erl_scan:string(binary_to_list(ErlangCode)) of
         {ok, Tokens, _} ->
             case erl_parse:parse_exprs(Tokens) of
+                {ok, Parsed} ->
+                    {ok, Parsed};
+                Error ->
+                    {error, Error}
+            end;
+        Error ->
+            {error, Error}
+    end.
+
+%%
+%%
+is_function_code(ErlangCode) when is_list(ErlangCode) ->
+    is_function_code(ErlangCode);
+is_function_code(ErlangCode) ->
+    case erl_scan:string(binary_to_list(ErlangCode)) of
+        {ok, Tokens, _} ->
+            case erl_parse:parse_form(Tokens) of
                 {ok, Parsed} ->
                     {ok, Parsed};
                 Error ->

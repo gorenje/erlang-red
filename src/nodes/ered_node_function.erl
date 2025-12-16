@@ -100,7 +100,8 @@
 
 -import(ered_function_code_manager, [
     execute_sync/3,
-    is_code_parsable/1
+    is_code_parsable/1,
+    is_function_code/1
 ]).
 
 -import(ered_nodes, [
@@ -256,19 +257,34 @@ handle_msg(_, NodeDef) ->
 validate_erlang_code(#{<<"func">> := <<>>} = NodeDef, WsName) ->
     node_status(WsName, NodeDef, "empty code not possible", "red", "dot");
 validate_erlang_code(#{<<"func">> := Code} = NodeDef, WsName) ->
-    case is_code_parsable(?WrapInFunction(Code)) of
-        {ok, _ParsedCode} ->
+    case check_code_for_function(Code) of
+        is_function ->
             node_status(WsName, NodeDef, "parsed", "green", "dot"),
             node_status_clear_after(1000, WsName, NodeDef);
-        {error, {error, ErrorList}} ->
-            Msg = ?AddWsName(#{
-                error => compiler_list_to_json_list(ErrorList)
-            }),
-            post_exception_or_debug(NodeDef, Msg, <<"compile failed">>),
-            node_status(WsName, NodeDef, "invalid Erlang code", "red", "dot");
-        Error ->
-            io:format("ERROR : [~p] ~p ~n ", [Code, Error]),
-            node_status(WsName, NodeDef, "unknown error", "red", "dot")
+        wrap_in_function ->
+            case is_code_parsable(?WrapInFunction(Code)) of
+                {ok, _ParsedCode} ->
+                    node_status(WsName, NodeDef, "parsed", "green", "dot"),
+                    node_status_clear_after(1000, WsName, NodeDef);
+                {error, {error, ErrorList}} ->
+                    Msg = ?AddWsName(#{
+                          error => compiler_list_to_json_list(ErrorList)
+                    }),
+                    post_exception_or_debug(NodeDef, Msg, <<"compile failed">>),
+                    node_status(WsName, NodeDef,
+                                "invalid Erlang code", "red", "dot");
+                Error ->
+                    io:format("ERROR : [~p] ~p ~n ", [Code, Error]),
+                    node_status(WsName, NodeDef, "unknown error", "red", "dot")
+            end
+    end.
+
+check_code_for_function(Code) ->
+    case is_function_code(Code) of
+        {ok, _} ->
+            is_function;
+        _ ->
+            wrap_in_function
     end.
 
 %%
