@@ -4,7 +4,7 @@
 set -e
 
 THIS_SCRIPT=$(basename $0)
-FLY_DOCKERFILE="Dockerfile.fly"
+FLY_DOCKERFILE="dockerfiles/Dockerfile.fly"
 
 # Make sure they have `fly or try to help them find it.
 hash fly 2>/dev/null || {
