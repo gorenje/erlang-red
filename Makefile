@@ -27,17 +27,16 @@ enter-docker-shell:
 	docker exec -it $$(docker ps -f ancestor=erlang-shell -q) bash
 
 ##
-## Heroku docker image
-heroku-build:
-	docker build -f dockerfiles/Dockerfile.heroku -t heroku-red-erik .
-heroku-run: heroku-build
-	docker run -it -p 7070:8080 -e DISABLE_FLOWEDITOR=YES -e COMPUTEFLOW="499288ab4007ac6a,777bee1d06741240,9d3f5506aa810b22" -t heroku-red-erik
-heroku-enter:
-	docker exec -it $$(docker ps -f ancestor=heroku-red-erik -q) bash
-heroku-stop:
-	docker kill $$(docker ps -f ancestor=heroku-red-erik -q)
-heroku-console: heroku-build
-	docker run -i -t heroku-red-erik /erlang-red/bin/erlang_red console
+## Heroku deployment:
+##
+## >> The Docker build context is always set to the directory containing the Dockerfile and can’t be configured independently.
+##   - https://devcenter.heroku.com/articles/build-docker-images-heroku-yml
+##
+## Heroku deployment no longer support.
+##
+## If their build context isn't configurable then I'm not supporting them.
+##
+
 ##
 ## fly.io docker image
 fly-io-build:
