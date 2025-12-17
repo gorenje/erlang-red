@@ -31,7 +31,7 @@ Online: Thanks to [@mwmiller](https://github.com/mwmiller), Erlang-Red can be te
 
 Locally: Using docker:
 
-    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.3.8
+    docker run --interactive --tty --publish 8080:8080 gorenje/erlang-red:0.4.0
 
 Starts Erlang-Red web listener on [localhost:8080/erlang-red](http://localhost:8080/erlang-red) and drops the console into an Eshell.
 
