@@ -44,6 +44,7 @@ COPY priv priv/
 COPY MILESTONES.md priv/
 COPY README.md priv/
 COPY .images priv/
+COPY config config/
 
 RUN rebar3 as prod release -n erlang_red
 
@@ -66,6 +67,9 @@ ENV SHELL=/bin/bash
 ## needed for Elixir
 ENV LANG=C.UTF-8
 ENV ELIXIR_ERL_OPTIONS="+fnu"
+
+ENV NODE_NAME=erlang-red@spreads-the.love
+RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." >> sys.config
 
 ## needed for nobody
 USER nobody

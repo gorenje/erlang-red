@@ -55,6 +55,8 @@ hub-docker-run: hub-docker-build
 	docker run -it -p 6060:8080 -t gorenje/erlang-red:${HUB_RELEASE}
 hub-docker-push: hub-docker-build
 	docker push gorenje/erlang-red:${HUB_RELEASE}
+hub-docker-enter:
+	docker exec -it $$(docker ps -f ancestor=gorenje/erlang-red:${HUB_RELEASE} -q) bash
 
 ##
 ## For local testing, start a kafka broker
