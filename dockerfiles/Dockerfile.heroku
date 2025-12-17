@@ -40,6 +40,7 @@ RUN cp /usr/local/lib/erlang/lib/diameter-2.4.1/src/compiler/diameter_forms.hrl 
 
 COPY include include/
 COPY priv priv/
+COPY config config/
 
 ## copy some content into the images to use for the website
 COPY MILESTONES.md priv/
@@ -64,6 +65,8 @@ ENV SHELL=/bin/bash
 ## Both now set at heroku.
 #### COMPUTEFLOW="499288ab4007ac6a,777bee1d06741240,9d3f5506aa810b22"
 #### DISABLE_FLOWEDITOR=YES
+ENV NODE_NAME=heroku@spreads-the.love
+RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." >> sys.config
 
 ## needed for Elixir
 ENV LANG=C.UTF-8
