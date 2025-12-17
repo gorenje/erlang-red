@@ -6,10 +6,22 @@ build-docker-container:
 
 start-docker-shell: build-docker-container
 	docker network create erlang-red-node-red-bridge || true
-	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data --hostname erlang-red -p 9090:8080 -p 1883:1883 --network erlang-red-node-red-bridge -w /code --rm erlang-shell bash
+	docker run -it \
+		-v $(shell pwd):/code \
+		-v $(shell pwd)/data:/data \
+		--hostname erlang-red \
+		--publish 9090:8080 \
+		--publish 1883:1883 \
+		--network erlang-red-node-red-bridge \
+		-w /code --rm erlang-shell bash
 
 start-docker-shell-raspberry: build-docker-container
-	docker run -it -v $(shell pwd):/code -v $(shell pwd)/data:/data --device=/dev/i2c-1 --hostname erlang-red-raspberry --publish 9090:8080 -w /code --rm erlang-shell bash
+	docker run -it -v $(shell pwd):/code \
+		-v $(shell pwd)/data:/data \
+		--device=/dev/i2c-1 \
+		--hostname erlang-red-raspberry \
+		--publish 9090:8080 \
+		-w /code --rm erlang-shell bash
 
 enter-docker-shell:
 	docker exec -it $$(docker ps -f ancestor=erlang-shell -q) bash
@@ -19,7 +31,7 @@ enter-docker-shell:
 heroku-build:
 	docker build -f dockerfiles/Dockerfile.heroku -t heroku-red-erik .
 heroku-run: heroku-build
-	docker run -it -p 7070:8080 -t heroku-red-erik
+	docker run -it -p 7070:8080 -e DISABLE_FLOWEDITOR=YES -e COMPUTEFLOW="499288ab4007ac6a,777bee1d06741240,9d3f5506aa810b22" -t heroku-red-erik
 heroku-enter:
 	docker exec -it $$(docker ps -f ancestor=heroku-red-erik -q) bash
 heroku-stop:
@@ -29,7 +41,7 @@ heroku-console: heroku-build
 ##
 ## fly.io docker image
 fly-io-build:
-	docker build -f Dockerfile.fly -t fly-er .
+	docker build -f dockerfiles/Dockerfile.fly -t fly-er .
 fly-io-run: fly-io-build
 	docker run -it -p 6060:8080 -t fly-er
 fly-io-enter:
@@ -53,7 +65,7 @@ kafka-start:
 ##
 ## Elixir compile example
 elixir-build:
-	docker build -f Dockerfile.elixir -t er-elixir .
+	docker build -f dockerfiles/Dockerfile.elixir -t er-elixir .
 elixir-run: elixir-build
 	docker run -it -t er-elixir sh
 
