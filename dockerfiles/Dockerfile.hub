@@ -69,7 +69,7 @@ ENV LANG=C.UTF-8
 ENV ELIXIR_ERL_OPTIONS="+fnu"
 
 ENV NODE_NAME=erlang-red@spreads-the.love
-RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." >> sys.config
+RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." > sys.config
 
 ## needed for nobody
 USER nobody

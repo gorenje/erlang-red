@@ -44,7 +44,7 @@ COPY --from=builder --chown=nobody:root /builder/_build/prod/rel/erlang_red ./
 ENV SHELL=/bin/sh
 ## vm.args.src
 ENV NODE_NAME=nonode@example.com
-RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." >> sys.config
+RUN echo "[{erlang_red, [{flow_store, \"/tmp\"}]}]." > sys.config
 
 USER nobody
 
