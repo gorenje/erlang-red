@@ -100,7 +100,7 @@ shell:
 	rebar3 shell
 
 app-start:
-	rebar3 shell --apps erlang_red
+	rebar3 shell --config priv/sys.config --apps erlang_red
 
 app-start-loop:
 	while [ 1 ] ; do make -s app-start ; done
