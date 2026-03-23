@@ -51,11 +51,15 @@
 ]).
 
 -import(ered_messages, [
+    any_to_list/1,
     convert_to_num/1,
     create_outgoing_msg/1
 ]).
 
 % erlfmt:ignore - alignment
+start(#{<<"out">> := <<"sit">>, <<"ret">> := <<"buffer">>} = NodeDef, WsName) ->
+    ered_node:start(NodeDef#{?SetWsName}, ?MODULE);
+%
 start(#{ <<"out">> := <<"char">> } = NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "when is seen connection"),
     ered_node:start(NodeDef, ered_node_ignore);
@@ -65,7 +69,7 @@ start(#{ <<"out">> := <<"count">> } = NodeDef, WsName) ->
 start(#{ <<"out">> := <<"sit">> } = NodeDef, WsName) ->
     unsupported(NodeDef, {websocket, WsName}, "keep connection open"),
     ered_node:start(NodeDef, ered_node_ignore);
-
+%
 start(NodeDef, WsName) ->
     case check_node_config([
           {<<"ret">>,     <<"string">>},
@@ -85,6 +89,30 @@ start(NodeDef, WsName) ->
 handle_event(
   {registered, WsName, _MyPid},
   #{
+     <<"out">>    := <<"sit">>,
+     ?GetPort,
+     ?GetServer
+   } = NodeDef
+) ->
+    case
+        gen_tcp:connect(
+          binary_to_list(Server),
+          convert_to_num(Port),
+          [binary, {active, true}]
+         )
+    of
+        {ok, Socket} ->
+            ?NodeStatus("connected", "green", "dot"),
+            NodeDef#{socket => Socket};
+        {error, Reason} ->
+            ?NodeStatus("not connected", "red", "ring"),
+            io:format("error happened ~p~n",[Reason]),
+            NodeDef
+    end;
+
+handle_event(
+  {registered, WsName, _MyPid},
+  #{
      <<"out">>    := <<"time">>,
      <<"splitc">> := TimeoutMS,
      ?GetPort,
@@ -98,10 +126,10 @@ handle_event(
             erlang:start_timer(
               convert_to_num(TimeoutMS), self(), treq_disconnect
             ),
-            node_status(WsName, NodeDef, "connected", "green", "dot"),
+            ?NodeStatus("connected", "green", "dot"),
             NodeDef#{?SetSessionId};
         connecting ->
-            node_status(WsName, NodeDef, "connecting", "grey", "ring"),
+            ?NodeStatus("connecting", "grey", "ring"),
             NodeDef
     end;
 
@@ -112,7 +140,7 @@ handle_event(
      <<"splitc">> := TimeoutMS
    } = NodeDef
 ) ->
-    node_status(WsName, NodeDef, "connected", "green", "dot"),
+    ?NodeStatus("connected", "green", "dot"),
     erlang:start_timer(convert_to_num(TimeoutMS), self(), treq_disconnect),
     [ered_tcp_manager:send(SessionId, P) || P <- Backlog],
     NodeDef#{?SetSessionId, ?EmptyBacklog};
@@ -137,6 +165,14 @@ handle_event(
     NodeDef;
 
 handle_event(
+  {tcpr_data, Socket, Data},
+  #{?GetWsName, socket := Socket} = NodeDef
+) ->
+    {outgoing, Msg} = create_outgoing_msg(WsName),
+    send_msg_to_connected_nodes(NodeDef, Msg#{ <<"payload">> => Data }),
+    NodeDef;
+
+handle_event(
   treq_disconnect,
   #{ ?GetWsName,
      ?GetSessionId,
@@ -148,7 +184,7 @@ handle_event(
     [ered_tcp_manager:send(SessionId, P) || P <- Backlog],
     ered_tcp_manager:unregister_connector(Server, convert_to_num(Port), self()),
     ered_tcp_manager:close(SessionId),
-    node_status(WsName, NodeDef, "disconnected", "grey", "ring"),
+    ?NodeStatus("disconnected", "grey", "ring"),
     maps:remove('_sessionid', NodeDef#{?EmptyBacklog});
 
 handle_event(
@@ -160,17 +196,28 @@ handle_event(
 ) ->
     ered_tcp_manager:unregister_connector(Server, convert_to_num(Port), self()),
     ered_tcp_manager:close(SessionId),
-    node_status(WsName, NodeDef, "disconnected", "grey", "ring"),
+    ?NodeStatus("disconnected", "grey", "ring"),
     maps:remove('_sessionid', NodeDef#{?EmptyBacklog});
 
 
 %% fall through
-handle_event(_Event, NodeDef) ->
+handle_event(Event, NodeDef) ->
+    io:format("Unhandled event: ~p / ~p~n",[Event,NodeDef]),
     NodeDef.
 
 %%
 %%
 %% --> send & forget --> immediately close connection after sending data
+handle_msg(
+    {incoming, #{?GetWsName, ?GetPayload} = Msg},
+    #{
+        <<"out">> := <<"sit">>,
+        <<"ret">> := <<"buffer">>,
+        socket := Socket
+    } = NodeDef
+) ->
+    gen_tcp:send(Socket, Payload),
+    {handled, NodeDef, Msg};
 handle_msg(
     {incoming, #{?GetWsName, ?GetPayload} = Msg},
     #{
@@ -183,9 +230,9 @@ handle_msg(
         {ok, Sock} ->
             gen_tcp:send(Sock, Payload),
             inet:close(Sock),
-            node_status(WsName, NodeDef, "disconnected", "grey", "ring");
+            ?NodeStatus("disconnected", "grey", "ring");
         {error, _Error} ->
-            node_status(WsName, NodeDef, "error connecting", "grey", "ring")
+            ?NodeStatus("error connecting", "grey", "ring")
     end,
 
     {handled, NodeDef, Msg};
