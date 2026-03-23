@@ -242,6 +242,8 @@ encoder(Other, Encode) when is_binary(Other) ->
     try
         json:encode_value(Other, Encode)
     catch
+        error:{invalid_byte, _}:_S ->
+            json:encode_value(binary_to_list(Other), Encode);
         error:E:S ->
             io:format("Json Encoding Error for [~p]~n", [Other]),
             io:format("Json Encoding Error ~p ~p~n", [E, S]),
