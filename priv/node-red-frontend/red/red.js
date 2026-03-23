@@ -24964,13 +24964,25 @@ RED.view = (function() {
     }
 
     function zoomIn() {
-        if (scaleFactor < 2) {
-            zoomView(scaleFactor+0.1);
+        if (scaleFactor < 2.5) {
+            zoomView(scaleFactor+0.05);
+        } else {
+            let idx = RED.nodes.getWorkspaceOrder().indexOf(RED.workspaces.active()) + 1;
+            if ( idx < RED.nodes.getWorkspaceOrder().length ) {
+              RED.workspaces.show(RED.nodes.getWorkspaceOrder()[idx],false,false,true);
+              zoomView(0.1);
+            }
         }
     }
     function zoomOut() {
-        if (scaleFactor > 0.3) {
-            zoomView(scaleFactor-0.1);
+        if (scaleFactor >= 0.1) {
+            zoomView(scaleFactor-0.05);
+        } else {
+            let idx = RED.nodes.getWorkspaceOrder().indexOf(RED.workspaces.active()) - 1;
+            if ( idx > -1 ) {
+              RED.workspaces.show(RED.nodes.getWorkspaceOrder()[idx],false,false,true);
+              zoomView(2.5);
+            }
         }
     }
     function zoomZero() { zoomView(1); }
@@ -24980,17 +24992,10 @@ RED.view = (function() {
 
 
     function zoomView(factor) {
-        var screenSize = [chart.width(),chart.height()];
-        var scrollPos = [chart.scrollLeft(),chart.scrollTop()];
-        var center = [(scrollPos[0] + screenSize[0]/2)/scaleFactor,(scrollPos[1] + screenSize[1]/2)/scaleFactor];
         scaleFactor = factor;
-        var newCenter = [(scrollPos[0] + screenSize[0]/2)/scaleFactor,(scrollPos[1] + screenSize[1]/2)/scaleFactor];
-        var delta = [(newCenter[0]-center[0])*scaleFactor,(newCenter[1]-center[1])*scaleFactor]
-        chart.scrollLeft(scrollPos[0]-delta[0]);
-        chart.scrollTop(scrollPos[1]-delta[1]);
-
         RED.view.navigator.resize();
         redraw();
+
         if (RED.settings.get("editor.view.view-store-zoom")) {
             RED.settings.setLocal('zoom-level', factor.toFixed(1))
         }
