@@ -46,6 +46,7 @@
 
 -import(ered_nodered_comm, [
     node_status/5,
+    post_exception_or_debug/3,
     send_out_debug_msg/4,
     unsupported/3
 ]).
@@ -57,7 +58,9 @@
 ]).
 
 % erlfmt:ignore - alignment
-start(#{<<"out">> := <<"sit">>, <<"ret">> := <<"buffer">>} = NodeDef, WsName) ->
+start(
+  #{<<"out">> := <<"sit">>, <<"ret">> := RetType} = NodeDef, WsName
+) when RetType =:= <<"buffer">>; RetType =:= <<"string">> ->
     ered_node:start(NodeDef#{?SetWsName}, ?MODULE);
 %
 start(#{ <<"out">> := <<"char">> } = NodeDef, WsName) ->
@@ -89,7 +92,7 @@ start(NodeDef, WsName) ->
 handle_event(
   {registered, WsName, _MyPid},
   #{
-     <<"out">>    := <<"sit">>,
+     <<"out">> := <<"sit">>,
      ?GetPort,
      ?GetServer
    } = NodeDef
@@ -106,7 +109,7 @@ handle_event(
             NodeDef#{socket => Socket};
         {error, Reason} ->
             ?NodeStatus("not connected", "red", "ring"),
-            io:format("error happened ~p~n",[Reason]),
+            io:format("tcp_request: error happened connecting ~p~n",[Reason]),
             NodeDef
     end;
 
@@ -135,7 +138,8 @@ handle_event(
 
 handle_event(
   {tcpc_initiated, {SessionId, _Host, _Port}},
-  #{ ?GetWsName,
+  #{
+     ?GetWsName,
      ?GetBacklog,
      <<"splitc">> := TimeoutMS
    } = NodeDef
@@ -166,11 +170,32 @@ handle_event(
 
 handle_event(
   {tcpr_data, Socket, Data},
-  #{?GetWsName, socket := Socket} = NodeDef
+  #{?GetWsName,
+    socket := Socket,
+    <<"ret">> := <<"string">>
+   } = NodeDef
+) ->
+    {outgoing, Msg} = create_outgoing_msg(WsName),
+    send_msg_to_connected_nodes(NodeDef, Msg#{ <<"payload">> => binary_to_list(Data) }),
+    NodeDef;
+
+handle_event(
+  {tcpr_data, Socket, Data},
+  #{?GetWsName,
+    socket := Socket
+   } = NodeDef
 ) ->
     {outgoing, Msg} = create_outgoing_msg(WsName),
     send_msg_to_connected_nodes(NodeDef, Msg#{ <<"payload">> => Data }),
     NodeDef;
+
+
+handle_event(
+  {tcp_closed, Socket},
+  #{?GetWsName, socket := Socket} = NodeDef
+) ->
+    ?NodeStatus("disconnected", "grey", "ring"),
+    maps:remove(socket, NodeDef);
 
 handle_event(
   treq_disconnect,
@@ -201,8 +226,7 @@ handle_event(
 
 
 %% fall through
-handle_event(Event, NodeDef) ->
-    io:format("Unhandled event: ~p / ~p~n",[Event,NodeDef]),
+handle_event(_Event, NodeDef) ->
     NodeDef.
 
 %%
@@ -212,12 +236,40 @@ handle_msg(
     {incoming, #{?GetWsName, ?GetPayload} = Msg},
     #{
         <<"out">> := <<"sit">>,
-        <<"ret">> := <<"buffer">>,
         socket := Socket
     } = NodeDef
 ) ->
     gen_tcp:send(Socket, Payload),
     {handled, NodeDef, Msg};
+
+handle_msg(
+    {incoming, #{?GetWsName, ?GetPayload} = Msg},
+    #{
+      <<"out">> := <<"sit">>,
+      ?GetPort,
+      ?GetServer
+    } = NodeDef
+) ->
+    %% this is a tcp request node that holds the connection but that has
+    %% been disconnected from the server. It now receives a new message that
+    %% it's meant to send on. So it has to reconnect and send.
+    case
+        gen_tcp:connect(
+          binary_to_list(Server),
+          convert_to_num(Port),
+          [binary, {active, true}]
+         )
+    of
+        {ok, Socket} ->
+            ?NodeStatus("connected", "green", "dot"),
+            gen_tcp:send(Socket, Payload),
+            {handled, NodeDef#{socket => Socket}, Msg};
+        {error, Reason} ->
+            ?NodeStatus("not connected", "red", "ring"),
+            post_exception_or_debug(NodeDef, Msg, Reason),
+            {handled, NodeDef, Msg}
+    end;
+%
 handle_msg(
     {incoming, #{?GetWsName, ?GetPayload} = Msg},
     #{
