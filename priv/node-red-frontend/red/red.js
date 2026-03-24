@@ -10263,11 +10263,13 @@ RED.utils = (function() {
             } else if (format === 'dateML' || format == 'dateL') {
                 format = 'dec';
             } else if (format === "hex" ) {
-                format = 'bin';
+                format = 'ascii';
             } else if ( format === "dec" ) {
                 format = 'hex';
             } else if (format === "bin" ) {
                 format = 'oct';
+            } else if (format === "ascii" ) {
+                format = 'bin';
             } else {
                 format = "oct"
             }
@@ -10294,6 +10296,8 @@ RED.utils = (function() {
         } else if (format === 'hex' || format === "oct" || format == "bin") {
           let unary = { "hex": ['x',16], "oct": ['o',8], "bin": ['b',2] }[format];
           element.text((obj < 0 ? "-" : "") + "0" + unary[0]+(Math.abs(obj)).toString(unary[1]));
+        } else if (format === 'ascii' ){
+          element.text(obj < 0 ? "-" : `'${String.fromCharCode(obj)}'`)
         }
     }
 
