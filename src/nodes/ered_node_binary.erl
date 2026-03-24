@@ -37,6 +37,7 @@
 ]).
 
 -import(ered_messages, [
+    any_to_binary/1,
     get_prop/2
 ]).
 
@@ -51,12 +52,9 @@ start(#{<<"pattern">> := Pattern} = NodeDef, WsName) ->
     try
         case erl_packetparser:packetdef_to_erlang(binary_to_list(Pattern)) of
             {ok, ErlangCode} ->
-                send_out_debug_msg(
-                    NodeDef, #{?SetWsName}, ErlangCode, normal
-                ),
                 case erl_packetparser:evaluate_erlang(ErlangCode) of
                     {ok, Func} ->
-                        node_status(WsName, NodeDef, "ready", "green", "dot"),
+                        ?NodeStatus("ready", "green", "dot"),
                         spawn(fun() ->
                             clear_status_after_one_sec(WsName, NodeDef)
                         end),
@@ -65,27 +63,18 @@ start(#{<<"pattern">> := Pattern} = NodeDef, WsName) ->
                         post_exception_or_debug(
                             NodeDef, ?AddWsName(#{}), ErrMsg
                         ),
-                        node_status(
-                            WsName, NodeDef, "eval erlang error", "red", "dot"
-                        ),
+                        ?NodeStatus("eval erlang error", "red", "dot"),
                         ered_node:start(NodeDef, ered_node_ignore)
                 end;
             {error, ErrMsg} ->
                 post_exception_or_debug(NodeDef, ?AddWsName(#{}), ErrMsg),
-                node_status(WsName, NodeDef, "parser error", "red", "dot"),
+                ?NodeStatus("parser error", "red", "dot"),
                 ered_node:start(NodeDef, ered_node_ignore)
         end
     catch
         E:F:S ->
-            ErrMsg2 = jstr("Exception: ~p ~p", [E, F]),
-            post_exception_or_debug(
-                NodeDef,
-                ?AddWsName(#{
-                    <<"stacktrace">> => S
-                }),
-                ErrMsg2
-            ),
-            node_status(WsName, NodeDef, "exception", "red", "dot"),
+            ?PostExceptionOrDebug(E, F, S),
+            ?NodeStatus("exception", "red", "dot"),
             ered_node:start(NodeDef, ered_node_ignore)
     end.
 
@@ -102,13 +91,22 @@ handle_msg(
 ) ->
     case get_prop(PropName, Msg) of
         {ok, Value, _} ->
-            {ok, Hash, MatchedData, UnmatchedData} = Func(Value),
-            send_msg_to_connected_nodes(NodeDef, Msg#{
-                <<"original">> => Value,
-                <<"payload">> => Hash,
-                <<"matched">> => MatchedData,
-                <<"rest">> => UnmatchedData
-            }),
+            try
+                {ok, Hash, MatchedData, UnmatchedData} = Func(any_to_binary(Value)),
+                send_msg_to_connected_nodes(NodeDef, Msg#{
+                     <<"original">> => Value,
+                     <<"payload">> => Hash,
+                     <<"matched">> => MatchedData,
+                     <<"rest">> => UnmatchedData
+                 })
+            catch
+                _E:_F:_S ->
+                    %% A litte undecided what to do here, if the pattern
+                    %% didn't match, post up an exception, is it an exception?
+                    %% Not sure.
+                    %post_exception_or_debug(NodeDef, Msg#{error_details => F}, E)
+                    ignore_as_per_original_node
+            end,
             {handled, NodeDef, Msg};
         _ ->
             ErrMsg = jstr("property not found '~p'", [PropName]),

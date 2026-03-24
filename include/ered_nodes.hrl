@@ -42,6 +42,17 @@ end#{
 
 -define(AddParts(V), <<"parts">> => V).
 
+-define(PostExceptionOrDebug(E,F,S), begin
+    ErrMsg2 = jstr("Exception: ~p ~p", [E, F]),
+    post_exception_or_debug(
+        NodeDef,
+        ?AddWsName(#{
+            <<"stacktrace">> => S
+        }),
+        ErrMsg2
+    )
+end).
+
 -define(TopicFrom(Msg), begin
     ToBinary = fun
         (V) when is_list(V) -> list_to_binary(V);
