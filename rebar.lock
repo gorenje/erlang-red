@@ -31,7 +31,7 @@
   0},
  {<<"erlang_red_parsers">>,
   {git,"https://github.com/gorenje/erlang-red-type-parsers",
-       {ref,"b9d768a3cbca36c1bc1f516e633478393dd406ee"}},
+       {ref,"0f57c3aef8e8a60635ee57591e2615ddb351fcb8"}},
   0},
  {<<"erlexec">>,{pkg,<<"erlexec">>,<<"2.2.0">>},0},
  {<<"erlydtl">>,{pkg,<<"erlydtl">>,<<"0.14.0">>},0},
