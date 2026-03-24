@@ -10250,7 +10250,7 @@ RED.utils = (function() {
                 } else if ( /*(obj.toString().length===10) && */ (obj<=2147483647000)) {
                     format = 'dateS';
                 } else {
-                    format = 'hex'
+                    format = 'dec'
                 }
             } else if (format === 'dateMS' || format == 'dateS') {
                 if ((obj.toString().length===13) && (obj<=2147483647000)) {
@@ -10258,14 +10258,16 @@ RED.utils = (function() {
                 } else if (/*(obj.toString().length===10) && */ (obj<=2147483647000)) {
                     format = 'dateL';
                 } else {
-                    format = 'hex'
+                    format = 'dec'
                 }
             } else if (format === 'dateML' || format == 'dateL') {
-                format = 'hex';
-            } else if (format === "hex" ) {
                 format = 'dec';
-            } else if ( format === "dec" ) {
+            } else if (format === "hex" ) {
                 format = 'bin';
+            } else if ( format === "dec" ) {
+                format = 'hex';
+            } else if (format === "bin" ) {
+                format = 'oct';
             } else {
                 format = "oct"
             }
@@ -10504,7 +10506,7 @@ RED.utils = (function() {
                     if (!key) {
                         headerHead = $('<span class="red-ui-debug-msg-type-meta red-ui-debug-msg-object-type-header"></span>').text(typeHint||(type+'['+originalLength+']')).appendTo(header);
                     }
-                    if (type === 'buffer') {
+                    if (type === 'buffer' || type === 'array') {
                         var stringRow = $('<div class="red-ui-debug-msg-string-rows"></div>').appendTo(element);
                         var sr = $('<div class="red-ui-debug-msg-object-entry collapsed"></div>').appendTo(stringRow);
                         var stringEncoding = "";
