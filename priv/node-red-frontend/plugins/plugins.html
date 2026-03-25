@@ -2265,11 +2265,27 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
          let initState = FlowToMermaid.retrieveInitialState(obtainCurrentActiveFlow());
 
          let moduleName = `statem_def_${RED.nodes.id()}`
+         
+         let mermaidDiagram = FlowToMermaid.constructMermaid(obtainCurrentActiveFlow(), globalYourConfigNode.direction, RED)
+         let mermaidFlowData = "```mermaid\n" + mermaidDiagram + "\n```"
+         let flowSource = "```flows\n" + JSON.stringify(obtainCurrentActiveFlow()) + "\n```"
+
+         let descInfo = `## Statemachine
+
+Statemachine at the time of code generation:
+
+${mermaidFlowData}
+
+Flow source
+
+${flowSource}
+`
 
          let nde = {
             "id": RED.nodes.id(),
             "type": "erlmodule",
             "name": "",
+            "info": descInfo,
             "module_name": moduleName,
             "code": atob("LW1vZHVsZSglJSBNT0RVTEUgTkFNRSAlJSkuCgolJQolJSBDb2RlIGdlbmVyYXRlZCBieSBGbG93MlVNTCBOb2RlIEAgaHR0cHM6Ly9mbG93aHViLm9yZy9mbG93MnVtbAolJQoKJSUKJSUgIEFQSXM6IGh0dHBzOi8vd3d3LmVybGFuZy5vcmcvZG9jL2FwcHMvc3RkbGliL2dlbl9zdGF0ZW0uaHRtbAolJQoKLWJlaGF2aW91cihnZW5fc3RhdGVtKS4KCi1leHBvcnQoWwogICAgc3RhcnQvMCwKICAgIGluaXQvMSwKICAgIGNhbGxiYWNrX21vZGUvMCwKICAgIGhhbmRsZV9ldmVudC80LAogICAgY29kZV9jaGFuZ2UvNCwKICAgIHRlcm1pbmF0ZS8zLAogICAgc3RvcC8wCl0pLgoKJSUgV0FSTklORzogc3RhdGVfZnVuY3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IHN0YXRlbWFjaGluZSBub2RlLgolJSBjYWxsYmFja19tb2RlKCkgLT4gc3RhdGVfZnVuY3Rpb25zLgpjYWxsYmFja19tb2RlKCkgLT4gaGFuZGxlX2V2ZW50X2Z1bmN0aW9uLgoKLWRlZmluZShLRUVQX1NUQVRFKFJlcGx5V2l0aCksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YSwgW3tyZXBseSwgRnJvbSwgUmVwbHlXaXRofV19CikuCgpzdGFydCgpIC0+CiAgICBnZW5fc3RhdGVtOnN0YXJ0KHtsb2NhbCwgP01PRFVMRX0sID9NT0RVTEUsIFtdLCBbXSkuCgpzdG9wKCkgLT4KICAgIGdlbl9zdGF0ZW06c3RvcCg/TU9EVUxFKS4KdGVybWluYXRlKF9SZWFzb24sIF9TdGF0ZSwgX0RhdGEpIC0+CiAgICB2b2lkLgpjb2RlX2NoYW5nZShfVnNuLCBTdGF0ZSwgRGF0YSwgX0V4dHJhKSAtPgogICAge29rLCBTdGF0ZSwgRGF0YX0uCgolJSBJbml0aWFsIHN0YXRlIGFuZCBkYXRhCmluaXQoW10pIC0+CiAgICBTdGF0ZSA9ICUlJSBJTklUSUFMIFNUQVJUIFNUQVRFICUlJSwgCiAgICBEYXRhID0gMCwKICAgIHtvaywgU3RhdGUsIERhdGF9LgoKJSUlIGhhbmRsZSBldmVudCBmdW5jdGlvbgoKJSUlJSUlIFJFUExBQ0UgV0lUSCBDT0RFIEhFUkUgJSUlJSUKICAgICAgICAgICAgICAgICAgICAgICAgCiUlIEZhbGwgdGhyb3VnaApoYW5kbGVfZXZlbnQoCiAge2NhbGwsIEZyb219LAogIF9BY3Rpb24sCiAgX0N1cnJTdGF0ZSwKICBEYXRhCikgLT4KICAgID9LRUVQX1NUQVRFKGlnbm9yZWQpOwoKCiUlJSBBYnNvbHV0ZSBmYWxsIHRocm91Z2gKaGFuZGxlX2V2ZW50KEV2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhKSAtPgogICAgaW86Zm9ybWF0KCJURVNUIDogfnAgfnAgfnAgfnB+biIsW0V2ZW50VHlwZSwgU3RpZmYsIFN0YXRlLCBEYXRhXSksCiAgICB7a2VlcF9zdGF0ZSwgRGF0YX0uCg==").replace("%%%%%% REPLACE WITH CODE HERE %%%%%", statemDef).replace("%% MODULE NAME %%", moduleName).replace("%%% INITIAL START STATE %%%",initState),
             "wires": []
@@ -2282,8 +2298,8 @@ $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) 
             nde.fieldType = "msg"
             nde.syntax    = "plain"
             nde.template  = nde.code
-            nde.output    =  "str"
-            
+            nde.output    = "str"
+            nde.info      = descInfo
             delete nde.code
             delete nde.module_name
          }

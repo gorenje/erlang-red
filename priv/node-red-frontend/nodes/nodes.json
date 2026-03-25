@@ -682,7 +682,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.4.2"
+        "version": "0.4.3"
     },
     {
         "enabled": true,
@@ -694,7 +694,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.4.2"
+        "version": "0.4.3"
     },
     {
         "enabled": true,
@@ -706,7 +706,7 @@
             "mermaid-state-start"
         ],
         "user": false,
-        "version": "0.4.2"
+        "version": "0.4.3"
     },
     {
         "enabled": true,
@@ -718,7 +718,7 @@
             "mermaid-state-state"
         ],
         "user": false,
-        "version": "0.4.2"
+        "version": "0.4.3"
     },
     {
         "enabled": true,
@@ -730,7 +730,7 @@
             "mermaid-state-end"
         ],
         "user": false,
-        "version": "0.4.2"
+        "version": "0.4.3"
     },
     {
         "enabled": true,
