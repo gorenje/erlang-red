@@ -583,6 +583,15 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             nodeSelector: config.messageSourceClick,
             enablePinning: true
         });
+
+        let perhapsLength = (objd) => {
+            let obj = objd.msg;
+            if ( obj && obj.hasOwnProperty("length") && typeof obj.length != "function") {
+                return `[${obj.length}]`
+            }
+            return ""
+        }
+
         // Do this in a separate step so the element functions aren't stripped
         debugMessage.appendTo(el);
         // NOTE: relying on function error to have a "type" that all other msgs don't
@@ -605,7 +614,7 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             });
             $('<span class="red-ui-debug-msg-topic">'+
                 (o.topic?topic+' : ':'')+
-                (o.property?'msg.'+property:'msg')+" : "+format+
+                (o.property?'msg.'+property:'msg')+" : "+format+perhapsLength(o)+
                 '</span>').appendTo(metaRow);
         }
 
