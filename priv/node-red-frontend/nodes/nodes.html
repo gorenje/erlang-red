@@ -13632,6 +13632,9 @@ Modules are installed in the Eshell that, for example, the docker image drops in
 
       emit_on_state_change: {
         value: false
+      },
+      asynchronous_messages: {
+        value: false
       }
     },
 
@@ -13782,6 +13785,11 @@ Modules are installed in the Eshell that, for example, the docker image drops in
                 style="display:inline-block; width:15px; vertical-align:baseline;">
         <label for="node-input-emit_on_state_change"><span data-i18n="erlstatemachine.label.emit-on-state-change"></span></label>
       </div>
+      <div class="form-row">
+        <input type="checkbox" id="node-input-asynchronous_messages"
+                      style="display:inline-block; width:15px; vertical-align:baseline;">
+        <label for="node-input-asynchronous_messages"><span data-i18n="erlstatemachine.label.async-messages"></span></label>
+      </div>
     </div>
 
     <div id="erlstatemachine-tab-handler-config" style="display:none">
@@ -13820,6 +13828,12 @@ To use a state machine node, a module node needs to be implemented.
 The module node MUST implement the state machine behaviour: `-behaviour(gen_statem)` is required. The module module defines a boilerplate template code for the state machine behaviour, start there if unsure.
 
 State machine node does not restart failed process, it remains the responsibility of the user to use supervisor nodes to restart failing nodes.
+
+**Asynchronous Messages**
+
+By default the `gen_statem:call/2` is used to send messages to statemachines. However if these do not reply using `{reply, From, ...}`, then this call waits indefinitely. All `handle_event/4` calls therefore **must** generate a reply.
+
+If this is undesired, the use "Asynchronous messaging" instead. Setting found in the options tabs of the respective node.
 
 ### References
 

@@ -110,6 +110,7 @@
     "@gregoriusrippenstein/erlang-red-supervisor-node/erlstatemachine": {
         "erlstatemachine": {
             "label": {
+                "async-messages": "(Async) Use `gen_statem:cast/2` to send message to state machine",
                 "emit-on-state-change": "Only emit output message on state change",
                 "statusset": "Status Set",
                 "tab": {
