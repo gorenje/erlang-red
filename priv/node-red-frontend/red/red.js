@@ -10241,16 +10241,27 @@ RED.utils = (function() {
         return false;
     }
 
-    function formatNumber(element,obj,sourceId,path,cycle,initialFormat) {
+    function formatNumber(element, obj, sourceId, path, cycle, initialFormat, event) {
+        let isMetaKeyPressed = event && event.metaKey;
+        let isShiftKeyPressed = event && event.shiftKey;
+
         var format = (formattedPaths[sourceId] && formattedPaths[sourceId][path] && formattedPaths[sourceId][path]['number']) || initialFormat || "dec";
         if (cycle) {
+             // here we cycle through
+             //     - dec ==> hex ==> ascii (if neither shift nor meta are pressed)
+             //     - dec ==> hex ==> ascii ==> bin ==> oct (if shift key is pressed)
+             //     - dec ==> hex ==> ascii ==> dateS ==> dateMS (if meta key are pressed)
             if (format === 'oct') {
-                if ( (obj.toString().length>=13) && (obj<=2147483647000) ) {
-                    format = 'dateMS';
-                } else if ( /*(obj.toString().length===10) && */ (obj<=2147483647000)) {
-                    format = 'dateS';
+                if ( !isMetaKeyPressed ) {
+                   format = 'dec'
                 } else {
-                    format = 'dec'
+                   if ( (obj.toString().length>=13) && (obj<=2147483647000) ) {
+                       format = 'dateMS';
+                   } else if ( /*(obj.toString().length===10) && */  (obj<=2147483647000)) {
+                       format = 'dateS';
+                   } else {
+                       format = 'dec'
+                   }
                 }
             } else if (format === 'dateMS' || format == 'dateS') {
                 if ((obj.toString().length===13) && (obj<=2147483647000)) {
@@ -10269,9 +10280,9 @@ RED.utils = (function() {
             } else if (format === "bin" ) {
                 format = 'oct';
             } else if (format === "ascii" ) {
-                format = 'bin';
+                format = isShiftKeyPressed ? 'bin' : (isMetaKeyPressed ? 'dateS' : 'dec');
             } else {
-                format = "oct"
+                format = "dec"
             }
             formattedPaths[sourceId] = formattedPaths[sourceId]||{};
             formattedPaths[sourceId][path] = formattedPaths[sourceId][path]||{};
@@ -10281,6 +10292,7 @@ RED.utils = (function() {
             formattedPaths[sourceId][path] = formattedPaths[sourceId][path]||{};
             formattedPaths[sourceId][path]['number'] = format;
         }
+
         if (format === 'dec') {
             element.text(""+obj);
         } else if (format === 'dateMS') {
@@ -10448,10 +10460,10 @@ RED.utils = (function() {
                 e.addClass("red-ui-debug-msg-type-number-toggle");
                 e.on("click", function(evt) {
                     evt.preventDefault();
-                    formatNumber($(this), obj, sourceId, path, true);
+                    formatNumber($(this), obj, sourceId, path, true, undefined, evt);
                 });
             }
-            formatNumber(e,obj,sourceId,path,false,typeHint==='hex'?'hex':undefined);
+            formatNumber(e, obj, sourceId, path, false, typeHint==='hex'?'hex':undefined, undefined);
 
         } else if (isArray) {
             element.addClass('collapsed');
