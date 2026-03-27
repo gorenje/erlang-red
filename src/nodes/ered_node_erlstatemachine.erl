@@ -86,18 +86,13 @@ start(
 %% changed, so we can set the function to handle message sending as start
 %% time, this won't change during runtime.
 %%
-
-start(#{<<"emit_on_state_change">> := true} = NodeDef, WsName) ->
-    ered_node:start(
-        NodeDef#{
-            '_func_send_msg' => fun send_message_on_state_change/6,
-            ?SetWsName
-        },
-        ?MODULE
-    );
 start(NodeDef, WsName) ->
     ered_node:start(
-        NodeDef#{'_func_send_msg' => fun always_send_message/6, ?SetWsName},
+        NodeDef#{
+            '_func_send_msg' => get_send_msg_func(NodeDef),
+            '_statem_call' => get_statem_call(NodeDef),
+            ?SetWsName
+        },
         ?MODULE
     ).
 
@@ -131,18 +126,12 @@ handle_event(
                 _ ->
                     case gen_statem:start_monitor(ModuleName, [], []) of
                         {ok, {Pid, _Ref}} ->
-                            node_status(
-                                WsName,
-                                NodeDef,
-                                element(1, sys:get_state(Pid)),
-                                "blue",
-                                "dot"
+                            ?NodeStatus(
+                                element(1, sys:get_state(Pid)), "blue", "dot"
                             ),
                             %% capture i/o requests for process if required.
                             ered_capture_io_exchange:pid_for(
-                                NodeId,
-                                Pid,
-                                WsName
+                                NodeId, Pid, WsName
                             ),
                             maps:put('_statem_pid', Pid, NodeDef);
                         {error, ErrMsg} ->
@@ -211,11 +200,12 @@ handle_msg(
         } = Msg},
     #{
         '_statem_pid' := Pid,
-        '_func_send_msg' := SendMsgFunc
+        '_func_send_msg' := SendMsgFunc,
+        '_statem_call' := StatemCallFunc
     } = NodeDef
 ) ->
-    {PrevState, Result, CurrState} = statem_call(Pid, {Action, Payload}),
-    node_status(WsName, NodeDef, CurrState, "blue", "dot"),
+    {PrevState, Result, CurrState} = StatemCallFunc(Pid, {Action, Payload}),
+    ?NodeStatus(CurrState, "blue", "dot"),
     SendMsgFunc(NodeDef, Msg, Result, Action, CurrState, PrevState);
 %% incoming message with only Action defined, and the state machine process
 %% is up and runnning
@@ -227,11 +217,12 @@ handle_msg(
         } = Msg},
     #{
         '_statem_pid' := Pid,
-        '_func_send_msg' := SendMsgFunc
+        '_func_send_msg' := SendMsgFunc,
+        '_statem_call' := StatemCallFunc
     } = NodeDef
 ) ->
-    {PrevState, Result, CurrState} = statem_call(Pid, Action),
-    node_status(WsName, NodeDef, CurrState, "blue", "dot"),
+    {PrevState, Result, CurrState} = StatemCallFunc(Pid, Action),
+    ?NodeStatus(CurrState, "blue", "dot"),
     SendMsgFunc(NodeDef, Msg, Result, Action, CurrState, PrevState);
 %% Error situaion, no action defined for a statemachine that is running - this
 %% shouldn't happen.
@@ -328,3 +319,21 @@ statem_call(Pid, CallPayload) ->
         gen_statem:call(Pid, CallPayload),
         element(1, sys:get_state(Pid))
     }.
+
+statem_call_async(Pid, CallPayload) ->
+    {
+        element(1, sys:get_state(Pid)),
+        gen_statem:cast(Pid, CallPayload),
+        element(1, sys:get_state(Pid))
+    }.
+
+% get the functions for handling node specific configurations.
+
+get_statem_call(#{<<"asynchronous_messages">> := true}) ->
+    fun statem_call_async/2;
+get_statem_call(_) ->
+    fun statem_call/2.
+get_send_msg_func(#{<<"emit_on_state_change">> := true}) ->
+    fun send_message_on_state_change/6;
+get_send_msg_func(_) ->
+    fun always_send_message/6.
