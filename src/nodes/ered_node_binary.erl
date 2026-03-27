@@ -17,6 +17,7 @@
 %%     "z": "8f1ed58b183fe5d3",
 %%     "name": "array collection",
 %%     "property": "payload",
+%%     "raise_exception_on_mismatch": false,
 %%     "pattern": "x8, \nb8[3] => value,\nb16{b4 => f1,b12 => f2},\nb16{b6 => f3,b10 => f4}",
 %%     "x": 760,
 %%     "y": 737.25,
@@ -54,6 +55,7 @@ start(#{<<"pattern">> := Pattern} = NodeDef, WsName) ->
             {ok, ErlangCode} ->
                 case erl_packetparser:evaluate_erlang(ErlangCode) of
                     {ok, Func} ->
+                        %% io:format("Binary code: ~p~n", [ErlangCode]),
                         ?NodeStatus("ready", "green", "dot"),
                         spawn(fun() ->
                             clear_status_after_one_sec(WsName, NodeDef)
@@ -87,25 +89,37 @@ handle_event(_, NodeDef) ->
 %%
 handle_msg(
     {incoming, Msg},
-    #{<<"property">> := PropName, '_func' := Func} = NodeDef
+    #{
+        '_func' := Func,
+        <<"property">> := PropName
+    } = NodeDef
 ) ->
     case get_prop(PropName, Msg) of
         {ok, Value, _} ->
             try
-                {ok, Hash, MatchedData, UnmatchedData} = Func(any_to_binary(Value)),
+                {ok, Hash, MatchedData, UnmatchedData} = Func(
+                    any_to_binary(Value)
+                ),
                 send_msg_to_connected_nodes(NodeDef, Msg#{
-                     <<"original">> => Value,
-                     <<"payload">> => Hash,
-                     <<"matched">> => MatchedData,
-                     <<"rest">> => UnmatchedData
-                 })
+                    <<"original">> => Value,
+                    <<"payload">> => Hash,
+                    <<"matched">> => MatchedData,
+                    <<"rest">> => UnmatchedData
+                })
             catch
-                _E:_F:_S ->
-                    %% A litte undecided what to do here, if the pattern
-                    %% didn't match, post up an exception, is it an exception?
-                    %% Not sure.
-                    %post_exception_or_debug(NodeDef, Msg#{error_details => F}, E)
-                    ignore_as_per_original_node
+                E:F:_S ->
+                    case
+                        maps:get(
+                            <<"raise_exception_on_mismatch">>, NodeDef, false
+                        )
+                    of
+                        true ->
+                            post_exception_or_debug(
+                                NodeDef, Msg#{error_details => F}, E
+                            );
+                        _ ->
+                            ignore
+                    end
             end,
             {handled, NodeDef, Msg};
         _ ->
