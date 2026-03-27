@@ -42,7 +42,7 @@ end#{
 
 -define(AddParts(V), <<"parts">> => V).
 
--define(PostExceptionOrDebug(E,F,S), begin
+-define(PostExceptionOrDebug(E, F, S), begin
     ErrMsg2 = jstr("Exception: ~p ~p", [E, F]),
     post_exception_or_debug(
         NodeDef,

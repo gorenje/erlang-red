@@ -241,13 +241,12 @@ handle_msg(
 ) ->
     gen_tcp:send(Socket, Payload),
     {handled, NodeDef, Msg};
-
 handle_msg(
     {incoming, #{?GetWsName, ?GetPayload} = Msg},
     #{
-      <<"out">> := <<"sit">>,
-      ?GetPort,
-      ?GetServer
+        <<"out">> := <<"sit">>,
+        ?GetPort,
+        ?GetServer
     } = NodeDef
 ) ->
     %% this is a tcp request node that holds the connection but that has
@@ -255,10 +254,10 @@ handle_msg(
     %% it's meant to send on. So it has to reconnect and send.
     case
         gen_tcp:connect(
-          binary_to_list(Server),
-          convert_to_num(Port),
-          [binary, {active, true}]
-         )
+            binary_to_list(Server),
+            convert_to_num(Port),
+            [binary, {active, true}]
+        )
     of
         {ok, Socket} ->
             ?NodeStatus("connected", "green", "dot"),

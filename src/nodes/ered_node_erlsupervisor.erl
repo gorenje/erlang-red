@@ -63,7 +63,7 @@
 %%
 %%
 start(NodeDef, WsName) ->
-    node_status(WsName, NodeDef, "starting", "green", "ring"),
+    ?NodeStatus("starting", "green", "ring"),
     ered_node:start(?AddWsName(NodeDef), ?MODULE).
 
 %% erlfmt:ignore alignment
