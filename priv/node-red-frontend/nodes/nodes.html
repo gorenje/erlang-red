@@ -12594,6 +12594,142 @@ msg.cookies = {
   <p>Definition of ered-kafka-consumer</p>
   <p>Usage details can be found under https://github.com/asinino/node-red-kafkajs/blob/README.md</p>
 </script>
+<!-- --- [red-module:@gorenje/node-red-contrib-binary/binary] --- -->
+<script type="text/html" data-template-name="binary">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    
+    <div class="form-row">
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
+        <input type="text" id="node-input-property" style="width:70%;"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-raise_exception_on_mismatch"><i class="fa fa-bug"></i> Exception</label>
+        <input type="checkbox" style="width: 5%" id="node-input-raise_exception_on_mismatch"/>
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-pattern"><i class="fa fa-exchange"></i> Pattern</label>
+        <textarea id="node-input-pattern" rows="18" cols="40" autofocus style="vertical-align:top; width:75%; resize:none"></textarea>
+    </div>
+
+    <div class="form-row">
+        <label></label>
+        <button id="binary-button-generate-function">Generate Function</button>
+    </div>
+
+    <div class="form-row hide" id="node-input-binary-erlang-row">
+        <label></label>
+        <textarea id="node-input-binary-erlang" rows="18" cols="40" autofocus style="vertical-align:top; width:75%; resize:none"></textarea>
+    </div>
+</script>
+
+
+
+<script type="text/javascript">
+    RED.nodes.registerType("binary", {
+        category: "parser",
+        color: "#DEBD5C",
+        defaults: {
+            name: { value:"" },
+            property: { value:"payload",required:true },
+            pattern: {
+                value: "",
+                required: true,
+                validate:RED.validators.regex(/^(-?)([xbl])(\d+)([fa]?)(.*)$/m)
+            },
+            raise_exception_on_mismatch: {
+                value:false
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "parser-binary.png",
+        label: function() {
+            return this.name || "binary";
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        },
+        inputLabels: function() {
+            return `msg.${this.property}`;
+        },
+        oneditprepare: function() {
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+
+            $("#node-input-property").typedInput({default:'msg',types:['msg']});
+
+            $("#binary-button-generate-function").on('click', (e) => {
+                e.preventDefault();
+
+                let data = { pattern: $('#node-input-pattern').val() }
+                $("#node-input-binary-erlang-row").fadeOut(200)
+
+                $.ajax({
+                    url: "BinaryToErlang",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    success: function (resp, data) { 
+                        $("#node-input-binary-erlang").val(resp.binary)
+                        $("#node-input-binary-erlang-row").fadeIn(200)
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) { console.log(textStatus) }
+                });
+            })
+        }
+    });
+</script>
+<script type="text/html" data-help-name="binary">
+    <p>A parser that takes the <code>msg.payload</code> and converts it to/from binary data. <b>Pattern</b> specifies the binary format.</p>
+    <p>If the input is a buffer it tries to parse it and creates a javascript object.</p>
+    <p>If the input is a javascript object it tries to serialize it and creates a buffer.</p>
+    <p>The pattern language is defined by the underlying <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">packet</a> library.</p>
+    <h3>Quick ref</h3>
+    <ul>
+        <li>b16 - big endian integer 16 bits (2 bytes)</li>
+        <li>l32 - little endian integer 32 bits (4 bytes)</li>
+        <li>x16 - ignore next 16 bits (2 bytes)</li>
+        <li>-b8 - signed integer 8 bits (1 byte)</li>
+        <li>b64f - big endian double float - IEEE 754</li>
+        <li>l32f - little endian single float</li>
+
+        <li>l128a - 128 bits (16 byte array)</li>
+        <li>b8z - zero (0x00) terminated byte array</li>
+        <li>b16{b3,x6,-b7} - 16 bits, structured as 3 bits, ignore 6, signed 7 bit int</li>
+    </ul>
+    See the <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">ref doc</a> for more patterns.
+
+    <h3>Exception</h3>
+
+    <p>Raise an exceptoin is a msg does not match. Normally this is silently ignored. Sometimes it can be useful to be informed if something does not match the pattern specified.</p>
+
+    <h3>Example</h3>
+    <p>The pattern is setup as a comma separated set of fields, the binary side first and the json field name second.</p>
+    <p><code>x8,  b8 => len,  l24a => id,  b8[4] => tag,  b8 => status,  b16 => volt,  b16 => temp,  b8 => hum,  b8 => crc,  x8</code></p>
+    <p>This would create an object like:</p>
+    <pre>{
+    len: 13,
+    id: [0x12,0x34,0x56],
+    tag: [0xde,0xad,0xbe,0xef]],
+    status: 0,
+    volt: 3600,
+    temp: 236,
+    hum: 79,
+    crc: 114
+}</pre>
+    <p>from a buffer like <code>7e0d123456deadbeef000e1000ec4f7203</code></p>
+    <p>You can also add the <code>str</code> transform to convert to and from strings, for example:</p>
+    <pre>b8[4]|str("ascii")</pre>
+    <p>will convert the 4 bytes into 4 ascii characters.</p>
+    <p><b>Note</b>: the pattern does not cope well with extraneous spaces.
+</script>
 <!-- --- [red-module:@gorenje/node-red-contrib-flowcompare/flowcompare] --- -->
 <script type="text/javascript">
 (function ($) {
@@ -17787,96 +17923,6 @@ Functionality:
     <li>This node relies heavily on the <a href="http://www.squaremobius.net/amqp.node/" target="_blank">amqplib</a> library.
     <li>View the github repo: <a href="" target="_blank"></a>
   </ul>
-</script>
-<!-- --- [red-module:node-red-contrib-binary/binary] --- -->
-<script type="text/html" data-template-name="binary">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:70%;"/>
-    </div>
-    <div class="form-row">
-        <label for="node-input-pattern"><i class="fa fa-exchange"></i> Pattern</label>
-        <textarea id="node-input-pattern" rows="18" cols="40" autofocus style="vertical-align:top; width:75%; resize:none">
-    </div>
-</script>
-
-
-
-<script type="text/javascript">
-    RED.nodes.registerType("binary", {
-        category: "parser",
-        color: "#DEBD5C",
-        defaults: {
-            name: { value:"" },
-            property: { value:"payload",required:true },
-            pattern: {
-                value: "",
-                required: true,
-                validate:RED.validators.regex(/^(-?)([xbl])(\d+)([fa]?)(.*)$/m)
-            }
-        },
-        inputs: 1,
-        outputs: 1,
-        icon: "parser-binary.png",
-        label: function() {
-            return this.name || "binary";
-        },
-        labelStyle: function() {
-            return this.name ? "node_label_italic" : "";
-        },
-        inputLabels: function() {
-            return `msg.${this.property}`;
-        },
-        oneditprepare: function() {
-            if (this.property === undefined) {
-                $("#node-input-property").val("payload");
-            }
-            $("#node-input-property").typedInput({default:'msg',types:['msg']});
-        }
-    });
-</script>
-<script type="text/html" data-help-name="binary">
-    <p>A parser that takes the <code>msg.payload</code> and converts it to/from binary data. <b>Pattern</b> specifies the binary format.</p>
-    <p>If the input is a buffer it tries to parse it and creates a javascript object.</p>
-    <p>If the input is a javascript object it tries to serialize it and creates a buffer.</p>
-    <p>The pattern language is defined by the underlying <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">packet</a> library.</p>
-    <h3>Quick ref</h3>
-    <ul>
-        <li>b16 - big endian integer 16 bits (2 bytes)</li>
-        <li>l32 - little endian integer 32 bits (4 bytes)</li>
-        <li>x16 - ignore next 16 bits (2 bytes)</li>
-        <li>-b8 - signed integer 8 bits (1 byte)</li>
-        <li>b64f - big endian double float - IEEE 754</li>
-        <li>l32f - little endian single float</li>
-
-        <li>l128a - 128 bits (16 byte array)</li>
-        <li>b8z - zero (0x00) terminated byte array</li>
-        <li>b16{b3,x6,-b7} - 16 bits, structured as 3 bits, ignore 6, signed 7 bit int</li>
-    </ul>
-    See the <a href="https://github.com/bigeasy/packet#binary-pattern-fields" target="_new">ref doc</a> for more patterns.
-    <h3>Example</h3>
-    <p>The pattern is setup as a comma separated set of fields, the binary side first and the json field name second.</p>
-    <p><code>x8,  b8 => len,  l24a => id,  b8[4] => tag,  b8 => status,  b16 => volt,  b16 => temp,  b8 => hum,  b8 => crc,  x8</code></p>
-    <p>This would create an object like:</p>
-    <pre>{
-    len: 13,
-    id: [0x12,0x34,0x56],
-    tag: [0xde,0xad,0xbe,0xef]],
-    status: 0,
-    volt: 3600,
-    temp: 236,
-    hum: 79,
-    crc: 114
-}</pre>
-    <p>from a buffer like <code>7e0d123456deadbeef000e1000ec4f7203</code></p>
-    <p>You can also add the <code>str</code> transform to convert to and from strings, for example:</p>
-    <pre>b8[4]|str("ascii")</pre>
-    <p>will convert the 4 bytes into 4 ascii characters.</p>
-    <p><b>Note</b>: the pattern does not cope well with extraneous spaces.
 </script>
 <!-- --- [red-module:node-red-contrib-i2c/i2c] --- -->
 

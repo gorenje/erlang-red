@@ -3,6 +3,7 @@
     "@gorenje/erlang-red-kafka-brod/ered-kafka-broker": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-consumer": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-producer": {},
+    "@gorenje/node-red-contrib-binary/binary": {},
     "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlconfig": {},
@@ -36,7 +37,6 @@
     "@greyorange/node-red-contrib-amqp/amqp-in": {},
     "@greyorange/node-red-contrib-amqp/amqp-in-manual-ack": {},
     "@greyorange/node-red-contrib-amqp/amqp-out": {},
-    "node-red-contrib-binary/binary": {},
     "node-red-contrib-i2c/i2c": {},
     "node-red-node-markdown/markdown": {}
 }

@@ -3,6 +3,9 @@
     "@gorenje/erlang-red-kafka-brod": [
         "Kafka.svg"
     ],
+    "@gorenje/node-red-contrib-binary": [
+        "parser-binary.png"
+    ],
     "@gorenje/node-red-contrib-flowcompare": [],
     "@gregoriusrippenstein/erlang-red-process-nodes": [],
     "@gregoriusrippenstein/erlang-red-supervisor-node": [
@@ -74,9 +77,6 @@
         "trigger.svg",
         "watch.svg",
         "white-globe.svg"
-    ],
-    "node-red-contrib-binary": [
-        "parser-binary.png"
     ],
     "node-red-contrib-i2c": [],
     "node-red-node-markdown": [

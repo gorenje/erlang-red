@@ -682,7 +682,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -694,7 +694,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -706,7 +706,7 @@
             "mermaid-state-start"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -718,7 +718,7 @@
             "mermaid-state-state"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -730,7 +730,7 @@
             "mermaid-state-end"
         ],
         "user": false,
-        "version": "0.4.3"
+        "version": "0.4.4"
     },
     {
         "enabled": true,
@@ -890,18 +890,6 @@
     },
     {
         "enabled": true,
-        "id": "node-red-contrib-binary/binary",
-        "local": true,
-        "module": "node-red-contrib-binary",
-        "name": "binary",
-        "types": [
-            "binary"
-        ],
-        "user": false,
-        "version": "0.1.3"
-    },
-    {
-        "enabled": true,
         "id": "node-red-contrib-i2c/i2c",
         "local": true,
         "module": "node-red-contrib-i2c",
@@ -937,5 +925,17 @@
         ],
         "user": false,
         "version": "0.4.1"
+    },
+    {
+        "enabled": true,
+        "id": "@gorenje/node-red-contrib-binary/binary",
+        "local": true,
+        "module": "@gorenje/node-red-contrib-binary",
+        "name": "binary",
+        "types": [
+            "binary"
+        ],
+        "user": false,
+        "version": "0.1.4"
     }
 ]
