@@ -181,6 +181,9 @@ flow_editor_routes() ->
         %% POST handlers
         %%
 
+        %% Binary node backend for converting patterns
+        {"/BinaryToErlang", ered_http_binary_node, []},
+
         %% ClientCode node backend
         {"/ClientCode/:nodeid", ered_http_clientcode_node, []},
         {"/ClientCode/:nodeid/:task", ered_http_clientcode_node, []},
