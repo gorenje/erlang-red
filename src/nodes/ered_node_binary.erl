@@ -86,7 +86,7 @@ handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
-%%
+%% erlfmt:ignore - alignment
 handle_msg(
     {incoming, Msg},
     #{
@@ -102,9 +102,9 @@ handle_msg(
                 ),
                 send_msg_to_connected_nodes(NodeDef, Msg#{
                     <<"original">> => Value,
-                    <<"payload">> => Hash,
-                    <<"matched">> => MatchedData,
-                    <<"rest">> => UnmatchedData
+                    <<"payload">>  => stack_payload(PropName, Hash, Msg),
+                    <<"matched">>  => MatchedData,
+                    <<"rest">>     => binary_to_list(UnmatchedData)
                 })
             catch
                 E:F:_S ->
@@ -135,3 +135,20 @@ handle_msg(_, NodeDef) ->
 clear_status_after_one_sec(WsName, NodeDef) ->
     timer:sleep(1000),
     node_status_clear(WsName, NodeDef).
+
+%% stack up the payloads. Even this is a chain of binary nodes,
+%% then each is parsing a part of the stream.
+stack_payload(
+    <<"rest">>,
+    Hash,
+    #{<<"payload">> := ExistingPayload}
+) when is_list(ExistingPayload) ->
+    [Hash | ExistingPayload];
+stack_payload(
+    <<"rest">>,
+    Hash,
+    #{<<"payload">> := ExistingPayload}
+) when is_map(ExistingPayload) ->
+    [Hash, ExistingPayload];
+stack_payload(_, Hash, _) ->
+    Hash.
