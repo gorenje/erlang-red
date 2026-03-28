@@ -15996,6 +15996,7 @@ RED.stack = (function() {
         { value: "responseTopic", source: ["mqtt"] },
         { value: "responseUrl", source: ["http request"] },
         { value: "restartTimeout", source: ["join"] },
+        { value: "rest", source: ["binary"] },
         { value: "retain", source: ["mqtt"] },
         { value: "schema", source: ["json"] },
         { value: "select", source: ["html"] },
