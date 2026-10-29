@@ -87,6 +87,18 @@ For that walkthrough, I created a collection of [flows](https://github.com/goren
 
 VDA5050 is a protocol for controlling Automated Guided Vehicles by a central “brain”. The basis of the communication between the two is MQTT. That makes the VDA5050 specification a perfect chance to combine Erlang-Red and Node-RED to implement a holistic system. I created a [set of screencasts](https://github.com/gorenje/vda5050_erlang_red) presenting how to do this.
 
+Funding
+---
+
+This project is funded through [NGI0 Commons Fund](https://nlnet.nl/commonsfund), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/Erlang-RED).
+
+[<img src="https://nlnet.nl/logo/banner.png" alt="NLnet foundation logo" width="20%" />](https://nlnet.nl)
+[<img src="https://nlnet.nl/image/logos/NGI0_tag.svg" alt="NGI Zero Logo" width="20%" />](https://nlnet.nl/commonsfund)
+
+
+[<img src="https://erlef.org/images/eef-header-logo.svg" alt="NGI Zero Logo" width="18%" />](https://erlef.org/)
+
+
 Embedding
 ---
 
@@ -352,7 +364,8 @@ Also for more details, there was also a discussion on [Hacker News](https://news
 Sponsors
 ---
 
-This work is sponsored in part by the [EEF](https://erlef.org).
+This work is sponsored by the [EEF](https://erlef.org) and [NGI0 Commons Fund](https://nlnet.nl/commonsfund).
+
 
 Acknowledgement
 ---
