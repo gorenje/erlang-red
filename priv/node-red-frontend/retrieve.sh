@@ -26,6 +26,12 @@ NODERED_URL=http://localhost:1890/cfg
 echo "Edit retrieve.sh before use"
 exit
 
+### Not ideal to run this when the template Node-RED server ISN'T running.
+if ! curl ${NODERED_URL} >/dev/null 2>&1; then
+    echo "ERROR: Template editor has not been started, doing nothing"
+    exit
+fi
+
 CBSTMP=$(date +%s)
 PyTHON=/usr/bin/python3
 
@@ -46,6 +52,7 @@ for fle in vendor/jquery/css/base/jquery-ui.min.css \
            vendor/monaco/style.css \
            vendor/monaco/dist/editor.js \
            vendor/monaco/dist/8f3abbcbc983396e1f13.ttf \
+           vendor/monaco/dist/4c354c82c52ca6cc2543.ttf \
            vendor/monaco/dist/editor.worker.js \
            vendor/monaco/dist/ts.worker.js \
            vendor/monaco/dist/html.worker.js \
@@ -69,10 +76,13 @@ for fle in vendor/jquery/css/base/jquery-ui.min.css \
            red/images/deploy-nodes.svg \
            red/images/deploy-nodes-o.svg \
            red/images/deploy-reload.svg \
+           red/images/explorer.svg \
            red/images/grip.svg \
            red/images/grip-horizontal.svg \
            red/images/node-red.svg \
            red/images/node-red-icon-black.svg \
+           red/images/sidebar-left-o.svg \
+           red/images/sidebar-left.svg \
            red/images/spin.svg \
            red/images/subflow_tab.svg \
            red/images/typedInput/az.svg \
@@ -89,13 +99,14 @@ for fle in vendor/jquery/css/base/jquery-ui.min.css \
            types/node/buffer.d.ts \
            types/node/timers.d.ts \
            types/node/util.d.ts \
+           types/node/url.d.ts \
           ; do
     mkdir -p $(dirname $fle)
     curl -s "${NODERED_URL}/${fle}?v=${CBSTMP}" > ${fle}
 done
 
 ##
-## these two should only be retrieved once since they will be altered
+## these two should only be retrieved once since these files will be altered
 ##
 #curl -s "${NODERED_URL}/?_=${CBSTMP}" -H 'Accept: application/html' -o index.html
 #curl -s "${NODERED_URL}/red/red.js?_=${CBSTMP}" -o red/red.js
