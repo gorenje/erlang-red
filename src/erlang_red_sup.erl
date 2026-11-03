@@ -122,6 +122,20 @@ init([]) ->
                     restart => permanent,
                     type => worker,
                     module => [ered_webserver]
+                },
+                #{
+                    id => ered_ch15_flowhub_async,
+                    start => {ered_flowhub_async, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_flowhub_async]
+                },
+                #{
+                    id => ered_ch16_user_settings_store,
+                    start => {ered_user_settings_store, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_user_settings_store]
                 }
             ]
         }}.

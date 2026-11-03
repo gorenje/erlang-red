@@ -185,7 +185,7 @@ timestamp() ->
     erlang:system_time(millisecond).
 
 %%
-%% Decode a json string just like we like it, with atoms as keys
+%%
 decode_json(Val) when is_list(Val) ->
     decode_json(list_to_binary(Val));
 decode_json(Val) ->

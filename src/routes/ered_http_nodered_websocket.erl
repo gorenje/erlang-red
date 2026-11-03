@@ -279,6 +279,30 @@ websocket_info({runtime_deploy, Revision}, State) ->
         }
     ]),
     {reply, {text, Msg}, State};
+%% -------------------- FlowHub Notifications
+%%
+%% Things related to pushing flows to flowhub.
+%%
+%% -spec websocket_info(
+%%         {flowhub_submit_result,
+%%          StatusTyp :: atom(),
+%%          MsgText :: binary(),
+%%          Obj :: map()},
+%%         State :: map()).
+%%
+%% Because flow pushing is an async tasks, results are communicated back to
+%% the editor via the webscocket. The are sent as `RED,comms` messages.
+websocket_info({flowhub_submit_result, StatusType, MsgText, Obj}, State) ->
+    Msg = encode_json([
+        #{
+            topic => 'flowhub:submission-result',
+            data => Obj#{
+                <<"status">> => MsgText,
+                <<"statusType">> => atom_to_binary(StatusType)
+            }
+        }
+    ]),
+    {reply, {text, Msg}, State};
 %% -------------------- Client Code node
 %%
 %% ClientCode node execute function in browser

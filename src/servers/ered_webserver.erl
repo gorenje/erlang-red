@@ -181,6 +181,16 @@ flow_editor_routes() ->
         %% POST handlers
         %%
 
+        %% FlowHub endpoints
+        {"/FlowHubCatalogue", ered_http_flowhub_catalogue, []},
+        {"/FlowHubPull", ered_http_flowhub_pull, []},
+        {"/FlowHubPush", ered_http_flowhub_push, []},
+        {"/FlowHubDiff", ered_http_flowhub_diff, []},
+        {"/FlowHubTokenCheck", ered_http_flowhub_token_check, []},
+        {"/FlowHubTokens", ered_http_flowhub_tokens, []},
+        {"/FlowHubToken", ered_http_flowhub_token, []},
+        {"/FlowHubCreateBranch", ered_http_flowhub_create_branch, []},
+
         %% Binary node backend for converting patterns
         {"/BinaryToErlang", ered_http_binary_node, []},
 
@@ -231,14 +241,16 @@ flow_editor_routes() ->
         {"/FlowCompare/jslib/diff.min.js", cowboy_static,
             {priv_file, erlang_red, "vendor/diff.min.js"}},
 
-        {"/ScratchPad/jslib/diff.min.js", cowboy_static,
-            {priv_file, erlang_red, "vendor/diff.min.js"}},
+        {"/FlowHubDiffFrame/s/:flowid", ered_http_flowhub_diff_frame, []},
 
         {"/FlowHubLib/jslib/diff.min.js", cowboy_static,
             {priv_file, erlang_red, "vendor/flowhub.diff.min.js"}},
 
         {"/FlowCompare/jslib/flowviewer.min.js", cowboy_static,
             {priv_file, erlang_red, "vendor/flowviewer.min.js"}},
+
+        {"/ScratchPad/jslib/diff.min.js", cowboy_static,
+            {priv_file, erlang_red, "vendor/diff.min.js"}},
 
         {"/vendor/monaco-tokenizer.js", cowboy_static,
             {priv_file, erlang_red, "vendor/monaco-tokenizer.js"}},
