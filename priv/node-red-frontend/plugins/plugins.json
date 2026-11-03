@@ -2,18 +2,6 @@
     {
         "editor": true,
         "enabled": true,
-        "id": "@gorenje/node-red-contrib-flowcompare/sidebar-plugin",
-        "local": true,
-        "module": "@gorenje/node-red-contrib-flowcompare",
-        "name": "sidebar-plugin",
-        "plugins": [],
-        "runtime": false,
-        "user": false,
-        "version": "0.2.2"
-    },
-    {
-        "editor": true,
-        "enabled": true,
         "id": "@gregoriusrippenstein/erlang-red-process-nodes/sidebar-plugin",
         "local": true,
         "module": "@gregoriusrippenstein/erlang-red-process-nodes",
@@ -33,7 +21,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "editor": true,
@@ -45,7 +33,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "editor": true,
@@ -57,7 +45,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.9.1"
+        "version": "1.1.4"
     },
     {
         "editor": true,
@@ -69,7 +57,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "editor": true,
@@ -81,7 +69,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.0.9"
+        "version": "0.2.1"
     },
     {
         "editor": true,
@@ -94,5 +82,29 @@
         "runtime": false,
         "user": false,
         "version": "0.4.1"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flowcompare/sidebar-plugin",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flowcompare",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "1.0.1"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-presenter-mode/sidebar-plugin",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-presenter-mode",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.1.1"
     }
 ]
