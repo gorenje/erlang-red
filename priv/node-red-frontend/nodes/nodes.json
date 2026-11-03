@@ -9,7 +9,7 @@
             "junction"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -21,7 +21,7 @@
             "inject"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -33,7 +33,7 @@
             "debug"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -45,7 +45,7 @@
             "complete"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -57,7 +57,7 @@
             "catch"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -69,7 +69,7 @@
             "status"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -83,7 +83,7 @@
             "link call"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -95,7 +95,7 @@
             "comment"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -107,7 +107,7 @@
             "global-config"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -119,7 +119,7 @@
             "unknown"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -131,7 +131,7 @@
             "function"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -143,7 +143,7 @@
             "switch"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -155,7 +155,7 @@
             "change"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -167,7 +167,7 @@
             "range"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -179,7 +179,7 @@
             "template"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -191,7 +191,7 @@
             "delay"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -203,7 +203,7 @@
             "trigger"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -215,7 +215,7 @@
             "exec"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -227,7 +227,7 @@
             "rbe"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -239,7 +239,7 @@
             "tls-config"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -251,7 +251,7 @@
             "http proxy"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -265,7 +265,7 @@
             "mqtt-broker"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -278,7 +278,7 @@
             "http response"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -290,7 +290,7 @@
             "http request"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -305,7 +305,7 @@
             "websocket-client"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -319,7 +319,7 @@
             "tcp request"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -332,7 +332,7 @@
             "udp out"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -344,7 +344,7 @@
             "csv"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -356,7 +356,7 @@
             "html"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -368,7 +368,7 @@
             "json"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -380,7 +380,7 @@
             "xml"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -392,7 +392,7 @@
             "yaml"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -405,7 +405,7 @@
             "join"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -417,7 +417,7 @@
             "sort"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -429,7 +429,7 @@
             "batch"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -442,7 +442,7 @@
             "file in"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -454,7 +454,7 @@
             "watch"
         ],
         "user": false,
-        "version": "4.0.9"
+        "version": "5.0.8"
     },
     {
         "enabled": true,
@@ -491,18 +491,6 @@
         ],
         "user": false,
         "version": "0.1.1"
-    },
-    {
-        "enabled": true,
-        "id": "@gorenje/node-red-contrib-flowcompare/flowcompare",
-        "local": true,
-        "module": "@gorenje/node-red-contrib-flowcompare",
-        "name": "flowcompare",
-        "types": [
-            "FlowCompareCfg"
-        ],
-        "user": false,
-        "version": "0.2.2"
     },
     {
         "enabled": true,
@@ -622,7 +610,7 @@
             "ut-assert-failure"
         ],
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "enabled": true,
@@ -634,7 +622,7 @@
             "ut-assert-values"
         ],
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "enabled": true,
@@ -646,7 +634,7 @@
             "ut-assert-success"
         ],
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "enabled": true,
@@ -658,7 +646,7 @@
             "ut-assert-status"
         ],
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "enabled": true,
@@ -670,7 +658,7 @@
             "ut-assert-debug"
         ],
         "user": false,
-        "version": "0.12.2"
+        "version": "0.20.2"
     },
     {
         "enabled": true,
@@ -682,7 +670,7 @@
             "Flow2MermaidCfg"
         ],
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "enabled": true,
@@ -694,7 +682,7 @@
             "mermaid-flowchart"
         ],
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "enabled": true,
@@ -706,7 +694,7 @@
             "mermaid-state-start"
         ],
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "enabled": true,
@@ -718,7 +706,7 @@
             "mermaid-state-state"
         ],
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "enabled": true,
@@ -730,7 +718,7 @@
             "mermaid-state-end"
         ],
         "user": false,
-        "version": "0.4.4"
+        "version": "0.5.1"
     },
     {
         "enabled": true,
@@ -742,7 +730,7 @@
             "FlowHubPull"
         ],
         "user": false,
-        "version": "0.9.1"
+        "version": "1.1.4"
     },
     {
         "enabled": true,
@@ -754,7 +742,7 @@
             "FlowHubCfg"
         ],
         "user": false,
-        "version": "0.9.1"
+        "version": "1.1.4"
     },
     {
         "enabled": true,
@@ -766,7 +754,7 @@
             "Seeker"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -778,7 +766,7 @@
             "Sink"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -790,7 +778,7 @@
             "ClientCode"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -802,7 +790,7 @@
             "GetFlows"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -814,7 +802,7 @@
             "SendFlow"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -826,7 +814,7 @@
             "InstallPackage"
         ],
         "user": false,
-        "version": "0.11.4"
+        "version": "0.16.1"
     },
     {
         "enabled": true,
@@ -838,7 +826,7 @@
             "ScratchPadCfg"
         ],
         "user": false,
-        "version": "0.0.9"
+        "version": "0.2.1"
     },
     {
         "enabled": true,
@@ -912,7 +900,7 @@
             "markdown"
         ],
         "user": false,
-        "version": "0.6.0"
+        "version": "0.6.3"
     },
     {
         "enabled": true,
@@ -937,5 +925,17 @@
         ],
         "user": false,
         "version": "0.1.4"
+    },
+    {
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-contrib-flowcompare/flowcompare",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-contrib-flowcompare",
+        "name": "flowcompare",
+        "types": [
+            "FlowCompareCfg"
+        ],
+        "user": false,
+        "version": "1.0.1"
     }
 ]

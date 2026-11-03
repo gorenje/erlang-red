@@ -55,12 +55,12 @@
 
     <div class="form-row inject-time-row hidden" id="inject-time-row-interval">
         <span data-i18n="inject.every"></span>
-        <input id="inject-time-interval-count" class="inject-time-count" value="1"></input>
+        <input id="inject-time-interval-count" class="inject-time-count" value="1">
         <select style="width:100px" id="inject-time-interval-units">
             <option value="s" data-i18n="inject.seconds"></option>
             <option value="m" data-i18n="inject.minutes"></option>
             <option value="h" data-i18n="inject.hours"></option>
-        </select><br/>
+        </select><br>
     </div>
 
     <div class="form-row inject-time-row hidden" id="inject-time-row-interval-time">
@@ -77,46 +77,46 @@
             <option value="20">20</option>
             <option value="30">30</option>
             <option value="0">60</option>
-        </select> <span data-i18n="inject.minutes"></span><br/>
+        </select> <span data-i18n="inject.minutes"></span><br>
         <span data-i18n="inject.between"></span> <select id="inject-time-interval-time-start" class="inject-time-times"></select>
-        <span data-i18n="inject.and"></span> <select id="inject-time-interval-time-end" class="inject-time-times"></select><br/>
+        <span data-i18n="inject.and"></span> <select id="inject-time-interval-time-end" class="inject-time-times"></select><br>
         <div id="inject-time-interval-time-days" class="inject-time-days" style="margin-top:5px">
             <div style="display:inline-block; vertical-align:top; margin-right:5px;" data-i18n="inject.on">on</div>
             <div style="display:inline-block;">
                 <div>
-                    <label><input type='checkbox' checked value='1'/> <span data-i18n="inject.days.0"></span></label>
-                    <label><input type='checkbox' checked value='2'/> <span data-i18n="inject.days.1"></span></label>
-                    <label><input type='checkbox' checked value='3'/> <span data-i18n="inject.days.2"></span></label>
+                    <label><input type='checkbox' checked value='1'> <span data-i18n="inject.days.0"></span></label>
+                    <label><input type='checkbox' checked value='2'> <span data-i18n="inject.days.1"></span></label>
+                    <label><input type='checkbox' checked value='3'> <span data-i18n="inject.days.2"></span></label>
                 </div>
                 <div>
-                    <label><input type='checkbox' checked value='4'/> <span data-i18n="inject.days.3"></span></label>
-                    <label><input type='checkbox' checked value='5'/> <span data-i18n="inject.days.4"></span></label>
-                    <label><input type='checkbox' checked value='6'/> <span data-i18n="inject.days.5"></span></label>
+                    <label><input type='checkbox' checked value='4'> <span data-i18n="inject.days.3"></span></label>
+                    <label><input type='checkbox' checked value='5'> <span data-i18n="inject.days.4"></span></label>
+                    <label><input type='checkbox' checked value='6'> <span data-i18n="inject.days.5"></span></label>
                 </div>
                 <div>
-                    <label><input type='checkbox' checked value='0'/> <span data-i18n="inject.days.6"></span></label>
+                    <label><input type='checkbox' checked value='0'> <span data-i18n="inject.days.6"></span></label>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="form-row inject-time-row hidden" id="inject-time-row-time">
-        <span data-i18n="inject.at"></span> <input type="text" id="inject-time-time" value="12:00"></input><br/>
+        <span data-i18n="inject.at"></span> <input type="text" id="inject-time-time" value="12:00"><br>
         <div id="inject-time-time-days" class="inject-time-days">
             <div style="display:inline-block; vertical-align:top; margin-right:5px;" data-i18n="inject.on"></div>
             <div style="display:inline-block;">
                 <div>
-                    <label><input type='checkbox' checked value='1'/> <span data-i18n="inject.days.0"></span></label>
-                    <label><input type='checkbox' checked value='2'/> <span data-i18n="inject.days.1"></span></label>
-                    <label><input type='checkbox' checked value='3'/> <span data-i18n="inject.days.2"></span></label>
+                    <label><input type='checkbox' checked value='1'> <span data-i18n="inject.days.0"></span></label>
+                    <label><input type='checkbox' checked value='2'> <span data-i18n="inject.days.1"></span></label>
+                    <label><input type='checkbox' checked value='3'> <span data-i18n="inject.days.2"></span></label>
                 </div>
                 <div>
-                    <label><input type='checkbox' checked value='4'/> <span data-i18n="inject.days.3"></span></label>
-                    <label><input type='checkbox' checked value='5'/> <span data-i18n="inject.days.4"></span></label>
-                    <label><input type='checkbox' checked value='6'/> <span data-i18n="inject.days.5"></span></label>
+                    <label><input type='checkbox' checked value='4'> <span data-i18n="inject.days.3"></span></label>
+                    <label><input type='checkbox' checked value='5'> <span data-i18n="inject.days.4"></span></label>
+                    <label><input type='checkbox' checked value='6'> <span data-i18n="inject.days.5"></span></label>
                 </div>
                 <div>
-                    <label><input type='checkbox' checked value='0'/> <span data-i18n="inject.days.6"></span></label>
+                    <label><input type='checkbox' checked value='0'> <span data-i18n="inject.days.6"></span></label>
                 </div>
             </div>
         </div>
@@ -132,9 +132,6 @@
     }
     .inject-time-days label {
         -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
         user-select: none;
         vertical-align: baseline;
         width: 100px;
@@ -1152,18 +1149,20 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                         // Highlight the subflow instance node.
                         sourceNode = RED.nodes.node(pathParts[1]);
                     }
-                  const getNodeLabel = (n) => {
-                    n ? (n.name || (typeof n.label === "function" && n.label())  || (typeof n.label === "string" && n.label) || (n.type + ":" + n.id)) : "undefined";
-                  }
+		    const getNodeLabel = (n) => {
+                      n ? (n.name || (typeof n.label === "function" && n.label())  || (typeof n.label === "string" && n.label) || (n.type + ":" + n.id)) : "undefined";
+                    }
                     pathHierarchy = pathParts.map((id,index) => {
                         if (index === 0) {
                             if (id === "global") {
                                 return { id: sourceNode.id, label: getNodeLabel(sourceNode) }
-                            }
+                            } 
+
                           let wksp = RED.nodes.workspace(id)
                           return { id:
                                    id, label: wksp ? wksp.label : id
                           }
+
                         } else {
                             const instanceNode = RED.nodes.node(id)
                             const pathLabel = (instanceNode.name || RED.nodes.subflow(instanceNode.type.substring(8))?.name || instanceNode.type)
@@ -1232,6 +1231,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             RED.actions.add("core:deactivate-selected-debug-nodes", function() { setDebugNodeState(getSelectedDebugNodes(false), false); });
             RED.actions.add("core:deactivate-all-debug-nodes", function() { setDebugNodeState(getMatchingDebugNodes(false, true),false); });
             RED.actions.add("core:deactivate-all-flow-debug-nodes", function() { setDebugNodeState(getMatchingDebugNodes(false, false),false); });
+
+            RED.actions.add("core:toggle-debug-messages", function () { RED.debug.toggleDebugMessages() });
 
             function getSelectedDebugNodes(state) {
                 var nodes = [];
@@ -1630,6 +1631,11 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 };
                 items.push(nodeItemMap[n.id]);
             });
+            items.sort((A, B) => {
+                const labelA = A.label;
+                const labelB = B.label;
+                return labelA.localeCompare(labelB);
+            })
             dirList.treeList('data',items);
 
             $("#node-input-complete-target-select").on("click", function(e) {
@@ -1832,6 +1838,12 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 };
                 items.push(nodeItemMap[n.id]);
             });
+            items.sort((A, B) => {
+                const labelA = A.label;
+                const labelB = B.label;
+                return labelA.localeCompare(labelB);
+            })
+
             dirList.treeList('data',items);
 
             $("#node-input-catch-target-select").on("click", function(e) {
@@ -2069,6 +2081,11 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 };
                 items.push(nodeItemMap[n.id]);
             });
+            items.sort((A, B) => {
+                const labelA = A.label;
+                const labelB = B.label;
+                return labelA.localeCompare(labelB);
+            })
             dirList.treeList('data',items);
 
             $("#node-input-status-target-select").on("click", function(e) {
@@ -2295,6 +2312,11 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             })
         }
 
+        candidateNodes.sort((A, B) => {
+            const labelA = A.name || A.id;
+            const labelB = B.name || B.id;
+            return labelA.localeCompare(labelB);
+        })
         candidateNodes.forEach(function (n) {
             if (flowMap[n.z]) {
                 if (targetType === "link out" && n.mode === 'return') {
@@ -2623,23 +2645,20 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
           <code>link in</code> node you wish to call.</dd>
     </dl>
     <h3>Details</h3>
-    <p>This node can be connected to a <code>link in</code> node that exists on any tab.
-       The flow connected to that node must end with a <code>link out</code> node configured
+    <p>This node can be connected to a <code>link in</code> node that exists on any tab.</p>
+    <p>The flow connected to that node must end with a <code>link out</code> node configured
        in 'return' mode.</p>
     <p>When this node receives a message, it is passed to the connected <code>link in</code> node.
        It then waits for a response which it then sends on.</p>
     <p>If no response is received within the configured timeout, default 30 seconds, the node
        will log an error that can be caught using the <code>catch</code> node.</p>
     <p>When the option <b>Link Type</b> is set to "Dynamic target" <code>msg.target</code> can be used to call a
-       <code>link in</code> by name or id. 
+       <code>link in</code> by name or id:</p>
     <ul>
       <li>If there is a <code>link in</code> nodes with the same id, it will be called</li>
       <li>If there are two or more <code>link in</code> nodes with the same name, an error will be raised</li>
       <li>A <code>link call</code> cannot call a <code>link in</code> node inside a subflow</li>
     </ul>
-    </p>
-    The flow connected to that node must end with a <code>link out</code> node configured
-    in 'return' mode.</p>
 </script>
 
 <!-- --- [red-module:node-red/comment] --- -->
@@ -2743,12 +2762,13 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     RED.nodes.registerType('global-config',{
         category: 'config',
         defaults: {
-            name: { value: "" },
             env: { value: [] },
+            modules: { value: {} }
         },
         credentials: {
             map: { type: "map" }
         },
+        label: 'global-config',
         oneditprepare: function() {
             $('#node-input-edit-env-var').on('click', function(evt) {
                 RED.actions.invoke('core:show-user-settings', 'envvar')
@@ -2764,15 +2784,23 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
 <!-- --- [red-module:node-red/unknown] --- -->
 
 <script type="text/html" data-template-name="unknown">
-    <div class="form-tips"><span data-i18n="[html]unknown.tip"></span></div>
+    <div class="form-tips">
+        <span data-i18n="[html]unknown.tip"></span>
+        <p id="unknown-module-known">
+            <button id="unknown-manage-dependencies" class="red-ui-button"><span data-i18n="unknown.manageModules"></span></button>
+        </p>
+    </div>
+    </div>
+    
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('unknown',{
+    RED.nodes.registerType('unknown', {
         category: 'unknown',
-        color:"#fff0f0",
+        color:"#fee",
         defaults: {
-            name: {value:""}
+            name: {value:""},
+            modules: { value: [] }
         },
         inputs:1,
         outputs:1,
@@ -2782,6 +2810,20 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         },
         labelStyle: function() {
             return "node_label_unknown";
+        },
+        oneditprepare: function () {
+            const node = this
+            if (this.modules && this.modules.length > 0) {
+                $('#unknown-manage-dependencies').on('click', function () {
+                    RED.actions.invoke('core:cancel-edit-tray')
+                    RED.actions.invoke('core:manage-palette', {
+                        view: 'install',
+                        filter: '"' + node.modules.join('", "') + '"'
+                    })
+                })
+            } else {
+                $('#unknown-module-known').hide()
+            }
         }
     });
 </script>
@@ -3014,14 +3056,6 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     // object that maps from library name to its descriptor
     var allLibs = [];
 
-    function moduleName(module) {
-        var match = /^([^@]+)@(.+)/.exec(module);
-        if (match) {
-            return [match[1], match[2]];
-        }
-        return [module, undefined];
-    }
-
     function getAllUsedModules() {
         var moduleSet = new Set();
         for (var id in knownFunctionNodes) {
@@ -3119,7 +3153,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                     if (val === "_custom_") {
                         val = $(this).val();
                     }
-                    var varName = val.trim().replace(/^@/,"").replace(/@.*$/,"").replace(/[-_/\.].?/g, function(v) { return v[1]?v[1].toUpperCase():"" });
+                    var varName = val.trim().replace(/^node:/,"").replace(/^@/,"").replace(/@.*$/,"").replace(/[-_/\.].?/g, function(v) { return v[1]?v[1].toUpperCase():"" });
                     fvar.val(varName);
                     fvar.trigger("change");
 
@@ -3174,6 +3208,27 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             });
         }
         return _libs;
+    }
+
+    function getEditorValue(editor, defaultValue) {
+        var val = editor.getValue();
+        if (defaultValue && val.trim() === defaultValue.trim()) {
+            return "";
+        } else {
+            return val;
+        }
+    }
+
+    function getEditorErrorCount(editor) {
+        const annot = editor.getSession().getAnnotations();
+        let count = 0
+        for (var k=0; k < annot.length; k++) {
+            if (annot[k].type === "error") {
+                count += annot.length;
+                break;
+            }
+        }
+        return count
     }
 
     RED.nodes.registerType('function',{
@@ -3252,6 +3307,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                         } else if (that.finalizeEditor.getDomNode() == editor[0]) {
                             that.finalizeEditor.focus();
                         }
+                        updateTabBadges();
                     }
                 }
             });
@@ -3276,6 +3332,28 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
 
             tabs.activateTab("func-tab-body");
 
+
+            const updateTabBadge = (tabId, editorName, defaultValue) => {
+                const editor = this[editorName]
+                const hasContent = getEditorValue(editor, defaultValue) !== ''
+                // This doesn't work as the annotations appear to be cleared when the editor isn't active
+                // TODO: add a badge for tabs with errors
+                // const hasErrors = getEditorErrorCount(editor) > 0
+                const badgeSpan = $(`#red-ui-tab-${tabId} .red-ui-tabs-badges`)
+                badgeSpan.find('i').remove()
+                $(`#red-ui-tab-${tabId} .red-ui-tabs-badges i`).remove()
+                if (hasContent) {
+                    $('<i style="display: inline" class="fa fa-file-code-o"></i>').appendTo(badgeSpan)
+                }
+                                
+            }
+            
+            const updateTabBadges = function () {
+                updateTabBadge("func-tab-body", "editor", "")
+                updateTabBadge("func-tab-init", "initEditor", RED._("node-red:function.text.initialize"))
+                updateTabBadge("func-tab-finalize", "finalizeEditor", RED._("node-red:function.text.finalize"))
+            }
+            
             $( "#node-input-outputs" ).spinner({
                 min: 0,
                 max: 500,
@@ -3308,9 +3386,15 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 }
             });
 
-            var buildEditor = function(id, stateId, focus, value, defaultValue, extraLibs, offset) {
-                var editor = RED.editor.createEditor({
+            const buildEditor = function(id, node, focus, value, defaultValue, extraLibs, offset) {
+                const stateId = `${node.id}/${id}`;
+                const editor = RED.editor.createEditor({
                     id: id,
+                    node: {
+                        id: node.id,
+                        type: node.type,
+                        z: node.z
+                    },
                     mode: 'ace/mode/erlang',
                     value: value || defaultValue || "",
                     stateId: stateId,
@@ -3337,9 +3421,9 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 editor.__stateId = stateId;
                 return editor;
             }
-            this.initEditor = buildEditor('node-input-init-editor', this.id + "/" + "initEditor", false, $("#node-input-initialize").val(), RED._("node-red:function.text.initialize"), undefined, 0);
-            this.editor = buildEditor('node-input-func-editor', this.id + "/" + "editor", true, $("#node-input-func").val(), undefined, that.libs || [], undefined, -1);
-            this.finalizeEditor = buildEditor('node-input-finalize-editor', this.id + "/" + "finalizeEditor", false, $("#node-input-finalize").val(), RED._("node-red:function.text.finalize"), undefined, 0);
+            this.initEditor = buildEditor('node-input-init-editor', this, false, $("#node-input-initialize").val(), RED._("node-red:function.text.initialize"), undefined, 0);
+            this.editor = buildEditor('node-input-func-editor', this, true, $("#node-input-func").val(), undefined, that.libs || [], undefined, -1);
+            this.finalizeEditor = buildEditor('node-input-finalize-editor', this, false, $("#node-input-finalize").val(), RED._("node-red:function.text.finalize"), undefined, 0);
 
             RED.library.create({
                 url:"functions", // where to get the data from
@@ -3418,27 +3502,18 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             if (RED.settings.functionExternalModules !== false) {
                 prepareLibraryConfig(that);
             }
+
+            updateTabBadges();
         },
         oneditsave: function() {
-            var node = this;
-            var noerr = 0;
+            const node = this;
+            let noerr = 0;
             $("#node-input-noerr").val(0);
 
-            var disposeEditor = function(editorName,targetName,defaultValue) {
-                var editor = node[editorName];
-                var annot = editor.getSession().getAnnotations();
-                for (var k=0; k < annot.length; k++) {
-                    if (annot[k].type === "error") {
-                        noerr += annot.length;
-                        break;
-                    }
-                }
-                var val = editor.getValue();
-                if (defaultValue) {
-                    if (val.trim() == defaultValue.trim()) {
-                        val = "";
-                    }
-                }
+            const disposeEditor = function(editorName,targetName,defaultValue) {
+                const editor = node[editorName];
+                noerr += getEditorErrorCount(editor)
+                const val = getEditorValue(editor, defaultValue)
                 editor.destroy();
                 delete node[editorName];
                 $("#"+targetName).val(val);
@@ -3582,8 +3657,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     </div>
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="switch.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width: calc(100% - 105px)"/>
-        <input type="hidden" id="node-input-outputs"/>
+        <input type="text" id="node-input-property" style="width: calc(100% - 105px)">
+        <input type="hidden" id="node-input-outputs">
     </div>
     <div class="form-row node-input-rule-container-row">
         <ol id="node-input-rule-container"></ol>
@@ -3596,7 +3671,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     </div>
     <div class="form-row">
         <input type="checkbox" id="node-input-repair" style="display: inline-block; width: auto; vertical-align: top;">
-        <label style="width: auto;" for="node-input-repair"><span data-i18n="switch.label.repair"></span></label></input>
+        <label style="width: auto;" for="node-input-repair"><span data-i18n="switch.label.repair"></span></label>
     </div>
 </script>
 
@@ -4501,7 +4576,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
 <script type="text/html" data-template-name="range">
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="common.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:calc(70% - 1px)"/>
+        <input type="text" id="node-input-property" style="width:calc(70% - 1px)">
     </div>
     <div class="form-row">
         <label for="node-input-action"><i class="fa fa-dot-circle-o"></i> <span data-i18n="range.label.action"></span></label>
@@ -4512,23 +4587,23 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             <option value="drop" data-i18n="range.scale.drop"></option>
         </select>
     </div>
-    <br/>
+    <br>
     <div class="form-row"><i class="fa fa-sign-in"></i> <span data-i18n="range.label.inputrange"></span>:</div>
     <div class="form-row"><label></label>
-        <span data-i18n="range.label.from"></span>: <input type="text" id="node-input-minin" data-i18n="[placeholder]range.placeholder.min" style="width:100px;"/>
-        &nbsp;&nbsp;<span data-i18n="range.label.to"></span>: <input type="text" id="node-input-maxin" data-i18n="[placeholder]range.placeholder.maxin" style="width:100px;"/>
+        <span data-i18n="range.label.from"></span>: <input type="text" id="node-input-minin" data-i18n="[placeholder]range.placeholder.min" style="width:100px;">
+        &nbsp;&nbsp;<span data-i18n="range.label.to"></span>: <input type="text" id="node-input-maxin" data-i18n="[placeholder]range.placeholder.maxin" style="width:100px;">
     </div>
     <div class="form-row"><i class="fa fa-sign-out"></i> <span data-i18n="range.label.resultrange"></span>:</div>
     <div class="form-row"><label></label>
-        <span data-i18n="range.label.from"></span>: <input type="text" id="node-input-minout" data-i18n="[placeholder]range.placeholder.min" style="width:100px;"/>
-        &nbsp;&nbsp;<span data-i18n="range.label.to"></span>: <input type="text" id="node-input-maxout" data-i18n="[placeholder]range.placeholder.maxout" style="width:100px;"/>
+        <span data-i18n="range.label.from"></span>: <input type="text" id="node-input-minout" data-i18n="[placeholder]range.placeholder.min" style="width:100px;">
+        &nbsp;&nbsp;<span data-i18n="range.label.to"></span>: <input type="text" id="node-input-maxout" data-i18n="[placeholder]range.placeholder.maxout" style="width:100px;">
     </div>
-    <br/>
+    <br>
     <div class="form-row"><label></label>
         <input type="checkbox" id="node-input-round" style="display: inline-block; width: auto; vertical-align: top;">
-        <label style="width: auto;" for="node-input-round"><span data-i18n="range.label.roundresult"></span></label></input>
+        <label style="width: auto;" for="node-input-round"><span data-i18n="range.label.roundresult"></span></label>
     </div>
-    <br/>
+    <br>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
@@ -4563,6 +4638,14 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         },
         inputs: 1,
         outputs: 1,
+        inputLabels: function() { return this.minin + " - " + this.maxin },
+        outputLabels: function(i) {
+            var outie = this.minout + " - " + this.maxout
+            if (this.action === "clamp") { outie = "[" + outie + "]" }
+            if (this.action === "drop") { outie = "x" + outie + "x" }
+            if (this.action === "roll") { outie = ">" + outie + ">" }
+            return outie;
+        },
         icon: "range.svg",
         label: function() {
             if (this.minout !== "" && this.maxout !== "") { return this.name||this.minout + " - " + this.maxout; }
@@ -4917,6 +5000,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             <label></label>
             <select id="node-input-rate-type" style="width:270px !important">
                 <option value="all" data-i18n="delay.limitall"></option>
+                <option value="burst" data-i18n="delay.limitburst"></option>
                 <option value="topic" data-i18n="delay.limittopic"></option>
             </select>
         </div>
@@ -5039,6 +5123,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                     return this._("delay.label.limit")+" "+rate;
                 } else if (this.pauseType == "timed") {
                     return this._("delay.label.limitTopic")+" "+rate;
+                } else if (this.pauseType == "burst") {
+                    return this._("delay.label.burst")+" "+rate;
                 } else {
                     return this._("delay.label.limitTopic")+" "+rate;
                 }
@@ -5099,6 +5185,9 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 $("#node-input-delay-action").val('rate');
                 $("#node-input-rate-type").val('topic');
                 $("#node-input-rate-topic-type").val('timed');
+            } else if (this.pauseType == "burst") {
+                $("#node-input-delay-action").val('rate');
+                $("#node-input-rate-type").val('burst');
             }
 
             if (!this.timeoutUnits) {
@@ -5148,12 +5237,17 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 if (this.value === "all") {
                     $("#rate-details-per-topic").hide();
                     $("#node-input-drop-select-queue").attr('disabled', false);
+                    $("#rate-override").show();
+                } else if (this.value === "burst") {
+                    $("#rate-details-per-topic").hide();
+                    $("#node-input-drop-select-queue").attr('disabled', true);
+                    $("#rate-override").hide();
                 } else if (this.value === "topic") {
                     if ($("#node-input-drop-select").val() === "queue") {
-                        $("#node-input-drop-select").val("drop");
                     }
                     $("#node-input-drop-select-queue").attr('disabled', true);
                     $("#rate-details-per-topic").show();
+                    $("#rate-override").show();
                 }
             }).trigger("change");
         },
@@ -5166,6 +5260,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 action = $("#node-input-rate-type").val();
                 if (action === "all") {
                     this.pauseType = "rate";
+                } else if (action === "burst") {
+                    this.pauseType = "burst";
                 } else {
                     this.pauseType = $("#node-input-rate-topic-type").val();
                 }
@@ -5194,6 +5290,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
 
 <script type="text/html" data-help-name="delay">
     <p>Delays each message passing through the node or limits the rate at which they can pass.</p>
+    <p>Not all input parameters apply to all modes.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">delay <span class="property-type">number</span></dt>
@@ -5225,9 +5322,11 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         Each message is delayed independently of any other message, based on
         the time of its arrival.
     </p>
-    <p>When configured to rate limit messages, their delivery is spread across
-        the configured time period. The status shows the number of messages currently in the queue.
-        It can optionally discard intermediate messages as they arrive.</p>
+    <p>When configured to rate limit messages, the node can operate in several modes.
+        By default the messages are delivered evenly spread across
+        the configured time period. e.g. 3 msgs in 12 seconds means 1 message every 4 seconds.
+        The status shows the number of messages currently in the queue.
+        It can optionally discard intermediate messages as they arrive.
     </p>
     <p>If set to allow override of the rate, the new rate will be applied immediately,
         and will remain in effect until changed again, the node is reset, or the flow is restarted.</p>
@@ -5236,6 +5335,12 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         automatically dropped. At each time interval, the node can either release
         the most recent message for all topics, or release the most recent message
         for the next topic.
+    </p>
+    <p>In burst mode, messages are passed through up to the configured limit immediately,
+        any further messages will be dropped or sent to the second output until the time
+        period has elapsed. At that point the next burst of messages can be sent.
+        The status shows green when messages can be sent immediately, and red when
+        messages are blocked.
     </p>
     <p><b>Note</b>: In rate limit mode the maximum queue depth can be set by a property in your
         <i>settings.js</i> file. For example <code>nodeMessageBufferMaxLength: 1000,</code></p>
@@ -5307,7 +5412,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             <li><span data-i18n="trigger.label.resetPayload"></span> <input type="text" id="node-input-reset" style="width:150px" data-i18n="[placeholder]trigger.label.resetprompt"></li>
         </ul>
     </div>
-    <br/>
+    <br>
     <div class="form-row">
         <label data-i18n="trigger.for" for="node-input-bytopic"></label>
         <select id="node-input-bytopic" style="width:120px;">
@@ -5315,12 +5420,12 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             <option value="topic" data-i18n="trigger.bytopics"></option>
         </select>
         <span class="form-row" id="node-stream-topic">
-            <input type="text" id="node-input-topic" style="width:46%;"/>
+            <input type="text" id="node-input-topic" style="width:46%;">
         </span>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name"></input>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
         <input type="hidden" id="node-input-outputs" value="1">
     </div>
 </script>
@@ -5484,6 +5589,8 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         oneditsave: function() {
             if ($("#node-then-type").val() == "block") {
                 $("#node-input-duration").val("0");
+                // The override option is hidden in this mode, so do not leave it enabled
+                $("#node-input-overrideDelay").prop("checked", false);
             }
             if ($("#node-then-type").val() == "loop") {
                 $("#node-input-duration").val($("#node-input-duration").val() * -1);
@@ -5769,7 +5876,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     </div>
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:70%;"/>
+        <input type="text" id="node-input-property" style="width:70%;">
     </div>
     <div class="form-row" style="margin-bottom: 0px;">
         <label> </label>
@@ -5778,7 +5885,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     </div>
     <div class="form-row">
         <label> </label>
-        <input type="text" id="node-input-topi"  style="width:70%;"/>
+        <input type="text" id="node-input-topi"  style="width:70%;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="rbe.label.name"></span></label>
@@ -5855,7 +5962,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     });
 </script>
 <script type="text/html" data-help-name="rbe">
-    <p>Report by Exception (RBE) node - only passes on data if the payload has changed.
+    <p>filter node - only passes on data if the payload has changed.
        It can also block unless, or ignore if the value changes by a specified amount (Dead- and Narrowband mode).</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -5868,7 +5975,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         </dt>
         <dd>if specified the function will work on a per topic basis. This property can be set by configuration.</dd>
         <dt class="optional">reset<span class="property-type">any</span></dt>
-        <dd>if set clears the stored value for the specified msg.topic, or
+        <dd>if set clears the stored value for the specified <code>msg.topic</code>, or
             all topics if msg.topic is not specified.</dd>
     </dl>
     <h3>Outputs</h3>
@@ -5914,11 +6021,19 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
 -->
 
 <script type="text/html" data-template-name="tls-config">
+    <div class="form-row">
+        <label style="width: 120px;" for="node-config-input-certType"><i class="fa fa-bars"></i> <span data-i18n="tls.label.certtype"></label>
+        <select id="node-config-input-certType">
+            <option value="files" data-i18n="tls.label.files"></option>
+            <option value="pfx" data-i18n="tls.label.pfx"></option>
+            <option value="env" data-i18n="tls.label.env"></option>
+        </select>
+    </div>
     <div class="form-row" class="hide" id="node-config-row-uselocalfiles">
         <input type="checkbox" id="node-config-input-uselocalfiles" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-config-input-uselocalfiles" style="width: 70%;"><span data-i18n="tls.label.use-local-files"></label>
     </div>
-    <div class="form-row">
+    <div class="form-row" id="node-tls-conf-cer">
         <label style="width: 120px;"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.cert"></span></label>
         <span class="tls-config-input-data">
             <label class="red-ui-button" for="node-config-input-certfile"><i class="fa fa-upload"></i> <span data-i18n="tls.label.upload"></span></label>
@@ -5930,7 +6045,11 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         <input type="hidden" id="node-config-input-certdata">
         <input class="hide tls-config-input-path" style="width: calc(100% - 170px);" type="text" id="node-config-input-cert" data-i18n="[placeholder]tls.placeholder.cert">
     </div>
-    <div class="form-row">
+    <div class="form-row" id="node-tls-conf-cer-env">
+        <label style="width: 120px;"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.cert"></span></label>
+        <input type="text" id="node-config-input-certEnv">
+    </div>
+    <div class="form-row" id="node-tls-conf-key">
         <label style="width: 120px;" for="node-config-input-key"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.key"></span></label>
         <span class="tls-config-input-data">
             <label class="red-ui-button" for="node-config-input-keyfile"><i class="fa fa-upload"></i> <span data-i18n="tls.label.upload"></span></label>
@@ -5942,11 +6061,27 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         <input type="hidden" id="node-config-input-keydata">
         <input class="hide tls-config-input-path" style="width: calc(100% - 170px);" type="text" id="node-config-input-key" data-i18n="[placeholder]tls.placeholder.key">
     </div>
-    <div class="form-row">
-        <label style="width: 100px; margin-left: 20px;" for="node-config-input-passphrase"> <span data-i18n="tls.label.passphrase"></span></label>
-        <input type="password" style="width: calc(100% - 170px);" id="node-config-input-passphrase" data-i18n="[placeholder]tls.placeholder.passphrase">
+    <div class="form-row" id="node-tls-conf-key-env">
+        <label style="width: 120px;"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.key"></span></label>
+        <input type="text" id="node-config-input-keyEnv">
+    </div>
+    <div class="form-row" id="node-tls-conf-p12">
+        <label style="width: 120px;" for="node-config-input-p12"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.p12"></span></label>
+        <span class="tls-config-input-data">
+            <label class="red-ui-button" for="node-config-input-p12file"><i class="fa fa-upload"></i> <span data-i18n="tls.label.upload"></span></label>
+            <input class="hide" type="file" id="node-config-input-p12file">
+            <span id="tls-config-p12name" style="width: calc(100% - 280px); overflow: hidden; line-height:34px; height:34px; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle;"> </span>
+            <button type="button" class="red-ui-button red-ui-button-small" id="tls-config-button-p12-clear" style="margin-left: 10px"><i class="fa fa-times"></i></button>
+        </span>
+        <input type="hidden" id="node-config-input-p12name">
+        <input type="hidden" id="node-config-input-p12data">
+        <input class="hide tls-config-input-path" style="width: calc(100% - 170px);" type="text" id="node-config-input-p12" data-i18n="[placeholder]tls.placeholder.p12">
     </div>
     <div class="form-row">
+        <label style="width: 120px;" for="node-config-input-passphrase"><i class="fa fa-key"></i>  <span data-i18n="tls.label.passphrase"></span></label>
+        <input type="password" style="width: calc(100% - 170px);" id="node-config-input-passphrase" data-i18n="[placeholder]tls.placeholder.passphrase">
+    </div>
+    <div class="form-row" id="node-tls-conf-ca">
         <label style="width: 120px;" for="node-config-input-ca"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.ca"></span></label>
         <span class="tls-config-input-data">
             <label class="red-ui-button" for="node-config-input-cafile"><i class="fa fa-upload"></i> <span data-i18n="tls.label.upload"></span></label>
@@ -5957,6 +6092,10 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         <input type="hidden" id="node-config-input-caname">
         <input type="hidden" id="node-config-input-cadata">
         <input class="hide tls-config-input-path" style="width: calc(100% - 170px);" type="text" id="node-config-input-ca" data-i18n="[placeholder]tls.placeholder.ca">
+    </div>
+    <div class="form-row" id="node-tls-conf-ca-env">
+        <label style="width: 120px;"><i class="fa fa-file-text-o"></i> <span data-i18n="tls.label.ca"></span></label>
+        <input type="text" id="node-config-input-caEnv">
     </div>
     <div class="form-row">
         <input type="checkbox" id="node-config-input-verifyservercert" style="display: inline-block; width: auto; vertical-align: top;">
@@ -5982,6 +6121,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         category: 'config',
         defaults: {
             name: {value:""},
+            certType: {value:"files"},
             cert: {value:"", validate: function(v,opt) {
                 var currentKey = $("#node-config-input-key").val();
                 if (currentKey === undefined) {
@@ -6002,18 +6142,24 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 }
                 return RED._("node-red:tls.error.invalid-key");
             }},
+            p12: {value:""},
+            p12name: {value:""},
             ca: {value:""},
             certname: {value:""},
             keyname: {value:""},
             caname: {value:""},
             servername: {value:""},
             verifyservercert: {value: true},
-            alpnprotocol: {value: ""}
+            alpnprotocol: {value: ""},
+            certEnv: {value: ""},
+            keyEnv: {value: ""},
+            caEnv: {value: ""}
         },
         credentials: {
             certdata: {type:"text"},
             keydata: {type:"text"},
             cadata: {type:"text"},
+            p12data: {type:"text"},
             passphrase: {type:"password"}
         },
         label: function() {
@@ -6023,6 +6169,59 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             return this.name?"node_label_italic":"";
         },
         oneditprepare: function() {
+            $("#node-config-input-certType").on('change',function() {
+                if ($("#node-config-input-certType").val() === "pfx") {
+                    $("#node-tls-conf-cer").hide();
+                    $("#node-tls-conf-key").hide();
+                    $("#node-tls-conf-ca").hide();
+                    $("#node-tls-conf-cer-env").hide();
+                    $("#node-tls-conf-key-env").hide();
+                    $("#node-tls-conf-ca-env").hide();
+                    $("#node-tls-conf-p12").show();
+                    if (RED.settings.tlsConfigDisableLocalFiles) {
+                        $("#node-config-row-uselocalfiles").hide();
+                    } else {
+                        $("#node-config-row-uselocalfiles").show();
+                    }
+                }
+                else if ($("#node-config-input-certType").val() === "env") {
+                    $("#node-tls-conf-cer").hide();
+                    $("#node-tls-conf-key").hide();
+                    $("#node-tls-conf-ca").hide();
+                    $("#node-tls-conf-cer-env").show();
+                    $("#node-tls-conf-key-env").show();
+                    $("#node-tls-conf-ca-env").show();
+                    $("#node-tls-conf-p12").hide();
+                    $("#node-config-row-uselocalfiles").hide();
+                } else {
+                    $("#node-tls-conf-cer").show();
+                    $("#node-tls-conf-key").show();
+                    $("#node-tls-conf-ca").show();
+                    $("#node-tls-conf-cer-env").hide();
+                    $("#node-tls-conf-key-env").hide();
+                    $("#node-tls-conf-ca-env").hide();
+                    $("#node-tls-conf-p12").hide();
+                    if (RED.settings.tlsConfigDisableLocalFiles) {
+                        $("#node-config-row-uselocalfiles").hide();
+                    } else {
+                        $("#node-config-row-uselocalfiles").show();
+                    }
+                }
+            });
+            
+            $("#node-config-input-certEnv").typedInput({
+                type:"env",
+                types:["env"]
+            });
+            $("#node-config-input-keyEnv").typedInput({
+                type:"env",
+                types:["env"]
+            });
+            $("#node-config-input-caEnv").typedInput({
+                type:"env",
+                types:["env"]
+            });
+
             function updateFileUpload() {
                 if ($("#node-config-input-uselocalfiles").is(':checked')) {
                     $(".tls-config-input-path").show();
@@ -6044,9 +6243,19 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 reader.onload = function(event) {
                     $("#tls-config-"+property+"name").text(filename);
                     $(filenameInputId).val(filename);
-                    $(dataInputId).val(event.target.result);
+                    if (property === "p12") {
+                        $(dataInputId).val(btoa(String.fromCharCode(...new Uint8Array(event.target.result))))
+                    }
+                    else {
+                        $(dataInputId).val(event.target.result);
+                    }
                 }
-                reader.readAsText(file,"UTF-8");
+                if (property === "p12") {
+                    reader.readAsArrayBuffer(file);
+                }
+                else {
+                    reader.readAsText(file,"UTF-8");
+                }
             }
             $("#node-config-input-certfile" ).on("change", function() {
                 saveFile("cert", this.files[0]);
@@ -6057,6 +6266,9 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             $("#node-config-input-cafile" ).on("change", function() {
                 saveFile("ca", this.files[0]);
             });
+            $("#node-config-input-p12file" ).on("change", function() {
+                saveFile("p12", this.files[0]);
+            });
 
             function clearNameData(prop) {
                 $("#tls-config-"+prop+"name").text("");
@@ -6066,12 +6278,19 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
             $("#tls-config-button-cert-clear").on("click", function() {
                 clearNameData("cert");
             });
+            RED.popover.tooltip($("#tls-config-button-cert-clear"), RED._("common.label.delete"));
             $("#tls-config-button-key-clear").on("click", function() {
                 clearNameData("key");
             });
+            RED.popover.tooltip($("#tls-config-button-key-clear"), RED._("common.label.delete"));
             $("#tls-config-button-ca-clear").on("click", function() {
                 clearNameData("ca");
             });
+            RED.popover.tooltip($("#tls-config-button-ca-clear"), RED._("common.label.delete"));
+            $("#tls-config-button-p12-clear").on("click", function() {
+                clearNameData("p12");
+            });
+            RED.popover.tooltip($("#tls-config-button-p12-clear"), RED._("common.label.delete"));
 
             if (RED.settings.tlsConfigDisableLocalFiles) {
                 $("#node-config-row-uselocalfiles").hide();
@@ -6079,12 +6298,13 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 $("#node-config-row-uselocalfiles").show();
             }
             // in case paths were set from old TLS config
-            if(this.cert || this.key || this.ca) {
+            if (this.cert || this.key || this.ca || this.p12) {
                 $("#node-config-input-uselocalfiles").prop('checked',true);
             }
             $("#tls-config-certname").text(this.certname);
             $("#tls-config-keyname").text(this.keyname);
             $("#tls-config-caname").text(this.caname);
+            $("#tls-config-p12name").text(this.p12name);
             updateFileUpload();
         },
         oneditsave: function() {
@@ -6092,10 +6312,13 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 clearNameData("ca");
                 clearNameData("cert");
                 clearNameData("key");
-            } else {
+                clearNameData("p12");
+            }
+            else {
                 $("#node-config-input-ca").val("");
                 $("#node-config-input-cert").val("");
                 $("#node-config-input-key").val("");
+                $("#node-config-input-p12").val("");
             }
         }
     });
@@ -6763,6 +6986,16 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         }
         return RED._("node-red:mqtt.errors.invalid-topic");
     }
+    function setupTopicField(node, input) {
+        input.autoComplete({
+            minLength: 0,
+            completionPluginType: 'node-red-mqtt-topic-autocomplete-source',
+            context: {
+                node
+            }
+        })
+    }
+
     RED.nodes.registerType('mqtt-broker',{
         category: 'config',
         defaults: {
@@ -7138,6 +7371,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         },
         oneditprepare: function() {
             const node = this;
+            setupTopicField(this, $("#node-input-topic"));
             const isV5Broker = function() {
                 var confNode = RED.nodes.node($("#node-input-broker").val());
                 return confNode && confNode.protocolVersion === "5";
@@ -7216,6 +7450,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         },
         oneditprepare: function() {
             var that = this;
+            setupTopicField(this, $("#node-input-topic"));
 
             function showHideDynamicFields() {
                 var confNode = RED.nodes.node($("#node-input-broker").val());
@@ -7471,11 +7706,22 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
         <option value="patch">PATCH</option>
         </select>
     </div>
-    <div class="form-row form-row-http-in-upload hide">
+
+    <div id="form-reqBody-http-in-controller" class="form-row hide" style="display: flex;">
         <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-upload" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-upload" style="width: 70%;" data-i18n="httpin.label.upload"></label>
+        <div style="display: flex; margin-left: 5px; flex-direction: column-reverse; gap: 10px; justify-content: center;">
+            <div id="form-row-http-in-upload" class="hide" style="display: flex; gap: 10px">
+                <input type="checkbox" id="node-input-upload" style="margin: 0px;">
+                <label for="node-input-upload" style="text-wrap: nowrap; margin-bottom: 0;" data-i18n="httpin.label.upload"></label>
+            </div>
+            <div id="form-row-http-in-parsing" class="hide" style="display: flex; gap: 10px">
+                <input type="checkbox" id="node-input-skipBodyParsing" style="margin: 0px;">
+                <label for="node-input-skipBodyParsing" style="text-wrap: nowrap; margin-bottom: 0;" data-i18n="httpin.label.parsing"></label>
+            </div>
+        </div>
     </div>
+    
+
     <div class="form-row">
         <label for="node-input-url"><i class="fa fa-globe"></i> <span data-i18n="httpin.label.url"></span></label>
         <input id="node-input-url" type="text" placeholder="/url">
@@ -7520,6 +7766,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                   label:RED._("node-red:httpin.label.url")},
             method: {value:"get",required:true},
             upload: {value:false},
+            skipBodyParsing: {value:false},
             swaggerDoc: {type:"swagger-doc", required:false}
         },
         inputs:0,
@@ -7561,16 +7808,22 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
                 $('.row-swagger-doc').hide();
             }
             $("#node-input-method").on("change", function() {
-                if ($(this).val() === "post") {
-                    $(".form-row-http-in-upload").show();
+                var method = $(this).val();
+                if(["post", "put", "patch","delete"].includes(method)){
+                    $("#form-reqBody-http-in-controller").show();
+                    $("#form-row-http-in-parsing").show();
+                    if (method === "post") {
+                        $("#form-row-http-in-upload").show();
+                    } else {
+                        $("#form-row-http-in-upload").hide();
+                    }
                 } else {
-                    $(".form-row-http-in-upload").hide();
+                    $("#form-row-http-in-parsing").hide();
+                    $("#form-row-http-in-upload").hide();
+                    $("#form-reqBody-http-in-controller").hide();
                 }
             }).change();
-
-
         }
-
     });
     var headerTypes = [
         {value:"content-type",label:"Content-Type",hasValue: false},
@@ -7774,6 +8027,7 @@ If you want every 20 minutes from now - use the <i>"interval"</i> option.</p>
     <p>If the content type of the request can be determined, the body will be parsed to
        any appropriate type. For example, <code>application/json</code> will be parsed to
        its JavaScript object representation.</p>
+    <p>The node can be configured to not parse the body, in which case it will be provided as a Buffer object.</p>
     <p><b>Note:</b> this node does not send any response to the request. The flow
        must include an HTTP Response node to complete the request.</p>
 </script>
@@ -7855,7 +8109,7 @@ msg.cookies = {
 
     <div class="form-row">
         <label for="node-input-url"><i class="fa fa-globe"></i> <span data-i18n="httpin.label.url"></span></label>
-        <input id="node-input-url" type="text" placeholder="http://">
+        <input id="node-input-url" type="text" placeholder="https://">
     </div>
 
     <div class="form-row node-input-paytoqs-row">
@@ -8998,7 +9252,7 @@ msg.cookies = {
     </div>
 
     <div id="node-row-newline" class="form-row hidden" style="padding-left:110px;">
-        <span data-i18n="tcpin.label.delimited"></span> <input type="text" id="node-input-newline" style="width:110px;" data-i18n="[placeholder]tcpin.label.optional"><br/>
+        <span data-i18n="tcpin.label.delimited"></span> <input type="text" id="node-input-newline" style="width:110px;" data-i18n="[placeholder]tcpin.label.optional"><br>
         <input type="checkbox" id="node-input-trim" style="display:inline-block; width:auto; vertical-align:top;"> <span data-i18n="tcpin.label.reattach"></span>
     </div>
 
@@ -9265,7 +9519,7 @@ msg.cookies = {
         <span id="node-units"></span>
     </div>
     <div id="node-row-newline" class="form-row hidden" style="padding-left:162px;">
-        <span data-i18n="tcpin.label.delimited"></span> <input type="text" id="node-input-newline" style="width:110px;" data-i18n="[placeholder]tcpin.label.optional"><br/>
+        <span data-i18n="tcpin.label.delimited"></span> <input type="text" id="node-input-newline" style="width:110px;" data-i18n="[placeholder]tcpin.label.optional"><br>
         <input type="checkbox" id="node-input-trim" style="display:inline-block; width:auto; vertical-align:top;"> <span data-i18n="tcpin.label.reattach"></span>
     </div>
     <div class="form-row">
@@ -9399,7 +9653,7 @@ msg.cookies = {
     <p>If <code>msg._session</code> is not present the payload is
     sent to <b>all</b> connected clients.</p>
     <p>In Reply-to mode, setting <code>msg.reset = true</code> will reset the connection
-        specified by _session.id, or all connections if no _session.id is specified.</p>
+        specified by _session.id, or all connections if no _session.id is specified. Any <code>msg.payload</code> is ignored in this case.</p>
     <p><b>Note: </b>On some systems you may need root or administrator access
     to access ports below 1024.</p>
 </script>
@@ -9411,7 +9665,7 @@ msg.cookies = {
     wait a fixed timeout from first reply and then return, sit and wait for data, or send then close the connection
     immediately, without waiting for a reply.</p>
     <p>If in sit and wait mode (remain connected) you can send <code>msg.reset = true</code> or <code>msg.reset = "host:port"</code> to force a break in
-    the connection and an automatic reconnection.</p>
+    the connection and an automatic reconnection. If the message has no <code>msg.payload</code>, only the connection is reset and nothing further is sent. If <code>msg.payload</code> is present, it is sent as a new request over the freshly reconnected connection.</p>
     <p>The response will be output in <code>msg.payload</code> as a buffer, so you may want to .toString() it.</p>
     <p>If you leave tcp host or port blank they must be set by using the <code>msg.host</code> and <code>msg.port</code> properties in every message sent to the node.</p>
 </script>
@@ -9730,21 +9984,21 @@ msg.cookies = {
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
     </div>
-    <hr align="middle"/>
+    <hr align="middle">
     <div class="form-row">
         <label style="width:100%;"><span data-i18n="csv.label.c2o"></span></label>
     </div>
     <div class="form-row" style="padding-left:20px;">
         <label><i class="fa fa-sign-in"></i> <span data-i18n="csv.label.input"></span></label>
-        <span data-i18n="csv.label.skip-s"></span>&nbsp;<input type="text" id="node-input-skip" style="width:40px; height:25px;"/>&nbsp;<span data-i18n="csv.label.skip-e"></span><br/>
+        <span data-i18n="csv.label.skip-s"></span>&nbsp;<input type="text" id="node-input-skip" style="width:40px; height:25px;">&nbsp;<span data-i18n="csv.label.skip-e"></span><br>
         <label>&nbsp;</label>
-        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-hdrin"><label style="width:auto; margin-top:7px;" for="node-input-hdrin"><span data-i18n="csv.label.firstrow"></span></label><br/>
+        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-hdrin"><label style="width:auto; margin-top:7px;" for="node-input-hdrin"><span data-i18n="csv.label.firstrow"></span></label><br>
         <label>&nbsp;</label>
-        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-strings"><label style="width:auto; margin-top:7px;" for="node-input-strings"><span data-i18n="csv.label.usestrings"></span></label><br/>
+        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-strings"><label style="width:auto; margin-top:7px;" for="node-input-strings"><span data-i18n="csv.label.usestrings"></span></label><br>
         <label>&nbsp;</label>
-        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-include_empty_strings"><label style="width:auto; margin-top:7px;" for="node-input-include_empty_strings"><span data-i18n="csv.label.include_empty_strings"></span></label><br/>
+        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-include_empty_strings"><label style="width:auto; margin-top:7px;" for="node-input-include_empty_strings"><span data-i18n="csv.label.include_empty_strings"></span></label><br>
         <label>&nbsp;</label>
-        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-include_null_values"><label style="width:auto; margin-top:7px;" for="node-input-include_null_values"><span data-i18n="csv.label.include_null_values"></span></label><br/>
+        <input style="width:20px; vertical-align:baseline; margin-right:5px;" type="checkbox" id="node-input-include_null_values"><label style="width:auto; margin-top:7px;" for="node-input-include_null_values"><span data-i18n="csv.label.include_null_values"></span></label><br>
     </div>
     <div class="form-row" style="padding-left:20px;">
         <label><i class="fa fa-sign-out"></i> <span data-i18n="csv.label.output"></span></label>
@@ -9948,7 +10202,7 @@ msg.cookies = {
         <label for="node-input-chr" style="width: 230px;"><i class="fa fa-tag"></i> <span data-i18n="html.label.prefix"></span></label>
         <input type="text" id="node-input-chr" style="text-align:center; width: 40px;" placeholder="_">
     </div>
-    <br/>
+    <br>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" style="width:70%" data-i18n="[placeholder]common.label.name">
@@ -10040,13 +10294,13 @@ msg.cookies = {
     </div>
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="json.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:70%;"/>
+        <input type="text" id="node-input-property" style="width:70%;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
     </div>
-    <hr align="middle"/>
+    <hr align="middle">
     <div class="form-row node-json-to-json-options">
         <label style="width:100%;"><span data-i18n="json.label.o2j"></span></label>
     </div>
@@ -10151,13 +10405,13 @@ msg.cookies = {
 <script type="text/html" data-template-name="xml">
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="common.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:70%;"/>
+        <input type="text" id="node-input-property" style="width:70%;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
     </div>
-    <hr align="middle"/>
+    <hr align="middle">
     <div class="form-row">
         <label style="width:100%;"><span data-i18n="xml.label.x2o"></span></label>
     </div>
@@ -10255,7 +10509,7 @@ msg.cookies = {
 <script type="text/html" data-template-name="yaml">
     <div class="form-row">
         <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="common.label.property"></span></label>
-        <input type="text" id="node-input-property" style="width:70%;"/>
+        <input type="text" id="node-input-property" style="width:70%;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
@@ -10349,7 +10603,7 @@ msg.cookies = {
         <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
     </div>
     <div class="form-row">
-        <label for="node-input-property"><i class="fa fa-forward"></i> <span data-i18n="split.splitThe"></span></label>
+        <label for="node-input-property" style="padding-left:10px; margin-right:-10px;" data-i18n="split.splitThe"></label>
         <input type="text" id="node-input-property" style="width:70%;"/>
     </div>
     <div class="form-row"><span data-i18n="[html]split.strBuff"></span></div>
@@ -10530,7 +10784,7 @@ msg.cookies = {
         <div class="form-row">
             <label>&nbsp;</label>
             <input type="checkbox" id="node-input-reduceRight" style="display:inline-block; width:auto; vertical-align:top; margin-left:10px;">
-            <label for="node-input-reduceRight" style="width:70%;" data-i18n="join.reduce.right" style="margin-left:10px;"/>
+            <label for="node-input-reduceRight" data-i18n="join.reduce.right" style="width:70%; margin-left:10px;"></label>
         </div>
     </div>
     <div class="form-tips form-tips-auto hide" data-i18n="[html]join.tip"></div>
@@ -11287,7 +11541,7 @@ msg.cookies = {
 <script type="text/html" data-template-name="file">
     <div class="form-row node-input-filename">
          <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="file.label.filename"></span></label>
-         <input id="node-input-filename" type="text">
+         <input id="node-input-filename" type="text" style="width: 100% !important;">
          <input type="hidden" id="node-input-filenameType">
     </div>
     <div class="form-row">
@@ -11323,7 +11577,7 @@ msg.cookies = {
 <script type="text/html" data-template-name="file in">
     <div class="form-row">
          <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="file.label.filename"></span></label>
-         <input id="node-input-filename" type="text">
+         <input id="node-input-filename" type="text" style="width: 100% !important;">
          <input type="hidden" id="node-input-filenameType">
     </div>
     <div class="form-row">
@@ -12730,30 +12984,6 @@ msg.cookies = {
     <p>will convert the 4 bytes into 4 ascii characters.</p>
     <p><b>Note</b>: the pattern does not cope well with extraneous spaces.
 </script>
-<!-- --- [red-module:@gorenje/node-red-contrib-flowcompare/flowcompare] --- -->
-<script type="text/javascript">
-(function ($) {
-   RED.nodes.registerType('FlowCompareCfg', {
-      category: 'config',
-      hasUsers: false,
-      defaults: {
-         name: { value: "" },
-         data: { value: "" }
-      },
-      paletteLabel: 'FlowCompareCfg',
-      label: function () {
-         return this.name;
-      }
-  });
-})(jQuery);
-</script>
-
-<!-- The html for the config node info panel (in right sidebar) -->
-<script type="text/x-red" data-template-name="FlowCompareCfg">
-   <p>Visually compare local flow with flow deployed on the server.</p>
-   Visual comparison of flows being edited and flow that has been deployed.
-</script>
-
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-process-nodes/erlconfig] --- -->
 <script type="text/javascript">
 (function ($) {
@@ -14952,15 +15182,7 @@ Failures will still be sent to the debug panel however the node status will rema
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-success] --- -->
 <script type="text/javascript">
   (function(){
-  
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
-  
+    
   RED.nodes.registerType('ut-assert-success',{
     color: '#addb7b',
     icon: "font-awesome/fa-smile-o",
@@ -14968,6 +15190,9 @@ Failures will still be sent to the debug panel however the node status will rema
     defaults: {
       name: {
         value:"",
+      },
+      msglimit: {
+        value:"=="
       },
       count: {
         value: 1,
@@ -14988,8 +15213,8 @@ Failures will still be sent to the debug panel however the node status will rema
 
       if ( this.count == "") { this.count = 1 }
 
-      if ( this.count > 1  ) {
-        label = `${label}: ${this.count}`
+      if ( this.count > 0  ) {
+        label = `${label}: ${this.msglimit || '=='} ${this.count}`
       }
       return label;
     },
@@ -15007,6 +15232,21 @@ Failures will still be sent to the debug panel however the node status will rema
 
     oneditprepare: function() {
       if (!this.count || this.count == "")  { this.count = 1 }
+      
+      $(".limit-msgcnt-button-group").removeClass("selected")
+      $('#node-input-msglimit').val(this.msglimit || "==")
+
+      $(".limit-msgcnt-button-group").map((i, d) => {
+        if ($(d).data("value") == $('#node-input-msglimit').val()) {
+          $(d).addClass("selected")
+        }
+      })
+
+      $(".limit-msgcnt-button-group").on("click", function () {
+        $(".limit-msgcnt-button-group").removeClass("selected");
+        $(this).addClass("selected");
+        $('#node-input-msglimit').val($(this).data("value"))
+      })
     },
 
     oneditcancel: function() {
@@ -15030,30 +15270,39 @@ Failures will still be sent to the debug panel however the node status will rema
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
-
+  
   <div class="form-row">
     <label for="node-input-count" data-i18n="ut-assert-success.label.count"></label>
+
+
+    <span class="button-group">
+      <button type="button" data-value="<=" class="red-ui-button toggle limit-msgcnt-button-group selected"><span data-i18n="ut-assert-success.label.limit.upperlimit"></span></button>
+      <button type="button" data-value="=="class="red-ui-button toggle limit-msgcnt-button-group"><span data-i18n="ut-assert-success.label.limit.exactly"></span></button>
+      <button type="button" data-value=">=" class="red-ui-button toggle limit-msgcnt-button-group"><span data-i18n="ut-assert-success.label.limit.lowerlimit"></span></button>
+    </span>
+
+    <input type="text" id="node-input-msglimit" class='hide'></input>
     <input type="number" id="node-input-count" data-i18n="[placeholder]ut-assert-success.placeholder.count" style="width: 100px;"></input>
+
+    <span data-i18n="ut-assert-success.label.messages"></span>
   </div>
 </script>
 <script type="text/html" data-help-name="ut-assert-success">
-  <p>This node failes if, during flow execution, it is not reached.</p>
-  A success assertion meaning that this node **must** be reached when a flow is executed as part of a test.
+<p>This node failes if, during flow execution, it is not reached.</p>
+A success assertion meaning that this node <b>must</b> be reached when a flow is executed as part of a test.
 
+<p>
 If this node isn't reached, then the test will fail.
+</p>
+
+<p>
+A message count of zero is assumed to be <b>at least one message</b>, it's the same as minimum of one message.
+</p>
 </script>
 
 <!-- --- [red-module:@gregoriusrippenstein/erlang-red-unittest/ut-assert-status] --- -->
 <script type="text/javascript">
   (function(){
-  
-
-  function frontendSupportFunction() {
-  }
-
-  var functTwo = (arg) => {
-
-  };
   
   RED.nodes.registerType('ut-assert-status',{
     color: '#C0DEED',
@@ -15064,9 +15313,19 @@ If this node isn't reached, then the test will fail.
       name: {
         value:"",
       },
+      
+      scope: {
+        value: null,
+        type: "*[]",
+        required: true,
+        validate: function (v) {
+          if (!v) { return false }
+          return Array.isArray(v) && v.length > 0
+        }
+      },
+
       nodeid: {
         value: "",
-        required: true
       },
       content: {
         value: "",
@@ -15087,26 +15346,34 @@ If this node isn't reached, then the test will fail.
 
     inputs: 0,
 
-    outputs: 0,
+    outputs: 1,
 
     label: function() {
-      if ( this.nodeid && !this.name) {
-        let nodeLabel = `[${this.nodeid}]`;
-        let node = RED.nodes.node(this.nodeid)
+      if (this.nodeid && (!this.scope || !this.scope[0])) {
+        this.scope = [this.nodeid]
+      }
+
+      if (this.scope && this.scope[0] && !this.name) {
+        let nodeLabel = `[${this.scope[0]}]`;
+        let node = RED.nodes.node(this.scope[0])
         if (node) {
           nodeLabel = RED.utils.getNodeLabel(node)
         }
-        
-        if ( this.inverse )  {
-          return `Assert No Status for ${nodeLabel}`
+
+        if (this.inverse) {
+          return `Assert No Status from ${nodeLabel}`
         } else {
-          return `Assert Status for ${nodeLabel}: ${this.colour} ${this.shape}`
+          return `Assert Status of ${this.msgtype} for ${nodeLabel}`
         }
       } else { return (this.name || this._def.paletteLabel) }
     },
 
     labelStyle: function() {
-      return (this.name || this.nodeid) ? "node_label_italic" : "";
+      if (this.nodeid && (!this.scope || !this.scope[0])) {
+        this.scope = [this.nodeid]
+      }
+
+      return (this.name || (this.scope && this.scope[0])) ? "node_label_italic" : "";      
     },
 
     onpaletteadd: function() {
@@ -15171,7 +15438,7 @@ If this node isn't reached, then the test will fail.
           nodeid: nde.id,
           node: nde,
           sublabel: nde.type,
-          selected: nde.id == this.nodeid,
+          selected: this.scope && this.scope.indexOf(nde.id) > -1,
           checkbox: false,
           radio: true,
           children: undefined
@@ -15185,7 +15452,11 @@ If this node isn't reached, then the test will fail.
     },
 
     oneditsave: function() {
-      this.nodeid = $("#node-input-assert-status-target-container-div").treeList('selected').nodeid;
+      if ($("#node-input-assert-status-target-container-div").treeList('selected').nodeid) {
+        this.scope = [$("#node-input-assert-status-target-container-div").treeList('selected').nodeid]
+      } else {
+        this.scope = []
+      }
     },
 
     oneditresize: function(size) {
@@ -15271,11 +15542,18 @@ If this node isn't reached, then the test will fail.
         value:"",
       },
 
-      scope: { value: null, type: "*[]", required: true },
+      scope: { 
+        value: null, 
+        type: "*[]", 
+        required: true,
+        validate: function(v) {
+          if (!v) { return false }
+          return Array.isArray(v) && v.length > 0
+        }
+      },
 
       nodeid: {
         value: "",
-        required: true
       }, 
 
       msgtype: {
@@ -16088,7 +16366,7 @@ Used to define a state machine diagram.
 <script type="text/javascript">
  (function(){
 
-   function flowHubPullUpdateFlows(e=null,o=null){let t=t=>{if($("#func-sidebar-flowhub-pull-spinner").hide(),"failed"==t.status)return RED.notify(t.msg,{type:"error",id:"FlowHubPull",timeout:4e3});let i=[],r={},l=[];Object.keys(t.data).forEach(function(e){var o=t.data[e].name.match(/^(\[.+\])/);o?r[o[0]]?r[o[0]].push(t.data[e]):r[o[0]]=[t.data[e]]:l.push(t.data[e])}),Object.keys(r).sort((e,o)=>e<o?-1:1).forEach(e=>{var o=r[e].map(e=>({label:e.name,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0}));i.push({label:e,icon:"",flowid:"",sublabel:"",selected:!1,checkbox:!1,children:o.sort((e,o)=>e.label<o.label?-1:1)})}),l.sort((e,o)=>e.name<o.name?-1:1).forEach(e=>{i.push({label:e.name,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0})}),e&&e(i)};$.get({url:"https://api.flowhub.org/v1/flows?cb="+(new Date).getTime(),headers:{"X-FHB-TOKEN":o}}).done(e=>{t(e)}).fail(e=>{var i="";"rejected"==e.state()?$.ajax({url:"FlowHubCatalogue",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({token:o}),success:function(e){t(e)},error:function(e,o,t){$("#func-sidebar-flowhub-pull-spinner").hide(),i="<p>Failed to retrieve FlowHub catalogue, request blocked.</p><p>Request: <b>https://api.flowhub.org/v1/flows</b></p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>",console.log("Error",o),RED.notify(i,{type:"error",id:"FlowHubPull",timeout:4e3})}}):($("#func-sidebar-flowhub-pull-spinner").hide(),i="<p>Failed to retrieve FlowHub catalogue.</p><p>Check browser console for more details.</p>",console.warn("Error loading https://api.flowhub.org/v1/flows:",e),RED.notify(i,{type:"error",id:"FlowHubPull",timeout:4e3}))})}function obtainConfigNode(){let o=[];return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&o.push(e)}),o[0]}function tokenToUrl(e){e=e.substring(4);var o="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".split("");let t=Object.fromEntries(o.map((e,o)=>[e,o])),i=Object.fromEntries(o.map((e,o)=>[o,e]));return e.replaceAll(/./gi,(e,o)=>i[(t[e]+o+1)%64])}function obtainFhbToken(e,i){$.ajax({url:"FlowHubToken",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({cfgnode:e}),success:function(e){i(e.token)},error:function(e,o,t){i("")}})}function doFlowImportForSidebar(i,e){var o=$("#node-input-flowhubpull-flowid").val().trim();""==$("#node-input-flowhubpull-flowrevision").val().trim()&&RED.nodes.workspace(o)?(RED.notify("Remove existing flow tab to re-import",{type:"warning"}),RED.view.reveal(o)):(RED.notify("Pull triggered",{type:"warning",timeout:3e3}),$.get({url:"https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"?cb="+(new Date).getTime()+"&v="+$("#node-input-flowhubpull-flowrevision").val().trim(),headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"}}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||((t=ensureYourConfigNodeExists()).flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision&&(t.flowrevisions[o.flowid]=o.revision)),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);i&&(e=e.filter(function(e){return"tab"!=e.type})),$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})}))}function doFlowImportForPullNode(e,o){RED.notify("Pull triggered",{type:"warning",timeout:3e3});$.get({url:"https://api.flowhub.org/v3/flows/"+$("#node-input-flowid").val().trim()+"?cb="+(new Date).getTime()+"&v="+$("#node-input-flowrevision").val().trim(),headers:{"X-FHB-TOKEN":o,"User-Agent":"FlowHub.org Pull Node"}}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||(t=(()=>{let o=void 0;return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&(o=e)}),o})())&&(t.flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision)&&(t.flowrevisions[o.flowid]=o.revision),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})})}function checkForDuplication(e){$.get({url:"https://api.flowhub.org/v1/flows/"+$("#node-input-flowhubpull-flowid").val()+"?cb="+(new Date).getTime()+"&v="+$("#node-input-flowhubpull-flowrevision").val(),headers:{"X-FHB-TOKEN":e}},function(e,o){let t=[];if(!Array.isArray(e))return RED.notify("Access denied or revision not found.","error");if(e.forEach((e,o)=>{"tab"==e.type?RED.nodes.workspace(e.id)&&t.push(e):"junction"==e.type?RED.nodes.junction(e.id)&&t.push(e):"group"==e.type?RED.nodes.group(e.id)&&t.push(e):"subflow"==e.type?RED.nodes.subflow(e.id)&&t.push(e):RED.nodes.node(e.id)&&t.push(e)}),0==t.length){RED.notify("Found no duplication.","success");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}}else{RED.notify("Found "+t.length+" items of duplication","warning");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){$("#node-input-flowhubpull-sb-duplication-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,o){}).on("treelistitemmouseout",function(e,o){}).on("treelistselect",function(e,o){o.node&&(RED.workspaces.show(o.node.z,!1,!1,!0),RED.view.reveal(o.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,o){var t;o.node&&(t=o.node.id,setTimeout(()=>{var e=RED.nodes.node(t);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),t==RED.workspaces.active()&&RED.workspaces.edit()},50))})}t=t.map(e=>({node:e,label:e.id,sublabel:e.type,selected:!1,checkbox:!1})),$("#node-input-flowhubpull-sb-duplication-container-div").treeList("data",t)}})}
+   function frontendHostUrlForToken(e){return e&&e.startsWith("local://")?e.replace(/local:\/\//,"").split("?")[0]:"https://flowhub.org"}function flowHubPullUpdateFlows(o=null,e=null){$.ajax({url:"FlowHubCatalogue",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({token:e}),success:function(e){(t=>{if($("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),"failed"==t.status)return RED.notify(t.msg,{type:"error",id:"FlowHubPull",timeout:4e3});let i=[],r={},n=[];Object.keys(t.data).forEach(function(e){var o=t.data[e].name.match(/^(\[.+\])/);o?r[o[0]]?r[o[0]].push(t.data[e]):r[o[0]]=[t.data[e]]:n.push(t.data[e])}),Object.keys(r).sort((e,o)=>e<o?-1:1).forEach(e=>{var o=r[e].map(e=>({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0}));i.push({label:e,icon:"",flowid:"",sublabel:"",selected:!1,checkbox:!1,children:o.sort((e,o)=>e.label<o.label?-1:1)})}),n.sort((e,o)=>e.name<o.name?-1:1).forEach(e=>{i.push({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0})}),o&&o(i)})(e)},error:function(e,o,t){$("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),console.log(e),console.log(t),console.log("Error",o),e&&418==e.status?RED.notify("<p>Failed to retrieve git catalogue, request returned empty response.</p><p>Please request the admin of the gitstore to have a look at the gitstore cache.</p>",{type:"warning",id:"FlowHubPull",timeout:4e3}):RED.notify("<p>Failed to retrieve FlowHub catalogue, request blocked.</p><p>FlowHub.org server might be down or GitHub might be down, please be patient.</p>",{type:"error",id:"FlowHubPull",timeout:4e3})}})}function obtainConfigNode(){let o=[];return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&o.push(e)}),o[0]}function tokenToUrl(e){if(!e.startsWith("local://")){e=e.substring(4);var o="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".split("");let t=Object.fromEntries(o.map((e,o)=>[e,o])),i=Object.fromEntries(o.map((e,o)=>[o,e]));return e.replaceAll(/./gi,(e,o)=>i[(t[e]+o+1)%64])}encodeURIComponent(e)}function obtainFhbToken(e,i){$.ajax({url:"FlowHubToken",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({cfgnode:e}),success:function(e){i(e.token)},error:function(e,o,t){i("")}})}function doFlowImportForSidebar(i,e){var o=$("#node-input-flowhubpull-flowid").val().trim();RED.nodes.workspace(o)?(RED.notify("Remove existing flow tab to re-import",{type:"warning"}),RED.view.reveal(o)):(RED.notify("Pull triggered",{type:"warning",timeout:3e3}),$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return""!=$("#node-input-flowhubpull-flowrevision").val()&&$("#node-input-flowhubpull-flowrevision").animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300),RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||((t=ensureYourConfigNodeExists()).flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision&&(t.flowrevisions[o.flowid]=o.revision)),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);i&&(e=e.filter(function(e){return"tab"!=e.type})),$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})}))}function doFlowImportForPullNode(e,o){RED.notify("Pull triggered",{type:"warning",timeout:3e3});$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":o,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:o,flowid:$("#node-input-flowid").val().trim(),revision:$("#node-input-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||(t=(()=>{let o=void 0;return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&(o=e)}),o})())&&(t.flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision)&&(t.flowrevisions[o.flowid]=o.revision),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})})}function checkForDuplication(e){$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((e,o)=>{try{if(!e||!e.flowdata||!Array.isArray(JSON.parse(e.flowdata))){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}}catch(e){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}if(e.status&&"ok"!=e.status){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Failed duplication check: "+e.msg,"error")}e=JSON.parse(e.flowdata);let t=[];if(!Array.isArray(e))return RED.notify("Access denied or revision not found.","error");if(e.forEach((e,o)=>{"tab"==e.type?RED.nodes.workspace(e.id)&&t.push(e):"junction"==e.type?RED.nodes.junction(e.id)&&t.push(e):"group"==e.type?RED.nodes.group(e.id)&&t.push(e):"subflow"==e.type?RED.nodes.subflow(e.id)&&t.push(e):RED.nodes.node(e.id)&&t.push(e)}),0==t.length){RED.notify("Found no duplication.","success");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}}else{RED.notify("Found "+t.length+" items of duplication","warning");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){$("#node-input-flowhubpull-sb-duplication-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,o){}).on("treelistitemmouseout",function(e,o){}).on("treelistselect",function(e,o){o.node&&(RED.workspaces.show(o.node.z,!1,!1,!0),RED.view.reveal(o.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,o){var t;o.node&&(t=o.node.id,setTimeout(()=>{var e=RED.nodes.node(t);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),t==RED.workspaces.active()&&RED.workspaces.edit()},50))})}t=t.map(e=>({node:e,label:e.id,sublabel:e.type,selected:!1,checkbox:!1})),$("#node-input-flowhubpull-sb-duplication-container-div").treeList("data",t)}})}
 
    RED.nodes.registerType('FlowHubPull',{
      color: '#44eeff',
@@ -16101,9 +16379,15 @@ Used to define a state machine diagram.
        flowname: { value: "" },
        flowrevision: { value: "" }
      },
+     
      inputs: 1,
+
      outputs: 2,
 
+     outputLabels: [
+        "required node packages",
+        "flow.json"
+     ],
      label: function() {
        return (this.name || this.flowname || this.flowid || this._def.paletteLabel);
      },
@@ -16116,9 +16400,11 @@ Used to define a state machine diagram.
      },
 
      oneditprepare: function() {
+       $('#node-input-flowhub-pull-spinner').show()
+
        var dirList = $("#node-input-flowhubpull-target-container-div").css({
         width: "100%",
-        height: "100%"
+        height: "63vh"
        }).treeList(
          {
            multi:false
@@ -16128,14 +16414,18 @@ Used to define a state machine diagram.
           $('#node-input-flowid').val(item.flowid);
           $('#node-input-flowname').val(item.label);
 
-          obtainFhbToken(obtainConfigNode(), (token) => {
-            if ( token !== "" && token ) {
-              token = "?t=" + tokenToUrl(token)
-            }
-            $('#flowhubpull-view-flow-link').attr(
-            'href', 'https://flowhub.org/f/' + item.flowid + token
-            ).show();
-          })
+          if (item.url) {
+              $('#flowhubpull-view-flow-link').attr('href', item.url).show();
+          } else {
+            obtainFhbToken(obtainConfigNode(), (token) => {
+              if ( token !== "" && token ) {
+                token = "?t=" + tokenToUrl(token)
+              }
+              $('#flowhubpull-view-flow-link').attr(
+              'href', `${frontendHostUrlForToken(token)}/f/${item.flowid}${token}`
+              ).show();
+            })
+          }
 
           $('#node-input-import-flow-but').prop('disabled',false)
          }
@@ -16144,33 +16434,25 @@ Used to define a state machine diagram.
           $('#node-input-flowid').val(item.flowid);
           $('#node-input-flowname').val(item.label);
 
-          obtainFhbToken(obtainConfigNode(), (token) => {
-            if ( token !== "" && token ) { 
-              token = "?t=" + tokenToUrl(token)
-            }
-            $('#flowhubpull-view-flow-link').attr(
-              'href', 'https://flowhub.org/f/' + item.flowid + token
-            ).show();
-          });
+          if (item.url) {
+              $('#flowhubpull-view-flow-link').attr('href', item.url).show();
+          } else {
+            obtainFhbToken(obtainConfigNode(), (token) => {
+              if ( token !== "" && token ) { 
+                token = "?t=" + tokenToUrl(token)
+              }
+              $('#flowhubpull-view-flow-link').attr(
+                'href', `${frontendHostUrlForToken(token)}/f/${item.flowid}${token}`
+              ).show();
+            });
+          }
 
           $('#node-input-import-flow-but').prop('disabled',false)
           $("#node-input-import-flow-but").trigger('click');
          }
        });
-
-       if ( this.flowid ) {
-         setTimeout( () => {
-          obtainFhbToken(obtainConfigNode(), (token) => {
-            if ( token !== "" && token ) {
-              token = "?t=" + tokenToUrl(token)
-            }
-
-            $('#flowhubpull-view-flow-link').attr(
-              'href', 'https://flowhub.org/f/' + $('#node-input-flowid').val() + token
-            ).show();             
-          })
-         }, 200);
-       } else {
+       
+       if ( !this.flowid ) {
         $('#node-input-import-flow-but').prop('disabled',true)
        }
 
@@ -16207,7 +16489,8 @@ Used to define a state machine diagram.
 
        $('#node-input-refresh-list-but').on('click', function(e) {
          e.preventDefault();
-
+         $('#node-input-flowhub-pull-spinner').show()
+         
          setTimeout( () => {
            obtainFhbToken(obtainConfigNode(), (token) => {
             flowHubPullUpdateFlows( (lst) => { 
@@ -16301,12 +16584,13 @@ Used to define a state machine diagram.
       </span>
     </div>
 -->
-    <div class="form-row node-input-target-row">
+    <div class="form-row">
         <button id="node-input-refresh-list-but"
                 class="red-ui-button"><i class="fa fa-refresh"></i> Refresh Flow List</button>
+        <img class='hide' id="node-input-flowhub-pull-spinner" src='red/images/spin.svg'/>
     </div>
 
-    <div class="form-row node-input-target-row node-input-target-list-row"
+    <div class="form-row"
          style="position: relative; min-height: 100px">
         <div style="position: absolute; top: -30px; right: 0px;">
             <input type="text" id="node-input-flowhubpull-target-filter">
@@ -16345,9 +16629,12 @@ Used to define a state machine diagram.
    RED.nodes.registerType('FlowHubCfg', {
       category: 'config',
       hasUsers: false,
+      credentials: {
+        apiToken: { type: "text" },
+        tokens: { value: []}
+      },
       defaults: {
-        apiToken: { value: "" },      
-        apiTokenType: { value: "" },
+        apiTokenType: { type: "cred" },
         fullname: { value: "" },
         email: { value: "" },
         flowid: { value: "" },
@@ -16356,7 +16643,6 @@ Used to define a state machine diagram.
         pushcomment: { value: "" },
         pushnewflows: { value: false },
         forcepush: { value: false },
-        tokens: { value: [] },
         flowrevisions: { value: {} }
       },
       label: 'FlowHubCfg',
@@ -16371,7 +16657,7 @@ This page is intentional left blank.
 
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-introspection/seeker] --- -->
 <script type="text/javascript">
-RED.nodes.registerType("Seeker",{color:"#e5e4ef",icon:"font-awesome/fa-ship",category:"introspection",paletteLabel:"Seeker",defaults:{name:{value:""}},inputs:0,outputs:1,label:function(){return this.name||this._def.paletteLabel},labelStyle:function(){return this.name?"node_label_italic":""},oneditprepare:function(){var n=this;window._introSpectionSeekerStack=[],window._introWorker=void 0;let i=e=>{var t=RED.nodes.node(e[e.length-1]);let n=[];return e.forEach(function(e){var t,e=RED.nodes.node(e)||RED.nodes.junction(e);void 0!==e&&(t=RED.nodes.workspace(e.z)||RED.nodes.subflow(e.z),n.push({label:"",_label:RED.utils.getNodeLabel(e),node:e,sublabel:t&&RED.utils.getNodeLabel(t)||e.z,icon:RED.utils.createNodeIcon(e,!0),class:"intro-remove-top-left"}))}),{node:t,label:RED.utils.getNodeLabel(t),_label:RED.utils.getNodeLabel(t),_pathlen:e.length,sublabel:"Length: "+e.length,selected:!1,checkbox:!1,children:n}};var o=$("#node-input-seeker-target-filter").searchBox({style:"compact",delay:300,change:function(){let t=$(this).val().trim().toLowerCase();var e,n=$("#node-input-seeker-target-container-div").treeList("data");""===t?($("#node-input-seeker-target-container-div").treeList("filter",null),o.searchBox("count","")):(e=$("#node-input-seeker-target-container-div").treeList("filter",function(e){return-1<e._label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)||e.sublabel.toLowerCase().indexOf(t)}),o.searchBox("count",e+" / "+n.length))}}),r=((e=>{let n=`#node-input-${e}-target-container-div`,o=`#node-input-${e}-extract-pathway-but`,i=`#node-input-${e}-show-pathway-but`;$(n).css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistconfirm",function(e,t){t.node&&!t.children&&(RED.view.reveal(t.node.id),RED.view.select(t.node.id),setTimeout(()=>{RED.editor.edit(t.node)},100))}).on("treelistselect",function(e,t){t.node&&!t.children&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw()),1==$(n).treeList("data").filter(e=>e.expanded).length?($(o).prop("disabled",!1),$(i).prop("disabled",!1)):($(o).prop("disabled",!0),$(i).prop("disabled",!0))})})("seeker"),function(t,n){if(n.indexOf(t.id)<0&&!t.d)switch(t.type){case"link call":RED.nodes.getNodeLinks(t).forEach(e=>{r(e.target,[...n,t.id])}),t.links.forEach(e=>{e=RED.nodes.node(e);e&&r(e,[...n,t.id])});break;case"link out":t.links.forEach(e=>{e=RED.nodes.node(e);e&&r(e,[...n,t.id])});break;case"Sink":n.push(t.id),window._introSpectionSeekerStack=[n,...window._introSpectionSeekerStack];break;default:RED.nodes.getNodeLinks(t).forEach(e=>{r(e.target,[...n,t.id])})}});let a=e=>{e&&e.preventDefault();let t=window._introSpectionSeekerStack.length,n=25,o=("-"!=$("#node-input-seeker-show-percent").val()&&(n=parseInt(t*(parseInt($("#node-input-seeker-show-percent").val())/100))),e=$("#node-input-seeker-show-ordering").val(),{1:(e,t)=>e.length<t.length?-1:1,2:(e,t)=>e.length>t.length?-1:1,3:(e,t)=>RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]))<RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))?-1:1,4:(e,t)=>{e=RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]));return RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))<e?-1:1},5:(e,t)=>.5<Math.random()?-1:1}[parseInt(e)]||((e,t)=>e.length<t.length?-1:1));setTimeout(()=>{setTimeout(()=>{$("#node-input-seeker-totalPaths").html(n>t?""+t:n+" / "+t)},10),setTimeout(()=>{$("#node-input-seeker-target-container-div").treeList("data",window._introSpectionSeekerStack.sort(o).slice(0,n).map(e=>i(e)))},20)},100)},d=()=>{let e=window._introSpectionSeekerStack.length;setTimeout(()=>{$("#node-input-seeker-totalPaths").html(e),$("#node-input-seeker-spinner").hide(),$("#node-input-seeker-start-but").html('<span><i class="fa fa-refresh"></i> Find Pathways</span>')},10);var t="seeker",n=e;$(`#node-input-${t}-show-percent`).show(),$(`#node-input-${t}-show-ordering`).show();var o,i=$(`#node-input-${t}-show-percent`),r=(i.html(""),i.append($("<option></option>").val("-").html("Show..")),[5,10,20,30,40,50,75].forEach(e=>{var t=parseInt(e*n/100);0!=t&&i.append($("<option></option>").val(e).html(t+" paths"))}),i.append($("<option></option>").val(100).html("All")),i.val("-"),(i=$(`#node-input-${t}-show-ordering`)).html(""),{"Count Asc":1,"Count Desc":2,"Name Asc":3,"Name Desc":4,Random:5});for(o in r)i.append($("<option></option>").val(r[o]).html(o));i.val(1),$("#node-input-seeker-show-ordering").on("change",a),$("#node-input-seeker-show-percent").on("change",a),$("#node-input-seeker-show-percent").trigger("change")};$("#node-input-seeker-show-pathway-but").on("click",e=>{e&&e.preventDefault();var e=$("#node-input-seeker-target-container-div").treeList("data").filter(e=>e.expanded);1==(e=e).length?(e=e[0].children.filter(e=>e.node.z==RED.workspaces.active()).map(e=>e.node.id),RED.tray.hide(),RED.view.selectNodes({selected:e,onselect:()=>{RED.tray.show()},oncancel:()=>{RED.tray.show()}})):RED.notify("Only one expanded pathway can be shown.",{type:"warning"})}),$("#node-input-seeker-extract-pathway-but").on("click",e=>{e&&e.preventDefault(),(e=>{if(1==e.length){e=e[0].children.map(e=>e.node).filter(e=>["link in","link out","Seeker","Sink","junction"].indexOf(e.type)<0);let o=RED.nodes.createExportableNodeSet(e).map(e=>(e.id=RED.nodes.id(),e)),i=0;o=o.map((e,t)=>{try{var n;e._def=e._def||RED.nodes.getType(e.type),e._def&&e._def._&&e._?(n=RED.utils.getNodeLabel(e,e.info).split("\\n").length,i+=30*n+30):i+=50}catch(e){i+=50}return delete e.z,e.y=i,e.x=0,e.wires=[[]],t!=o.length-1&&(e.wires=[[o[t+1].id]]),e}),RED.clipboard.copyText(JSON.stringify(o))&&RED.notify("Pathway copied to clipboard",{type:"success"})}else RED.notify("Only one expanded pathway can be extracted.",{type:"warning"})})($("#node-input-seeker-target-container-div").treeList("data").filter(e=>e.expanded))}),$("#node-input-seeker-start-but").on("click",e=>{if(e&&e.preventDefault(),window._introWorker)window._introWorker.terminate(),delete window._introWorker,d();else if(setTimeout(()=>{$("#node-input-seeker-totalPaths").html(""),$("#node-input-seeker-spinner").show(),$("#node-input-seeker-show-percent").hide(),$("#node-input-seeker-show-ordering").hide()},10),window._introSpectionSeekerStack=[],"undefined"!=typeof Worker){let t=new Worker("data:text/javascript;base64,bGV0IGludHJvU3BlY3Rpb25TdGFjaz1bXSxncmFwaD1bXSxncmFwaEluZGV4PXt9LFJFRD17bm9kZXM6e25vZGU6ZT0+Z3JhcGhbZ3JhcGhJbmRleFtlXV0sZ2V0Tm9kZUxpbmtzOmE9PmEuZmxhdHdpcmVzLm1hcChlPT4oe3RhcmdldDpSRUQubm9kZXMubm9kZShlKSxzb3VyY2U6YX0pKX19LHRyYXZlcnNlPWZ1bmN0aW9uKGEscyl7aWYocy5pbmRleE9mKGEuaWQpPDAmJiFhLmQpc3dpdGNoKGEudHlwZSl7Y2FzZSJsaW5rIGNhbGwiOlJFRC5ub2Rlcy5nZXROb2RlTGlua3MoYSkuZm9yRWFjaChlPT57dHJhdmVyc2UoZS50YXJnZXQsWy4uLnMsYS5pZF0pfSksYS5saW5rcy5mb3JFYWNoKGU9PntlPVJFRC5ub2Rlcy5ub2RlKGUpO2UmJnRyYXZlcnNlKGUsWy4uLnMsYS5pZF0pfSk7YnJlYWs7Y2FzZSJsaW5rIG91dCI6YS5saW5rcy5mb3JFYWNoKGU9PntlPVJFRC5ub2Rlcy5ub2RlKGUpO2UmJnRyYXZlcnNlKGUsWy4uLnMsYS5pZF0pfSk7YnJlYWs7Y2FzZSJTaW5rIjpzLnB1c2goYS5pZCkscG9zdE1lc3NhZ2Uocyk7YnJlYWs7ZGVmYXVsdDpSRUQubm9kZXMuZ2V0Tm9kZUxpbmtzKGEpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUudGFyZ2V0LFsuLi5zLGEuaWRdKX0pfX07b25tZXNzYWdlPWZ1bmN0aW9uKGUpe2xldCBhPWUuZGF0YS5zZWVrZXJJZDsoZ3JhcGg9ZS5kYXRhLm5vZGVzLm1hcChlPT4oe3dpcmVzOmUud2lyZXMsbGlua3M6ZS5saW5rcyxkOmUuZGlzYWJsZWR8fGUuZCxpZDplLmlkLHR5cGU6ZS50eXBlfSkpLmZpbHRlcihlPT4hIWUud2lyZXMpLm1hcChlPT4oZS5mbGF0d2lyZXM9ZS53aXJlcy5mbGF0KCksZSkpKS5mb3JFYWNoKChlLGEpPT5ncmFwaEluZGV4W2UuaWRdPWEpLFJFRC5ub2Rlcy5nZXROb2RlTGlua3MoUkVELm5vZGVzLm5vZGUoYSkpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUudGFyZ2V0LFthXSl9KSxwb3N0TWVzc2FnZSgiZG9uZSIpfTs=");(window._introWorker=t).onmessage=function(e){"done"==e.data?(t.terminate(),delete window._introWorker,d()):(window._introSpectionSeekerStack.push(e.data),$("#node-input-seeker-totalPaths").html(window._introSpectionSeekerStack.length),26==window._introSpectionSeekerStack.length&&$("#node-input-seeker-target-container-div").treeList("data",window._introSpectionSeekerStack.sort((e,t)=>e.length<t.length?-1:1).slice(0,25).map(e=>i(e))))},setTimeout(()=>{t.postMessage({seekerId:n.id,nodes:RED.nodes.createCompleteNodeSet({credentials:!1})}),$("#node-input-seeker-start-but").html('<span><i class="fa fa-stop"></i> Stop</span>')},10)}else setTimeout(()=>{RED.nodes.getNodeLinks(n).forEach(e=>{r(e.target,[n.id])}),d()},300)})},oneditsave:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionSeekerStack},oneditcancel:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionSeekerStack},oneditresize:function(e){for(var t=$("#dialog-form>div:not(.node-input-target-list-row)"),n=$("#dialog-form").height(),o=0;o<t.length;o++)n-=$(t[o]).outerHeight(!0);$("#dialog-form>div.node-input-target-list-row").css("height",n+"px")}});
+RED.nodes.registerType("Seeker",{color:"#e5e4ef",icon:"font-awesome/fa-ship",category:"introspection",paletteLabel:"Seeker",defaults:{name:{value:""}},inputs:0,outputs:1,label:function(){return this.name||this._def.paletteLabel},labelStyle:function(){return this.name?"node_label_italic":""},oneditprepare:function(){var n=this;window._introSpectionSeekerStack=[],window._introWorker=void 0;let i=e=>{var t=RED.nodes.node(e[e.length-1]);let n=[];return e.forEach(function(e){var t,e=RED.nodes.node(e)||RED.nodes.junction(e);void 0!==e&&(t=RED.nodes.workspace(e.z)||RED.nodes.subflow(e.z),n.push({label:"",_label:RED.utils.getNodeLabel(e),node:e,sublabel:t&&RED.utils.getNodeLabel(t)||e.z,icon:RED.utils.createNodeIcon(e,!0),class:"intro-remove-top-left"}))}),{node:t,label:RED.utils.getNodeLabel(t),_label:RED.utils.getNodeLabel(t),_pathlen:e.length,sublabel:"Length: "+e.length,selected:!1,checkbox:!1,children:n}};var o=$("#node-input-seeker-target-filter").searchBox({style:"compact",delay:300,change:function(){let t=$(this).val().trim().toLowerCase();var e,n=$("#node-input-seeker-target-container-div").treeList("data");""===t?($("#node-input-seeker-target-container-div").treeList("filter",null),o.searchBox("count","")):(e=$("#node-input-seeker-target-container-div").treeList("filter",function(e){return-1<e._label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)||e.sublabel.toLowerCase().indexOf(t)}),o.searchBox("count",e+" / "+n.length))}}),r=((e=>{let n=`#node-input-${e}-target-container-div`,o=`#node-input-${e}-extract-pathway-but`,i=`#node-input-${e}-show-pathway-but`;$(n).css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistconfirm",function(e,t){t.node&&!t.children&&(RED.view.reveal(t.node.id),RED.view.select(t.node.id),setTimeout(()=>{RED.editor.edit(t.node)},100))}).on("treelistselect",function(e,t){t.node&&!t.children&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw()),1==$(n).treeList("data").filter(e=>e.expanded).length?($(o).prop("disabled",!1),$(i).prop("disabled",!1)):($(o).prop("disabled",!0),$(i).prop("disabled",!0))})})("seeker"),function(t,n){if(n.indexOf(t.id)<0&&!t.d)switch(t.type){case"link call":RED.nodes.getNodeLinks(t).forEach(e=>{r(e.target,[...n,t.id])}),t.links.forEach(e=>{e=RED.nodes.node(e);e&&r(e,[...n,t.id])});break;case"link out":t.links.forEach(e=>{e=RED.nodes.node(e);e&&r(e,[...n,t.id])});break;case"Sink":n.push(t.id),window._introSpectionSeekerStack=[n,...window._introSpectionSeekerStack];break;default:RED.nodes.getNodeLinks(t).forEach(e=>{r(e.target,[...n,t.id])})}});let a=e=>{e&&e.preventDefault();let t=window._introSpectionSeekerStack.length,n=25,o=("-"!=$("#node-input-seeker-show-percent").val()&&(n=parseInt(t*(parseInt($("#node-input-seeker-show-percent").val())/100))),e=$("#node-input-seeker-show-ordering").val(),{1:(e,t)=>e.length<t.length?-1:1,2:(e,t)=>e.length>t.length?-1:1,3:(e,t)=>RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]))<RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))?-1:1,4:(e,t)=>{e=RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]));return RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))<e?-1:1},5:(e,t)=>.5<Math.random()?-1:1}[parseInt(e)]||((e,t)=>e.length<t.length?-1:1));setTimeout(()=>{setTimeout(()=>{$("#node-input-seeker-totalPaths").html(n>t?""+t:n+" / "+t)},10),setTimeout(()=>{$("#node-input-seeker-target-container-div").treeList("data",window._introSpectionSeekerStack.sort(o).slice(0,n).map(e=>i(e)))},20)},100)},d=()=>{let e=window._introSpectionSeekerStack.length;setTimeout(()=>{$("#node-input-seeker-totalPaths").html(e),$("#node-input-seeker-spinner").hide(),$("#node-input-seeker-start-but").html('<span><i class="fa fa-refresh"></i> Find Pathways</span>')},10);var t="seeker",n=e;$(`#node-input-${t}-show-percent`).show(),$(`#node-input-${t}-show-ordering`).show();var o,i=$(`#node-input-${t}-show-percent`),r=(i.html(""),i.append($("<option></option>").val("-").html("Show..")),[5,10,20,30,40,50,75].forEach(e=>{var t=parseInt(e*n/100);0!=t&&i.append($("<option></option>").val(e).html(t+" paths"))}),i.append($("<option></option>").val(100).html("All")),i.val("-"),(i=$(`#node-input-${t}-show-ordering`)).html(""),{"Count Asc":1,"Count Desc":2,"Name Asc":3,"Name Desc":4,Random:5});for(o in r)i.append($("<option></option>").val(r[o]).html(o));i.val(1),$("#node-input-seeker-show-ordering").on("change",a),$("#node-input-seeker-show-percent").on("change",a),$("#node-input-seeker-show-percent").trigger("change")};$("#node-input-seeker-show-pathway-but").on("click",e=>{e&&e.preventDefault();var e=$("#node-input-seeker-target-container-div").treeList("data").filter(e=>e.expanded);1==(e=e).length?(e=e[0].children.filter(e=>e.node.z==RED.workspaces.active()).map(e=>e.node.id),RED.tray.hide(),RED.view.selectNodes({selected:e,onselect:()=>{RED.tray.show()},oncancel:()=>{RED.tray.show()}})):RED.notify("Only one expanded pathway can be shown.",{type:"warning"})}),$("#node-input-seeker-extract-pathway-but").on("click",e=>{e&&e.preventDefault(),((t,n)=>{if(1==t.length){let e=t[0].children.map(e=>e.node).filter(e=>["link in","link out","Seeker","Sink","junction"].indexOf(e.type)<0),o=(n&&(e=e.reverse()),RED.nodes.createExportableNodeSet(e).map(e=>(e.id=RED.nodes.id(),e))),i=0;o=o.map((e,t)=>{try{var n;e._def=e._def||RED.nodes.getType(e.type),e._def&&e._def._&&e._?(n=RED.utils.getNodeLabel(e,e.info).split("\\n").length,i+=30*n+30):i+=50}catch(e){i+=50}return delete e.z,e.y=i,e.x=0,e.wires=[[]],t!=o.length-1&&(e.wires=[[o[t+1].id]]),e}),RED.clipboard.copyText(JSON.stringify(o))&&RED.notify("Pathway copied to clipboard",{type:"success"})}else RED.notify("Only one expanded pathway can be extracted.",{type:"warning"})})($("#node-input-seeker-target-container-div").treeList("data").filter(e=>e.expanded))}),$("#node-input-seeker-start-but").on("click",e=>{if(e&&e.preventDefault(),window._introWorker)window._introWorker.terminate(),delete window._introWorker,d();else if(setTimeout(()=>{$("#node-input-seeker-totalPaths").html(""),$("#node-input-seeker-spinner").show(),$("#node-input-seeker-show-percent").hide(),$("#node-input-seeker-show-ordering").hide()},10),window._introSpectionSeekerStack=[],"undefined"!=typeof Worker){let t=new Worker("data:text/javascript;base64,bGV0IGludHJvU3BlY3Rpb25TdGFjaz1bXSxncmFwaD1bXSxncmFwaEluZGV4PXt9LFJFRD17bm9kZXM6e25vZGU6ZT0+Z3JhcGhbZ3JhcGhJbmRleFtlXV0sZ2V0Tm9kZUxpbmtzOmE9PmEuZmxhdHdpcmVzLm1hcChlPT4oe3RhcmdldDpSRUQubm9kZXMubm9kZShlKSxzb3VyY2U6YX0pKX19LHRyYXZlcnNlPWZ1bmN0aW9uKGEscyl7aWYocy5pbmRleE9mKGEuaWQpPDAmJiFhLmQpc3dpdGNoKGEudHlwZSl7Y2FzZSJsaW5rIGNhbGwiOlJFRC5ub2Rlcy5nZXROb2RlTGlua3MoYSkuZm9yRWFjaChlPT57dHJhdmVyc2UoZS50YXJnZXQsWy4uLnMsYS5pZF0pfSksYS5saW5rcy5mb3JFYWNoKGU9PntlPVJFRC5ub2Rlcy5ub2RlKGUpO2UmJnRyYXZlcnNlKGUsWy4uLnMsYS5pZF0pfSk7YnJlYWs7Y2FzZSJsaW5rIG91dCI6YS5saW5rcy5mb3JFYWNoKGU9PntlPVJFRC5ub2Rlcy5ub2RlKGUpO2UmJnRyYXZlcnNlKGUsWy4uLnMsYS5pZF0pfSk7YnJlYWs7Y2FzZSJTaW5rIjpzLnB1c2goYS5pZCkscG9zdE1lc3NhZ2Uocyk7YnJlYWs7ZGVmYXVsdDpSRUQubm9kZXMuZ2V0Tm9kZUxpbmtzKGEpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUudGFyZ2V0LFsuLi5zLGEuaWRdKX0pfX07b25tZXNzYWdlPWZ1bmN0aW9uKGUpe2xldCBhPWUuZGF0YS5zZWVrZXJJZDsoZ3JhcGg9ZS5kYXRhLm5vZGVzLm1hcChlPT4oe3dpcmVzOmUud2lyZXMsbGlua3M6ZS5saW5rcyxkOmUuZGlzYWJsZWR8fGUuZCxpZDplLmlkLHR5cGU6ZS50eXBlfSkpLmZpbHRlcihlPT4hIWUud2lyZXMpLm1hcChlPT4oZS5mbGF0d2lyZXM9ZS53aXJlcy5mbGF0KCksZSkpKS5mb3JFYWNoKChlLGEpPT5ncmFwaEluZGV4W2UuaWRdPWEpLFJFRC5ub2Rlcy5nZXROb2RlTGlua3MoUkVELm5vZGVzLm5vZGUoYSkpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUudGFyZ2V0LFthXSl9KSxwb3N0TWVzc2FnZSgiZG9uZSIpfTs=");(window._introWorker=t).onmessage=function(e){"done"==e.data?(t.terminate(),delete window._introWorker,d()):(window._introSpectionSeekerStack.push(e.data),$("#node-input-seeker-totalPaths").html(window._introSpectionSeekerStack.length),26==window._introSpectionSeekerStack.length&&$("#node-input-seeker-target-container-div").treeList("data",window._introSpectionSeekerStack.sort((e,t)=>e.length<t.length?-1:1).slice(0,25).map(e=>i(e))))},setTimeout(()=>{t.postMessage({seekerId:n.id,nodes:RED.nodes.createCompleteNodeSet({credentials:!1})}),$("#node-input-seeker-start-but").html('<span><i class="fa fa-stop"></i> Stop</span>')},10)}else setTimeout(()=>{RED.nodes.getNodeLinks(n).forEach(e=>{r(e.target,[n.id])}),d()},300)})},oneditsave:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionSeekerStack},oneditcancel:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionSeekerStack},oneditresize:function(e){for(var t=$("#dialog-form>div:not(.node-input-target-list-row)"),n=$("#dialog-form").height(),o=0;o<t.length;o++)n-=$(t[o]).outerHeight(!0);$("#dialog-form>div.node-input-target-list-row").css("height",n+"px")}});
 </script>
 
 <script type="text/html" data-template-name="Seeker">
@@ -16416,7 +16702,7 @@ RED.nodes.registerType("Seeker",{color:"#e5e4ef",icon:"font-awesome/fa-ship",cat
 </script>
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-introspection/sink] --- -->
 <script type="text/javascript">
-RED.nodes.registerType("Sink",{color:"#e5e4ef",icon:"font-awesome/fa-anchor",category:"introspection",paletteLabel:"Sink",defaults:{name:{value:""}},inputs:1,outputs:0,label:function(){return this.name||this._def.paletteLabel},labelStyle:function(){return this.name?"node_label_italic":""},oneditprepare:function(){var n=this;let o=1,i=(window._introSpectionsinkStack=[],window._introWorker=void 0,e=>{var t=RED.nodes.node(e[e.length-1]);let n=[];return e.forEach(function(e){var t,e=RED.nodes.node(e)||RED.nodes.junction(e);void 0!==e&&(t=RED.nodes.workspace(e.z)||RED.nodes.subflow(e.z),n.push({label:"",_label:RED.utils.getNodeLabel(e),node:e,sublabel:t&&RED.utils.getNodeLabel(t)||e.z,icon:RED.utils.createNodeIcon(e,!0),class:"intro-remove-top-left"}))}),{node:t,label:RED.utils.getNodeLabel(t),_label:RED.utils.getNodeLabel(t),_pathlen:e.length,sublabel:"Length: "+e.length,selected:!1,checkbox:!1,children:n}});var a=$("#node-input-sink-target-filter").searchBox({style:"compact",delay:300,change:function(){let t=$(this).val().trim().toLowerCase();var e,n=$("#node-input-sink-target-container-div").treeList("data");""===t?($("#node-input-sink-target-container-div").treeList("filter",null),a.searchBox("count","")):(e=$("#node-input-sink-target-container-div").treeList("filter",function(e){return-1<e._label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)||e.sublabel.toLowerCase().indexOf(t)}),a.searchBox("count",e+" / "+n.length))}}),d=((e=>{let n=`#node-input-${e}-target-container-div`,o=`#node-input-${e}-extract-pathway-but`,i=`#node-input-${e}-show-pathway-but`;$(n).css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistconfirm",function(e,t){t.node&&!t.children&&(RED.view.reveal(t.node.id),RED.view.select(t.node.id),setTimeout(()=>{RED.editor.edit(t.node)},100))}).on("treelistselect",function(e,t){t.node&&!t.children&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw()),1==$(n).treeList("data").filter(e=>e.expanded).length?($(o).prop("disabled",!1),$(i).prop("disabled",!1)):($(o).prop("disabled",!0),$(i).prop("disabled",!0))})})("sink"),function(t,n){if(n.indexOf(t.id)<0&&!t.d)switch(t.type){case"link in":t.links.forEach(e=>{e=RED.nodes.node(e);e&&d(e,[...n,t.id])});break;case"Seeker":n.push(t.id),window._introSpectionsinkStack=[n,...window._introSpectionsinkStack];break;default:RED.nodes.getNodeLinks(t,o).forEach(e=>{d(e.source,[...n,t.id])})}});let l=e=>{e&&e.preventDefault();let t=window._introSpectionsinkStack.length,n=25,o=("-"!=$("#node-input-sink-show-percent").val()&&(n=parseInt(t*(parseInt($("#node-input-sink-show-percent").val())/100))),e=$("#node-input-sink-show-ordering").val(),{1:(e,t)=>e.length<t.length?-1:1,2:(e,t)=>e.length>t.length?-1:1,3:(e,t)=>RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]))<RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))?-1:1,4:(e,t)=>{e=RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]));return RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))<e?-1:1},5:(e,t)=>.5<Math.random()?-1:1}[parseInt(e)]||((e,t)=>e.length<t.length?-1:1));setTimeout(()=>{setTimeout(()=>{$("#node-input-sink-totalPaths").html(n>t?""+t:n+" / "+t)},10),setTimeout(()=>{$("#node-input-sink-target-container-div").treeList("data",window._introSpectionsinkStack.sort(o).slice(0,n).map(e=>i(e)))},20)},100)},r=()=>{let e=window._introSpectionsinkStack.length;setTimeout(()=>{$("#node-input-sink-start-but").html('<i class="fa fa-refresh"></i> Find Pathways'),$("#node-input-sink-totalPaths").html(e),$("#node-input-sink-spinner").hide()},10);var t="sink",n=e;$(`#node-input-${t}-show-percent`).show(),$(`#node-input-${t}-show-ordering`).show();var o,i=$(`#node-input-${t}-show-percent`),a=(i.html(""),i.append($("<option></option>").val("-").html("Show..")),[5,10,20,30,40,50,75].forEach(e=>{var t=parseInt(e*n/100);0!=t&&i.append($("<option></option>").val(e).html(t+" paths"))}),i.append($("<option></option>").val(100).html("All")),i.val("-"),(i=$(`#node-input-${t}-show-ordering`)).html(""),{"Count Asc":1,"Count Desc":2,"Name Asc":3,"Name Desc":4,Random:5});for(o in a)i.append($("<option></option>").val(a[o]).html(o));i.val(1),$("#node-input-sink-show-ordering").on("change",l),$("#node-input-sink-show-percent").on("change",l),$("#node-input-sink-show-percent").trigger("change")};$("#node-input-sink-show-pathway-but").on("click",e=>{e&&e.preventDefault();var e=$("#node-input-sink-target-container-div").treeList("data").filter(e=>e.expanded);1==(e=e).length?(e=e[0].children.filter(e=>e.node.z==RED.workspaces.active()).map(e=>e.node.id),RED.tray.hide(),RED.view.selectNodes({selected:e,onselect:()=>{RED.tray.show()},oncancel:()=>{RED.tray.show()}})):RED.notify("Only one expanded pathway can be shown.",{type:"warning"})}),$("#node-input-sink-extract-pathway-but").on("click",e=>{e&&e.preventDefault(),(e=>{if(1==e.length){e=e[0].children.map(e=>e.node).filter(e=>["link in","link out","Seeker","Sink","junction"].indexOf(e.type)<0);let o=RED.nodes.createExportableNodeSet(e).map(e=>(e.id=RED.nodes.id(),e)),i=0;o=o.map((e,t)=>{try{var n;e._def=e._def||RED.nodes.getType(e.type),e._def&&e._def._&&e._?(n=RED.utils.getNodeLabel(e,e.info).split("\\n").length,i+=30*n+30):i+=50}catch(e){i+=50}return delete e.z,e.y=i,e.x=0,e.wires=[[]],t!=o.length-1&&(e.wires=[[o[t+1].id]]),e}),RED.clipboard.copyText(JSON.stringify(o))&&RED.notify("Pathway copied to clipboard",{type:"success"})}else RED.notify("Only one expanded pathway can be extracted.",{type:"warning"})})($("#node-input-sink-target-container-div").treeList("data").filter(e=>e.expanded))}),$("#node-input-sink-start-but").on("click",e=>{if(e&&e.preventDefault(),window._introWorker)window._introWorker.terminate(),delete window._introWorker,r();else if(setTimeout(()=>{$("#node-input-sink-totalPaths").html(""),$("#node-input-sink-spinner").show(),$("#node-input-sink-show-percent").hide(),$("#node-input-sink-show-ordering").hide()},10),window._introSpectionsinkStack=[],"undefined"!=typeof Worker){let t=new Worker("data:text/javascript;base64,bGV0IGludHJvU3BlY3Rpb25TdGFjaz1bXSxncmFwaD1bXSxncmFwaEluZGV4PXt9LFJFRD17bm9kZXM6e25vZGU6ZT0+Z3JhcGhbZ3JhcGhJbmRleFtlXV0sZ2V0Tm9kZUxpbmtzOnM9PnMuaW53aXJlcy5tYXAoZT0+KHt0YXJnZXQ6cyxzb3VyY2U6UkVELm5vZGVzLm5vZGUoZSl9KSl9fTt2YXIgdHJhdmVyc2U9ZnVuY3Rpb24ocyxhKXtpZihhLmluZGV4T2Yocy5pZCk8MCYmIXMuZClzd2l0Y2gocy50eXBlKXtjYXNlImxpbmsgaW4iOnMubGlua3MuZm9yRWFjaChlPT57ZT1SRUQubm9kZXMubm9kZShlKTtlJiZ0cmF2ZXJzZShlLFsuLi5hLHMuaWRdKX0pO2JyZWFrO2Nhc2UiU2Vla2VyIjphLnB1c2gocy5pZCkscG9zdE1lc3NhZ2UoYSk7YnJlYWs7ZGVmYXVsdDpSRUQubm9kZXMuZ2V0Tm9kZUxpbmtzKHMpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUuc291cmNlLFsuLi5hLHMuaWRdKX0pfX07b25tZXNzYWdlPWZ1bmN0aW9uKGUpe2xldCBzPWUuZGF0YS5zaW5rSWQ7KGdyYXBoPShncmFwaD1lLmRhdGEubm9kZXMubWFwKGU9Pih7d2lyZXM6ZS53aXJlcyxsaW5rczplLmxpbmtzLGQ6ZS5kaXNhYmxlZHx8ZS5kLGlkOmUuaWQsdHlwZTplLnR5cGV9KSkuZmlsdGVyKGU9PiEhZS53aXJlcykubWFwKGU9PihlLmZsYXR3aXJlcz1lLndpcmVzLmZsYXQoKSxlKSkpLm1hcChzPT4ocy5pbndpcmVzPWdyYXBoLmZpbHRlcihlPT4tMTxlLmZsYXR3aXJlcy5pbmRleE9mKHMuaWQpKS5tYXAoZT0+ZS5pZCkscykpKS5mb3JFYWNoKChlLHMpPT5ncmFwaEluZGV4W2UuaWRdPXMpLFJFRC5ub2Rlcy5nZXROb2RlTGlua3MoUkVELm5vZGVzLm5vZGUocykpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUuc291cmNlLFtzXSl9KSxwb3N0TWVzc2FnZSgiZG9uZSIpfTs=");(window._introWorker=t).onmessage=function(e){"done"==e.data?(t.terminate(),delete window._introWorker,r()):(window._introSpectionsinkStack.push(e.data),$("#node-input-sink-totalPaths").html(window._introSpectionsinkStack.length),26==window._introSpectionsinkStack.length&&$("#node-input-sink-target-container-div").treeList("data",window._introSpectionsinkStack.sort((e,t)=>e.length<t.length?-1:1).slice(0,25).map(e=>i(e))))},setTimeout(()=>{t.postMessage({sinkId:n.id,nodes:RED.nodes.createCompleteNodeSet({credentials:!1})}),$("#node-input-sink-start-but").html('<i class="fa fa-stop"></i> Stop')},10)}else setTimeout(()=>{RED.nodes.getNodeLinks(n,o).forEach(e=>{d(e.source,[n.id])}),r()},300)})},oneditsave:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionsinkStack},oneditcancel:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionsinkStack},oneditresize:function(e){for(var t=$("#dialog-form>div:not(.node-input-target-list-row)"),n=$("#dialog-form").height(),o=0;o<t.length;o++)n-=$(t[o]).outerHeight(!0);$("#dialog-form>div.node-input-target-list-row").css("height",n+"px")}});
+RED.nodes.registerType("Sink",{color:"#e5e4ef",icon:"font-awesome/fa-anchor",category:"introspection",paletteLabel:"Sink",defaults:{name:{value:""}},inputs:1,outputs:0,label:function(){return this.name||this._def.paletteLabel},labelStyle:function(){return this.name?"node_label_italic":""},oneditprepare:function(){var n=this;let o=1,i=(window._introSpectionsinkStack=[],window._introWorker=void 0,e=>{var t=RED.nodes.node(e[e.length-1]);let n=[];return e.forEach(function(e){var t,e=RED.nodes.node(e)||RED.nodes.junction(e);void 0!==e&&(t=RED.nodes.workspace(e.z)||RED.nodes.subflow(e.z),n.push({label:"",_label:RED.utils.getNodeLabel(e),node:e,sublabel:t&&RED.utils.getNodeLabel(t)||e.z,icon:RED.utils.createNodeIcon(e,!0),class:"intro-remove-top-left"}))}),{node:t,label:RED.utils.getNodeLabel(t),_label:RED.utils.getNodeLabel(t),_pathlen:e.length,sublabel:"Length: "+e.length,selected:!1,checkbox:!1,children:n}});var a=$("#node-input-sink-target-filter").searchBox({style:"compact",delay:300,change:function(){let t=$(this).val().trim().toLowerCase();var e,n=$("#node-input-sink-target-container-div").treeList("data");""===t?($("#node-input-sink-target-container-div").treeList("filter",null),a.searchBox("count","")):(e=$("#node-input-sink-target-container-div").treeList("filter",function(e){return-1<e._label.toLowerCase().indexOf(t)||-1<e.node.type.toLowerCase().indexOf(t)||e.sublabel.toLowerCase().indexOf(t)}),a.searchBox("count",e+" / "+n.length))}}),d=((e=>{let n=`#node-input-${e}-target-container-div`,o=`#node-input-${e}-extract-pathway-but`,i=`#node-input-${e}-show-pathway-but`;$(n).css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,t){}).on("treelistitemmouseout",function(e,t){}).on("treelistconfirm",function(e,t){t.node&&!t.children&&(RED.view.reveal(t.node.id),RED.view.select(t.node.id),setTimeout(()=>{RED.editor.edit(t.node)},100))}).on("treelistselect",function(e,t){t.node&&!t.children&&(RED.workspaces.show(t.node.z,!1,!1,!0),RED.view.reveal(t.node.id,!0),RED.view.redraw()),1==$(n).treeList("data").filter(e=>e.expanded).length?($(o).prop("disabled",!1),$(i).prop("disabled",!1)):($(o).prop("disabled",!0),$(i).prop("disabled",!0))})})("sink"),function(t,n){if(n.indexOf(t.id)<0&&!t.d)switch(t.type){case"link in":t.links.forEach(e=>{e=RED.nodes.node(e);e&&d(e,[...n,t.id])});break;case"Seeker":n.push(t.id),window._introSpectionsinkStack=[n,...window._introSpectionsinkStack];break;default:RED.nodes.getNodeLinks(t,o).forEach(e=>{d(e.source,[...n,t.id])})}});let l=e=>{e&&e.preventDefault();let t=window._introSpectionsinkStack.length,n=25,o=("-"!=$("#node-input-sink-show-percent").val()&&(n=parseInt(t*(parseInt($("#node-input-sink-show-percent").val())/100))),e=$("#node-input-sink-show-ordering").val(),{1:(e,t)=>e.length<t.length?-1:1,2:(e,t)=>e.length>t.length?-1:1,3:(e,t)=>RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]))<RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))?-1:1,4:(e,t)=>{e=RED.utils.getNodeLabel(RED.nodes.node(e[e.length-1]));return RED.utils.getNodeLabel(RED.nodes.node(t[t.length-1]))<e?-1:1},5:(e,t)=>.5<Math.random()?-1:1}[parseInt(e)]||((e,t)=>e.length<t.length?-1:1));setTimeout(()=>{setTimeout(()=>{$("#node-input-sink-totalPaths").html(n>t?""+t:n+" / "+t)},10),setTimeout(()=>{$("#node-input-sink-target-container-div").treeList("data",window._introSpectionsinkStack.sort(o).slice(0,n).map(e=>i(e)))},20)},100)},r=()=>{let e=window._introSpectionsinkStack.length;setTimeout(()=>{$("#node-input-sink-start-but").html('<i class="fa fa-refresh"></i> Find Pathways'),$("#node-input-sink-totalPaths").html(e),$("#node-input-sink-spinner").hide()},10);var t="sink",n=e;$(`#node-input-${t}-show-percent`).show(),$(`#node-input-${t}-show-ordering`).show();var o,i=$(`#node-input-${t}-show-percent`),a=(i.html(""),i.append($("<option></option>").val("-").html("Show..")),[5,10,20,30,40,50,75].forEach(e=>{var t=parseInt(e*n/100);0!=t&&i.append($("<option></option>").val(e).html(t+" paths"))}),i.append($("<option></option>").val(100).html("All")),i.val("-"),(i=$(`#node-input-${t}-show-ordering`)).html(""),{"Count Asc":1,"Count Desc":2,"Name Asc":3,"Name Desc":4,Random:5});for(o in a)i.append($("<option></option>").val(a[o]).html(o));i.val(1),$("#node-input-sink-show-ordering").on("change",l),$("#node-input-sink-show-percent").on("change",l),$("#node-input-sink-show-percent").trigger("change")};$("#node-input-sink-show-pathway-but").on("click",e=>{e&&e.preventDefault();var e=$("#node-input-sink-target-container-div").treeList("data").filter(e=>e.expanded);1==(e=e).length?(e=e[0].children.filter(e=>e.node.z==RED.workspaces.active()).map(e=>e.node.id),RED.tray.hide(),RED.view.selectNodes({selected:e,onselect:()=>{RED.tray.show()},oncancel:()=>{RED.tray.show()}})):RED.notify("Only one expanded pathway can be shown.",{type:"warning"})}),$("#node-input-sink-extract-pathway-but").on("click",e=>{e&&e.preventDefault(),((t,n)=>{if(1==t.length){let e=t[0].children.map(e=>e.node).filter(e=>["link in","link out","Seeker","Sink","junction"].indexOf(e.type)<0),o=(n&&(e=e.reverse()),RED.nodes.createExportableNodeSet(e).map(e=>(e.id=RED.nodes.id(),e))),i=0;o=o.map((e,t)=>{try{var n;e._def=e._def||RED.nodes.getType(e.type),e._def&&e._def._&&e._?(n=RED.utils.getNodeLabel(e,e.info).split("\\n").length,i+=30*n+30):i+=50}catch(e){i+=50}return delete e.z,e.y=i,e.x=0,e.wires=[[]],t!=o.length-1&&(e.wires=[[o[t+1].id]]),e}),RED.clipboard.copyText(JSON.stringify(o))&&RED.notify("Pathway copied to clipboard",{type:"success"})}else RED.notify("Only one expanded pathway can be extracted.",{type:"warning"})})($("#node-input-sink-target-container-div").treeList("data").filter(e=>e.expanded),!0)}),$("#node-input-sink-start-but").on("click",e=>{if(e&&e.preventDefault(),window._introWorker)window._introWorker.terminate(),delete window._introWorker,r();else if(setTimeout(()=>{$("#node-input-sink-totalPaths").html(""),$("#node-input-sink-spinner").show(),$("#node-input-sink-show-percent").hide(),$("#node-input-sink-show-ordering").hide()},10),window._introSpectionsinkStack=[],"undefined"!=typeof Worker){let t=new Worker("data:text/javascript;base64,bGV0IGludHJvU3BlY3Rpb25TdGFjaz1bXSxncmFwaD1bXSxncmFwaEluZGV4PXt9LFJFRD17bm9kZXM6e25vZGU6ZT0+Z3JhcGhbZ3JhcGhJbmRleFtlXV0sZ2V0Tm9kZUxpbmtzOnM9PnMuaW53aXJlcy5tYXAoZT0+KHt0YXJnZXQ6cyxzb3VyY2U6UkVELm5vZGVzLm5vZGUoZSl9KSl9fTt2YXIgdHJhdmVyc2U9ZnVuY3Rpb24ocyxhKXtpZihhLmluZGV4T2Yocy5pZCk8MCYmIXMuZClzd2l0Y2gocy50eXBlKXtjYXNlImxpbmsgaW4iOnMubGlua3MuZm9yRWFjaChlPT57ZT1SRUQubm9kZXMubm9kZShlKTtlJiZ0cmF2ZXJzZShlLFsuLi5hLHMuaWRdKX0pO2JyZWFrO2Nhc2UiU2Vla2VyIjphLnB1c2gocy5pZCkscG9zdE1lc3NhZ2UoYSk7YnJlYWs7ZGVmYXVsdDpSRUQubm9kZXMuZ2V0Tm9kZUxpbmtzKHMpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUuc291cmNlLFsuLi5hLHMuaWRdKX0pfX07b25tZXNzYWdlPWZ1bmN0aW9uKGUpe2xldCBzPWUuZGF0YS5zaW5rSWQ7KGdyYXBoPShncmFwaD1lLmRhdGEubm9kZXMubWFwKGU9Pih7d2lyZXM6ZS53aXJlcyxsaW5rczplLmxpbmtzLGQ6ZS5kaXNhYmxlZHx8ZS5kLGlkOmUuaWQsdHlwZTplLnR5cGV9KSkuZmlsdGVyKGU9PiEhZS53aXJlcykubWFwKGU9PihlLmZsYXR3aXJlcz1lLndpcmVzLmZsYXQoKSxlKSkpLm1hcChzPT4ocy5pbndpcmVzPWdyYXBoLmZpbHRlcihlPT4tMTxlLmZsYXR3aXJlcy5pbmRleE9mKHMuaWQpKS5tYXAoZT0+ZS5pZCkscykpKS5mb3JFYWNoKChlLHMpPT5ncmFwaEluZGV4W2UuaWRdPXMpLFJFRC5ub2Rlcy5nZXROb2RlTGlua3MoUkVELm5vZGVzLm5vZGUocykpLmZvckVhY2goZT0+e3RyYXZlcnNlKGUuc291cmNlLFtzXSl9KSxwb3N0TWVzc2FnZSgiZG9uZSIpfTs=");(window._introWorker=t).onmessage=function(e){"done"==e.data?(t.terminate(),delete window._introWorker,r()):(window._introSpectionsinkStack.push(e.data),$("#node-input-sink-totalPaths").html(window._introSpectionsinkStack.length),26==window._introSpectionsinkStack.length&&$("#node-input-sink-target-container-div").treeList("data",window._introSpectionsinkStack.sort((e,t)=>e.length<t.length?-1:1).slice(0,25).map(e=>i(e))))},setTimeout(()=>{t.postMessage({sinkId:n.id,nodes:RED.nodes.createCompleteNodeSet({credentials:!1})}),$("#node-input-sink-start-but").html('<i class="fa fa-stop"></i> Stop')},10)}else setTimeout(()=>{RED.nodes.getNodeLinks(n,o).forEach(e=>{d(e.source,[n.id])}),r()},300)})},oneditsave:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionsinkStack},oneditcancel:function(){window._introWorker&&(window._introWorker.terminate(),delete window._introWorker),delete window._introSpectionsinkStack},oneditresize:function(e){for(var t=$("#dialog-form>div:not(.node-input-target-list-row)"),n=$("#dialog-form").height(),o=0;o<t.length;o++)n-=$(t[o]).outerHeight(!0);$("#dialog-form>div.node-input-target-list-row").css("height",n+"px")}});
 </script>
 
 <script type="text/html" data-template-name="Sink">
@@ -16460,9 +16746,9 @@ RED.nodes.registerType("Sink",{color:"#e5e4ef",icon:"font-awesome/fa-anchor",cat
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-introspection/clientcode] --- -->
 <script type="text/javascript">
 
-function handleMsgTracePacket(e,r){if(r.nodeid){let a=RED.nodes.node(r.nodeid);if(a){var s,r=$("#node-input-msgtracer-trace-treelist").treeList("data");let t=!1;r.forEach(e=>{e.id==a.id&&(t=!0,e.seenCounter+=1,e.sublabel=e.seenCounter+" @ "+e.workspaceLabel)}),t?$("#node-input-msgtracer-trace-treelist").treeList("data",r):(s={id:a.id,label:"",_label:RED.utils.getNodeLabel(a),seenCounter:1,workspaceLabel:(RED.nodes.workspace(a.z)||{label:a.z}).label,sublabel:"1 @ "+(RED.nodes.workspace(a.z)||{label:a.z}).label,selected:!1,checkbox:!1,node:a,icon:RED.utils.createNodeIcon(a,!0)},$("#node-input-msgtracer-trace-treelist").treeList("data",[s,...r]))}}}RED.comms.subscribe("msgtracer:node-received",(e,t)=>{try{handleMsgTracePacket(e,t)}catch(e){console.error(e)}});
+function handleMsgTracePacket(e,a){if(a.nodeid){let t=RED.nodes.node(a.nodeid);if(t){var s,a=$("#node-input-msgtracer-trace-treelist").treeList("data");let r=!1;a.forEach(e=>{e.id==t.id&&(r=!0,e.seenCounter+=1,e.sublabel=e.seenCounter+" @ "+e.workspaceLabel)}),r?$("#node-input-msgtracer-trace-treelist").treeList("data",a):(s={id:t.id,label:"",_label:RED.utils.getNodeLabel(t),seenCounter:1,workspaceLabel:(RED.nodes.workspace(t.z)||{label:t.z}).label,sublabel:"1 @ "+(RED.nodes.workspace(t.z)||{label:t.z}).label,selected:!1,checkbox:!1,node:t,icon:RED.utils.createNodeIcon(t,!0)},$("#node-input-msgtracer-trace-treelist").treeList("data",[s,...a]))}}}RED.comms.subscribe("msgtracer:node-received",(e,r)=>{try{handleMsgTracePacket(e,r)}catch(e){console.error(e)}}),RED.comms.subscribe("msgtracer:node-received",(e,r)=>{window.msgTracerCounter||=0,window.msgTracerCounter+=1}),RED.comms.subscribe("msgtracer:debug-sent",(e,r)=>{window.msgTracerCounter||=0,window.msgTracerCounter+=1});
  
-function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid,_msg,msg,node,payload,topic;"execfunc"==data.msg&&(doSend=(o,d,e)=>{"object"==typeof o&&(o={...e,...o}),$.ajax({url:"ClientCode/"+d,type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(o),success:function(o){},error:function(o,e,t){RED.notify("ClientCode Communcation Failure: "+d+": "+e,{type:"error",id:d,timeout:3e3})}})},doStatus=(o,d,e)=>{$.ajax({url:"ClientCode/"+d+"/status",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(o),success:function(o){},error:function(o,e,t){RED.notify("ClientCode Communcation Failure: "+d+": "+e,{type:"error",id:d,timeout:3e3})}})},doError=(o,e,t)=>{RED.notify("ClientCode Failed: "+e+": "+o,{type:"error",id:e,timeout:3e3}),console.log("ClientCode: Error with node: "+e+": "+o)},nodeid=data.nodeid,_msg=data._msg,msg=data._msg,node={id:data.nodeid,send:o=>{doSend(o,nodeid,_msg)},error:o=>{doError(o,nodeid,_msg)},status:o=>{doStatus(o,nodeid,_msg)}},payload=data.payload,topic=data.topic,eval(data.func))}RED.comms.subscribe("introspect:client-code-perform",(o,e)=>{try{handleClientCodeFrontend(o,e)}catch(o){console.error(o)}});
+function handleClientCodeFrontend(event,data){if("execfunc"==data.msg){let doSend=(e,d,t)=>{"object"==typeof e&&(e={...t,...e}),$.ajax({url:"ClientCode/"+d,type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(e),success:function(e){},error:function(e,t,o){RED.notify("ClientCode Communcation Failure: "+d+": "+t,{type:"error",id:d,timeout:3e3})}})},doStatus=(e,d,t)=>{$.ajax({url:"ClientCode/"+d+"/status",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify(e),success:function(e){},error:function(e,t,o){RED.notify("ClientCode Communcation Failure: "+d+": "+t,{type:"error",id:d,timeout:3e3})}})},doError=(e,t,o)=>{RED.notify("ClientCode Failed: "+t+": "+e,{type:"error",id:t,timeout:3e3}),console.log("ClientCode: Error with node: "+t+": "+e)},nodeid=data.nodeid,_msg=data._msg,msg=data._msg??{},cfg=data._cfg,node={id:data.nodeid,sendMsg:e=>{doSend(e,nodeid,{_msgid:RED.nodes.id()})},send:e=>{doSend(e,nodeid,_msg)},error:e=>{doError(e,nodeid,_msg)},status:e=>{doStatus(e,nodeid,_msg)}},payload=data.payload,topic=data.topic;eval(data.func)}}RED.comms.subscribe("introspect:client-code-perform",(e,t)=>{try{handleClientCodeFrontend(e,t)}catch(e){console.error(e)}});
 
   RED.nodes.registerType('ClientCode',{
     color: '#e5e4ef',
@@ -16478,6 +16764,12 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
       },
       format: {
         value: "javascript"
+      },
+      removereqres: {
+        value: false
+      },
+      rules: {
+          value: [{ t: "default", p: "payload", pt: "msg", to: "", tot: "str" }]
       }
     },
     inputs:1,
@@ -16495,6 +16787,28 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
       $('#node-input-clientcode').val(this.editor.getValue());
       this.editor.destroy();
       delete this.editor;
+
+      var rules = $("#node-inpclientcode-defaults-container").editableList('items');
+
+      var node = this;
+      node.rules = [];
+
+      rules.each(function (i) {
+        var rule = $(this);
+        var type = rule.find(".node-input-rule-type").val();
+
+        var r = {
+          t: type,
+          p: rule.find(".node-input-rule-property-name").typedInput('value'),
+          pt: rule.find(".node-input-rule-property-name").typedInput('type')
+        };
+
+        if (type !== "notset" && type !== "debug" && type !== "set") {
+          r.to = rule.find(".node-input-rule-property-value").typedInput('value');
+          r.tot = rule.find(".node-input-rule-property-value").typedInput('type');
+        }        
+        node.rules.push(r);
+      });
     },
 
     oneditcancel: function() {
@@ -16502,16 +16816,170 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
       delete this.editor;
     },
 
+    //
+    // ***********************
+    // Prepare editor panel
+    // ***********************
+    //
     oneditprepare: function() {
       const that = this;
+      const node = this;
       const stateId = RED.editor.generateViewStateId("node", this, "");
+
+      var to = this._("clientcode.action.to");
+      var toValueLabel = this._("clientcode.action.toValue", to);
+      var search = this._("clientcode.action.search");
+      var replace = this._("clientcode.action.replace");
+      var regex = this._("clientcode.label.regex");
+
+      function createPropertyValue(row2_1, row2_2, defaultType) {
+        var propValInput = $('<input/>', { class: "node-input-rule-property-value", type: "text" })
+          .appendTo(row2_1)
+          .typedInput({ default: defaultType || 'str', types: ['str', 'num', 'bool', 'json', 'bin', 'date', 'jsonata'] });
+
+        propValInput.on("change", function (evt, type, val) {
+          row2_2.toggle(type === "msg" || type === "flow" || type === "global" || type === "env");
+        })
+        return [propValInput, undefined];
+      }
+
+      var tabs = RED.tabs.create({
+        id: "client-code-tabs",
+        onchange: function (tab) {
+          $("#client-code-tabs-content").children().hide();
+          $("#" + tab.id).show();
+        }
+      });
+
+      tabs.addTab({
+        id: "client-code-tabs-default-values",
+        iconClass: "fa fa-cog",
+        label: "msg parameters"
+      });
+
+      tabs.addTab({
+        id: "client-code-tabs-code-editor",
+        iconClass: "fa fa-edit",
+        label: "editor"
+      });
+
+      tabs.activateTab("client-code-tabs-code-editor");
+
+
+      $('#node-inpclientcode-defaults-container').css('max-height', '70vh').css('min-width', '15vw').editableList({
+        addItem: function (container, i, opt) {
+          var rule = opt;
+          if (!rule.hasOwnProperty('t')) {
+            rule = { t: "default", p: "payload", to: "", tot: "str" };
+          }
+          container.css({
+            overflow: 'hidden',
+            whiteSpace: 'nowrap'
+          });
+          let fragment = document.createDocumentFragment();
+          var row1 = $('<div/>', { style: "display:flex; align-items: baseline" }).appendTo(fragment);
+          var row2 = $('<div/>', { style: "margin-top:8px;" }).appendTo(fragment);
+          var row3 = $('<div/>', { style: "margin-top:8px;" }).appendTo(fragment);
+          var row4 = $('<div/>', { style: "display:flex;margin-top:8px;align-items: baseline" }).appendTo(fragment);
+
+          var selectField = $('<select/>', { class: "node-input-rule-type", style: "width:110px; margin-right:10px;" }).appendTo(row1);
+          var selectOptions = [
+            { v: "default" }, 
+            { v: "overwrite" }, 
+            { v: "fixed" }, 
+          ];
+          for (var i = 0; i < selectOptions.length; i++) {
+            let label = node._("clientcode.action." + (selectOptions[i].l || selectOptions[i].v))
+            selectField.append($("<option></option>").val(selectOptions[i].v).text(label));
+          }
+
+          var propertyName = $('<input/>', { class: "node-input-rule-property-name", type: "text" })
+            .appendTo(row1)
+            .typedInput({ types: ['msg'] });
+
+          var row2_1 = $('<div/>', { style: "display:flex;align-items: baseline" }).appendTo(row2);
+          $('<div/>', { style: "display:inline-block;text-align:right; width:120px; padding-right:10px; box-sizing:border-box;" })
+            .text(toValueLabel)
+            .appendTo(row2_1);
+
+          var row2_2 = $('<div/>', { style: "margin-top: 4px;" }).appendTo(row2);
+
+          var row3_1 = $('<div/>', { style: "display:flex;align-items: baseline" }).appendTo(row3);
+          $('<div/>', { style: "display:inline-block;text-align:right; width:120px; padding-right:10px; box-sizing:border-box;" })
+            .text(search)
+            .appendTo(row3_1);
+
+          var row3_2 = $('<div/>', { style: "display:flex;margin-top:8px;align-items: baseline" }).appendTo(row3);
+          $('<div/>', { style: "display:inline-block;text-align:right; width:120px; padding-right:10px; box-sizing:border-box;" })
+            .text(replace)
+            .appendTo(row3_2);
+
+          $('<div/>', { style: "display:inline-block;text-align:right; width:120px; padding-right:10px; box-sizing:border-box;" })
+            .text(to)
+            .appendTo(row4);
+
+          let propertyValue = null;
+          let fromValue = null;
+          let toValue = null;
+          let moveValue = null;
+
+          selectField.on("change", function () {
+            var type = $(this).val();
+            if (propertyValue) {
+              propertyValue.typedInput('hide');
+            }
+            if (fromValue) {
+              fromValue.typedInput('hide');
+            }
+            if (toValue) {
+              toValue.typedInput('hide');
+            }
+            if (moveValue) {
+              moveValue.typedInput('hide');
+            }
+
+            if (type != "notset" && type != "debug" && type != "set") {
+              if (!propertyValue) {
+                var parts = createPropertyValue(row2_1, row2_2);
+                propertyValue = parts[0];
+              }
+              
+              propertyValue.typedInput('show');
+              propertyValue.typedInput('value', rule.to);
+              propertyValue.typedInput('type', rule.tot);
+
+              row2.show();
+              row3.hide();
+              row4.hide();
+            } else {
+              row2.hide();
+              row3.hide();
+              row4.hide();
+            }
+          });
+
+          selectField.val(rule.t);
+          propertyName.typedInput('value', rule.p);
+          propertyName.typedInput('type', rule.pt);
+          selectField.change();
+          container[0].appendChild(fragment);
+        },
+        removable: true,
+        sortable: true
+      });
+
+      this.rules = this.rules ?? [{t: "default", p: "payload", pt: "msg", to: "", tot: "str"}]
+      for (var i = 0; i < this.rules.length; i++) {
+        var rule = this.rules[i];
+        $("#node-inpclientcode-defaults-container").editableList('addItem', rule);
+      }
 
       this.editor = RED.editor.createEditor({
         id: 'node-input-clientcode-editor',
         mode: 'ace/mode/nrjavascript',
         stateId: stateId,
         globals: {
-          msg:true,          
+          msg:true,     
           RED: true,
           node: true,
           alert: true,
@@ -16556,22 +17024,53 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
 
     },
 
+    //
+    // *******************
+    // Resize event
+    // *******************
+    //
     oneditresize: function(size) {
-      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var rows = $("#dialog-form #client-code-tabs-code-editor>div:not(.node-text-editor-row)");
       var height = $("#dialog-form").height();
       for (var i=0; i<rows.length; i++) {
         height -= $(rows[i]).outerHeight(true);
       }
-      var editorRow = $("#dialog-form>div.node-text-editor-row");
+
+      var rows = $("#dialog-form>.client-code-node-name-row");
+      for (var i=0; i<rows.length; i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+
+      // footer
+      height -= 42;
+      
+      var editorRow = $("#dialog-form #client-code-tabs-code-editor>div.node-text-editor-row");
       height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
       $(".node-text-editor").css("height",height+"px");
+
       this.editor.resize();
+
+      //
+      //
+      //
+      if ($('#client-code-tabs-default-values').is(":visible")) {
+        var rows = $("#dialog-form #client-code-tabs-default-values>div:not(.node-inpclientcode-defaults-container-row)");
+        var height = size.height;
+        for (var i=0; i<rows.length; i++) {
+            height -= $(rows[i]).outerHeight(true);
+        }
+        var editorRow = $("#dialog-form #client-code-tabs-default-values>div.node-input-rule-container-row");
+        height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+        $("#node-inpclientcode-defaults-container").editableList('height', height-60);
+      } else {
+        $("#node-inpclientcode-defaults-container").editableList('height', height/3);
+      }
     }
   });
 </script>
 
 <script type="text/html" data-template-name="ClientCode">
-  <div class="form-row">
+  <div class="form-row client-code-node-name-row">
       <label for="node-input-name">
           <i class="fa fa-tag"></i>
           <span data-i18n="common.label.name">Name</span>
@@ -16579,40 +17078,66 @@ function handleClientCodeFrontend(event,data){var doSend,doStatus,doError,nodeid
       <input type="text" id="node-input-name" placeholder="Name">
   </div>
 
-  <div class="form-row" style="position: relative; margin-bottom: 0px;">
-      <label for="node-input-clientcode">
-          <i class="fa fa-file-code-o"></i> Client Code
-      </label>
+  <div class="form-row func-tabs-row">
+    <ul style="min-width: 400px; margin-bottom: 20px;" id="client-code-tabs"></ul>
+  </div>
 
-      <div style="position: absolute; right:0;display:inline-block; text-align: right; font-size: 0.8em;">
-          Syntax:
-          <select id="node-input-format" style="width:110px; font-size: 10px !important;  height: 24px; padding:0;">
-              <option value="handlebars">mustache</option>
-              <option value="html">HTML</option>
-              <option value="json">JSON</option>
-              <option value="javascript">JavaScript</option>
-              <option value="css">CSS</option>
-              <option value="markdown">Markdown</option>
-              <option value="php">PHP</option>
-              <option value="python">Python</option>
-              <option value="sql">SQL</option>
-              <option value="yaml">YAML</option>
-              <option value="text">None</option>
-          </select>
-          <button type="button" id="node-clientcode-expand-editor"
-                  class="red-ui-button red-ui-button-small">
-              <i class="fa fa-expand"></i>
-          </button>
+  <div id="client-code-tabs-content" style="min-height: calc(100% - 95px);">
+
+    <div id="client-code-tabs-default-values" style="display:none;">
+      <div class="form-row node-input-rule-container-row node-inpclientcode-defaults-container-row">
+        <ol id="node-inpclientcode-defaults-container"></ol>
       </div>
-  </div>
+    </div>
 
-  <div class="form-row node-text-editor-row">
-      <div style="height: 250px; min-height:150px;"
-           class="node-text-editor"
-           id="node-input-clientcode-editor" ></div>
-  </div>
+    <div id="client-code-tabs-code-editor">
+      <div class="form-row" style="position: relative; margin-bottom: 0px;">
+          <label for="node-input-clientcode">
+              <i class="fa fa-file-code-o"></i> Client Code
+          </label>
 
-  <input type="hidden" id="node-input-clientcode" autofocus="autofocus">
+          <div style="position: absolute; right:0;display:inline-block; text-align: right; font-size: 0.8em;">
+              Syntax:
+              <select id="node-input-format" style="width:110px; font-size: 10px !important;  height: 24px; padding:0;">
+                  <option value="handlebars">mustache</option>
+                  <option value="html">HTML</option>
+                  <option value="json">JSON</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="css">CSS</option>
+                  <option value="markdown">Markdown</option>
+                  <option value="php">PHP</option>
+                  <option value="python">Python</option>
+                  <option value="sql">SQL</option>
+                  <option value="yaml">YAML</option>
+                  <option value="text">None</option>
+              </select>
+              <button type="button" id="node-clientcode-expand-editor"
+                      class="red-ui-button red-ui-button-small">
+                  <i class="fa fa-expand"></i>
+              </button>
+          </div>
+      </div>
+
+      <div class="form-row node-text-editor-row">
+          <div style="height: 250px; min-height:150px;"
+              class="node-text-editor"
+              id="node-input-clientcode-editor" ></div>
+      </div>
+
+      <input type="hidden" id="node-input-clientcode" autofocus="autofocus"></input>
+
+      <div class="form-row">
+        <input type="checkbox" id="node-input-removereqres"
+                           style="display:inline-block; width:35px; vertical-align:baseline;">
+        <label style="display: inline-block; width: 40%;"
+                   for="node-input-removereqres">
+              <i class="fa fa-filter"></i>
+              <span>Remove <code>msg.res</code> and <code>msg.req</code>?</span>
+            </label>        
+      </div>
+    </div>
+
+  </div>
 </script>
 
 
@@ -16629,6 +17154,7 @@ Variables:
   node.id - id of this node, same as `nodeid` above
   payload - a reference to msg.payload as it was received by this node
   topic - a reference to the msg.topic as it was recieved by this node
+  cfg - an object that represents the default values defined in the msg parameters tab
 
 Functionality:
   node.send({..}) - send data to the output port of this node
@@ -16652,6 +17178,28 @@ Functionality:
     The code to be executed by the client can also be passed in via the `msg` object using the
     `clientcode` attribute on the `msg` object. If this attribute is set, it will take precendence
     over the code defined in the node itself.
+
+    <p>
+      <b>Handling of Default Values</b>
+    <p>
+      Each default value can either be default, overwrite or fixed:
+      <li>
+        <ul><b>Default</b> - value is set on the message if value isn't set on the msg object already. Else the msg value is used.</ul>
+        <ul><b>Overwrite</b> - default value overwrites the existing value on the message. If the property does not exist on the message, then the default value is ignored. A default value will only overwrite if the value is already defined on the msg object.</ul>
+        <ul><b>Fixed</b> - the default value is always used, ignoring whether the value is already set or not on the msg object. This is useful for constants or JSONata expressions - see loop counter below.</ul>
+      </li>
+    <p>
+      <b>Loop counters using jsonata</b>
+    <p>
+      One usage of the default values is as an loop counter for messages going around and around. To define a loopcounter which is only defined on the msg object, define a default value <code>loopcounter</code> with the following JSONata code <code>$filter([$$.loopcounter,0,0], function ($v) { $exists($v) })[0] + 1</code> ($filter returns a single value if the array only contains one value else it returns an array).
+
+    <p>
+      <b>Remove msg.req and msg.res</b>
+    <p>
+      The <code>msg.req</code> and <code>msg.res</code> can cause <code>Converting circular structure to JSON</code> errors when the message is passed to the ClientCode node. To avoid this from happening, remove these attributes from the message before passing the message to the node. 
+    <p>
+      <b>Node:</b> activating this implies that a http response following this ClientCode node will not work.      
+    <p>
 </script>
 <!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-introspection/getflows] --- -->
 <script type="text/javascript">
@@ -16665,6 +17213,9 @@ Functionality:
       },
       flowVersion: {
         value: "v1"
+      },
+      useHttps: {
+        value: false
       },
       useAuthentication: {
         value:false
@@ -16739,8 +17290,17 @@ Functionality:
     </div>
 
     <div class="form-row">
+      <label for="node-input-useHttps">
+            <i class="fa fa-clown"></i>
+            <span>Use HTTPS?</span>
+      </label>
+      <input type="checkbox" id="node-input-useHttps"
+             style="display:inline-block; width:15px; vertical-align:baseline;">
+    </div>
+
+    <div class="form-row">
       <label for="node-input-useAuthentication">
-        <i class="fa "></i>
+        <i class="fa fa-key"></i>
         <span>Use Authentication?</span>
       </label>
 
@@ -18169,4 +18729,27 @@ Functionality:
         <a href="https://markdown-it.github.io/">here</a>.</p>
     <p>It is configured with html, linkify and typographer options turned on.</p>
 
+</script>
+<!-- --- [red-module:@gregoriusrippenstein/node-red-contrib-flowcompare/flowcompare] --- -->
+<script type="text/javascript">
+(function ($) {
+   RED.nodes.registerType('FlowCompareCfg', {
+      category: 'config',
+      hasUsers: false,
+      defaults: {
+         name: { value: "" },
+         data: { value: "" }
+      },
+      paletteLabel: 'FlowCompareCfg',
+      label: function () {
+         return this.name;
+      }
+  });
+})(jQuery);
+</script>
+
+<!-- The html for the config node info panel (in right sidebar) -->
+<script type="text/x-red" data-template-name="FlowCompareCfg">
+   <p>Visually compare local flow with flow deployed on the server.</p>
+   Visual comparison of flows being edited and flow that has been deployed.
 </script>

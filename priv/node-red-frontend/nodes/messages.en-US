@@ -4,7 +4,6 @@
     "@gorenje/erlang-red-kafka-brod/ered-kafka-consumer": {},
     "@gorenje/erlang-red-kafka-brod/ered-kafka-producer": {},
     "@gorenje/node-red-contrib-binary/binary": {},
-    "@gorenje/node-red-contrib-flowcompare/flowcompare": {},
     "@gregoriusrippenstein/erlang-red-process-nodes/erlcaptureio": {
         "erlcaptureio": {
             "captureFlow": "captureio: flow",
@@ -195,7 +194,10 @@
                 "statusset": "Status Set"
             },
             "status": {
+                "failed": "assert failed",
+                "succeed": "assert succeed",
                 "timeout": "No more time to waiting",
+                "unsupported": "Unsupported",
                 "waiting": "Waiting for Godot"
             }
         }
@@ -221,7 +223,10 @@
                 "statusset": "Status Set"
             },
             "status": {
+                "failed": "assert failed",
+                "succeed": "assert succeed",
                 "timeout": "No more time to waiting",
+                "unsupported": "Unsupported",
                 "waiting": "Waiting for Godot"
             }
         }
@@ -231,6 +236,12 @@
             "label": {
                 "count": "Msg Count",
                 "failed": "assert failed",
+                "limit": {
+                    "exactly": "Exactly",
+                    "lowerlimit": "Min",
+                    "upperlimit": "Max"
+                },
+                "messages": "Msgs",
                 "statusset": "Status Set",
                 "succeed": "assert succeed",
                 "unsupported": "Unsupported"
@@ -391,9 +402,64 @@
             }
         }
     },
+    "@gregoriusrippenstein/node-red-contrib-flowcompare/flowcompare": {},
     "@gregoriusrippenstein/node-red-contrib-flowhub/flowhubcfg": {},
     "@gregoriusrippenstein/node-red-contrib-flowhub/flowhubpull": {},
-    "@gregoriusrippenstein/node-red-contrib-introspection/clientcode": {},
+    "@gregoriusrippenstein/node-red-contrib-introspection/clientcode": {
+        "clientcode": {
+            "action": {
+                "change": "Change",
+                "debug": "Debug",
+                "default": "Default",
+                "delete": "Delete",
+                "eql": "Equal",
+                "fixed": "Fixed",
+                "move": "Move",
+                "mth": "Match",
+                "noteql": "Not Equal",
+                "notmth": "Not Match",
+                "notset": "Not Defined",
+                "overwrite": "Overwrite",
+                "replace": "Replace with",
+                "search": "Search for",
+                "set": "Defined",
+                "to": "to",
+                "toValue": "to the value"
+            },
+            "errors": {
+                "invalid-expr": "Invalid JSONata expression: __error__",
+                "invalid-from": "Invalid 'from' property: __error__",
+                "invalid-json": "Invalid 'to' JSON property",
+                "invalid-json-data": "Invalid JSON data: __error__",
+                "invalid-prop": "Invalid property expression: __property__",
+                "no-override": "Cannot set property of non-object type: __property__"
+            },
+            "label": {
+                "change": "change __property__",
+                "changeCount": "assert: __count__ values",
+                "debug": "debug __property__",
+                "deepCopy": "Deep copy value",
+                "delete": "delete __property__",
+                "eql": "equal __property__",
+                "ignore_failure_if_succeed": "Ignore failure if succeed once",
+                "move": "move __property__",
+                "mth": "match __property__",
+                "noteql": "not equal __property__",
+                "notmth": "not match __property__",
+                "notset": "not set __property__",
+                "regex": "Use regular expressions",
+                "rule": "rule",
+                "rules": "Rules",
+                "set": "set __property__",
+                "statusset": "Status Set",
+                "unsupported": "supported rule __property__"
+            },
+            "status": {
+                "timeout": "No more time to waiting",
+                "waiting": "Waiting for Godot"
+            }
+        }
+    },
     "@gregoriusrippenstein/node-red-contrib-introspection/getflows": {},
     "@gregoriusrippenstein/node-red-contrib-introspection/installpackage": {},
     "@gregoriusrippenstein/node-red-contrib-introspection/seeker": {},
