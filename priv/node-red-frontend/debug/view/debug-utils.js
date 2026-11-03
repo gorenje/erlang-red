@@ -32,21 +32,29 @@ RED.debug = (function() {
     var numMessages = 100;  // Hardcoded number of message to show in debug window scrollback
 
     var debugNodeTreeList;
+    let debugPaused = false;
+    let debugPausedMessage;
+    let debugPausedMessageCount = 0;
+    let pauseTooltip;
 
     function init(_config) {
         config = _config;
 
-        var content = $("<div>").css({"position":"relative","height":"100%"});
+        var content = $('<div class="red-ui-debug-container"></div>');
         var toolbar = $('<div class="red-ui-sidebar-header">'+
             '<span class="button-group">'+
-                '<a id="red-ui-sidebar-debug-filter" style="padding-right: 5px" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-filter"></i> <span></span> <i style="padding-left: 5px;" class="fa fa-caret-down"></i></a>'+
+                '<a id="red-ui-sidebar-debug-pause" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-pause"></i></a>'+
             '</span>'+
             '<span class="button-group">'+
-                '<a id="red-ui-sidebar-debug-clear" style="border-right: none; padding-right: 6px" class="red-ui-sidebar-header-button" href="#" data-clear-type="all"><i class="fa fa-trash"></i> <span>all</span></a>' +
-                '<a id="red-ui-sidebar-debug-clear-opts" style="padding: 5px; border-left: none;" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-caret-down"></i></a>'+
+                '<a id="red-ui-sidebar-debug-filter" style="padding-right: 3px" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-filter"></i> <span></span> <i style="padding-left: 5px;" class="fa fa-caret-down"></i></a>'+
+            '</span>'+
+            '<span class="button-group">'+
+                '<a id="red-ui-sidebar-debug-clear" style="border-right: none; padding-right: 2px" class="red-ui-sidebar-header-button" href="#" data-clear-type="all"><i class="fa fa-trash"></i> <span>all</span></a>' +
+                '<a id="red-ui-sidebar-debug-clear-opts" style="padding: 3px; border-left: none;" class="red-ui-sidebar-header-button" href="#" aria-label="'+RED._('node-red:debug.sidebar.clearLogOptions')+'"><i class="fa fa-caret-down"></i></a>'+
             '</span></div>').appendTo(content);
 
         var footerToolbar = $('<div>'+
+            '<span id="red-ui-sidebar-debug-info" style="float: left;"></span>' +
             '<span class="button-group"><a id="red-ui-sidebar-debug-open" class="red-ui-footer-button" href="#"><i class="fa fa-desktop"></i></a></span> ' +
             '</div>');
 
@@ -184,6 +192,14 @@ RED.debug = (function() {
             $('input[name="filter-type"][value="'+RED.settings.get("debug.filter","filterAll")+'"]').prop("checked", true)
         });
         RED.popover.tooltip(toolbar.find('#red-ui-sidebar-debug-filter'),RED._('node-red:debug.sidebar.filterLog'));
+
+        const pauseToggle = toolbar.find("#red-ui-sidebar-debug-pause");
+        pauseToggle.on("click", function(e) {
+            e.preventDefault();
+            toggleDebugMessages();
+        });
+
+        pauseTooltip = RED.popover.tooltip(pauseToggle,RED._('node-red:debug.sidebar.pause'),"core:toggle-debug-messages");
 
         toolbar.find("#red-ui-sidebar-debug-clear").on("click", function(e) {
             e.preventDefault();
@@ -389,83 +405,38 @@ RED.debug = (function() {
     var stack = [];
     var busy = false;
     function handleDebugMessage(o) {
-        if (o) { stack.push(o); }
-        if (!busy && (stack.length > 0)) {
-            busy = true;
-            processDebugMessage(stack.shift());
-            setTimeout(function() {
-                busy = false;
-                handleDebugMessage();
-            }, 15);  // every 15mS = 66 times a second
-            if (stack.length > numMessages) { stack = stack.splice(-numMessages); }
+        if (!debugPaused) {
+            if (o) { stack.push(o); }
+            if (!busy && (stack.length > 0)) {
+                busy = true;
+                const message = stack.shift()
+                // call any preDebugLog hooks, allowing them to modify the message or block it from being displayed
+                RED.hooks.trigger('debugPreProcessMessage', { message }).then(result => {
+                    if (result === false) {
+                        return false; // A hook returned false - halt processing of this message
+                    }
+                    return processDebugMessage(message);
+                }).then(processArtifacts => {
+                    if (processArtifacts === false) {
+                        return false; // A hook returned false - halt processing of this message
+                    }
+                    const { message, element, payload } = processArtifacts || {};
+                    return RED.hooks.trigger('debugPostProcessMessage', { message, element, payload });
+                }).catch(err => {
+                    console.error("Error in debug process message hooks", err);
+                }).finally(() => {
+                    setTimeout(function() {
+                        busy = false;
+                        handleDebugMessage();
+                    }, 15);  // every 15mS = 66 times a second
+                    if (stack.length > numMessages) { stack = stack.splice(-numMessages); }
+                })
+            }
+        } else {
+            debugPausedMessageCount++
+            debugPausedMessage.find('.red-ui-debug-msg-name').last().text(RED._("node-red:debug.sidebar.messagesDropped",{count:debugPausedMessageCount}));
         }
     }
-
-window.importOrShowFlow = (elem) => {
-   window.doFlowImportForSidebarUnittesting($(elem).data('flowid'))
-}
-window.openSearch = (elem) => {
-   RED.search.show($(elem).data('nodeid'))
-}
-window.doFlowImportForSidebarUnittesting = (flowid) => {
-
-  if ( RED.nodes.workspace(flowid) ) {
-    RED.workspaces.show(flowid, false, false, true);
-  } else {
-    RED.notify("Retrieving test", {
-      type: "warning",
-      timeout: 3000
-    });
-
-    $.get({
-      url: "/UnitTesting/" +
-        flowid +
-        "/retrieve?cb=" + new Date().getTime(),
-      headers: {
-      }
-    }).done((e, d) => {
-      try {
-        if (!e || !e.flowdata || !Array.isArray(e.flowdata)) {
-          return RED.notify("Access denied or revision not found.", {
-            type: "error",
-            timeout: 3000
-          });
-        }
-      } catch (ex) {
-        return RED.notify("Access Denied, parse error.", {
-          type: "error",
-          timeout: 3000
-        });
-      }
-
-      RED.clipboard.import();
-
-      setTimeout(() => {
-        var content = e.flowdata;
-
-
-        $('#red-ui-clipboard-dialog-import-text').val(
-          JSON.stringify(content)
-        ).trigger("paste");
-      }, 300);
-    }).fail(e => {
-      let msg = "<p>Failed to retrieve test flow data from server.</p>" +
-        $('#node-input-unittestingpull-flowid').val().trim() + "</p>" +
-        "<p>AdBlocker or uBlock might have prevented request.</p>" +
-        "<p>Please check browser console for more details.</p>" + e;
-
-      RED.notify(msg, {
-        type: "error",
-        id: "UnitTesting",
-        timeout: 4000
-      });
-    });
-  }
-}
-
-
-
-
 
     function processDebugMessage(o) {
         var msg = $("<div/>");
@@ -503,6 +474,11 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
         var property = sanitize(o.property?o.property:'');
         var payload = o.msg;
         var format = sanitize((o.format||"").toString());
+        var baseFormat = format
+        // If format is "array[12]"/"Float32Array[12]" then strip off the size portion [12] for the decodeObject
+        if (/\w+\[\d+\]$/.test(baseFormat)) {
+            baseFormat = format.replace(/\[\d+\]$/,'');
+        }
         msg.attr("class", 'red-ui-debug-msg'+(o.level?(' red-ui-debug-msg-level-'+o.level):'')+
             (sourceNode?(
                 " red-ui-debug-msg-node-"+sourceNode.id.replace(/\./g,"_")+
@@ -569,7 +545,7 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             $(`<span onmouseover=""  data-flowid='${o.z}' onclick='javascript:window.importOrShowFlow(this)' class="red-ui-debug-msg-name" style="cursor: pointer; float: right; margin-right: 30px;">[${o.z}]</span>`).appendTo(metaRow);
         }
 
-        payload = RED.utils.decodeObject(payload,format);
+        payload = RED.utils.decodeObject(payload, baseFormat);
 
         var el = $('<span class="red-ui-debug-msg-payload"></span>').appendTo(msg);
         var path = o.property||'';
@@ -581,7 +557,8 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             sourceId: sourceNode && sourceNode.id,
             rootPath: path,
             nodeSelector: config.messageSourceClick,
-            enablePinning: true
+            enablePinning: true,
+            tools: o.tools // permit preDebugLog hooks to add extra tools to the <debugMessage> element
         });
 
         let perhapsLength = (objd) => {
@@ -594,6 +571,8 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
 
         // Do this in a separate step so the element functions aren't stripped
         debugMessage.appendTo(el);
+        // add the meta row tools container, even if there are no tools, so that the postProcessDebugMessage hook can add tools
+        const tools = $('<span class="red-ui-debug-msg-tools button-group"></span>').appendTo(metaRow)
         // NOTE: relying on function error to have a "type" that all other msgs don't
         if (o.hasOwnProperty("type") && (o.type === "function")) {
             var errorLvlType = 'error';
@@ -605,17 +584,28 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             msg.addClass('red-ui-debug-msg-level-' + errorLvl);
             $('<span class="red-ui-debug-msg-topic">function : (' + errorLvlType + ')</span>').appendTo(metaRow);
         } else {
-            var tools = $('<span class="red-ui-debug-msg-tools button-group"></span>').appendTo(metaRow);
             var filterMessage = $('<button class="red-ui-button red-ui-button-small"><i class="fa fa-caret-down"></i></button>').appendTo(tools);
             filterMessage.on("click", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 showMessageMenu(filterMessage,debugMessage,sourceNode&&sourceNode.id);
             });
-            $('<span class="red-ui-debug-msg-topic">'+
-                (o.topic?topic+' : ':'')+
-                (o.property?'msg.'+property:'msg')+" : "+format+perhapsLength(o)+
-                '</span>').appendTo(metaRow);
+            const msgInfos = (`${o.topic ? " : " : ""}msg${o.property ? "." + property : ""} : ${format}`) + perhapsLength(o)
+            const topicTruncated = RED.utils.truncateString((o.topic ? topic : ""), 120 - msgInfos.length);
+            const topicElem = $('<span class="red-ui-debug-msg-topic">' + topicTruncated + msgInfos + '</span>').appendTo(metaRow);
+            if (topic !== topicTruncated) {
+                RED.popover.create({
+                    content: topic,
+                    delay: { show: 750, hide: 50 },
+                    direction: "bottom",
+                    interactive: true,
+                    maxWidth: 300,
+                    target: topicElem,
+                    trigger: "hover",
+                    tooltip: true,
+                    size: "small"
+                });
+            }
         }
 
         var atBottom = (sbc.scrollHeight-messageList.height()-sbc.scrollTop) < 5;
@@ -649,6 +639,14 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
         if (atBottom) {
             messageList.scrollTop(sbc.scrollHeight);
         }
+
+        // return artifacts to permit postProcessDebugMessage hooks to modify the message element, access the
+        // processed payload or otherwise modify the message after it has been generated.
+        return {
+            message: o, // original debug message object, useful for any hook that might have tagged additional info onto it
+            element: msg, // the top-level element for this debug message
+            payload // the reconstructed debug message
+        }
     }
 
     function clearMessageList(clearFilter, filteredOnly) {
@@ -656,6 +654,9 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
             $(".red-ui-debug-msg").remove();
         } else {
             $(".red-ui-debug-msg:not(.hide)").remove();
+        }
+        if (debugPaused) {
+            messageList.append(debugPausedMessage);
         }
         config.clear();
         if (!!clearFilter) {
@@ -680,11 +681,100 @@ window.doFlowImportForSidebarUnittesting = (flowid) => {
         $('#red-ui-sidebar-debug-filter span').text(RED._('node-red:debug.sidebar.filterAll'));
     }
 
+    function toggleDebugMessages() {
+        debugPaused = !debugPaused;
+        if (debugPaused) {
+            debugPausedMessageCount = 0
+            debugPausedMessage = $('<div class="red-ui-debug-msg red-ui-debug-msg-paused">')
+            $(`<div class="red-ui-debug-msg-meta">
+                <span class="red-ui-debug-msg-date">${getTimestamp()}</span>
+                <span class="red-ui-debug-msg-name">${RED._('node-red:debug.sidebar.paused')}</span>
+                </div>`).appendTo(debugPausedMessage);
+            $('<div class="red-ui-debug-msg-meta"><span class="red-ui-debug-msg-name">&nbsp;</span></div>').appendTo(debugPausedMessage);
+            const atBottom = (sbc.scrollHeight-messageList.height()-sbc.scrollTop) < 5;
+            messageList.append(debugPausedMessage);
+            if (atBottom) {
+                messageList.scrollTop(sbc.scrollHeight);
+            }
+
+            $("#red-ui-sidebar-debug-pause i").removeClass("fa-pause").addClass("fa-play");
+            pauseTooltip.setContent(RED._('node-red:debug.sidebar.resume'))
+            $("#red-ui-sidebar-debug-info").text(RED._('node-red:debug.sidebar.paused'));
+        } else {
+            $("#red-ui-sidebar-debug-pause i").removeClass("fa-play").addClass("fa-pause");
+            pauseTooltip.setContent(RED._('node-red:debug.sidebar.pause'))
+            $("#red-ui-sidebar-debug-info").text("");
+        }
+    }
+
+    window.importOrShowFlow = (elem) => {
+       window.doFlowImportForSidebarUnittesting($(elem).data('flowid'))
+    }
+    window.openSearch = (elem) => {
+       RED.search.show($(elem).data('nodeid'))
+    }
+    window.doFlowImportForSidebarUnittesting = (flowid) => {
+
+      if ( RED.nodes.workspace(flowid) ) {
+        RED.workspaces.show(flowid, false, false, true);
+      } else {
+        RED.notify("Retrieving test", {
+          type: "warning",
+          timeout: 3000
+        });
+
+        $.get({
+          url: "/UnitTesting/" +
+            flowid +
+            "/retrieve?cb=" + new Date().getTime(),
+          headers: {
+          }
+        }).done((e, d) => {
+          try {
+            if (!e || !e.flowdata || !Array.isArray(e.flowdata)) {
+              return RED.notify("Access denied or revision not found.", {
+                type: "error",
+                timeout: 3000
+              });
+            }
+          } catch (ex) {
+            return RED.notify("Access Denied, parse error.", {
+              type: "error",
+              timeout: 3000
+            });
+          }
+
+          RED.clipboard.import();
+
+          setTimeout(() => {
+            var content = e.flowdata;
+
+
+            $('#red-ui-clipboard-dialog-import-text').val(
+              JSON.stringify(content)
+            ).trigger("paste");
+          }, 300);
+        }).fail(e => {
+          let msg = "<p>Failed to retrieve test flow data from server.</p>" +
+            $('#node-input-unittestingpull-flowid').val().trim() + "</p>" +
+            "<p>AdBlocker or uBlock might have prevented request.</p>" +
+            "<p>Please check browser console for more details.</p>" + e;
+
+          RED.notify(msg, {
+            type: "error",
+            id: "UnitTesting",
+            timeout: 4000
+          });
+        });
+      }
+    }
+
     return {
         init: init,
         refreshMessageList:refreshMessageList,
         handleDebugMessage: handleDebugMessage,
         clearMessageList: clearMessageList,
-        refreshDebugNodeList: refreshDebugNodeList
+        refreshDebugNodeList: refreshDebugNodeList,
+        toggleDebugMessages: toggleDebugMessages
     }
 })();
