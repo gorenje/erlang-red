@@ -10,9 +10,10 @@ start-docker-shell: build-docker-container
 		-v $(shell pwd):/code \
 		-v $(shell pwd)/data:/data \
 		--hostname erlang-red \
-		--publish 9090:8080 \
+		--publish 9191:8080 \
 		--publish 1883:1883 \
 		--network erlang-red-node-red-bridge \
+		--network mnmn \
 		-w /code --rm erlang-shell bash
 
 start-docker-shell-raspberry: build-docker-container
