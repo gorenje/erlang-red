@@ -3,14 +3,15 @@
         "alt-shift-p":"core:manage-palette",
         "ctrl-f": "core:search",
         "ctrl-shift-f": "core:list-flows",
-        "ctrl-d": "core:deploy-flows",
         "ctrl-s": "core:deploy-flows",
         "ctrl-g c": "core:show-config-tab",
         "ctrl-g d": "core:show-debug-tab",
         "ctrl-g h": "core:show-help-tab",
+        "ctrl-g e": "core:show-explorer-tab",
         "ctrl-g i": "core:show-info-tab",
         "ctrl-g v": "core:show-version-control-tab",
         "ctrl-g x": "core:show-context-tab",
+        "ctrl-g p": "core:show-palette-tab",
         "ctrl-i": "core:show-import-dialog",
         "ctrl-space": "core:toggle-sidebar",
         "ctrl-p": "core:toggle-palette",
@@ -53,7 +54,7 @@
         "alt-s u": "core:select-upstream-nodes",
         "alt-s d": "core:select-downstream-nodes",
         "alt-s c": "core:select-connected-nodes",
-        "shift-?": "core:show-help",
+        "shift-?": "core:show-keyboard-settings",
         "w": "core:scroll-view-up",
         "d": "core:scroll-view-right",
         "s": "core:scroll-view-down",
@@ -98,8 +99,8 @@
         "alt-shift-w": "core:show-last-hidden-flow",
         "ctrl-2": "core:zoom-in",
         "ctrl-§": "core:zoom-out",
-        "ctrl-1": "core:zoom-reset"
-
+        "ctrl-1": "core:zoom-reset",
+        "ctrl-3": "core:zoom-fit"
      },
      "red-ui-editor-stack": {
         "ctrl-enter": "core:confirm-edit-tray",

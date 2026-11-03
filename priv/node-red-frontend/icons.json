@@ -6,13 +6,13 @@
     "@gorenje/node-red-contrib-binary": [
         "parser-binary.png"
     ],
-    "@gorenje/node-red-contrib-flowcompare": [],
     "@gregoriusrippenstein/erlang-red-process-nodes": [],
     "@gregoriusrippenstein/erlang-red-supervisor-node": [
         "erlang.svg"
     ],
     "@gregoriusrippenstein/erlang-red-unittest": [],
     "@gregoriusrippenstein/node-red-contrib-flow2uml": [],
+    "@gregoriusrippenstein/node-red-contrib-flowcompare": [],
     "@gregoriusrippenstein/node-red-contrib-flowhub": [
         "flowhubdiff.svg",
         "flowhublogo.svg",
@@ -24,6 +24,7 @@
         "swap-inject-to-change.svg",
         "switch-inject-to-change.svg"
     ],
+    "@gregoriusrippenstein/node-red-presenter-mode": [],
     "@gregoriusrippenstein/node-red-scratchpad": [],
     "@greyorange/node-red-contrib-amqp": [
         "snaggy.svg"

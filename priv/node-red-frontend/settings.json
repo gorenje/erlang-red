@@ -1,7 +1,7 @@
 {
   "httpNodeRoot": "/",
-  "version": "4.0.9",
-    "dynamicServer": "https://deadred.flowhub.org/",
+  "version": "5.0.8",
+  "dynamicServer": "https://deadred.flowhub.org/",
   "context": {
     "default": "memory",
     "stores": [
@@ -40,12 +40,13 @@
     }
   ],
   "flowFilePretty": true,
-  "externalModules": null,
+  "externalModules": {},
   "flowEncryptionType": "system",
   "diagnostics": {
     "enabled": true,
     "ui": true
   },
+  "telemetryEnabled": false,
   "runtimeState": {
     "enabled": false,
     "ui": false
@@ -54,7 +55,7 @@
   "functionTimeout": 0,
   "tlsConfigDisableLocalFiles": false,
   "editorTheme": {
-    "palette": null,
+    "palette": {},
     "projects": {
       "enabled": false,
       "workflow": {

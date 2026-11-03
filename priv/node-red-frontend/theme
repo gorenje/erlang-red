@@ -5,7 +5,9 @@
     "tabicon": {
       "icon": "red/images/node-red-icon-black.svg",
       "colour": "#8f0000"
-    }
+    },
+    "css": [],
+    "scripts": []
   },
   "header": {
     "title": "Erlang-Red",
@@ -14,7 +16,8 @@
   "asset": {
     "red": "red/red.min.js",
     "main": "red/main.min.js",
-    "vendorMonaco": "vendor/monaco/monaco-bootstrap.js"
+    "vendorMonaco": "vendor/monaco/monaco-bootstrap.js",
+    "vendorAce": ""
   },
   "themes": []
 }
