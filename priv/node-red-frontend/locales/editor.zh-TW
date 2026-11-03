@@ -1,10 +1,12 @@
 {
     "actions": {
-        "search-counter": "\"__term__\" __result__ of __count__",
+        "open-event-log": "Open event log",
+        "search-counter": "__result__ of __count__",
         "search-flows": "\u641c\u7d22\u6d41\u7a0b",
         "search-next": "\u4e0b\u4e00\u500b",
         "search-prev": "\u4e0a\u4e00\u500b",
         "toggle-navigator": "\u5207\u63db\u5c0e\u822a\u5668",
+        "zoom-fit": "Zoom to fit",
         "zoom-in": "\u653e\u5927",
         "zoom-out": "\u7e2e\u5c0f",
         "zoom-reset": "\u91cd\u7f6e\u7e2e\u653e"
@@ -18,7 +20,7 @@
     "clipboard": {
         "clipboard": "\u526a\u8cbc\u7c3f",
         "configNode": "__count__ \u7bc0\u9ede\u7d44\u614b",
-        "configNode_plural": "__count__ \u591a\u7bc0\u9ede\u7d44\u614b",
+        "configNode_other": "__count__ \u591a\u7bc0\u9ede\u7d44\u614b",
         "copyMessagePath": "\u5df2\u8907\u88fd\u8def\u5f91",
         "copyMessageValue": "\u5df2\u8907\u88fd\u6578\u503c",
         "copyMessageValue_truncated": "\u5df2\u8907\u88fd\u6368\u68c4\u7684\u6578\u503c",
@@ -37,12 +39,12 @@
         },
         "exportNodes": "\u532f\u51fa\u7bc0\u9ede\u81f3\u526a\u8cbc\u7c3f",
         "flow": "__count__ \u6d41\u7a0b",
-        "flow_plural": "__count__ \u591a\u6d41\u7a0b",
+        "flow_other": "__count__ \u591a\u6d41\u7a0b",
         "group": "__count__ \u500b\u7d44",
         "groupCopied": "\u8907\u88fd __count__ \u500b\u7d44",
-        "groupCopied_plural": "\u5df2\u8907\u88fd __count__ \u500bgroups",
+        "groupCopied_other": "\u5df2\u8907\u88fd __count__ \u500bgroups",
         "groupStyleCopied": "\u5df2\u8907\u88fd\u7d44\u98a8\u683c",
-        "group_plural": "__count__ \u500b\u7d44",
+        "group_other": "__count__ \u500b\u7d44",
         "import": {
             "alreadyExists": "This node already exists",
             "conflictNotification1": "\u60a8\u8981\u5c0e\u5165\u7684\u67d0\u4e9b\u7bc0\u9ede\u5df2\u7d93\u5b58\u5728\u65bc\u5de5\u4f5c\u7a7a\u9593\u4e2d\u3002",
@@ -61,15 +63,17 @@
             "viewNodes": "\u67e5\u770b\u7bc0\u9ede"
         },
         "importDuplicate": "\u5c0e\u5165\u4e86\u91cd\u5fa9\u7bc0\u9ede\uff1a",
-        "importDuplicate_plural": "\u5c0e\u5165\u4e86\u91cd\u5fa9\u7bc0\u9ede\uff1a",
+        "importDuplicate_other": "\u5c0e\u5165\u4e86\u91cd\u5fa9\u7bc0\u9ede\uff1a",
         "importNodes": "\u532f\u5165\u7bc0\u9ede",
         "importUnrecognised": "\u532f\u5165\u4e86\u7121\u6cd5\u8b58\u5225\u7684\u985e\u578b:",
-        "importUnrecognised_plural": "\u532f\u5165\u4e86\u7121\u6cd5\u8b58\u5225\u7684\u985e\u578b:",
+        "importUnrecognised_other": "\u532f\u5165\u4e86\u7121\u6cd5\u8b58\u5225\u7684\u985e\u578b:",
+        "importWithModuleInfo": "Required modules missing",
+        "importWithModuleInfoDesc": "These nodes are not currently installed in your palette and are required for the imported flow:",
         "invalidFlow": "\u7121\u6548\u7684\u6d41\u7a0b: __message__",
         "node": "__count__ \u7bc0\u9ede",
         "nodeCopied": "\u5df2\u8907\u88fd __count__ \u500b\u7bc0\u9ede",
-        "nodeCopied_plural": "\u5df2\u8907\u88fd __count__ \u500b\u7bc0\u9ede",
-        "node_plural": "__count__ \u591a\u500b\u7bc0\u9ede",
+        "nodeCopied_other": "\u5df2\u8907\u88fd __count__ \u500b\u7bc0\u9ede",
+        "node_other": "__count__ \u591a\u500b\u7bc0\u9ede",
         "nodes": "\u7bc0\u9ede",
         "nodesExported": "\u7bc0\u9ede\u532f\u51fa\u5230\u4e86\u526a\u8cbc\u7c3f",
         "nodesImported": "\u5df2\u532f\u5165:",
@@ -78,10 +82,10 @@
         "recoveredNodesInfo": "\u5c0e\u5165\u7bc0\u9ede\u6642\uff0c\u6b64\u6d41\u4e0a\u7684\u7bc0\u9ede\u7f3a\u5c11\u6709\u6548\u7684\u6d41ID\u3002\u5b83\u5011\u5df2\u88ab\u6dfb\u52a0\u5230\u6b64\u6d41\u4e2d\uff0c\u60a8\u53ef\u4ee5\u5fa9\u539f\u6216\u522a\u9664\u5b83\u5011\u3002",
         "recoveredNodesNotification": "<p>\u5c0e\u5165\u7684\u7bc0\u9ede\u7f3a\u5c11\u6709\u6548\u7684\u6d41ID</p><p>\u5df2\u5c07\u5b83\u5011\u6dfb\u52a0\u5230\u540d\u70ba '__flowName__'\u7684\u65b0\u6d41\u4e2d\u3002</p>",
         "replacedNodes": "__count__ \u500b\u7bc0\u9ede\u88ab\u7f6e\u63db",
-        "replacedNodes_plural": "__count__ \u500b\u7bc0\u9ede\u88ab\u7f6e\u63db",
+        "replacedNodes_other": "__count__ \u500b\u7bc0\u9ede\u88ab\u7f6e\u63db",
         "selectFile": "\u532f\u5165\u6240\u9078\u6a94\u6848",
         "subflow": "__count__ \u5b50\u6d41\u7a0b",
-        "subflow_plural": "__count__ \u591a\u5b50\u6d41\u7a0b"
+        "subflow_other": "__count__ \u591a\u5b50\u6d41\u7a0b"
     },
     "common": {
         "label": {
@@ -94,6 +98,7 @@
             "delete": "\u522a\u9664",
             "disable": "\u7981\u7528",
             "done": "\u5b8c\u6210",
+            "edit": "Edit",
             "enable": "\u555f\u7528",
             "export": "\u532f\u51fa",
             "fill": "\u586b\u5145",
@@ -113,6 +118,12 @@
             "unlock": "\u89e3\u9396",
             "unlocked": "\u89e3\u9396",
             "upload": "\u4e0a\u50b3"
+        },
+        "tabs": {
+            "menu": "Tab menu",
+            "scrollLeft": "Scroll tabs left",
+            "scrollRight": "Scroll tabs right",
+            "selectTab": "Select tab"
         },
         "type": {
             "array": "\u6578\u7d44",
@@ -167,6 +178,7 @@
         "modifiedFlowsDesc": "\u53ea\u90e8\u7f72\u5305\u542b\u5df2\u66f4\u6539\u7bc0\u9ede\u7684\u6d41\u7a0b",
         "modifiedNodes": "\u5df2\u66f4\u6539\u7684\u7bc0\u9ede",
         "modifiedNodesDesc": "\u53ea\u90e8\u7f72\u5df2\u7d93\u66f4\u6539\u7684\u7bc0\u9ede",
+        "options": "Deploy options",
         "restartFlows": "\u91cd\u65b0\u555f\u52d5\u6d41\u7a0b",
         "restartFlowsDesc": "\u91cd\u65b0\u555f\u52d5\u7576\u524d\u90e8\u7f72\u7684\u6d41\u7a0b",
         "startFlows": "\u555f\u52d5",
@@ -194,7 +206,7 @@
         "newVersionError": "\u65b0\u7248\u672c\u4e0d\u5305\u542b\u6709\u6548\u7684JSON\uff1a",
         "noBinaryFileShowed": "\u7121\u6cd5\u986f\u793a\u4e8c\u9032\u88fd\u6587\u4ef6\u5167\u5bb9",
         "nodeCount": "__count__ \u500b\u7bc0\u9ede",
-        "nodeCount_plural": "__count__ \u500b\u7bc0\u9ede",
+        "nodeCount_other": "__count__ \u500b\u7bc0\u9ede",
         "oldVersionError": "\u820a\u7248\u672c\u4e0d\u5305\u542b\u6709\u6548\u7684JSON\uff1a",
         "remote": "\u9060\u7aef",
         "remoteChanges": "Remote Changes",
@@ -215,7 +227,7 @@
             "wires": "wires"
         },
         "unresolvedCount": "__count__ \u500b\u672a\u89e3\u6c7a\u7684\u885d\u7a81",
-        "unresolvedCount_plural": "__count__ \u500b\u672a\u89e3\u6c7a\u7684\u885d\u7a81",
+        "unresolvedCount_other": "__count__ \u500b\u672a\u89e3\u6c7a\u7684\u885d\u7a81",
         "useLocalChanges": "use local changes",
         "useRemoteChanges": "use remote changes",
         "viewCommitDiff": "\u67e5\u770b\u63d0\u4ea4\u66f4\u6539"
@@ -237,6 +249,9 @@
         "description": "\u63cf\u8ff0",
         "editConfig": "\u7de8\u8f2f __type__ \u914d\u7f6e",
         "editNode": "\u7de8\u8f2f __type__ \u7bc0\u9ede",
+        "envVar": {
+            "expandEdit": "Edit environment variable"
+        },
         "errors": {
             "credentialLoadFailed": "\u7121\u6cd5\u52a0\u8f09\u7bc0\u9ede\u6191\u64da",
             "invalidProperties": "\u7121\u6548\u7684\u5c6c\u6027\uff1a",
@@ -268,7 +283,7 @@
         "noDefaultLabel": "\u7121",
         "nodeProperties": "\u7bc0\u9ede\u5c6c\u6027",
         "nodesUse": "__count__ \u500b\u7bc0\u9ede\u4f7f\u7528\u6b64\u914d\u7f6e",
-        "nodesUse_plural": "__count__ \u500b\u7bc0\u9ede\u4f7f\u7528\u6b64\u914d\u7f6e",
+        "nodesUse_other": "__count__ \u500b\u7bc0\u9ede\u4f7f\u7528\u6b64\u914d\u7f6e",
         "portLabels": "\u57e0\u6a19\u7c64",
         "searchIcons": "\u641c\u5c0b\u5716\u6a19",
         "select": {
@@ -392,6 +407,7 @@
         "pasteGroupStyle": "\u7c98\u8cbc\u7d44\u6a23\u5f0f",
         "pasteNode": "\u7c98\u8cbc\u7bc0\u9ede",
         "redoChange": "\u91cd\u505a",
+        "revertEdit": "Revert shortcut",
         "scope": "\u7bc4\u570d",
         "searchBox": "\u6253\u958b\u641c\u5c0b\u6846",
         "selectAll": "\u9078\u64c7\u6240\u6709\u7bc0\u9ede",
@@ -400,6 +416,7 @@
         "shortcut": "\u5feb\u6377\u9375",
         "splitWireWithLinks": "\u4f7f\u7528Link\u7bc0\u9ede\u62c6\u5206\u5df2\u9078\u9805",
         "title": "\u9375\u76e4\u5feb\u901f\u9375",
+        "toggleLeftSidebar": "Toggle left sidebar",
         "togglePalette": "\u5207\u63db\u8abf\u8272\u677f",
         "toggleSidebar": "\u5207\u63db\u5074\u908a\u6b04",
         "unassigned": "\u672a\u5206\u914d",
@@ -439,6 +456,14 @@
         "unnamedType": "\u7121\u540d __type__"
     },
     "markdownEditor": {
+        "alert": {
+            "caution": "Caution",
+            "important": "Important",
+            "note": "Note",
+            "tip": "Tip",
+            "warning": "Warning"
+        },
+        "alert-tooltip": "Alert",
         "bold": "\u7c97\u9ad4",
         "code": "\u7a0b\u5f0f\u78bc",
         "expand": "\u5c55\u958b",
@@ -473,6 +498,7 @@
             "delete": "\u522a\u9664",
             "disableSelectedNodes": "\u7981\u7528\u7576\u524d\u9078\u4e2d\u7bc0\u9ede",
             "displayConfig": "\u4fee\u6539\u7bc0\u9ede\u914d\u7f6e",
+            "displayInfoIcon": "Show node information icon",
             "displayStatus": "\u986f\u793a\u7bc0\u9ede\u72c0\u614b",
             "distributeHorizontally": "\u6a2a\u5411\u5206\u5e03",
             "distributeVertically": "\u5782\u76f4\u5206\u5e03",
@@ -492,6 +518,7 @@
             "keyboardShortcuts": "\u9375\u76e4\u5feb\u901f\u9375",
             "login": "\u767b\u5165",
             "logout": "\u9000\u51fa",
+            "mainMenu": "Main menu",
             "moveBackwards": "\u5411\u5f8c\u79fb\u52d5",
             "moveForwards": "\u5411\u524d\u79fb\u52d5",
             "moveToBack": "\u7f6e\u65bc\u5e95\u5c64",
@@ -515,14 +542,20 @@
             "showTips": "\u986f\u793a\u5c0f\u63d0\u793a",
             "showWelcomeTours": "\u986f\u793a\u65b0\u7248\u672c\u5411\u5c0e",
             "sidebar": {
-                "show": "\u986f\u793a\u5074\u908a\u6b04"
+                "show": "\u986f\u793a\u5074\u908a\u6b04",
+                "showLeft": "Show left sidebar"
             },
             "subflows": "\u5b50\u6d41\u7a0b",
             "ungroupSelection": "\u53d6\u6d88\u9078\u64c7\u7d44",
             "userSettings": "\u4f7f\u7528\u8005\u8a2d\u7f6e",
             "view": {
+                "appearance": "Appearance",
                 "auto": "\u4e0a\u4e0b\u6587",
                 "browserDefault": "\u700f\u89bd\u5668\u9ed8\u8a8d",
+                "darkThemeAuto": "Auto",
+                "darkThemeDark": "Dark",
+                "darkThemeLabel": "Theme",
+                "darkThemeLight": "Light",
                 "defaultDir": "\u9ed8\u8a8d\u65b9\u5411",
                 "grid": "\u683c\u7dda",
                 "gridSize": "\u683c\u7dda\u5c3a\u5bf8",
@@ -576,6 +609,7 @@
             "setupProjectFiles": "\u8a2d\u7f6e\u9805\u76ee\u6587\u4ef6",
             "updated": "\u5df2\u66f4\u65b0\u9805\u76ee'__project__'"
         },
+        "showNotifications": "Show notifications",
         "state": {
             "flowsStarted": "\u6d41\u7a0b\u5df2\u555f\u52d5",
             "flowsStopped": "\u6d41\u7a0b\u5df2\u505c\u6b62"
@@ -604,6 +638,20 @@
             "expand-all": "\u5c55\u958b\u6240\u6709\u985e\u5225"
         },
         "addCategory": "\u6dfb\u52a0\u65b0\u7684...",
+        "description": {
+            "advanced": "Less commonly used nodes for more specialised tasks.",
+            "analysis": "Nodes for analysing message content.",
+            "common": "General purpose nodes used for common operations.",
+            "function": "Nodes for processing and transforming messages as they pass through a flow.",
+            "input": "Nodes that produce messages from external sources or triggers.",
+            "network": "Nodes for sending and receiving messages over network protocols.",
+            "output": "Nodes that send messages out to external systems or services.",
+            "parser": "Nodes for converting messages between different data formats.",
+            "sequence": "Nodes for working with sequences of messages, such as splitting, joining and sorting.",
+            "social": "Nodes for interacting with social media and communication platforms.",
+            "storage": "Nodes for reading from and writing to files, databases and other storage systems.",
+            "subflows": "Reusable flows that can be added to other flows as a single node."
+        },
         "editor": {
             "allCatalogs": "\u6240\u6709\u76ee\u9304",
             "confirm": {
@@ -635,6 +683,8 @@
             },
             "conflict": "conflict",
             "conflictTip": "<p>\u7121\u6cd5\u5b89\u88dd\u6b64\u6a21\u584a\uff0c\u56e0\u70ba\u5b83\u5305\u542b\u5df2\u5b89\u88dd\u7684<br/>\u7bc0\u9ede\u985e\u578b</p><p>\u8207<code>__module__</code>\u885d\u7a81</p>",
+            "deprecated": "deprecated",
+            "deprecatedTip": "This module has been deprecated",
             "disable": "\u7981\u7528",
             "disableall": "\u5168\u90e8\u7981\u7528",
             "enable": "\u555f\u7528",
@@ -649,58 +699,66 @@
                 "updateFailed": "\u7121\u6cd5\u66f4\u65b0: __module__<br>__message__<br>\u67e5\u770b\u65e5\u8a8c\u77ad\u89e3\u66f4\u591a\u8cc7\u8a0a"
             },
             "install": "\u5b89\u88dd",
+            "installAll": "Install all",
             "installed": "\u5df2\u5b89\u88dd",
+            "installing": "Module installation in progress: __module__",
             "inuse": "\u4f7f\u7528\u4e2d",
             "loading": "\u8f09\u5165\u76ee\u9304...",
+            "majorVersion": "<p>This is a major version update of the node. Check the documentation for details of the update.</p>",
+            "manageModules": "Manage modules",
             "moduleCount": "__count__ \u500b\u53ef\u7528\u6a21\u7d44",
-            "moduleCount_plural": "__count__ \u500b\u53ef\u7528\u6a21\u7d44",
+            "moduleCount_other": "__count__ \u500b\u53ef\u7528\u6a21\u7d44",
+            "moduleDocumentation": "Module documentation",
             "more": "\u589e\u52a0 __count__ \u500b",
             "nodeCount": "__label__ \u500b\u7bc0\u9ede",
-            "nodeCount_plural": "__label__ \u500b\u7bc0\u9ede",
+            "nodeCount_other": "__label__ \u500b\u7bc0\u9ede",
             "palette": "\u63a7\u88fd\u677f",
             "pluginCount": "__count__ plugin",
-            "pluginCount_plural": "__count__ plugins",
+            "pluginCount_other": "__count__ plugins",
             "refresh": "\u66f4\u65b0\u6a21\u584a\u5217\u8868",
             "remove": "\u79fb\u9664",
             "sort": "\u6392\u5e8f:",
             "sortAZ": "a-z\u9806\u5e8f",
             "sortRecent": "\u65e5\u671f\u9806\u5e8f",
             "sortRelevance": "\u95dc\u806f",
+            "successfulInstall": "Successfully installed modules",
             "tab-install": "\u5b89\u88dd",
             "tab-nodes": "\u7bc0\u9ede",
             "times": {
                 "daysV": "__count__ \u5929\u524d",
-                "daysV_plural": "__count__ \u5929\u524d",
+                "daysV_other": "__count__ \u5929\u524d",
                 "hoursV": "__count__ \u5c0f\u6642\u524d",
-                "hoursV_plural": "__count__ \u5c0f\u6642\u524d",
+                "hoursV_other": "__count__ \u5c0f\u6642\u524d",
                 "minutes": "\u5206\u524d",
                 "minutesV": "__count__ \u5206\u524d",
                 "monthsV": "__count__ \u6708\u524d",
-                "monthsV_plural": "__count__ \u6708\u524d",
+                "monthsV_other": "__count__ \u6708\u524d",
                 "seconds": "\u79d2\u524d",
                 "weeksV": "__count__ \u5468\u524d",
-                "weeksV_plural": "__count__ \u5468\u524d",
+                "weeksV_other": "__count__ \u5468\u524d",
                 "yearMonthsV": "__y__ \u5e74, __count__ \u6708\u524d",
-                "yearMonthsV_plural": "__y__ \u5e74, __count__ \u6708\u524d",
+                "yearMonthsV_other": "__y__ \u5e74, __count__ \u6708\u524d",
                 "yearsMonthsV": "__y__ \u5e74, __count__ \u6708\u524d",
-                "yearsMonthsV_plural": "__y__ \u5e74, __count__ \u6708\u524d",
+                "yearsMonthsV_other": "__y__ \u5e74, __count__ \u6708\u524d",
                 "yearsV": "__count__ \u5e74\u524d",
-                "yearsV_plural": "__count__ \u5e74\u524d"
+                "yearsV_other": "__count__ \u5e74\u524d"
             },
             "title": "\u9762\u677f\u7ba1\u7406",
             "update": "\u66f4\u65b0\u81f3 __version__ \u7248\u672c",
+            "updateCount": "__count__ update available",
+            "updateCount_other": "__count__ updates available",
             "updated": "\u5df2\u66f4\u65b0",
             "upload": "\u4e0a\u50b3\u6a21\u584atgz\u6587\u4ef6"
         },
         "event": {
             "nodeAdded": "\u6dfb\u52a0\u5230\u9762\u677f\u4e2d\u7684\u7bc0\u9ede:",
-            "nodeAdded_plural": "\u6dfb\u52a0\u5230\u9762\u677f\u4e2d\u7684\u591a\u500b\u7bc0\u9ede",
+            "nodeAdded_other": "\u6dfb\u52a0\u5230\u9762\u677f\u4e2d\u7684\u591a\u500b\u7bc0\u9ede",
             "nodeDisabled": "\u7981\u7528\u7bc0\u9ede:",
-            "nodeDisabled_plural": "\u7981\u7528\u591a\u500b\u7bc0\u9ede:",
+            "nodeDisabled_other": "\u7981\u7528\u591a\u500b\u7bc0\u9ede:",
             "nodeEnabled": "\u555f\u7528\u7bc0\u9ede:",
-            "nodeEnabled_plural": "\u555f\u7528\u591a\u500b\u7bc0\u9ede:",
+            "nodeEnabled_other": "\u555f\u7528\u591a\u500b\u7bc0\u9ede:",
             "nodeRemoved": "\u5f9e\u9762\u677f\u4e2d\u522a\u9664\u7684\u7bc0\u9ede:",
-            "nodeRemoved_plural": "\u5f9e\u9762\u677f\u4e2d\u522a\u9664\u7684\u591a\u500b\u7bc0\u9ede:",
+            "nodeRemoved_other": "\u5f9e\u9762\u677f\u4e2d\u522a\u9664\u7684\u591a\u500b\u7bc0\u9ede:",
             "nodeUpgraded": "\u7bc0\u9ede\u6a21\u7d44__module__\u5347\u7d1a\u5230__version__\u7248\u672c",
             "unknownNodeRegistered": "\u52a0\u8f09\u7bc0\u9ede\u932f\u8aa4\uff1a <ul><li>__type__<br>__error__</li></ul>"
         },
@@ -719,8 +777,10 @@
             "storage": "\u5b58\u5132",
             "subflows": "\u5b50\u6d41\u7a0b"
         },
+        "loadingSuggestions": "Loading suggestions...",
         "noInfo": "\u7121\u53ef\u7528\u8cc7\u8a0a",
-        "search": "\u641c\u5c0b\u6a21\u7d44"
+        "search": "\u641c\u5c0b\u6a21\u7d44",
+        "searchByType": "Search for this node type"
     },
     "projects": {
         "clone-project": {
@@ -897,12 +957,14 @@
             "configNodes": "\u914d\u7f6e\u7bc0\u9ede",
             "hiddenFlows": "\u96b1\u85cf\u7684\u6d41\u7a0b",
             "invalidNodes": "\u7121\u6548\u7684\u7bc0\u9ede",
+            "label": "Search options",
             "modifiedNodes": "\u5df2\u4fee\u6539\u7684\u7bc0\u9ede\u6216\u6d41\u7a0b",
             "thisFlow": "\u7576\u524d\u6d41\u7a0b",
             "uknownNodes": "\u672a\u77e5\u7684\u7bc0\u9ede",
             "unusedConfigNodes": "\u672a\u4f7f\u7528\u7684\u914d\u7f6e\u7bc0\u9ede",
             "unusedSubflows": "\u672a\u4f7f\u7528\u7684\u5b50\u6d41\u7a0b"
-        }
+        },
+        "showInOutline": "Show results in outline"
     },
     "sidebar": {
         "config": {
@@ -932,6 +994,10 @@
             "refresh": "\u5237\u65b0\u4ee5\u52a0\u8f09",
             "refrsh": "\u5237\u65b0"
         },
+        "explorer": {
+            "label": "Explorer",
+            "name": "Explorer"
+        },
         "help": {
             "changeLog": "\u66f4\u65b0\u65e5\u8a8c",
             "hideTopics": "Hide topics",
@@ -959,12 +1025,14 @@
             "globalConfig": "\u5168\u5c40\u914d\u7f6e\u7bc0\u9ede",
             "group": "\u7d44",
             "hideFlow": "\u96b1\u85cf\u6d41\u7a0b",
+            "hideTips": "Hide tips",
             "id": "ID",
             "info": "\u4fe1\u606f",
             "instances": "\u5be6\u4f8b",
             "label": "\u4fe1\u606f",
             "module": "Module",
             "name": "\u7bc0\u9ede\u4fe1\u606f",
+            "nextTip": "Show next tip",
             "node": "\u7bc0\u9ede",
             "nodeHelp": "\u7bc0\u9ede\u5e6b\u52a9",
             "nodes": "__count__ \u500b\u7bc0\u9ede",
@@ -984,6 +1052,7 @@
             "triggerAction": "\u89f8\u767c\u52d5\u4f5c",
             "type": "\u985e\u578b"
         },
+        "moreTabs": "More sidebar tabs",
         "palette": {
             "label": "\u7bc0\u9ede",
             "name": "\u7bc0\u9ede\u7ba1\u7406"
@@ -1085,31 +1154,31 @@
                 "commitPlaceholder": "\u8f38\u5165\u60a8\u7684\u63d0\u4ea4\u4fe1\u606f",
                 "commitsAhead": "\u60a8\u7684\u5009\u5eab\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5push\u9019\u4e9b\u63d0\u4ea4\u3002",
                 "commitsAheadAndBehind1": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4",
-                "commitsAheadAndBehind1_plural": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4",
+                "commitsAheadAndBehind1_other": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4",
                 "commitsAheadAndBehind2": "\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002",
-                "commitsAheadAndBehind2_plural": "\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002",
+                "commitsAheadAndBehind2_other": "\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002",
                 "commitsAheadAndBehind3": "\u60a8\u5fc5\u9808\u5148pull\u9060\u7a0b\u63d0\u4ea4\uff0c\u7136\u5f8c\u518d\u9032\u884cpush\u3002",
-                "commitsAheadAndBehind3_plural": "\u60a8\u5fc5\u9808\u5148pull\u9060\u7a0b\u63d0\u4ea4\uff0c\u7136\u5f8c\u518d\u9032\u884cpush\u3002",
-                "commitsAhead_plural": "\u60a8\u7684\u5009\u5eab\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5push\u9019\u4e9b\u63d0\u4ea4\u3002",
+                "commitsAheadAndBehind3_other": "\u60a8\u5fc5\u9808\u5148pull\u9060\u7a0b\u63d0\u4ea4\uff0c\u7136\u5f8c\u518d\u9032\u884cpush\u3002",
+                "commitsAhead_other": "\u60a8\u7684\u5009\u5eab\u9818\u5148\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5push\u9019\u4e9b\u63d0\u4ea4\u3002",
                 "commitsBehind": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5pull\u9019\u4e9b\u63d0\u4ea4\u3002",
-                "commitsBehind_plural": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5pull\u9019\u4e9b\u63d0\u4ea4\u3002",
+                "commitsBehind_other": "\u60a8\u7684\u5009\u5eab\u843d\u5f8c\u9060\u7a0b\u5009\u5eab __count__ \u6b21\u63d0\u4ea4\u3002\u60a8\u73fe\u5728\u53ef\u4ee5pull\u9019\u4e9b\u63d0\u4ea4\u3002",
                 "conflictResolve": "\u89e3\u6c7a\u6240\u6709\u885d\u7a81\u3002 \u63d0\u4ea4\u66f4\u6539\u4ee5\u5b8c\u6210\u5408\u4f75\u3002",
                 "connectionFailed": "\u7121\u6cd5\u9023\u63a5\u5230\u9060\u7a0b\u5b58\u5132\u5eab\uff1a",
                 "createBranchPlaceholder": "\u67e5\u627e\u6216\u5275\u5efa\u5206\u652f",
                 "createRemoteBranchPlaceholder": "\u67e5\u627e\u6216\u5275\u5efa\u9060\u7a0b\u5206\u652f",
                 "daysAgo": "__count__ \u5929\u524d",
-                "daysAgo_plural": "__count__ \u5929\u524d",
+                "daysAgo_other": "__count__ \u5929\u524d",
                 "head": "HEAD",
                 "history": "\u6b77\u53f2",
                 "hoursAgo": "__count__ \u5c0f\u6642\u524d",
-                "hoursAgo_plural": "__count__ \u5c0f\u6642\u524d",
+                "hoursAgo_other": "__count__ \u5c0f\u6642\u524d",
                 "local": "\u672c\u5730\u7684",
                 "localChanges": "\u7576\u5730\u8b8a\u5316",
                 "localFiles": "\u672c\u5730\u6587\u4ef6",
                 "localOverwrite": "\u60a8\u6709\u53ef\u901a\u904e\u5207\u63db\u5206\u652f\u8986\u84cb\u7684\u672c\u5730\u66f4\u6539\u3002\u60a8\u5fc5\u9808\u5148\u63d0\u4ea4\u6216\u64a4\u92b7\u90a3\u4e9b\u66f4\u6539\u3002",
                 "manageRemoteBranch": "\u7ba1\u7406\u9060\u7a0b\u5206\u652f",
                 "minsAgo": "__count__ \u5206\u9418\u524d",
-                "minsAgo_plural": "__count__ \u5206\u9418\u524d",
+                "minsAgo_other": "__count__ \u5206\u9418\u524d",
                 "moreCommits": "\u66f4\u591a\u63d0\u4ea4",
                 "none": "None",
                 "notTracking": "\u60a8\u7684\u672c\u5730\u5206\u652f\u7576\u524d\u672a\u8ddf\u8e64\u9060\u7a0b\u5206\u652f\u3002",
@@ -1149,6 +1218,7 @@
         }
     },
     "subflow": {
+        "addOutput": "Add output",
         "author": "\u4f5c\u8005",
         "authorPlaceholder": "\u540d\u5b57 <email@example.com>",
         "category": "\u985e\u5225",
@@ -1177,12 +1247,23 @@
         "licenseOther": "\u5176\u5b83",
         "module": "\u6a21\u584a",
         "output": "\u8f38\u51fa:",
+        "removeOutput": "Remove output",
         "status": "\u72c0\u614b\u7bc0\u9ede",
         "subflowInstances": "\u9019\u500b\u5b50\u6d41\u7a0b\u7bc4\u672c\u6709 __count__ \u500b\u5be6\u4f8b",
-        "subflowInstances_plural": "\u9019\u500b\u5b50\u6d41\u7a0b\u7bc4\u672c\u6709 __count__ \u500b\u5be6\u4f8b",
+        "subflowInstances_other": "\u9019\u500b\u5b50\u6d41\u7a0b\u7bc4\u672c\u6709 __count__ \u500b\u5be6\u4f8b",
         "type": "\u7bc0\u9ede\u985e\u578b",
         "version": "\u7248\u672c",
         "versionPlaceholder": "x.y.z"
+    },
+    "telemetry": {
+        "disableLabel": "No, do not enable notifications",
+        "enableLabel": "Yes, enable notifications",
+        "label": "Update Notifications",
+        "settingsDescription": "<p>Node-RED can notify you when there is a new version available. This ensures you keep up to date with the latest features and fixes.</p><p>This requires sending anonymised data back to the Node-RED team. It does not include any details of your flows or users.</p><p>For full information on what information is collected and how it is used, please see the <a href=\"https://nodered.org/docs/telemetry\" target=\"_blank\">documentation</a>.</p>",
+        "settingsDescription2": "<p>You can change this setting at any time in the User Settings.</p>",
+        "settingsTitle": "Enable Update Notifications",
+        "updateAvailable": "Update available",
+        "updateAvailableDesc": "Node-RED __version__ is now available"
     },
     "textEditor": {
         "title": "\u6587\u672c\u7de8\u8f2f\u5668"
@@ -1200,8 +1281,10 @@
                 "timestamp": "milliseconds since epoch"
             }
         },
+        "editPassword": "Edit password",
+        "passwordToggle": "Toggle password visibility",
         "selected": "__count__ selected",
-        "selected_plural": "__count__ selected",
+        "selected_other": "__count__ selected",
         "type": {
             "bin": "\u4e8c\u9032\u4f4d\u6d41",
             "bool": "\u5e03\u6797",
@@ -1255,12 +1338,11 @@
         "disableFlow": "\u7981\u7528\u6d41\u7a0b",
         "disabled": "\u7121\u6548",
         "dropFlowHere": "\u628a\u6d41\u7a0b\u653e\u5230\u9019\u88e1",
-        "dropImageHere": "Drop the image here",
         "editFlow": "\u7de8\u8f2f\u6d41\u7a0b: __name__",
         "enableFlow": "\u555f\u7528\u6d41\u7a0b",
         "enabled": "\u6709\u6548",
         "hiddenFlows": "\u5217\u51fa __count__ \u500b\u96b1\u85cf\u6d41\u7a0b",
-        "hiddenFlows_plural": "\u5217\u51fa __count__ \u500b\u96b1\u85cf\u6d41\u7a0b",
+        "hiddenFlows_other": "\u5217\u51fa __count__ \u500b\u96b1\u85cf\u6d41\u7a0b",
         "hideAllFlows": "\u96b1\u85cf\u6240\u6709\u6d41\u7a0b",
         "hideFlow": "\u96b1\u85cf\u6d41\u7a0b",
         "hideOtherFlows": "\u96b1\u85cf\u5176\u5b83\u6d41\u7a0b",

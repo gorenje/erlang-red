@@ -105,13 +105,16 @@
         "show-debug-tab": "Afficher l'onglet de d\u00e9bogage",
         "show-event-log": "Afficher le journal des \u00e9v\u00e9nements",
         "show-examples-import-dialog": "Afficher la bo\u00eete de dialogue d'importation d'exemples",
+        "show-explorer-tab": "Afficher l'onglet explorateur",
         "show-export-dialog": "Afficher la bo\u00eete de dialogue d'exportation",
+        "show-first-tab": "Afficher le premier onglet",
         "show-global-env": "Afficher les variables d'environnement globales",
         "show-help": "Afficher l'aide",
         "show-help-tab": "Afficher l'onglet d'aide du noeud",
         "show-import-dialog": "Afficher la bo\u00eete de dialogue d'importation",
         "show-info-tab": "Afficher l'onglet d'informations sur le noeud",
         "show-last-hidden-flow": "Afficher le dernier flux masqu\u00e9",
+        "show-last-tab": "Afficher le dernier onglet",
         "show-library-export-dialog": "Afficher la bo\u00eete de dialogue d'exportation de la biblioth\u00e8que",
         "show-library-import-dialog": "Afficher la bo\u00eete de dialogue d'importation de biblioth\u00e8que",
         "show-next-tab": "Afficher l'onglet suivant",
@@ -137,28 +140,33 @@
         "step-view-up": "Faire d\u00e9filer d'une unit\u00e9 vers le haut",
         "stop-flows": "Arr\u00eater les flux",
         "toggle-navigator": "Basculer l'affichage du navigateur",
+        "toggle-node-info-icon": "Basculer l'affichage de l'ic\u00f4ne d'information du noeud",
         "toggle-palette": "Basculer l'affichage de la palette",
         "toggle-show-grid": "Basculer l'affichage de la grille",
         "toggle-show-tips": "Basculer l'affichage des astuces",
         "toggle-sidebar": "Basculer l'affichage de la barre lat\u00e9rale",
         "toggle-snap-grid": "Basculer l'aide au placement des noeuds",
         "toggle-status": "Commuter l'\u00e9tat",
+        "trigger-selected-nodes-action": "D\u00e9clencher l'action des noeuds s\u00e9lectionn\u00e9s",
         "undo": "Annuler les modifications",
         "ungroup-selection": "Dissocier la s\u00e9lection",
         "unlock-flow": "D\u00e9verrouiller le flux",
         "wire-multiple-to-node": "Connecter plusieurs au noeud",
         "wire-node-to-multiple": "Connecter les noeuds \u00e0 plusieurs",
         "wire-series-of-nodes": "Connecter les noeuds en s\u00e9rie",
+        "zoom-fit": "Ajuster la taille",
         "zoom-in": "Zoomer",
         "zoom-out": "D\u00e9zoomer",
         "zoom-reset": "R\u00e9initialiser le zoom"
     },
     "actions": {
-        "search-counter": "\"__term__\" __result__ sur __count__",
+        "open-event-log": "Ouvrir le journal des \u00e9v\u00e9nements",
+        "search-counter": "__result__ sur __count__",
         "search-flows": "Rechercher le flux",
         "search-next": "Suivant",
         "search-prev": "Pr\u00e9c\u00e9dent",
         "toggle-navigator": "Basculer l'affichage du navigateur",
+        "zoom-fit": "Ajuster la taille",
         "zoom-in": "Agrandir",
         "zoom-out": "R\u00e9duire",
         "zoom-reset": "R\u00e9initialiser"
@@ -172,7 +180,7 @@
     "clipboard": {
         "clipboard": "Presse-papiers",
         "configNode": "__count__ noeud de configuration",
-        "configNode_plural": "__count__ noeuds de configuration",
+        "configNode_other": "__count__ noeuds de configuration",
         "copyMessagePath": "Chemin copi\u00e9",
         "copyMessageValue": "Valeur copi\u00e9e",
         "copyMessageValue_truncated": "Valeur tronqu\u00e9e (coup\u00e9e) copi\u00e9e",
@@ -191,12 +199,12 @@
         },
         "exportNodes": "Exporter des noeuds",
         "flow": "__count__ flux",
-        "flow_plural": "__count__ flux",
+        "flow_other": "__count__ flux",
         "group": "__count__ groupe",
         "groupCopied": "__count__ groupe copi\u00e9",
-        "groupCopied_plural": "__count__ groupes copi\u00e9s",
+        "groupCopied_other": "__count__ groupes copi\u00e9s",
         "groupStyleCopied": "Style de groupe copi\u00e9",
-        "group_plural": "__count__ groupes",
+        "group_other": "__count__ groupes",
         "import": {
             "alreadyExists": "Ce noeud existe d\u00e9j\u00e0",
             "conflictNotification1": "Certains des noeuds que vous avez import\u00e9s existent d\u00e9j\u00e0 dans votre espace de travail.",
@@ -215,15 +223,17 @@
             "viewNodes": "V\u00e9rifier ces noeuds"
         },
         "importDuplicate": "Noeud en double import\u00e9 :",
-        "importDuplicate_plural": "Noeuds en double import\u00e9s :",
+        "importDuplicate_other": "Noeuds en double import\u00e9s :",
         "importNodes": "Importer des noeuds",
         "importUnrecognised": "Importation d'un type inconnu :",
-        "importUnrecognised_plural": "Importation de plusieurs types inconnus :",
+        "importUnrecognised_other": "Importation de plusieurs types inconnus :",
+        "importWithModuleInfo": "Modules requis manquants",
+        "importWithModuleInfoDesc": "Ces noeuds ne sont pas actuellement install\u00e9s dans votre palette et sont requis pour le flux import\u00e9\u00a0:",
         "invalidFlow": "Flux invalide : __message__",
         "node": "__count__ noeud",
         "nodeCopied": "__count__ noeud copi\u00e9",
-        "nodeCopied_plural": "__count__ noeuds copi\u00e9s",
-        "node_plural": "__count__ noeuds",
+        "nodeCopied_other": "__count__ noeuds copi\u00e9s",
+        "node_other": "__count__ noeuds",
         "nodes": "Noeuds",
         "nodesExported": "Noeuds export\u00e9s vers le presse-papiers",
         "nodesImported": "Noeuds import\u00e9s :",
@@ -232,10 +242,10 @@
         "recoveredNodesInfo": "Les noeuds import\u00e9s sur ce flux contiennent un mauvais identifiant de flux. Ces noeuds ont \u00e9t\u00e9 ajout\u00e9s \u00e0 ce flux afin que vous puissiez les restaurer ou les supprimer.",
         "recoveredNodesNotification": "<p>Noeuds import\u00e9s sans identifiant de flux valide</p><p>Ils ont \u00e9t\u00e9 ajout\u00e9s \u00e0 un nouveau flux appel\u00e9 '__flowName__'.</p>",
         "replacedNodes": "__count__ noeud remplac\u00e9",
-        "replacedNodes_plural": "__count__ noeuds remplac\u00e9s",
+        "replacedNodes_other": "__count__ noeuds remplac\u00e9s",
         "selectFile": "S\u00e9lectionner un fichier \u00e0 importer",
         "subflow": "__count__ sous-flux",
-        "subflow_plural": "__count__ sous-flux"
+        "subflow_other": "__count__ sous-flux"
     },
     "common": {
         "label": {
@@ -248,6 +258,7 @@
             "delete": "Supprimer",
             "disable": "D\u00e9sactiver",
             "done": "Terminer",
+            "edit": "Modifier",
             "enable": "Activer",
             "export": "Exporter",
             "fill": "Remplissage",
@@ -267,6 +278,12 @@
             "unlock": "D\u00e9verrouiller",
             "unlocked": "D\u00e9verrouill\u00e9",
             "upload": "Charger"
+        },
+        "tabs": {
+            "menu": "Menu de l'onglet",
+            "scrollLeft": "D\u00e9filer les onglets vers la gauche",
+            "scrollRight": "D\u00e9filer les onglets vers la droite",
+            "selectTab": "S\u00e9lectionner l'onglet"
         },
         "type": {
             "array": "tableau",
@@ -321,6 +338,7 @@
         "modifiedFlowsDesc": "D\u00e9ploie uniquement les flux contenant des noeuds modifi\u00e9s",
         "modifiedNodes": "Noeuds modifi\u00e9s",
         "modifiedNodesDesc": "D\u00e9ploie uniquement les noeuds qui ont chang\u00e9s",
+        "options": "Options de d\u00e9ploiement",
         "restartFlows": "Red\u00e9marrer les flux",
         "restartFlowsDesc": "Red\u00e9marrer les flux actuellement d\u00e9ploy\u00e9s",
         "startFlows": "D\u00e9marrer",
@@ -348,7 +366,7 @@
         "newVersionError": "La nouvelle version ne contient pas de JSON valide :",
         "noBinaryFileShowed": "Impossible d'afficher le contenu du fichier binaire",
         "nodeCount": "__count__ noeud",
-        "nodeCount_plural": "__count__ noeuds",
+        "nodeCount_other": "__count__ noeuds",
         "oldVersionError": "L'ancienne version ne contient pas de JSON valide :",
         "remote": "Changements distants",
         "remoteChanges": "Modifications distantes",
@@ -369,7 +387,7 @@
             "wires": "c\u00e2bles"
         },
         "unresolvedCount": "__count__ conflit non r\u00e9solu",
-        "unresolvedCount_plural": "__count__ conflits non r\u00e9solus",
+        "unresolvedCount_other": "__count__ conflits non r\u00e9solus",
         "useLocalChanges": "utiliser les modifications locales",
         "useRemoteChanges": "utiliser les modifications distantes",
         "viewCommitDiff": "Afficher les modifications de la validation"
@@ -391,6 +409,9 @@
         "description": "Description",
         "editConfig": "Modifier le noeud de configuration __type__",
         "editNode": "Modifier le noeud __type__",
+        "envVar": {
+            "expandEdit": "Modifier la variable d'environnement"
+        },
         "errors": {
             "credentialLoadFailed": "\u00c9chec du chargement des identifiants du noeud",
             "invalidProperties": "Propri\u00e9t\u00e9s invalides :",
@@ -422,7 +443,7 @@
         "noDefaultLabel": "Aucune",
         "nodeProperties": "Propri\u00e9t\u00e9s du noeud",
         "nodesUse": "__count__ noeud utilise cette configuration",
-        "nodesUse_plural": "__count__ noeuds utilisent cette configuration",
+        "nodesUse_other": "__count__ noeuds utilisent cette configuration",
         "portLabels": "\u00c9tiquettes des ports",
         "searchIcons": "Rechercher une ic\u00f4ne",
         "select": {
@@ -546,6 +567,7 @@
         "pasteGroupStyle": "Coller le style de groupe",
         "pasteNode": "Coller les noeuds",
         "redoChange": "R\u00e9tablir",
+        "revertEdit": "Revenir \u00e0 l'\u00e9tat pr\u00e9c\u00e9dent de la s\u00e9lection",
         "scope": "Port\u00e9e",
         "searchBox": "Ouvrir le champ de recherche",
         "selectAll": "Tout s\u00e9lectionner",
@@ -554,8 +576,9 @@
         "shortcut": "Raccourci",
         "splitWireWithLinks": "Ajouter des liens \u00e0 la s\u00e9lection",
         "title": "Raccourcis clavier",
+        "toggleLeftSidebar": "Basculer la barre lat\u00e9rale gauche",
         "togglePalette": "Basculer la palette",
-        "toggleSidebar": "Basculer la barre lat\u00e9rale",
+        "toggleSidebar": "Basculer la barre lat\u00e9rale droite",
         "unassigned": "Non attribu\u00e9",
         "undoChange": "Annuler",
         "workspace": "Espace de travail"
@@ -593,6 +616,14 @@
         "unnamedType": "Sans nom __type__"
     },
     "markdownEditor": {
+        "alert": {
+            "caution": "Prudence",
+            "important": "Important",
+            "note": "Note",
+            "tip": "Astuce",
+            "warning": "Attention"
+        },
+        "alert-tooltip": "Alert",
         "bold": "Gras",
         "code": "Code",
         "expand": "D\u00e9velopper",
@@ -627,6 +658,7 @@
             "delete": "Supprimer",
             "disableSelectedNodes": "D\u00e9sactiver les noeuds s\u00e9lectionn\u00e9s",
             "displayConfig": "Noeuds de configuration",
+            "displayInfoIcon": "Afficher l'ic\u00f4ne d'information sur le noeud",
             "displayStatus": "Afficher l'\u00e9tat du noeud",
             "distributeHorizontally": "R\u00e9partir horizontalement",
             "distributeVertically": "R\u00e9partir verticalement",
@@ -646,6 +678,7 @@
             "keyboardShortcuts": "Raccourcis clavier",
             "login": "Se connecter",
             "logout": "Se d\u00e9connecter",
+            "mainMenu": "Menu principal",
             "moveBackwards": "Reculer",
             "moveForwards": "Avancer",
             "moveToBack": "D\u00e9placer vers l'arri\u00e8re",
@@ -669,14 +702,20 @@
             "showTips": "Afficher les astuces",
             "showWelcomeTours": "Afficher les visites guid\u00e9es des nouvelles versions",
             "sidebar": {
-                "show": "Afficher la barre lat\u00e9rale"
+                "show": "Afficher la barre lat\u00e9rale droite",
+                "showLeft": "Afficher la barre lat\u00e9rale gauche"
             },
             "subflows": "Sous-flux",
             "ungroupSelection": "D\u00e9grouper la s\u00e9lection",
             "userSettings": "Param\u00e8tres de l'utilisateur",
             "view": {
+                "appearance": "Apparence",
                 "auto": "Contextuel",
                 "browserDefault": "Par d\u00e9faut du Navigateur",
+                "darkThemeAuto": "Auto",
+                "darkThemeDark": "Sombre",
+                "darkThemeLabel": "Th\u00e8me",
+                "darkThemeLight": "Clair",
                 "defaultDir": "Sens par d\u00e9faut",
                 "grid": "Grille",
                 "gridSize": "Taille de la grille",
@@ -730,6 +769,7 @@
             "setupProjectFiles": "Configuration des fichiers du projet",
             "updated": "Projet '__project__' mis \u00e0 jour"
         },
+        "showNotifications": "Afficher les notifications",
         "state": {
             "flowsStarted": "Flux d\u00e9marr\u00e9s",
             "flowsStopped": "Flux arr\u00eat\u00e9s"
@@ -758,6 +798,20 @@
             "expand-all": "D\u00e9velopper toutes les cat\u00e9gories"
         },
         "addCategory": "Ajouter une nouvelle...",
+        "description": {
+            "advanced": "Noeuds moins couramment utilis\u00e9s pour des t\u00e2ches plus sp\u00e9cialis\u00e9es.",
+            "analysis": "Noeuds permettant d'analyser le contenu des messages.",
+            "common": "Noeuds polyvalents utilis\u00e9s pour des op\u00e9rations courantes.",
+            "function": "Noeuds permettant de traiter et de transformer les messages au fil de leur passage dans un flux.",
+            "input": "Noeuds qui produisent des messages \u00e0 partir de sources externes ou de d\u00e9clencheurs.",
+            "network": "Noeuds permettant d'envoyer et de recevoir des messages via des protocoles r\u00e9seau.",
+            "output": "Noeuds qui envoient des messages vers des syst\u00e8mes ou services externes.",
+            "parser": "Noeuds permettant de convertir des messages entre diff\u00e9rents formats de donn\u00e9es.",
+            "sequence": "Noeuds permettant de travailler avec des s\u00e9quences de messages, comme les fractionner, les fusionner et les trier.",
+            "social": "Noeuds permettant d'interagir avec les r\u00e9seaux sociaux et les plateformes de communication.",
+            "storage": "Noeuds permettant de lire et d'\u00e9crire dans des fichiers, des bases de donn\u00e9es et d'autres syst\u00e8mes de stockage.",
+            "subflows": "Flux r\u00e9utilisables pouvant \u00eatre ajout\u00e9s \u00e0 d'autres flux sous forme d'un seul noeud."
+        },
         "editor": {
             "allCatalogs": "Tous les catalogues",
             "confirm": {
@@ -789,6 +843,8 @@
             },
             "conflict": "Conflit",
             "conflictTip": "<p>Ce module ne peut pas \u00eatre install\u00e9 car il inclut un<br/>type de noeud qui a d\u00e9j\u00e0 \u00e9t\u00e9 install\u00e9</p><p>Conflits avec <code>__module__</code></p>",
+            "deprecated": "Obsol\u00e8te",
+            "deprecatedTip": "Ce module est obsol\u00e8te",
             "disable": "D\u00e9sactiver",
             "disableall": "D\u00e9sactiver tout",
             "enable": "Activer",
@@ -803,58 +859,66 @@
                 "updateFailed": "<p>\u00c9chec lors de la mise \u00e0 jour : __module__</p><p>__message__</p><p>Consulter le journal pour plus d'informations</p>"
             },
             "install": "Installer",
+            "installAll": "Installer tout",
             "installed": "Install\u00e9",
+            "installing": "Installation du module en cours\u00a0: __module__",
             "inuse": "En cours d'utilisation",
             "loading": "Chargement des catalogues...",
+            "majorVersion": "<p>Il s'agit d'une mise \u00e0 jour majeure du noeud. Consulter la documentation pour plus de d\u00e9tails sur la mise \u00e0 jour.</p>",
+            "manageModules": "G\u00e9rer les modules",
             "moduleCount": "__count__ module disponible",
-            "moduleCount_plural": "__count__ modules disponibles",
+            "moduleCount_other": "__count__ modules disponibles",
+            "moduleDocumentation": "Documentation du module",
             "more": "+ __count__ en plus",
             "nodeCount": "__label__ noeud",
-            "nodeCount_plural": "__label__ noeuds",
+            "nodeCount_other": "__label__ noeuds",
             "palette": "Palette",
             "pluginCount": "__count__ plugin",
-            "pluginCount_plural": "__count__ plugins",
+            "pluginCount_other": "__count__ plugins",
             "refresh": "Actualiser la liste des modules",
             "remove": "Supprimer",
             "sort": "Trier:",
             "sortAZ": "A-Z",
             "sortRecent": "R\u00e9cent",
             "sortRelevance": "Pertinence",
+            "successfulInstall": "Modules install\u00e9s avec succ\u00e8s",
             "tab-install": "Installer",
             "tab-nodes": "Noeuds",
             "times": {
                 "daysV": "il y a __count__ jour",
-                "daysV_plural": "il y a __count__ jours",
+                "daysV_other": "il y a __count__ jours",
                 "hoursV": "il y a __count__ heure",
-                "hoursV_plural": "il y a __count__ heures",
+                "hoursV_other": "il y a __count__ heures",
                 "minutes": "il y a quelques minutes",
                 "minutesV": "il y a __count__ minutes",
                 "monthsV": "il y a __count__ mois",
-                "monthsV_plural": "il y a __count__ mois",
+                "monthsV_other": "il y a __count__ mois",
                 "seconds": "il y a quelques secondes",
                 "weeksV": "il y a __count__ semaine",
-                "weeksV_plural": "il y a __count__ semaines",
+                "weeksV_other": "il y a __count__ semaines",
                 "yearMonthsV": "il y a __y__ an, __count__ mois",
-                "yearMonthsV_plural": "il y a __y__ an, __count__ mois",
+                "yearMonthsV_other": "il y a __y__ an, __count__ mois",
                 "yearsMonthsV": "il y a __y__ ans, __count__ mois",
-                "yearsMonthsV_plural": "il y a __y__ ans, __count__ mois",
+                "yearsMonthsV_other": "il y a __y__ ans, __count__ mois",
                 "yearsV": "il y a __count__ an",
-                "yearsV_plural": "il y a __count__ ans"
+                "yearsV_other": "il y a __count__ ans"
             },
             "title": "G\u00e9rer la palette",
             "update": "Mettre \u00e0 jour vers __version__",
+            "updateCount": "__count__ mise \u00e0 jour disponible",
+            "updateCount_other": "__count__ mises \u00e0 jour disponibles",
             "updated": "Mis \u00e0 jour",
             "upload": "Charger le fichier .tgz du module"
         },
         "event": {
             "nodeAdded": "Noeud ajout\u00e9 \u00e0 la palette :",
-            "nodeAdded_plural": "Noeuds ajout\u00e9s \u00e0 la palette :",
+            "nodeAdded_other": "Noeuds ajout\u00e9s \u00e0 la palette :",
             "nodeDisabled": "Noeud d\u00e9sactiv\u00e9 :",
-            "nodeDisabled_plural": "Noeuds d\u00e9sactiv\u00e9s :",
+            "nodeDisabled_other": "Noeuds d\u00e9sactiv\u00e9s :",
             "nodeEnabled": "Noeud activ\u00e9 :",
-            "nodeEnabled_plural": "Noeuds activ\u00e9s :",
+            "nodeEnabled_other": "Noeuds activ\u00e9s :",
             "nodeRemoved": "Noeud supprim\u00e9 de la palette :",
-            "nodeRemoved_plural": "Noeuds supprim\u00e9s de la palette :",
+            "nodeRemoved_other": "Noeuds supprim\u00e9s de la palette :",
             "nodeUpgraded": "Les noeuds du module __module__ ont \u00e9t\u00e9 mis \u00e0 jour vers la version __version__",
             "unknownNodeRegistered": "Erreur lors du chargement du noeud : <ul><li>__type__<br>__error__</li></ul>"
         },
@@ -873,8 +937,10 @@
             "storage": "Stockage",
             "subflows": "Sous-flux"
         },
+        "loadingSuggestions": "Chargement des suggestions...",
         "noInfo": "Pas d'information disponible",
-        "search": "Rechercher les modules"
+        "search": "Rechercher les modules",
+        "searchByType": "Rechercher ce type de noeud"
     },
     "projects": {
         "clone-project": {
@@ -1051,12 +1117,14 @@
             "configNodes": "Noeuds de configuration",
             "hiddenFlows": "Flux cach\u00e9s",
             "invalidNodes": "Noeuds invalides",
+            "label": "Options de recherche",
             "modifiedNodes": "Noeuds et flux modifi\u00e9s",
             "thisFlow": "Flux courant",
             "uknownNodes": "Noeuds inconnus",
             "unusedConfigNodes": "Noeuds de configuration inutilis\u00e9s",
             "unusedSubflows": "Sous-flux inutilis\u00e9s"
-        }
+        },
+        "showInOutline": "Afficher les r\u00e9sultats dans le plan"
     },
     "sidebar": {
         "config": {
@@ -1086,6 +1154,10 @@
             "refresh": "Actualiser pour charger",
             "refrsh": "Rafra\u00eechir"
         },
+        "explorer": {
+            "label": "Explorer",
+            "name": "Explorer"
+        },
         "help": {
             "changeLog": "Journal des modifications",
             "hideTopics": "Masquer les sujets",
@@ -1113,12 +1185,14 @@
             "globalConfig": "Noeuds de configuration globale",
             "group": "Groupe",
             "hideFlow": "Masquer",
+            "hideTips": "Masquer les astuces",
             "id": "ID (identifiant)",
             "info": "Information",
             "instances": "Instances",
             "label": "Info",
             "module": "Module",
             "name": "Information",
+            "nextTip": "Afficher l'astuce suivante",
             "node": "Noeud",
             "nodeHelp": "Aide sur les noeuds",
             "nodes": "__count__ noeuds",
@@ -1138,6 +1212,7 @@
             "triggerAction": "D\u00e9clencher une action",
             "type": "Type"
         },
+        "moreTabs": "Plus d'onglets dans la barre lat\u00e9rale",
         "palette": {
             "label": "Palette",
             "name": "Gestion des palettes"
@@ -1239,31 +1314,31 @@
                 "commitPlaceholder": "Entrer votre message de validation",
                 "commitsAhead": "Votre r\u00e9f\u00e9rentiel a __count__ validation d'avance sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser cette validation maintenant.",
                 "commitsAheadAndBehind1": "Votre r\u00e9f\u00e9rentiel a __count__ validation derri\u00e8re et ",
-                "commitsAheadAndBehind1_plural": "Votre r\u00e9f\u00e9rentiel est __count__ validations derri\u00e8re et ",
+                "commitsAheadAndBehind1_other": "Votre r\u00e9f\u00e9rentiel est __count__ validations derri\u00e8re et ",
                 "commitsAheadAndBehind2": "__count__ validation avant le r\u00e9f\u00e9rentiel distant. ",
-                "commitsAheadAndBehind2_plural": "__count__ commits ahead of the remote. ",
+                "commitsAheadAndBehind2_other": "__count__ commits ahead of the remote. ",
                 "commitsAheadAndBehind3": "Vous devez retirer la validation \u00e0 distance avant de pousser la modification.",
-                "commitsAheadAndBehind3_plural": "Vous devez retirer les validations \u00e0 distance avant de pousser les modifications.",
-                "commitsAhead_plural": "Votre r\u00e9f\u00e9rentiel a __count__ validations d'avance sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser ces validations maintenant.",
+                "commitsAheadAndBehind3_other": "Vous devez retirer les validations \u00e0 distance avant de pousser les modifications.",
+                "commitsAhead_other": "Votre r\u00e9f\u00e9rentiel a __count__ validations d'avance sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser ces validations maintenant.",
                 "commitsBehind": "Votre r\u00e9f\u00e9rentiel a __count__ validation de retard sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser cette validation maintenant.",
-                "commitsBehind_plural": "Votre r\u00e9f\u00e9rentiel a __count__ validations de retard sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser ces validations maintenant.",
+                "commitsBehind_other": "Votre r\u00e9f\u00e9rentiel a __count__ validations de retard sur le r\u00e9f\u00e9rentiel distant. Vous pouvez pousser ces validations maintenant.",
                 "conflictResolve": "Tous les conflits ont \u00e9t\u00e9 r\u00e9solus. Valider les modifications pour terminer la fusion.",
                 "connectionFailed": "Impossible de se connecter au r\u00e9f\u00e9rentiel distant: ",
                 "createBranchPlaceholder": "Trouver o\u00f9 cr\u00e9er une branche",
                 "createRemoteBranchPlaceholder": "Trouver ou cr\u00e9er une branche distante",
                 "daysAgo": "il y a __count__ jour",
-                "daysAgo_plural": "il y a __count__ jours",
+                "daysAgo_other": "il y a __count__ jours",
                 "head": "En-t\u00eate",
                 "history": "Historique",
                 "hoursAgo": "il y a __count__ heure",
-                "hoursAgo_plural": "il y a __count__ heures",
+                "hoursAgo_other": "il y a __count__ heures",
                 "local": "Local",
                 "localChanges": "Modifications locales",
                 "localFiles": "Fichiers locaux",
                 "localOverwrite": "Vous avez des modifications locales qui seraient \u00e9cras\u00e9es en changeant la branche. Vous devez d'abord valider ou annuler ces modifications.",
                 "manageRemoteBranch": "G\u00e9rer une branche distante",
                 "minsAgo": "il y a __count__ minute",
-                "minsAgo_plural": "il y a __count__ minutes",
+                "minsAgo_other": "il y a __count__ minutes",
                 "moreCommits": "Davantage de validations",
                 "none": "Vide",
                 "notTracking": "Votre branche locale ne suit pas actuellement une branche distante.",
@@ -1299,11 +1374,12 @@
                 "unstaged": "Non index\u00e9",
                 "unstagedChanges": "Changements non index\u00e9s",
                 "upstream": "en amont",
-                "validationsAheadAndBehind2_plural": "__count__ commits avant le r\u00e9f\u00e9rentiel distant. "
+                "validationsAheadAndBehind2_other": "__count__ commits avant le r\u00e9f\u00e9rentiel distant. "
             }
         }
     },
     "subflow": {
+        "addOutput": "Ajouter une sortie",
         "author": "Auteur",
         "authorPlaceholder": "Votre nom <email@exemple.com>",
         "category": "Cat\u00e9gorie",
@@ -1332,12 +1408,23 @@
         "licenseOther": "Autre",
         "module": "Module",
         "output": "Sorties :",
+        "removeOutput": "Supprimer la sortie",
         "status": "Statut du noeud",
         "subflowInstances": "Il existe __count__ instance de ce mod\u00e8le de sous-flux",
-        "subflowInstances_plural": "Il existe __count__ instances de ce mod\u00e8le de sous-flux",
+        "subflowInstances_other": "Il existe __count__ instances de ce mod\u00e8le de sous-flux",
         "type": "Type de noeud",
         "version": "Version",
         "versionPlaceholder": "x.y.z"
+    },
+    "telemetry": {
+        "disableLabel": "Non, ne pas activer les notifications",
+        "enableLabel": "Oui, activer les notifications",
+        "label": "Notifications de mise \u00e0 jour",
+        "settingsDescription": "<p>Node-RED peut vous avertir de la disponibilit\u00e9 d'une nouvelle version. Vous \u00eates ainsi inform\u00e9 des derni\u00e8res fonctionnalit\u00e9s et correctifs.</p><p>Cela n\u00e9cessite d'envoyer des donn\u00e9es anonymes \u00e0 l'\u00e9quipe Node-RED. Elles n'incluent aucun d\u00e9tail sur vos flux ou vos utilisateurs.</p><p>Pour plus d'informations sur les informations collect\u00e9es et leur utilisation, veuillez consulter la <a href=\"https://nodered.org/docs/telemetry\" target=\"_blank\">documentation</a>.</p>",
+        "settingsDescription2": "<p>Vous pouvez modifier ce param\u00e8tre \u00e0 tout moment dans les param\u00e8tres de l'utilisateur.</p>",
+        "settingsTitle": "Activer les notifications de mise \u00e0 jour",
+        "updateAvailable": "Mise(s) \u00e0 jour disponible(s)",
+        "updateAvailableDesc": "Node-RED __version__ est d\u00e9sormais disponible"
     },
     "textEditor": {
         "title": "\u00c9diteur de texte"
@@ -1355,8 +1442,10 @@
                 "timestamp": "millisecondes depuis l'\u00e9poque"
             }
         },
+        "editPassword": "Modifier le mot de passe",
+        "passwordToggle": "Basculer la visibilit\u00e9 du mot de passe",
         "selected": "__count__ s\u00e9lectionn\u00e9e",
-        "selected_plural": "__count__ s\u00e9lectionn\u00e9es",
+        "selected_other": "__count__ s\u00e9lectionn\u00e9es",
         "type": {
             "bin": "tampon",
             "bool": "bool\u00e9en",
@@ -1409,12 +1498,11 @@
         "disableFlow": "D\u00e9sactiver le flux",
         "disabled": "D\u00e9sactiv\u00e9",
         "dropFlowHere": "L\u00e2chez le flux ici",
-        "dropImageHere": "L\u00e2chez l'image ici",
         "editFlow": "Modifier le flux : __name__",
         "enableFlow": "Activer le flux",
         "enabled": "Activ\u00e9",
         "hiddenFlows": "R\u00e9pertorier le flux masqu\u00e9 __count__",
-        "hiddenFlows_plural": "R\u00e9pertorier les flux masqu\u00e9s __count__",
+        "hiddenFlows_other": "R\u00e9pertorier les flux masqu\u00e9s __count__",
         "hideAllFlows": "Masquer tous les flux",
         "hideFlow": "Masquer le flux",
         "hideOtherFlows": "Masquer les autres flux",

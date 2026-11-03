@@ -202,6 +202,7 @@
             "all": "all",
             "clearFilteredLog": "Clear filtered messages",
             "clearLog": "\u041e\u0447\u0438\u0441\u0442\u0438\u0442\u044c \u0436\u0443\u0440\u043d\u0430\u043b",
+            "clearLogOptions": "Clear messages options",
             "copyPath": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u0443\u0442\u044c",
             "copyPayload": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435",
             "debugNodes": "\u041e\u0442\u043b\u0430\u0434\u043e\u0447\u043d\u044b\u0435 \u0443\u0437\u043b\u044b",
@@ -211,9 +212,14 @@
             "filterSelected": "\u0432\u044b\u0431\u0440\u0430\u043d\u043d\u044b\u0435 \u0443\u0437\u043b\u044b",
             "filtered": "filtered",
             "label": "\u043e\u0442\u043b\u0430\u0434\u043a\u0430",
+            "messagesDropped": "__count__ message dropped",
+            "messagesDropped_other": "__count__ messages dropped",
             "name": "\u041e\u0442\u043b\u0430\u0434\u043e\u0447\u043d\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f",
             "openWindow": "\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u043d\u043e\u0432\u043e\u043c \u043e\u043a\u043d\u0435",
+            "pause": "pause",
+            "paused": "Paused",
             "pinPath": "\u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0432\u0438\u0434\u0438\u043c\u043e\u0441\u0442\u044c",
+            "resume": "resume",
             "selectAll": "select all",
             "selectNone": "select none"
         },
@@ -252,6 +258,7 @@
         "hour": "\u0447\u0430\u0441",
         "hours": "\u0447\u0430\u0441",
         "label": {
+            "burst": "burst",
             "delay": "\u0437\u0430\u0434\u0435\u0440\u0436\u043a\u0430",
             "limit": "\u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0435",
             "limitTopic": "\u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0435 \u0442\u0435\u043c\u044b",
@@ -280,6 +287,7 @@
             "variable": "\u043f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f"
         },
         "limitall": "\u0412\u0441\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f",
+        "limitburst": "All messages - burst mode",
         "limitrate": "\u041e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0435 \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u0438",
         "limittopic": "\u0414\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e msg.topic",
         "milisecs": "\u043c\u0441\u0435\u043a",
@@ -353,7 +361,7 @@
             "addnewline": "\u0414\u043e\u0431\u0430\u0432\u043b\u044f\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u0441\u0442\u0440\u043e\u043a\u0443 (\\n) \u043a \u0434\u0430\u043d\u043d\u044b\u043c?",
             "allProps": "include all existing properties in each msg",
             "binaryBuffer": "\u0434\u0432\u043e\u0438\u0447\u043d\u044b\u0439 \u0431\u0443\u0444\u0435\u0440",
-            "binaryBuffer_plural": "binary buffers",
+            "binaryBuffer_other": "binary buffers",
             "breakchunks": "\u0420\u0430\u0437\u0431\u0438\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430 \u0447\u0430\u0441\u0442\u0438",
             "breaklines": "\u0420\u0430\u0437\u0431\u0438\u0442\u044c \u043d\u0430 \u0441\u0442\u0440\u043e\u043a\u0438",
             "createdir": "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043a\u0430\u0442\u0430\u043b\u043e\u0433, \u0435\u0441\u043b\u0438 \u043e\u043d \u043d\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442?",
@@ -365,7 +373,7 @@
             "read": "read file",
             "sendError": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043f\u0440\u0438 \u043e\u0448\u0438\u0431\u043a\u0435 (\u0443\u0441\u0442\u0430\u0440\u0435\u0432\u0448\u0438\u0439 \u0440\u0435\u0436\u0438\u043c)",
             "utf8String": "\u0441\u0442\u0440\u043e\u043a\u0430 UTF8",
-            "utf8String_plural": "UTF8 strings",
+            "utf8String_other": "UTF8 strings",
             "write": "write file"
         },
         "output": {
@@ -387,6 +395,9 @@
             "externalModuleNotAllowed": "Function node not allowed to load external modules",
             "inputListener": "\u041d\u0435\u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0441\u043b\u0443\u0448\u0430\u0442\u0435\u043b\u044f \u043a \u0441\u043e\u0431\u044b\u0442\u0438\u044e 'input' \u0432 \u0444\u0443\u043d\u043a\u0446\u0438\u0438",
             "invalid-js": "Error in JavaScript code",
+            "linkcallMsgInvalid": "Error link call msg parameter is not valid, expected an object",
+            "linkcallTargetInvalid": "Error link call target parameter is not valid, expected a string",
+            "linkcallTargetNotFound": "Error target 'link in' node not found",
             "missing-module": "Module __module__ missing",
             "moduleLoadError": "Failed to load module __module__: __error__",
             "moduleNameError": "Invalid module variable name: __name__",
@@ -454,6 +465,7 @@
             "no-response": "\u041d\u0435\u0442 \u043e\u0431\u044a\u0435\u043a\u0442\u0430 \u043e\u0442\u0432\u0435\u0442\u0430",
             "no-url": "URL \u043d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d",
             "not-created": "\u041d\u0435\u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e \u0441\u043e\u0437\u0434\u0430\u0442\u044c \u0443\u0437\u0435\u043b http-in, \u043a\u043e\u0433\u0434\u0430 httpNodeRoot \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u043e \u0432 false",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized should be a boolean",
             "timeout-isnan": "\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0442\u0430\u0439\u043c-\u0430\u0443\u0442\u0430 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u043c \u0447\u0438\u0441\u043b\u043e\u043c, \u043f\u0440\u043e\u0438\u0433\u043d\u043e\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043e",
             "timeout-isnegative": "\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0442\u0430\u0439\u043c-\u0430\u0443\u0442\u0430 \u043e\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043b\u044c\u043d\u043e, \u043f\u0440\u043e\u0438\u0433\u043d\u043e\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043e"
         },
@@ -469,6 +481,7 @@
             "jsonObject": "\u043e\u0431\u044a\u0435\u043a\u0442 JSON",
             "method": "\u041c\u0435\u0442\u043e\u0434",
             "other": "\u0434\u0440\u0443\u0433\u043e\u0435",
+            "parsing": "Do not parse request body",
             "paytoqs": {
                 "body": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u043a\u0430\u043a \u0442\u0435\u043b\u043e \u0437\u0430\u043f\u0440\u043e\u0441\u0430",
                 "ignore": "\u0418\u0433\u043d\u043e\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -636,6 +649,8 @@
         "dynamicLinkCall": "Dynamic target (msg.target)",
         "dynamicLinkLabel": "Dynamic",
         "errors": {
+            "linkCallMultipleTargetsFound": "Multiple 'link in' nodes named '__target__' found",
+            "linkCallTargetNotFound": "Target 'link in' node '__target__' not found",
             "linkUndefined": "link undefined",
             "missingReturn": "Missing return node information"
         },
@@ -939,7 +954,7 @@
             "connection-closed": "\u0437\u0430\u043a\u0440\u044b\u0442\u043e \u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 __host__:__port__",
             "connection-from": "\u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435 \u043e\u0442 __host__:__port__",
             "connections": "__count__ \u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435",
-            "connections_plural": "__count__ connections",
+            "connections_other": "__count__ connections",
             "connections_plural_2": "__count__ \u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u044f",
             "connections_plural_5": "__count__ \u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0439",
             "listening-port": "\u043f\u0440\u043e\u0441\u043b\u0443\u0448\u0438\u0432\u0430\u043d\u0438\u0435 \u043f\u043e\u0440\u0442\u0430 __port__",
@@ -971,14 +986,20 @@
         "error": {
             "invalid-cert": "Certificate not specified",
             "invalid-key": "Private key not specified",
+            "invalid-p12": "pfx/p12 not specified",
             "missing-file": "\u0424\u0430\u0439\u043b \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u0430/\u043a\u043b\u044e\u0447\u0430 \u043d\u0435 \u043f\u0440\u0435\u0434\u043e\u0441\u0442\u0430\u0432\u043b\u0435\u043d"
         },
         "label": {
             "alpnprotocol": "ALPN Protocol",
             "ca": "CA \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442",
             "cert": "\u0421\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442",
+            "certtype": "Cert Type",
+            "env": "Environment Variable",
+            "files": "Individual files",
             "key": "\u0417\u0430\u043a\u0440\u044b\u0442\u044b\u0439 \u043a\u043b\u044e\u0447",
+            "p12": "pfx or p12",
             "passphrase": "\u041f\u0430\u0440\u043e\u043b\u044c",
+            "pfx": "pfx or p12 file",
             "servername": "\u0418\u043c\u044f \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
             "upload": "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c",
             "use-local-files": "\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u043a\u043b\u044e\u0447 \u0438 \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u044b \u0438\u0437 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0445 \u0444\u0430\u0439\u043b\u043e\u0432",
@@ -989,6 +1010,7 @@
             "ca": "\u043f\u0443\u0442\u044c \u043a \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u0443 CA (\u0444\u043e\u0440\u043c\u0430\u0442 PEM)",
             "cert": "\u043f\u0443\u0442\u044c \u043a \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u0443 (\u0444\u043e\u0440\u043c\u0430\u0442 PEM)",
             "key": "\u043f\u0443\u0442\u044c \u043a \u0437\u0430\u043a\u0440\u044b\u0442\u043e\u043c\u0443 \u043a\u043b\u044e\u0447\u0443 (\u0444\u043e\u0440\u043c\u0430\u0442 PEM)",
+            "p12": "path to .pfx or .p12 (PKCS12 format)",
             "passphrase": "\u043f\u0430\u0440\u043e\u043b\u044c \u0437\u0430\u043a\u0440\u044b\u0442\u043e\u0433\u043e \u043a\u043b\u044e\u0447\u0430 (\u043d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e)",
             "servername": "\u0434\u043b\u044f \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u0441 SNI"
         },
@@ -1100,6 +1122,7 @@
         "label": {
             "unknown": "\u043d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u044b\u0439"
         },
+        "manageModules": "Manage modules",
         "tip": "<p>\u0422\u0438\u043f \u044d\u0442\u043e\u0433\u043e \u0443\u0437\u043b\u0430 \u043d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u0435\u043d \u0412\u0430\u0448\u0435\u0439 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 Node-RED.</p><p><i>\u0415\u0441\u043b\u0438 \u0412\u044b \u0440\u0430\u0437\u0432\u0435\u0440\u043d\u0435\u0442\u0435 \u0443\u0437\u0435\u043b \u0432 \u044d\u0442\u043e\u043c \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438, \u0435\u0433\u043e \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u0431\u0443\u0434\u0435\u0442 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0430, \u043d\u043e \u043f\u043e\u0442\u043e\u043a \u043d\u0435 \u0431\u0443\u0434\u0435\u0442 \u0437\u0430\u043f\u0443\u0449\u0435\u043d, \u043f\u043e\u043a\u0430 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u0442\u0438\u043f \u043d\u0435 \u0431\u0443\u0434\u0435\u0442 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d.</i></p><p>\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u0443\u044e \u0441\u043f\u0440\u0430\u0432\u043a\u0443 \u0441\u043c\u043e\u0442\u0440\u0438\u0442\u0435 \u0432 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0439 \u0432\u043a\u043b\u0430\u0434\u043a\u0435 \u043d\u0430 \u0431\u043e\u043a\u043e\u0432\u043e\u0439 \u043f\u0430\u043d\u0435\u043b\u0438</p>"
     },
     "watch": {
@@ -1136,7 +1159,7 @@
         "sendrec": "\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c/\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c",
         "status": {
             "connected": "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d __count__",
-            "connected_plural": "connected __count__",
+            "connected_other": "connected __count__",
             "connected_plural_2": "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u043e __count__",
             "connected_plural_5": "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u043e __count__"
         },

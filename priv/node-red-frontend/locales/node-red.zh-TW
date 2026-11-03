@@ -200,6 +200,7 @@
             "all": "all",
             "clearFilteredLog": "Clear filtered messages",
             "clearLog": "\u6e05\u7a7a\u65e5\u8a8c",
+            "clearLogOptions": "Clear messages options",
             "copyPath": "\u5fa9\u5236\u8def\u5f91",
             "copyPayload": "\u5fa9\u5236\u503c",
             "debugNodes": "\u9664\u932f\u7bc0\u9ede",
@@ -209,9 +210,14 @@
             "filterSelected": "\u5df2\u9078\u7bc0\u9ede",
             "filtered": "filtered",
             "label": "\u9664\u932f\u7a97\u53e3",
+            "messagesDropped": "__count__ message dropped",
+            "messagesDropped_other": "__count__ messages dropped",
             "name": "\u540d\u7a31",
             "openWindow": "\u5728\u65b0\u8996\u7a97\u6253\u958b",
+            "pause": "pause",
+            "paused": "Paused",
             "pinPath": "\u56fa\u5b9a\u5c55\u958b",
+            "resume": "resume",
             "selectAll": "select all",
             "selectNone": "select none"
         },
@@ -250,6 +256,7 @@
         "hour": "\u5c0f\u6642",
         "hours": "\u5c0f\u6642",
         "label": {
+            "burst": "burst",
             "delay": "\u5ef6\u9072",
             "limit": "\u9650\u5236",
             "limitTopic": "\u9650\u5236\u4e3b\u984c",
@@ -278,6 +285,7 @@
             "variable": "\u8b8a\u6578"
         },
         "limitall": "\u6240\u6709\u8cc7\u8a0a",
+        "limitburst": "All messages - burst mode",
         "limitrate": "\u9650\u5236\u8cc7\u8a0a\u983b\u7387",
         "limittopic": "\u6bcf\u4e00\u500bmsg.topic",
         "milisecs": "\u6beb\u79d2",
@@ -351,7 +359,7 @@
             "addnewline": "\u5411\u6bcf\u500b\u6709\u6548\u8f09\u8377\u6dfb\u52a0\u5206\u884c\u7b26\u865f\uff08\\n\uff09?",
             "allProps": "include all existing properties in each msg",
             "binaryBuffer": "\u4e8c\u9032\u5236buffer",
-            "binaryBuffer_plural": "binary buffers",
+            "binaryBuffer_other": "binary buffers",
             "breakchunks": "\u5206\u62c6\u6210\u584a",
             "breaklines": "\u5206\u62c6\u6210\u884c",
             "createdir": "\u5275\u5efa\u76ee\u9304\uff08\u5982\u679c\u4e0d\u5b58\u5728\uff09?",
@@ -363,7 +371,7 @@
             "read": "read file",
             "sendError": "\u767c\u751f\u932f\u8aa4\u6642\u767c\u9001\u6d88\u606f\uff08\u50b3\u7d71\u6a21\u5f0f\uff09",
             "utf8String": "UTF8\u5b57\u7b26\u4e32",
-            "utf8String_plural": "UTF8 strings",
+            "utf8String_other": "UTF8 strings",
             "write": "write file"
         },
         "output": {
@@ -385,6 +393,9 @@
             "externalModuleNotAllowed": "Function node not allowed to load external modules",
             "inputListener": "\u7121\u6cd5\u5728\u51fd\u6578\u4e2d\u76e3\u807d\u5c0d'\u6ce8\u5165'\u4e8b\u4ef6",
             "invalid-js": "Error in JavaScript code",
+            "linkcallMsgInvalid": "Error link call msg parameter is not valid, expected an object",
+            "linkcallTargetInvalid": "Error link call target parameter is not valid, expected a string",
+            "linkcallTargetNotFound": "Error target 'link in' node not found",
             "missing-module": "Module __module__ missing",
             "moduleLoadError": "Failed to load module __module__: __error__",
             "moduleNameError": "Invalid module variable name: __name__",
@@ -452,6 +463,7 @@
             "no-response": "\u7121\u97ff\u61c9\u7269\u4ef6",
             "no-url": "\u672a\u8a2d\u5b9a URL",
             "not-created": "\u7576httpNodeRoot\u70ba\u5426\u6642\uff0c\u7121\u6cd5\u5275\u5efahttp-in\u7bc0\u9ede",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized should be a boolean",
             "timeout-isnan": "\u8d85\u6642\u503c\u4e0d\u662f\u6709\u6548\u6578\u5b57\uff0c\u5ffd\u7565",
             "timeout-isnegative": "\u8d85\u6642\u503c\u70ba\u8ca0\uff0c\u5ffd\u7565"
         },
@@ -467,6 +479,7 @@
             "jsonObject": "\u89e3\u6790\u7684JSON\u5c0d\u8c61",
             "method": "\u8acb\u6c42\u65b9\u5f0f",
             "other": "\u5176\u4ed6",
+            "parsing": "Do not parse request body",
             "paytoqs": "\u5c07msg.payload\u9644\u52a0\u70ba\u67e5\u8a62\u5b57\u7b26\u4e32\u53c3\u6578",
             "return": "\u8fd4\u56de",
             "status": "\u72c0\u614b\u78bc",
@@ -631,6 +644,8 @@
         "dynamicLinkCall": "Dynamic target (msg.target)",
         "dynamicLinkLabel": "Dynamic",
         "errors": {
+            "linkCallMultipleTargetsFound": "Multiple 'link in' nodes named '__target__' found",
+            "linkCallTargetNotFound": "Target 'link in' node '__target__' not found",
             "linkUndefined": "link undefined",
             "missingReturn": "Missing return node information"
         },
@@ -934,7 +949,7 @@
             "connection-closed": "\u9023\u63a5\u5df2\u95dc\u9589 __host__:__port__",
             "connection-from": "\u9023\u63a5\u4f86\u81ea __host__:__port__",
             "connections": "__count__ \u500b\u9023\u63a5",
-            "connections_plural": "__count__ \u500b\u9023\u63a5",
+            "connections_other": "__count__ \u500b\u9023\u63a5",
             "listening-port": "\u76e3\u807d\u57e0 __port__",
             "stopped-listening": "\u5df2\u505c\u6b62\u76e3\u807d\u57e0"
         },
@@ -964,14 +979,20 @@
         "error": {
             "invalid-cert": "Certificate not specified",
             "invalid-key": "Private key not specified",
+            "invalid-p12": "pfx/p12 not specified",
             "missing-file": "\u672a\u63d0\u4f9b\u8b49\u66f8/\u91d1\u9470\u6a94\u6848"
         },
         "label": {
             "alpnprotocol": "ALPN Protocol",
             "ca": "CA\u8b49\u66f8",
             "cert": "\u8b49\u66f8",
+            "certtype": "Cert Type",
+            "env": "Environment Variable",
+            "files": "Individual files",
             "key": "\u79c1\u5bc6\u91d1\u9470",
+            "p12": "pfx or p12",
             "passphrase": "\u5bc6\u78bc",
+            "pfx": "pfx or p12 file",
             "servername": "\u670d\u52d9\u5668\u540d",
             "upload": "\u4e0a\u50b3",
             "use-local-files": "\u4f7f\u7528\u672c\u5730\u5bc6\u9470\u53ca\u8b49\u66f8\u6a94",
@@ -982,6 +1003,7 @@
             "ca": "CA\u6191\u8b49\u8def\u5f91 (PEM \u683c\u5f0f)",
             "cert": "\u6191\u8b49\u8def\u5f91 (PEM \u683c\u5f0f)",
             "key": "\u79c1\u5bc6\u91d1\u9470\u8def\u5f91 (PEM \u683c\u5f0f)",
+            "p12": "path to .pfx or .p12 (PKCS12 format)",
             "passphrase": "\u79c1\u5bc6\u91d1\u9470\u5bc6\u78bc (\u53ef\u9078)",
             "servername": "\u7528\u65bcSNI"
         },
@@ -1094,6 +1116,7 @@
         "label": {
             "unknown": "\u672a\u77e5"
         },
+        "manageModules": "Manage modules",
         "tip": "<p>\u6b64\u7bc0\u9ede\u662f\u60a8\u5b89\u88dd\uff0c\u4f46Node-RED\u6240\u4e0d\u77e5\u9053\u7684\u985e\u578b\u3002</p><p><i>\u5982\u679c\u5728\u6b64\u72c0\u614b\u4e0b\u90e8\u7f72\u7bc0\u9ede\uff0c\u90a3\u9ebc\u5b83\u7684\u914d\u7f6e\u5c07\u88ab\u4fdd\u7559\uff0c\u4f46\u662f\u6d41\u7a0b\u5c07\u4e0d\u6703\u555f\u52d5\uff0c\u76f4\u5230\u5b89\u88dd\u7f3a\u5c11\u7684\u7bc0\u9ede\u3002</i></p><p>\u6709\u95dc\u66f4\u591a\u8aac\u660e\uff0c\u8acb\u53c3\u95b1\u8cc7\u8a0a\u5074\u6b04</p>"
     },
     "watch": {
@@ -1130,7 +1153,7 @@
         "sendrec": "\u767c\u9001/\u63a5\u53d7",
         "status": {
             "connected": "\u9023\u63a5\u6578 __count__",
-            "connected_plural": "\u9023\u63a5\u6578 __count__"
+            "connected_other": "\u9023\u63a5\u6578 __count__"
         },
         "tip": {
             "headers": "\u6a19\u982d\u50c5\u5728\u5354\u5b9a\u5347\u7d1a\u6a5f\u5236\u671f\u9593\u63d0\u4ea4\uff0c\u5f9e HTTP \u5230 WS/WSS \u5354\u5b9a.",

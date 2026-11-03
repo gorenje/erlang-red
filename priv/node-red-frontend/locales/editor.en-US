@@ -1,10 +1,12 @@
 {
     "actions": {
-        "search-counter": "\"__term__\" __result__ of __count__",
+        "open-event-log": "Open event log",
+        "search-counter": "__result__ of __count__",
         "search-flows": "Search flows",
         "search-next": "Next",
         "search-prev": "Previous",
         "toggle-navigator": "Toggle navigator",
+        "zoom-fit": "Zoom to fit",
         "zoom-in": "Zoom in",
         "zoom-out": "Zoom out",
         "zoom-reset": "Reset zoom"
@@ -18,7 +20,7 @@
     "clipboard": {
         "clipboard": "Clipboard",
         "configNode": "__count__ configuration node",
-        "configNode_plural": "__count__ configuration nodes",
+        "configNode_other": "__count__ configuration nodes",
         "copyMessagePath": "Path copied",
         "copyMessageValue": "Value copied",
         "copyMessageValue_truncated": "Truncated value copied",
@@ -37,12 +39,12 @@
         },
         "exportNodes": "Export nodes",
         "flow": "__count__ flow",
-        "flow_plural": "__count__ flows",
+        "flow_other": "__count__ flows",
         "group": "__count__ group",
         "groupCopied": "__count__ group copied",
-        "groupCopied_plural": "__count__ groups copied",
+        "groupCopied_other": "__count__ groups copied",
         "groupStyleCopied": "Group style copied",
-        "group_plural": "__count__ groups",
+        "group_other": "__count__ groups",
         "import": {
             "alreadyExists": "This node already exists",
             "conflictNotification1": "Some of the nodes you are importing already exist in your workspace.",
@@ -61,15 +63,17 @@
             "viewNodes": "View nodes..."
         },
         "importDuplicate": "Imported duplicate node:",
-        "importDuplicate_plural": "Imported duplicate nodes:",
+        "importDuplicate_other": "Imported duplicate nodes:",
         "importNodes": "Import nodes",
         "importUnrecognised": "Imported unrecognised type:",
-        "importUnrecognised_plural": "Imported unrecognised types:",
+        "importUnrecognised_other": "Imported unrecognised types:",
+        "importWithModuleInfo": "Required modules missing",
+        "importWithModuleInfoDesc": "These nodes are not currently installed in your palette and are required for the imported flow:",
         "invalidFlow": "Invalid flow: __message__",
         "node": "__count__ node",
         "nodeCopied": "__count__ node copied",
-        "nodeCopied_plural": "__count__ nodes copied",
-        "node_plural": "__count__ nodes",
+        "nodeCopied_other": "__count__ nodes copied",
+        "node_other": "__count__ nodes",
         "nodes": "Nodes",
         "nodesExported": "Nodes exported to clipboard",
         "nodesImported": "Imported:",
@@ -78,10 +82,10 @@
         "recoveredNodesInfo": "The nodes on this flow were missing a valid flow id when they were imported. They have been added to this flow so you can either restore or delete them.",
         "recoveredNodesNotification": "<p>Imported nodes without a valid flow id</p><p>They have been added to a new flow called '__flowName__'.</p>",
         "replacedNodes": "__count__ node replaced",
-        "replacedNodes_plural": "__count__ nodes replaced",
+        "replacedNodes_other": "__count__ nodes replaced",
         "selectFile": "select a file to import",
         "subflow": "__count__ subflow",
-        "subflow_plural": "__count__ subflows"
+        "subflow_other": "__count__ subflows"
     },
     "common": {
         "label": {
@@ -94,6 +98,7 @@
             "delete": "Delete",
             "disable": "Disable",
             "done": "Done",
+            "edit": "Edit",
             "enable": "Enable",
             "export": "Export",
             "fill": "Fill",
@@ -113,6 +118,12 @@
             "unlock": "Unlock",
             "unlocked": "Unlocked",
             "upload": "Upload"
+        },
+        "tabs": {
+            "menu": "Tab menu",
+            "scrollLeft": "Scroll tabs left",
+            "scrollRight": "Scroll tabs right",
+            "selectTab": "Select tab"
         },
         "type": {
             "array": "array",
@@ -167,6 +178,7 @@
         "modifiedFlowsDesc": "Only deploys flows that contain changed nodes",
         "modifiedNodes": "Modified Nodes",
         "modifiedNodesDesc": "Only deploys nodes that have changed",
+        "options": "Deploy options",
         "restartFlows": "Restart Flows",
         "restartFlowsDesc": "Restarts the current deployed flows",
         "startFlows": "Start",
@@ -194,7 +206,7 @@
         "newVersionError": "New Version doesn't contain valid JSON:",
         "noBinaryFileShowed": "Cannot show binary file contents",
         "nodeCount": "__count__ node",
-        "nodeCount_plural": "__count__ nodes",
+        "nodeCount_other": "__count__ nodes",
         "oldVersionError": "Old Version doesn't contain valid JSON:",
         "remote": "Remote changes",
         "remoteChanges": "Remote Changes",
@@ -215,7 +227,7 @@
             "wires": "wires"
         },
         "unresolvedCount": "__count__ unresolved conflict",
-        "unresolvedCount_plural": "__count__ unresolved conflicts",
+        "unresolvedCount_other": "__count__ unresolved conflicts",
         "useLocalChanges": "use local changes",
         "useRemoteChanges": "use remote changes",
         "viewCommitDiff": "View Commit Changes"
@@ -237,6 +249,9 @@
         "description": "Description",
         "editConfig": "Edit __type__ config node",
         "editNode": "Edit __type__ node",
+        "envVar": {
+            "expandEdit": "Edit environment variable"
+        },
         "errors": {
             "credentialLoadFailed": "Failed to load node credentials",
             "invalidProperties": "Invalid properties:",
@@ -268,7 +283,7 @@
         "noDefaultLabel": "none",
         "nodeProperties": "node properties",
         "nodesUse": "__count__ node uses this config",
-        "nodesUse_plural": "__count__ nodes use this config",
+        "nodesUse_other": "__count__ nodes use this config",
         "portLabels": "Port labels",
         "searchIcons": "Search icons",
         "select": {
@@ -392,6 +407,7 @@
         "pasteGroupStyle": "Paste group style",
         "pasteNode": "Paste nodes",
         "redoChange": "Redo",
+        "revertEdit": "Revert shortcut",
         "scope": "scope",
         "searchBox": "Open search box",
         "selectAll": "Select all",
@@ -400,8 +416,9 @@
         "shortcut": "shortcut",
         "splitWireWithLinks": "Split selection with Link nodes",
         "title": "Keyboard Shortcuts",
+        "toggleLeftSidebar": "Toggle left sidebar",
         "togglePalette": "Toggle palette",
-        "toggleSidebar": "Toggle sidebar",
+        "toggleSidebar": "Toggle right sidebar",
         "unassigned": "Unassigned",
         "undoChange": "Undo",
         "workspace": "workspace"
@@ -439,6 +456,14 @@
         "unnamedType": "Unnamed __type__"
     },
     "markdownEditor": {
+        "alert": {
+            "caution": "Caution",
+            "important": "Important",
+            "note": "Note",
+            "tip": "Tip",
+            "warning": "Warning"
+        },
+        "alert-tooltip": "Alert",
         "bold": "Bold",
         "code": "Code",
         "expand": "Expand",
@@ -473,6 +498,7 @@
             "delete": "Delete",
             "disableSelectedNodes": "Disable selected nodes",
             "displayConfig": "Configuration nodes",
+            "displayInfoIcon": "Show node information icon",
             "displayStatus": "Show node status",
             "distributeHorizontally": "Distribute horizontally",
             "distributeVertically": "Distribute vertically",
@@ -492,6 +518,7 @@
             "keyboardShortcuts": "Keyboard shortcuts",
             "login": "Login",
             "logout": "Logout",
+            "mainMenu": "Main menu",
             "moveBackwards": "Move backwards",
             "moveForwards": "Move forwards",
             "moveToBack": "Move to back",
@@ -515,14 +542,20 @@
             "showTips": "Show tips",
             "showWelcomeTours": "Show guided tours for new versions",
             "sidebar": {
-                "show": "Show sidebar"
+                "show": "Show right sidebar",
+                "showLeft": "Show left sidebar"
             },
             "subflows": "Subflows",
             "ungroupSelection": "Ungroup selection",
             "userSettings": "User Settings",
             "view": {
+                "appearance": "Appearance",
                 "auto": "Contextual",
                 "browserDefault": "Browser default",
+                "darkThemeAuto": "Auto",
+                "darkThemeDark": "Dark",
+                "darkThemeLabel": "Theme",
+                "darkThemeLight": "Light",
                 "defaultDir": "Default",
                 "grid": "Grid",
                 "gridSize": "Grid size",
@@ -576,6 +609,7 @@
             "setupProjectFiles": "Setup project files",
             "updated": "Project '__project__' updated"
         },
+        "showNotifications": "Show notifications",
         "state": {
             "flowsStarted": "Flows started",
             "flowsStopped": "Flows stopped"
@@ -604,6 +638,20 @@
             "expand-all": "Expand all categories"
         },
         "addCategory": "Add new...",
+        "description": {
+            "advanced": "Less commonly used nodes for more specialised tasks.",
+            "analysis": "Nodes for analysing message content.",
+            "common": "General purpose nodes used for common operations.",
+            "function": "Nodes for processing and transforming messages as they pass through a flow.",
+            "input": "Nodes that produce messages from external sources or triggers.",
+            "network": "Nodes for sending and receiving messages over network protocols.",
+            "output": "Nodes that send messages out to external systems or services.",
+            "parser": "Nodes for converting messages between different data formats.",
+            "sequence": "Nodes for working with sequences of messages, such as splitting, joining and sorting.",
+            "social": "Nodes for interacting with social media and communication platforms.",
+            "storage": "Nodes for reading from and writing to files, databases and other storage systems.",
+            "subflows": "Reusable flows that can be added to other flows as a single node."
+        },
         "editor": {
             "allCatalogs": "All Catalogs",
             "confirm": {
@@ -635,6 +683,8 @@
             },
             "conflict": "conflict",
             "conflictTip": "<p>This module cannot be installed as it includes a<br/>node type that has already been installed</p><p>Conflicts with <code>__module__</code></p>",
+            "deprecated": "deprecated",
+            "deprecatedTip": "This module has been deprecated",
             "disable": "disable",
             "disableall": "disable all",
             "enable": "enable",
@@ -649,58 +699,66 @@
                 "updateFailed": "<p>Failed to update: __module__</p><p>__message__</p><p>Check the log for more information</p>"
             },
             "install": "install",
+            "installAll": "Install all",
             "installed": "installed",
+            "installing": "Module installation in progress: __module__",
             "inuse": "in use",
             "loading": "Loading catalogues...",
+            "majorVersion": "<p>This is a major version update of the node. Check the documentation for details of the update.</p>",
+            "manageModules": "Manage modules",
             "moduleCount": "__count__ module available",
-            "moduleCount_plural": "__count__ modules available",
+            "moduleCount_other": "__count__ modules available",
+            "moduleDocumentation": "Module documentation",
             "more": "+ __count__ more",
             "nodeCount": "__label__ node",
-            "nodeCount_plural": "__label__ nodes",
+            "nodeCount_other": "__label__ nodes",
             "palette": "Palette",
             "pluginCount": "__count__ plugin",
-            "pluginCount_plural": "__count__ plugins",
+            "pluginCount_other": "__count__ plugins",
             "refresh": "Refresh module list",
             "remove": "remove",
             "sort": "sort:",
             "sortAZ": "a-z",
             "sortRecent": "recent",
             "sortRelevance": "relevance",
+            "successfulInstall": "Successfully installed modules",
             "tab-install": "Install",
             "tab-nodes": "Nodes",
             "times": {
                 "daysV": "__count__ day ago",
-                "daysV_plural": "__count__ days ago",
+                "daysV_other": "__count__ days ago",
                 "hoursV": "__count__ hour ago",
-                "hoursV_plural": "__count__ hours ago",
+                "hoursV_other": "__count__ hours ago",
                 "minutes": "minutes ago",
                 "minutesV": "__count__ minutes ago",
                 "monthsV": "__count__ month ago",
-                "monthsV_plural": "__count__ months ago",
+                "monthsV_other": "__count__ months ago",
                 "seconds": "seconds ago",
                 "weeksV": "__count__ week ago",
-                "weeksV_plural": "__count__ weeks ago",
+                "weeksV_other": "__count__ weeks ago",
                 "yearMonthsV": "__y__ year, __count__ month ago",
-                "yearMonthsV_plural": "__y__ year, __count__ months ago",
+                "yearMonthsV_other": "__y__ year, __count__ months ago",
                 "yearsMonthsV": "__y__ years, __count__ month ago",
-                "yearsMonthsV_plural": "__y__ years, __count__ months ago",
+                "yearsMonthsV_other": "__y__ years, __count__ months ago",
                 "yearsV": "__count__ year ago",
-                "yearsV_plural": "__count__ years ago"
+                "yearsV_other": "__count__ years ago"
             },
             "title": "Manage palette",
             "update": "update to __version__",
+            "updateCount": "__count__ update available",
+            "updateCount_other": "__count__ updates available",
             "updated": "updated",
             "upload": "Upload module tgz file"
         },
         "event": {
             "nodeAdded": "Node added to palette:",
-            "nodeAdded_plural": "Nodes added to palette:",
+            "nodeAdded_other": "Nodes added to palette:",
             "nodeDisabled": "Node disabled:",
-            "nodeDisabled_plural": "Nodes disabled:",
+            "nodeDisabled_other": "Nodes disabled:",
             "nodeEnabled": "Node enabled:",
-            "nodeEnabled_plural": "Nodes enabled:",
+            "nodeEnabled_other": "Nodes enabled:",
             "nodeRemoved": "Node removed from palette:",
-            "nodeRemoved_plural": "Nodes removed from palette:",
+            "nodeRemoved_other": "Nodes removed from palette:",
             "nodeUpgraded": "Node module __module__ upgraded to version __version__",
             "unknownNodeRegistered": "Error loading node: <ul><li>__type__<br>__error__</li></ul>"
         },
@@ -719,8 +777,10 @@
             "storage": "storage",
             "subflows": "subflows"
         },
+        "loadingSuggestions": "Loading suggestions...",
         "noInfo": "no information available",
-        "search": "search modules"
+        "search": "search modules",
+        "searchByType": "Search for this node type"
     },
     "projects": {
         "clone-project": {
@@ -897,12 +957,14 @@
             "configNodes": "Configuration nodes",
             "hiddenFlows": "Hidden flows",
             "invalidNodes": "Invalid nodes",
+            "label": "Search options",
             "modifiedNodes": "Modified nodes and flows",
             "thisFlow": "Current flow",
             "uknownNodes": "Unknown nodes",
             "unusedConfigNodes": "Unused configuration nodes",
             "unusedSubflows": "Unused subflows"
-        }
+        },
+        "showInOutline": "Show results in outline"
     },
     "sidebar": {
         "config": {
@@ -932,6 +994,10 @@
             "refresh": "refresh to load",
             "refrsh": "Refresh"
         },
+        "explorer": {
+            "label": "Explorer",
+            "name": "Explorer"
+        },
         "help": {
             "changeLog": "Change Log",
             "hideTopics": "Hide topics",
@@ -959,12 +1025,14 @@
             "globalConfig": "Global Configuration Nodes",
             "group": "Group",
             "hideFlow": "Hide",
+            "hideTips": "Hide tips",
             "id": "ID",
             "info": "Information",
             "instances": "Instances",
             "label": "info",
             "module": "Module",
             "name": "Information",
+            "nextTip": "Show next tip",
             "node": "Node",
             "nodeHelp": "Node Help",
             "nodes": "__count__ nodes",
@@ -984,6 +1052,7 @@
             "triggerAction": "Trigger action",
             "type": "Type"
         },
+        "moreTabs": "More sidebar tabs",
         "palette": {
             "label": "palette",
             "name": "Palette management"
@@ -1085,31 +1154,31 @@
                 "commitPlaceholder": "Enter your commit message",
                 "commitsAhead": "Your repository is __count__ commit ahead of the remote. You can push this commit now.",
                 "commitsAheadAndBehind1": "Your repository is __count__ commit behind and ",
-                "commitsAheadAndBehind1_plural": "Your repository is __count__ commits behind and ",
+                "commitsAheadAndBehind1_other": "Your repository is __count__ commits behind and ",
                 "commitsAheadAndBehind2": "__count__ commit ahead of the remote. ",
-                "commitsAheadAndBehind2_plural": "__count__ commits ahead of the remote. ",
+                "commitsAheadAndBehind2_other": "__count__ commits ahead of the remote. ",
                 "commitsAheadAndBehind3": "You must pull the remote commit down before pushing.",
-                "commitsAheadAndBehind3_plural": "You must pull the remote commits down before pushing.",
-                "commitsAhead_plural": "Your repository is __count__ commits ahead of the remote. You can push these commits now.",
+                "commitsAheadAndBehind3_other": "You must pull the remote commits down before pushing.",
+                "commitsAhead_other": "Your repository is __count__ commits ahead of the remote. You can push these commits now.",
                 "commitsBehind": "Your repository is __count__ commit behind of the remote. You can pull this commit now.",
-                "commitsBehind_plural": "Your repository is __count__ commits behind of the remote. You can pull these commits now.",
+                "commitsBehind_other": "Your repository is __count__ commits behind of the remote. You can pull these commits now.",
                 "conflictResolve": "All conflicts resolved. Commit the changes to complete the merge.",
                 "connectionFailed": "Could not connect to remote repository: ",
                 "createBranchPlaceholder": "Find or create a branch",
                 "createRemoteBranchPlaceholder": "Find or create a remote branch",
                 "daysAgo": "__count__ day ago",
-                "daysAgo_plural": "__count__ days ago",
+                "daysAgo_other": "__count__ days ago",
                 "head": "HEAD",
                 "history": "history",
                 "hoursAgo": "__count__ hour ago",
-                "hoursAgo_plural": "__count__ hours ago",
+                "hoursAgo_other": "__count__ hours ago",
                 "local": "Local",
                 "localChanges": "Local Changes",
                 "localFiles": "Local files",
                 "localOverwrite": "You have local changes that would be overwritten by changing the branch. You must either commit or undo those changes first.",
                 "manageRemoteBranch": "Manage remote branch",
                 "minsAgo": "__count__ min ago",
-                "minsAgo_plural": "__count__ mins ago",
+                "minsAgo_other": "__count__ mins ago",
                 "moreCommits": " more commit(s)",
                 "none": "None",
                 "notTracking": "Your local branch is not currently tracking a remote branch.",
@@ -1149,6 +1218,7 @@
         }
     },
     "subflow": {
+        "addOutput": "Add output",
         "author": "Author",
         "authorPlaceholder": "Your Name <email@example.com>",
         "category": "Category",
@@ -1177,12 +1247,23 @@
         "licenseOther": "Other",
         "module": "Module",
         "output": "outputs:",
+        "removeOutput": "Remove output",
         "status": "status node",
         "subflowInstances": "There is __count__ instance of this subflow template",
-        "subflowInstances_plural": "There are __count__ instances of this subflow template",
+        "subflowInstances_other": "There are __count__ instances of this subflow template",
         "type": "Node Type",
         "version": "Version",
         "versionPlaceholder": "x.y.z"
+    },
+    "telemetry": {
+        "disableLabel": "No, do not enable notifications",
+        "enableLabel": "Yes, enable notifications",
+        "label": "Update Notifications",
+        "settingsDescription": "<p>Node-RED can notify you when there is a new version available. This ensures you keep up to date with the latest features and fixes.</p><p>This requires sending anonymised data back to the Node-RED team. It does not include any details of your flows or users.</p><p>For full information on what information is collected and how it is used, please see the <a href=\"https://nodered.org/docs/telemetry\" target=\"_blank\">documentation</a>.</p>",
+        "settingsDescription2": "<p>You can change this setting at any time in the User Settings.</p>",
+        "settingsTitle": "Enable Update Notifications",
+        "updateAvailable": "Update available",
+        "updateAvailableDesc": "Node-RED __version__ is now available"
     },
     "textEditor": {
         "title": "Text editor"
@@ -1200,8 +1281,10 @@
                 "timestamp": "milliseconds since epoch"
             }
         },
+        "editPassword": "Edit password",
+        "passwordToggle": "Toggle password visibility",
         "selected": "__count__ selected",
-        "selected_plural": "__count__ selected",
+        "selected_other": "__count__ selected",
         "type": {
             "bin": "buffer",
             "bool": "boolean",
@@ -1254,12 +1337,11 @@
         "disableFlow": "Disable flow",
         "disabled": "Disabled",
         "dropFlowHere": "Drop the flow here",
-        "dropImageHere": "Drop the image here",
         "editFlow": "Edit flow: __name__",
         "enableFlow": "Enable flow",
         "enabled": "Enabled",
         "hiddenFlows": "List __count__ hidden flow",
-        "hiddenFlows_plural": "List __count__ hidden flows",
+        "hiddenFlows_other": "List __count__ hidden flows",
         "hideAllFlows": "Hide all flows",
         "hideFlow": "Hide flow",
         "hideOtherFlows": "Hide other flows",

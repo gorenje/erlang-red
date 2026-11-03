@@ -201,6 +201,7 @@
             "all": "Tout",
             "clearFilteredLog": "Les messages filtr\u00e9s",
             "clearLog": "Tous les messages",
+            "clearLogOptions": "Options de nettoyage des messages",
             "copyPath": "Copier le chemin",
             "copyPayload": "Copier la valeur",
             "debugNodes": "noeuds de d\u00e9bogage",
@@ -210,9 +211,14 @@
             "filterSelected": "Noeuds s\u00e9lectionn\u00e9s",
             "filtered": "Filtr\u00e9s",
             "label": "D\u00e9bogage",
+            "messagesDropped": "__count__ message supprim\u00e9",
+            "messagesDropped_other": "__count__ messages supprim\u00e9s",
             "name": "Messages de d\u00e9bogage",
             "openWindow": "Ouvrir dans une nouvelle fen\u00eatre",
+            "pause": "pause",
+            "paused": "Interrompue",
             "pinPath": "\u00c9pingler le chemin",
+            "resume": "continuer",
             "selectAll": "Tout s\u00e9lectionner",
             "selectNone": "Ne rien s\u00e9lectionner"
         },
@@ -247,6 +253,7 @@
         "hour": "Heure",
         "hours": "Heures",
         "label": {
+            "burst": "rafale",
             "delay": "retard",
             "limit": "limite",
             "limitTopic": "limiter le sujet",
@@ -275,6 +282,7 @@
             "variable": "variable"
         },
         "limitall": "Tous les messages",
+        "limitburst": "Tous les messages - mode rafale",
         "limitrate": "Limite de d\u00e9bit",
         "limittopic": "Pour chaque msg.topic",
         "milisecs": "Millisecondes",
@@ -348,7 +356,7 @@
             "addnewline": "Ajouter une nouvelle ligne (\\n) \u00e0 chaque charge ?",
             "allProps": "inclure toutes les propri\u00e9t\u00e9s existantes dans chaque message",
             "binaryBuffer": "tampon binaire",
-            "binaryBuffer_plural": "tampons binaires",
+            "binaryBuffer_other": "tampons binaires",
             "breakchunks": "D\u00e9couper en morceaux",
             "breaklines": "D\u00e9couper en lignes",
             "createdir": "Cr\u00e9er un r\u00e9pertoire s'il n'existe pas ?",
@@ -360,7 +368,7 @@
             "read": "Lire le fichier",
             "sendError": "Envoyer un message en cas d'erreur (mode h\u00e9rit\u00e9)",
             "utf8String": "Cha\u00eene UTF8",
-            "utf8String_plural": "Cha\u00eenes UTF8",
+            "utf8String_other": "Cha\u00eenes UTF8",
             "write": "\u00c9crire le fichier"
         },
         "output": {
@@ -382,6 +390,9 @@
             "externalModuleNotAllowed": "Le noeud de fonction n'est pas autoris\u00e9 \u00e0 charger des modules externes",
             "inputListener": "Impossible d'ajouter un \u00e9couteur \u00e0 l'\u00e9v\u00e9nement 'input' dans la fonction",
             "invalid-js": "Erreur dans le code JavaScript",
+            "linkcallMsgInvalid": "Le param\u00e8tre msg de l'appel de lien n'est pas valide, un objet \u00e9tait attendu",
+            "linkcallTargetInvalid": "Le param\u00e8tre cible de l'appel de lien n'est pas valide, une cha\u00eene \u00e9tait attendue",
+            "linkcallTargetNotFound": "Le noeud cible 'link in' est introuvable",
             "missing-module": "Module __module__ manquant",
             "moduleLoadError": "\u00c9chec du chargement du module __module__ : __error__",
             "moduleNameError": "Nom de la variable du module invalide : __name__",
@@ -449,6 +460,7 @@
             "no-response": "Aucun objet de r\u00e9ponse",
             "no-url": "Aucune URL sp\u00e9cifi\u00e9e",
             "not-created": "Impossible de cr\u00e9er un noeud http-in lorsque httpNodeRoot est d\u00e9fini sur faux",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized devrait \u00eatre un bool\u00e9en",
             "timeout-isnan": "La valeur du d\u00e9lai d'attente n'est pas un nombre valide, ignor\u00e9e",
             "timeout-isnegative": "La valeur du d\u00e9lai d'attente est n\u00e9gative, ignor\u00e9e"
         },
@@ -464,6 +476,7 @@
             "jsonObject": "objet JSON analys\u00e9",
             "method": "M\u00e9thode",
             "other": "Autre",
+            "parsing": "Ne pas analyser le corps de la requ\u00eate",
             "paytoqs": {
                 "body": "Envoyer en tant que corps de requ\u00eate",
                 "ignore": "Ignorer",
@@ -491,7 +504,7 @@
         "tls-config": "Configuration TLS",
         "use-proxy": "Utiliser un proxy",
         "use-proxyauth": "Utiliser l'authentification proxy",
-        "use-tls": "Activer la connexion s\u00e9curis\u00e9e (SSL/TLS)",
+        "use-tls": "Utiliser une configuration SSL/TLS personalis\u00e9e",
         "utf8": "une cha\u00eene UTF-8"
     },
     "inject": {
@@ -631,6 +644,8 @@
         "dynamicLinkCall": "Lien dynamique (msg.target)",
         "dynamicLinkLabel": "Dynamique",
         "errors": {
+            "linkCallMultipleTargetsFound": "Nombreux noeuds 'link in' nomm\u00e9s '__target__' trouv\u00e9s",
+            "linkCallTargetNotFound": "Noeud 'link in' cible '__target__' non trouv\u00e9",
             "linkUndefined": "Lien ind\u00e9fini",
             "missingReturn": "Informations manquantes sur le noeud de retour"
         },
@@ -827,7 +842,7 @@
         "objectSend": "Envoie un message pour chaque paire cl\u00e9/valeur",
         "split": "diviser",
         "splitLength": "Longueur fixe de",
-        "splitThe": "Diviser le",
+        "splitThe": "Diviser la propri\u00e9t\u00e9",
         "splitUsing": "Diviser en utilisant",
         "strBuff": "<b>Cha\u00eene</b> / <b>Tampon</b>",
         "stream": "G\u00e9rer comme un flux de messages"
@@ -934,7 +949,7 @@
             "connection-closed": "connexion ferm\u00e9e depuis __host__:__port__",
             "connection-from": "connexion depuis __host__:__port__",
             "connections": "__count__ connexion",
-            "connections_plural": "__count__ connexions",
+            "connections_other": "__count__ connexions",
             "listening-port": "\u00e9coute sur le port __port__",
             "stopped-listening": "a cess\u00e9 d'\u00e9couter sur le port"
         },
@@ -964,14 +979,20 @@
         "error": {
             "invalid-cert": "Certificat non sp\u00e9cifi\u00e9",
             "invalid-key": "Cl\u00e9 priv\u00e9e non sp\u00e9cifi\u00e9e",
+            "invalid-p12": "pfx/p12 non sp\u00e9cifi\u00e9e",
             "missing-file": "Aucun certificat/fichier de cl\u00e9 fourni"
         },
         "label": {
             "alpnprotocol": "Protocole ALPN",
             "ca": "Certificat CA",
             "cert": "Certificat",
+            "certtype": "Type de Certificat",
+            "env": "Variable d'environnement",
+            "files": "Fichiers individuels",
             "key": "Cl\u00e9 Priv\u00e9e",
+            "p12": "pfx ou p12",
             "passphrase": "Phrase de passe",
+            "pfx": "fichier pfx ou p12",
             "servername": "Nom du Serveur",
             "upload": "Charger",
             "use-local-files": "Utiliser la cl\u00e9 et les certificats depuis des fichiers locaux",
@@ -981,8 +1002,9 @@
             "alpnprotocol": "\u00e0 utiliser avec ALPN",
             "ca": "chemin d'acc\u00e8s au certificat CA (format PEM)",
             "cert": "chemin d'acc\u00e8s au certificat (format PEM)",
-            "key": "chemin vers la cl\u00e9 priv\u00e9e (format PEM)",
-            "passphrase": "phrase de passe de la cl\u00e9 priv\u00e9e (facultatif)",
+            "key": "chemin d'acc\u00e8s \u00e0 la cl\u00e9 priv\u00e9e (format PEM)",
+            "p12": "chemin d'acc\u00e8s au fichier pfx ou p12 (format PKCS12)",
+            "passphrase": "mot de passe ou phrase de passe (facultatif)",
             "servername": "\u00e0 utiliser avec SNI"
         },
         "tls": "Param\u00e9trage TLS"
@@ -1093,6 +1115,7 @@
         "label": {
             "unknown": "inconnu"
         },
+        "manageModules": "G\u00e9rer les modules",
         "tip": "<p>Ce noeud est un type inconnu de votre installation Node-RED.</p><p><i>Si vous d\u00e9ployez avec le noeud dans cet \u00e9tat, sa configuration sera pr\u00e9serv\u00e9e, mais le flux ne d\u00e9marrera pas avant que le type manquant soit install\u00e9.</i></p><p>Consulter la barre lat\u00e9rale d'informations pour plus d'aide</p>"
     },
     "watch": {
@@ -1129,7 +1152,7 @@
         "sendrec": "Envoyer/Recevoir",
         "status": {
             "connected": "__count__ connect\u00e9",
-            "connected_plural": "__count__ connect\u00e9s"
+            "connected_other": "__count__ connect\u00e9s"
         },
         "tip": {
             "headers": "Les en-t\u00eates ne sont soumis que lors du m\u00e9canisme de mise \u00e0 niveau du protocole, de HTTP vers le protocole WS/WSS.",

@@ -200,6 +200,7 @@
             "all": "todos",
             "clearFilteredLog": "Remover mensagens filtradas",
             "clearLog": "Remover mensagens",
+            "clearLogOptions": "Clear messages options",
             "copyPath": "Copiar caminho",
             "copyPayload": "Copiar valor",
             "debugNodes": "N\u00f3s de depura\u00e7\u00e3o",
@@ -209,9 +210,14 @@
             "filterSelected": "n\u00f3s selecionados",
             "filtered": "filtrado",
             "label": "depurar",
+            "messagesDropped": "__count__ message dropped",
+            "messagesDropped_other": "__count__ messages dropped",
             "name": "mensagens de depura\u00e7\u00e3o",
             "openWindow": "Abrir em uma nova janela",
+            "pause": "pause",
+            "paused": "Paused",
             "pinPath": "Pin aberto",
+            "resume": "resume",
             "selectAll": "selecionar todos",
             "selectNone": "selecionar nenhum"
         },
@@ -246,6 +252,7 @@
         "hour": "Hora",
         "hours": "Horas",
         "label": {
+            "burst": "burst",
             "delay": "atraso",
             "limit": "limite",
             "limitTopic": "limite de t\u00f3pico",
@@ -274,6 +281,7 @@
             "variable": "vari\u00e1vel"
         },
         "limitall": "Todas as mensagens",
+        "limitburst": "All messages - burst mode",
         "limitrate": "Limite de taxa",
         "limittopic": "Para cada msg.topic",
         "milisecs": "Milissegundos",
@@ -347,7 +355,7 @@
             "addnewline": "Adicionar nova linha (\\n) a cada carga \u00fatil?",
             "allProps": "inclui todas as propriedades existentes em cada mensagem",
             "binaryBuffer": "armazenamento tempor\u00e1rio bin\u00e1rio",
-            "binaryBuffer_plural": "armazenamentos tempor\u00e1rios bin\u00e1rios",
+            "binaryBuffer_other": "armazenamentos tempor\u00e1rios bin\u00e1rios",
             "breakchunks": "Quebre em peda\u00e7os",
             "breaklines": "Quebra nas linhas",
             "createdir": "Criar diret\u00f3rio se n\u00e3o existir?",
@@ -359,7 +367,7 @@
             "read": "ler arquivo",
             "sendError": "Enviar mensagem em caso de erro (modo legado)",
             "utf8String": "cadeia de caracteres UTF8",
-            "utf8String_plural": "cadeia de caracteres UTF8",
+            "utf8String_other": "cadeia de caracteres UTF8",
             "write": "escrever arquivo"
         },
         "output": {
@@ -381,6 +389,9 @@
             "externalModuleNotAllowed": "O n\u00f3 de fun\u00e7\u00e3o n\u00e3o tem permiss\u00e3o para carregar m\u00f3dulos externos",
             "inputListener": "N\u00e3o \u00e9 poss\u00edvel adicionar um ouvinte ao evento de 'input' dentro da Fun\u00e7\u00e3o",
             "invalid-js": "Erro no c\u00f3digo JavaScript",
+            "linkcallMsgInvalid": "Error link call msg parameter is not valid, expected an object",
+            "linkcallTargetInvalid": "Error link call target parameter is not valid, expected a string",
+            "linkcallTargetNotFound": "Error target 'link in' node not found",
             "missing-module": "Modulo __module__ ausente",
             "moduleLoadError": "Falha ao carregar o m\u00f3dulo __module__: __error__",
             "moduleNameError": "Nome da vari\u00e1vel do m\u00f3dulo inv\u00e1lido: __name__",
@@ -448,6 +459,7 @@
             "no-response": "Objeto sem resposta",
             "no-url": "Nenhuma url especificada",
             "not-created": "N\u00e3o \u00e9 poss\u00edvel criar o n\u00f3 http-in quando o httpNodeRoot estiver definido como falso",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized should be a boolean",
             "timeout-isnan": "O valor do tempo de expira\u00e7\u00e3o n\u00e3o \u00e9 um n\u00famero v\u00e1lido, ignorando",
             "timeout-isnegative": "O valor do tempo de expira\u00e7\u00e3o \u00e9 negativo, ignorando"
         },
@@ -463,6 +475,7 @@
             "jsonObject": "objeto JSON analisado",
             "method": "M\u00e9todo",
             "other": "outro",
+            "parsing": "Do not parse request body",
             "paytoqs": {
                 "body": "Enviar como corpo de pedido",
                 "ignore": "Ignorar",
@@ -633,6 +646,8 @@
             "missingReturn": "Informa\u00e7\u00e3o de retorno do n\u00f3 ausente"
         },
         "errors": {
+            "linkCallMultipleTargetsFound": "Multiple 'link in' nodes named '__target__' found",
+            "linkCallTargetNotFound": "Target 'link in' node '__target__' not found",
             "linkUndefined": "link undefined",
             "missingReturn": "Missing return node information"
         },
@@ -936,7 +951,7 @@
             "connection-closed": "conex\u00e3o fechada de __host __: __ port__",
             "connection-from": "conex\u00e3o de __host __: __ port__",
             "connections": "__count__ conex\u00e3o",
-            "connections_plural": "__count__ conex\u00f5es",
+            "connections_other": "__count__ conex\u00f5es",
             "listening-port": "escutando na porta __port__",
             "stopped-listening": "parou de ouvir na porta"
         },
@@ -966,14 +981,20 @@
         "error": {
             "invalid-cert": "Certificado n\u00e3o especificado",
             "invalid-key": "Chave privada n\u00e3o especificada",
+            "invalid-p12": "pfx/p12 not specified",
             "missing-file": "Nenhum certificado/arquivo de chave fornecido"
         },
         "label": {
             "alpnprotocol": "Protocolo ALPN",
             "ca": "Certificado CA",
             "cert": "Certificado",
+            "certtype": "Cert Type",
+            "env": "Environment Variable",
+            "files": "Individual files",
             "key": "Chave privada",
+            "p12": "pfx or p12",
             "passphrase": "Frase de passe",
+            "pfx": "pfx or p12 file",
             "servername": "Nome do servidor",
             "upload": "Subir",
             "use-local-files": "Use a chave e os certificados dos arquivos locais",
@@ -984,6 +1005,7 @@
             "ca": "caminho para o certificado CA (formato PEM)",
             "cert": "caminho para o certificado (formato PEM)",
             "key": "caminho para a chave privada (formato PEM)",
+            "p12": "path to .pfx or .p12 (PKCS12 format)",
             "passphrase": "frase de passe de chave privada (opcional)",
             "servername": "para uso com SNI"
         },
@@ -1095,6 +1117,7 @@
         "label": {
             "unknown": "desconhecido"
         },
+        "manageModules": "Manage modules",
         "tip": "<p>Este n\u00f3 \u00e9 desconhecido para a sua instala\u00e7\u00e3o do Node-RED.</p><p><i>Se voc\u00ea decidir implementar com o n\u00f3 neste estado, sua configura\u00e7\u00e3o ser\u00e1 preservada, mas o fluxo n\u00e3o ser\u00e1 iniciado at\u00e9 que o tipo ausente seja instalado.</i></p><p>Consulte a barra lateral de informa\u00e7\u00f5es para obter mais ajuda</p> "
     },
     "watch": {
@@ -1131,7 +1154,7 @@
         "sendrec": "Enviar/Receber",
         "status": {
             "connected": "conectado __count__",
-            "connected_plural": "conectados __count__"
+            "connected_other": "conectados __count__"
         },
         "tip": {
             "headers": "Os cabe\u00e7alhos s\u00e3o enviados apenas durante o mecanismo de atualiza\u00e7\u00e3o do protocolo, do HTTP para o protocolo WS/WSS.",

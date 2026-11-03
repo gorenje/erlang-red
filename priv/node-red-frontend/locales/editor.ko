@@ -1,10 +1,12 @@
 {
     "actions": {
-        "search-counter": "\"__term__\" __result__ of __count__",
+        "open-event-log": "Open event log",
+        "search-counter": "__result__ of __count__",
         "search-flows": "\ud50c\ub85c\uc6b0 \ucc3e\uae30",
         "search-next": "\ub2e4\uc74c",
         "search-prev": "\uc774\uc804",
         "toggle-navigator": "\ub124\ube44\uac8c\uc774\ud130 \ud45c\uc2dc/\ube44\ud45c\uc2dc",
+        "zoom-fit": "Zoom to fit",
         "zoom-in": "\ud655\ub300\ud558\uae30",
         "zoom-out": "\ucd95\uc18c\ud558\uae30",
         "zoom-reset": "\ud655\ub300/\ucd95\uc18c \ucd08\uae30\ud654"
@@ -18,7 +20,7 @@
     "clipboard": {
         "clipboard": "\ud074\ub9bd\ubcf4\ub4dc",
         "configNode": "__count__ \uac1c\uc758 \uc124\uc815 \ub178\ub4dc",
-        "configNode_plural": "__count__ \uac1c\uc758 \uc124\uc815 \ub178\ub4dc",
+        "configNode_other": "__count__ \uac1c\uc758 \uc124\uc815 \ub178\ub4dc",
         "copyMessagePath": "Path\uac00 \ubcf5\uc0ac \ub418\uc5c8\uc2b5\ub2c8\ub2e4",
         "copyMessageValue": "Value\uac00 \ubcf5\uc0ac \ub418\uc5c8\uc2b5\ub2c8\ub2e4",
         "copyMessageValue_truncated": "Truncated value\uac00 \ubcf5\uc0ac \ub418\uc5c8\uc2b5\ub2c8\ub2e4",
@@ -37,12 +39,12 @@
         },
         "exportNodes": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ub178\ub4dc \ub0b4\ubcf4\ub0b4\uae30",
         "flow": "__count__ \uac1c\uc758 \ud50c\ub85c\uc6b0",
-        "flow_plural": "__count__ \uac1c\uc758 \ud50c\ub85c\uc6b0",
+        "flow_other": "__count__ \uac1c\uc758 \ud50c\ub85c\uc6b0",
         "group": "__count__ \uac1c\uc758 \uadf8\ub8f9",
         "groupCopied": "__count__ \uac1c\uc758 \uadf8\ub8f9\uc774 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
-        "groupCopied_plural": "__count__ \uac1c\uc758 \uadf8\ub8f9\uc774 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
+        "groupCopied_other": "__count__ \uac1c\uc758 \uadf8\ub8f9\uc774 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
         "groupStyleCopied": "\uadf8\ub8f9 \uc2a4\ud0c0\uc77c\uc774 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
-        "group_plural": "__count__ \uac1c\uc758 \uadf8\ub8f9",
+        "group_other": "__count__ \uac1c\uc758 \uadf8\ub8f9",
         "import": {
             "alreadyExists": "This node already exists",
             "conflictNotification1": "\uac00\uc838\uc624\ub294 \ub178\ub4dc \uc911 \uc77c\ubd80\uac00 \uc774\ubbf8 \uc791\uc5c5 \uacf5\uac04\uc5d0 \uc788\uc2b5\ub2c8\ub2e4..",
@@ -61,15 +63,17 @@
             "viewNodes": "\ub178\ub4dc \ubcf4\uae30..."
         },
         "importDuplicate": "\uac00\uc838\uc628 \uc911\ubcf5 \ub178\ub4dc:",
-        "importDuplicate_plural": "\uac00\uc838\uc628 \uc911\ubcf5 \ub178\ub4dc:",
+        "importDuplicate_other": "\uac00\uc838\uc628 \uc911\ubcf5 \ub178\ub4dc:",
         "importNodes": "\ub178\ub4dc \ubd88\ub7ec\uc624\uae30",
         "importUnrecognised": "\uc54c \uc218 \uc5c6\ub294 \ud615\uc2dd :",
-        "importUnrecognised_plural": "\uc54c \uc218 \uc5c6\ub294 \ud615\uc2dd :",
+        "importUnrecognised_other": "\uc54c \uc218 \uc5c6\ub294 \ud615\uc2dd :",
+        "importWithModuleInfo": "Required modules missing",
+        "importWithModuleInfoDesc": "These nodes are not currently installed in your palette and are required for the imported flow:",
         "invalidFlow": "\uc815\uc0c1\uc801\uc9c0 \uc54a\uc740 \ud50c\ub85c\uc6b0 : __message__",
         "node": "__count__ \uac1c\uc758 \ub178\ub4dc",
         "nodeCopied": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
-        "nodeCopied_plural": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
-        "node_plural": "__count__ \uac1c\uc758 \ub178\ub4dc",
+        "nodeCopied_other": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \ubcf5\uc0ac\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
+        "node_other": "__count__ \uac1c\uc758 \ub178\ub4dc",
         "nodes": "\ub178\ub4dc",
         "nodesExported": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ub178\ub4dc \ub0b4\ubcf4\ub0b4\uae30",
         "nodesImported": "\ubd88\ub7ec\uc624\uae30 : ",
@@ -78,10 +82,10 @@
         "recoveredNodesInfo": "\uc774 \ud50c\ub85c\uc6b0\uc758 \ub178\ub4dc\ub97c \uac00\uc838\uc62c \ub54c \uc720\ud6a8\ud55c \ud50c\ub85c\uc6b0 ID\uac00 \ub204\ub77d\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \ud574\ub2f9 \ud50c\ub85c\uc6b0\uc5d0 \ucd94\uac00\ub418\uc5c8\uc73c\ubbc0\ub85c \ubcf5\uc6d0\ud558\uac70\ub098 \uc0ad\uc81c\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
         "recoveredNodesNotification": "<p>\uc720\ud6a8\ud558\uc9c0 \uc54a\uc740 \ud50c\ub85c\uc6b0 ID\ub97c \uac00\uc9c4 \ub178\ub4dc\uc785\ub2c8\ub2e4.</p><p>'__flowName__' \ub77c\ub294 \ud50c\ub85c\uc6b0\uc5d0 \ucd94\uac00\ub418\uc5c8\uc2b5\ub2c8\ub2e4.</p>",
         "replacedNodes": "__count__ \uac1c\uc758 \uad50\uccb4\ub41c \ub178\ub4dc",
-        "replacedNodes_plural": "__count__ \uac1c\uc758 \uad50\uccb4\ub41c \ub178\ub4dc",
+        "replacedNodes_other": "__count__ \uac1c\uc758 \uad50\uccb4\ub41c \ub178\ub4dc",
         "selectFile": "\ubd88\ub7ec\uc62c \ud30c\uc77c\uc744 \uc120\ud0dd\ud558\uc138\uc694",
         "subflow": "__count__ \uac1c\uc758 \uc11c\ube0c \ud50c\ub85c\uc6b0",
-        "subflow_plural": "__count__ \uac1c\uc758 \uc11c\ube0c \ud50c\ub85c\uc6b0"
+        "subflow_other": "__count__ \uac1c\uc758 \uc11c\ube0c \ud50c\ub85c\uc6b0"
     },
     "common": {
         "label": {
@@ -94,6 +98,7 @@
             "delete": "\uc0ad\uc81c",
             "disable": "Disable",
             "done": "\uc644\ub8cc",
+            "edit": "Edit",
             "enable": "Enable",
             "export": "\ub0b4\ubcf4\ub0b4\uae30",
             "fill": "Fill",
@@ -113,6 +118,12 @@
             "unlock": "Unlock",
             "unlocked": "Unlocked",
             "upload": "Upload"
+        },
+        "tabs": {
+            "menu": "Tab menu",
+            "scrollLeft": "Scroll tabs left",
+            "scrollRight": "Scroll tabs right",
+            "selectTab": "Select tab"
         },
         "type": {
             "array": "array",
@@ -167,6 +178,7 @@
         "modifiedFlowsDesc": "\ubcc0\uacbd\uc0ac\ud56d\uc774 \uc788\ub294 \ud50c\ub85c\uc6b0\ub9cc \ubc30\ud3ec\ud569\ub2c8\ub2e4",
         "modifiedNodes": "\ubcc0\uacbd\ub41c \ub178\ub4dc",
         "modifiedNodesDesc": "\ubcc0\uacbd\uc0ac\ud56d\uc774 \uc788\ub294 \ub178\ub4dc\ub9cc \ubc30\ud3ec\ud569\ub2c8\ub2e4",
+        "options": "Deploy options",
         "restartFlows": "\ud50c\ub85c\uc6b0 \uc7ac\uc2dc\uc791",
         "restartFlowsDesc": "\ud604\uc7ac \ubc30\ud3ec\ub41c \ud50c\ub85c\uc6b0\ub97c \uc7ac\uc2dc\uc791\ud569\ub2c8\ub2e4",
         "startFlows": "\uc2dc\uc791",
@@ -194,7 +206,7 @@
         "newVersionError": "New Version\uc758 JSON \ud615\uc2dd\uc774 \uc62c\ubc14\ub974\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4 :",
         "noBinaryFileShowed": "\ubc14\uc774\ub108\ub9ac\ud30c\uc77c \ub0b4\uc6a9\uc744 \ubcfc\uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
         "nodeCount": "__count__ \uac1c\uc758 \ub178\ub4dc",
-        "nodeCount_plural": "__count__ \uac1c\uc758 \ub178\ub4dc",
+        "nodeCount_other": "__count__ \uac1c\uc758 \ub178\ub4dc",
         "oldVersionError": "Old Version\uc758 JSON \ud615\uc2dd\uc774 \uc62c\ubc14\ub974\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4 :",
         "remote": "\uc6d0\uaca9 \ubcc0\uacbd\uc0ac\ud56d",
         "remoteChanges": "Remote Changes",
@@ -215,7 +227,7 @@
             "wires": "wires"
         },
         "unresolvedCount": "__count__\uac1c\uc758 \ucda9\ub3cc\uc774 \ud574\uacb0\ub418\uc9c0 \uc54a\uc74c",
-        "unresolvedCount_plural": "__count__\uac1c\uc758 \ucda9\ub3cc\uc774 \ud574\uacb0\ub418\uc9c0 \uc54a\uc74c",
+        "unresolvedCount_other": "__count__\uac1c\uc758 \ucda9\ub3cc\uc774 \ud574\uacb0\ub418\uc9c0 \uc54a\uc74c",
         "useLocalChanges": "use local changes",
         "useRemoteChanges": "use remote changes",
         "viewCommitDiff": "\ubcc0\uacbd\uc0ac\ud56d \ubcf4\uae30"
@@ -237,6 +249,9 @@
         "description": "\uc0c1\uc138 \ub0b4\uc5ed",
         "editConfig": "__type__\uc758 \uc124\uc815\ub178\ub4dc \uc218\uc815",
         "editNode": "__type__\uc758 \ub178\ub4dc \uc218\uc815",
+        "envVar": {
+            "expandEdit": "Edit environment variable"
+        },
         "errors": {
             "credentialLoadFailed": "Failed to load node credentials",
             "invalidProperties": "\uc720\ud6a8\ud558\uc9c0 \uc54a\uc740 \uc18d\uc131:",
@@ -268,7 +283,7 @@
         "noDefaultLabel": "\uc5c6\uc74c",
         "nodeProperties": "\ub178\ub4dc \uc18d\uc131",
         "nodesUse": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \uc774 \uc124\uc815\uc744 \uc0ac\uc6a9\uc911\uc785\ub2c8\ub2e4",
-        "nodesUse_plural": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \uc774 \uc124\uc815\uc744 \uc0ac\uc6a9\uc911\uc785\ub2c8\ub2e4",
+        "nodesUse_other": "__count__\uac1c\uc758 \ub178\ub4dc\uac00 \uc774 \uc124\uc815\uc744 \uc0ac\uc6a9\uc911\uc785\ub2c8\ub2e4",
         "portLabels": "\ud3ec\ud2b8 \uc124\uc815",
         "searchIcons": "\uc544\uc774\ucf58 \uc870\ud68c",
         "select": {
@@ -392,6 +407,7 @@
         "pasteGroupStyle": "\uadf8\ub8f9 \uc2a4\ud0c0\uc77c \ubd99\uc5ec\ub123\uae30",
         "pasteNode": "\ub178\ub4dc \ubd99\uc5ec\ub123\uae30",
         "redoChange": "\ub2e4\uc2dc \uc2e4\ud589\ud558\uae30",
+        "revertEdit": "Revert shortcut",
         "scope": "\ubc94\uc704",
         "searchBox": "\uac80\uc0c9\ucc3d \uc5f4\uae30",
         "selectAll": "\ubaa8\ub4e0 \ub178\ub4dc \uc120\ud0dd",
@@ -400,6 +416,7 @@
         "shortcut": "\ub2e8\ucd95\ud0a4",
         "splitWireWithLinks": "\ub9c1\ud06c \ub178\ub4dc\ub85c \uc120\ud0dd \ud56d\ubaa9 \ubd84\ud560",
         "title": "\ud0a4\ubcf4\ub4dc \ub2e8\ucd95\ud0a4",
+        "toggleLeftSidebar": "Toggle left sidebar",
         "togglePalette": "\ud314\ub81b\ud2b8 \ud45c\uc2dc/\ube44\ud45c\uc2dc",
         "toggleSidebar": "\uc0ac\uc774\ub4dc\ubc14 \ud45c\uc2dc/\ube44\ud45c\uc2dc",
         "unassigned": "\ubbf8\ud560\ub2f9",
@@ -439,6 +456,14 @@
         "unnamedType": "\uc774\ub984\uc5c6\ub294 __type__"
     },
     "markdownEditor": {
+        "alert": {
+            "caution": "Caution",
+            "important": "Important",
+            "note": "Note",
+            "tip": "Tip",
+            "warning": "Warning"
+        },
+        "alert-tooltip": "Alert",
         "bold": "\uac15\uc870",
         "code": "\ucf54\ub4dc",
         "expand": "Expand",
@@ -473,6 +498,7 @@
             "delete": "\uc0ad\uc81c",
             "disableSelectedNodes": "Disable selected nodes",
             "displayConfig": "\uc124\uc815 \ub178\ub4dc \ubcf4\uae30",
+            "displayInfoIcon": "Show node information icon",
             "displayStatus": "\ub178\ub4dc \uc0c1\ud0dc \ubcf4\uc774\uae30",
             "distributeHorizontally": "\uc218\ud3c9\uc73c\ub85c \ubc30\uce58",
             "distributeVertically": "\uc218\uc9c1\uc73c\ub85c \ubc30\uce58",
@@ -492,6 +518,7 @@
             "keyboardShortcuts": "\ub2e8\ucd95\ud0a4",
             "login": "\ub85c\uadf8\uc778",
             "logout": "\ub85c\uadf8\uc544\uc6c3",
+            "mainMenu": "Main menu",
             "moveBackwards": "\ub4a4\ub85c \uc774\ub3d9",
             "moveForwards": "\uc55e\uc73c\ub85c \uc774\ub3d9",
             "moveToBack": "\ub9e8 \ub4a4\ub85c \uc774\ub3d9",
@@ -515,14 +542,20 @@
             "showTips": "Tip \ubcf4\uae30",
             "showWelcomeTours": "\uc0c8 \ubc84\uc804\uc5d0 \ub300\ud55c \uac00\uc774\ub4dc \ubcf4\uae30 \ud45c\uc2dc",
             "sidebar": {
-                "show": "\uc6b0\uce21\uc0ac\uc774\ub4dc\ubc14 \ubcf4\uc774\uae30"
+                "show": "\uc6b0\uce21\uc0ac\uc774\ub4dc\ubc14 \ubcf4\uc774\uae30",
+                "showLeft": "Show left sidebar"
             },
             "subflows": "\uc11c\ube0c \ud50c\ub85c\uc6b0",
             "ungroupSelection": "\uadf8\ub8f9 \uc120\ud0dd \ud574\uc81c",
             "userSettings": "\uc0ac\uc6a9\uc790 \uc124\uc815",
             "view": {
+                "appearance": "Appearance",
                 "auto": "\uc790\ub3d9\ubc30\ubd84",
                 "browserDefault": "\ube0c\ub77c\uc6b0\uc800 \uae30\ubcf8\uac12",
+                "darkThemeAuto": "Auto",
+                "darkThemeDark": "Dark",
+                "darkThemeLabel": "Theme",
+                "darkThemeLight": "Light",
                 "defaultDir": "\uae30\ubcf8",
                 "grid": "\ub208\uae08\uc120",
                 "gridSize": "\ub208\uae08\uc120 \ud06c\uae30",
@@ -576,6 +609,7 @@
             "setupProjectFiles": "\ud504\ub85c\uc81d\ud2b8 \ud30c\uc77c \uc124\uc815",
             "updated": "'__project__'\uac00 \ubcc0\uacbd \ub418\uc5c8\uc2b5\ub2c8\ub2e4"
         },
+        "showNotifications": "Show notifications",
         "state": {
             "flowsStarted": "\ud50c\ub85c\uc6b0 \uc2dc\uc791\ub428",
             "flowsStopped": "\ud50c\ub85c\uc6b0 \uc911\uc9c0\ub428"
@@ -604,6 +638,20 @@
             "expand-all": "\ubaa8\ub4e0 \uce74\ud14c\uace0\ub9ac \ud3bc\uce58\uae30"
         },
         "addCategory": "\ucd94\uac00 ...",
+        "description": {
+            "advanced": "Less commonly used nodes for more specialised tasks.",
+            "analysis": "Nodes for analysing message content.",
+            "common": "General purpose nodes used for common operations.",
+            "function": "Nodes for processing and transforming messages as they pass through a flow.",
+            "input": "Nodes that produce messages from external sources or triggers.",
+            "network": "Nodes for sending and receiving messages over network protocols.",
+            "output": "Nodes that send messages out to external systems or services.",
+            "parser": "Nodes for converting messages between different data formats.",
+            "sequence": "Nodes for working with sequences of messages, such as splitting, joining and sorting.",
+            "social": "Nodes for interacting with social media and communication platforms.",
+            "storage": "Nodes for reading from and writing to files, databases and other storage systems.",
+            "subflows": "Reusable flows that can be added to other flows as a single node."
+        },
         "editor": {
             "allCatalogs": "All Catalogs",
             "confirm": {
@@ -635,6 +683,8 @@
             },
             "conflict": "\ucda9\ub3cc",
             "conflictTip": "<p>\ub178\ub4dc\ud0c0\uc785\uc774 \uc774\ubbf8 \uc124\uce58 \ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4.<br/>/p><p>\ucda9\ub3cc\ubaa8\ub4c8 : <code>__module__</code></p>",
+            "deprecated": "deprecated",
+            "deprecatedTip": "This module has been deprecated",
             "disable": "\ube44\ud65c\uc131\ud654",
             "disableall": "\ubaa8\ub450 \ube44\ud65c\uc131\ud654",
             "enable": "\ud65c\uc131\ud654",
@@ -649,58 +699,66 @@
                 "updateFailed": "<p>\uc5c5\ub370\uc774\ud2b8 \uc2e4\ud328 : __module__</p><p>__message__</p><p>\ube0c\ub77c\uc6b0\uc800 \ucf58\uc194\ub85c\uadf8\ub97c \ucc38\uace0\ud558\uc138\uc694.</p>"
             },
             "install": "\uc124\uce58",
+            "installAll": "Install all",
             "installed": "\uc124\uce58\ub428",
+            "installing": "Module installation in progress: __module__",
             "inuse": "\uc0ac\uc6a9\uc911",
             "loading": "\uce74\ud0c8\ub85c\uadf8 \uc5ec\ub294\uc911...",
+            "majorVersion": "<p>This is a major version update of the node. Check the documentation for details of the update.</p>",
+            "manageModules": "Manage modules",
             "moduleCount": "__count__ \uac1c\uc758 \ubaa8\ub4c8 \uc0ac\uc6a9\uac00\ub2a5",
-            "moduleCount_plural": "__count__ \uac1c\uc758 \ubaa8\ub4c8 \uc0ac\uc6a9\uac00\ub2a5",
+            "moduleCount_other": "__count__ \uac1c\uc758 \ubaa8\ub4c8 \uc0ac\uc6a9\uac00\ub2a5",
+            "moduleDocumentation": "Module documentation",
             "more": "+ __count__ \uac1c \ub354 \ubcf4\uae30",
             "nodeCount": "__label__ \uac1c\uc758 \ub178\ub4dc",
-            "nodeCount_plural": "__label__ \uac1c\uc758 \ub178\ub4dc",
+            "nodeCount_other": "__label__ \uac1c\uc758 \ub178\ub4dc",
             "palette": "\ud314\ub81b\ud2b8",
             "pluginCount": "__count__ plugin",
-            "pluginCount_plural": "__count__ plugins",
+            "pluginCount_other": "__count__ plugins",
             "refresh": "\ubaa8\ub4c8 \ubaa9\ub85d \uc0c8\ub85c \uace0\uce68",
             "remove": "\uc0ad\uc81c",
             "sort": "\uc815\ub82c:",
             "sortAZ": "a-z",
             "sortRecent": "\ucd5c\uadfc",
             "sortRelevance": "relevance",
+            "successfulInstall": "Successfully installed modules",
             "tab-install": "\uc124\uce58\uac00\ub2a5\ud55c \ub178\ub4dc",
             "tab-nodes": "\uc124\uce58\ub41c \ub178\ub4dc",
             "times": {
                 "daysV": "__count__\uc77c \uc804",
-                "daysV_plural": "__count__\uc77c \uc804",
+                "daysV_other": "__count__\uc77c \uc804",
                 "hoursV": "__count__\uc2dc\uac04 \uc804",
-                "hoursV_plural": "__count__\uc2dc\uac04 \uc804",
+                "hoursV_other": "__count__\uc2dc\uac04 \uc804",
                 "minutes": "\uba87\ubd84 \uc804",
                 "minutesV": "__count__\ubd84 \uc804",
                 "monthsV": "__count__\ub2ec \uc804",
-                "monthsV_plural": "__count__\ub2ec \uc804",
+                "monthsV_other": "__count__\ub2ec \uc804",
                 "seconds": "\uba87\ucd08 \uc804",
                 "weeksV": "__count__\uc8fc \uc804",
-                "weeksV_plural": "__count__\uc8fc \uc804",
+                "weeksV_other": "__count__\uc8fc \uc804",
                 "yearMonthsV": "__y__\ub144, __count__\uc6d4 \uc804",
-                "yearMonthsV_plural": "__y__\ub144, __count__\uc6d4 \uc804",
+                "yearMonthsV_other": "__y__\ub144, __count__\uc6d4 \uc804",
                 "yearsMonthsV": "__y__\ub144, __count__\uc6d4 \uc804",
-                "yearsMonthsV_plural": "__y__\ub144, __count__\uc6d4 \uc804",
+                "yearsMonthsV_other": "__y__\ub144, __count__\uc6d4 \uc804",
                 "yearsV": "__count__\ub144 \uc804",
-                "yearsV_plural": "__count__\ub144 \uc804"
+                "yearsV_other": "__count__\ub144 \uc804"
             },
             "title": "\ud314\ub81b\ud2b8 \uad00\ub9ac",
             "update": "__version__\uc73c\ub85c \uc5c5\ub370\uc774\ud2b8",
+            "updateCount": "__count__ update available",
+            "updateCount_other": "__count__ updates available",
             "updated": "\uc5c5\ub370\uc774\ud2b8 \ub428",
             "upload": "Upload module tgz file"
         },
         "event": {
             "nodeAdded": "\ud314\ub81b\ud2b8\uc5d0 \ub178\ub4dc\uac00 \ucd94\uac00\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
-            "nodeAdded_plural": "\ud314\ub81b\ud2b8\uc5d0 \ub178\ub4dc\uac00 \ucd94\uac00\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
+            "nodeAdded_other": "\ud314\ub81b\ud2b8\uc5d0 \ub178\ub4dc\uac00 \ucd94\uac00\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
             "nodeDisabled": "\ub178\ub4dc\uac00 \ube44\ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
-            "nodeDisabled_plural": "\ub178\ub4dc\uac00 \ube44\ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
+            "nodeDisabled_other": "\ub178\ub4dc\uac00 \ube44\ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
             "nodeEnabled": "\ub178\ub4dc\uac00 \ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
-            "nodeEnabled_plural": "\ub178\ub4dc\uac00 \ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
+            "nodeEnabled_other": "\ub178\ub4dc\uac00 \ud65c\uc131\ud654 \ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
             "nodeRemoved": "\ud314\ub81b\ud2b8\uc5d0\uc11c \ub178\ub4dc\uac00 \uc0ad\uc81c\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
-            "nodeRemoved_plural": "\ud314\ub81b\ud2b8\uc5d0\uc11c \ub178\ub4dc\uac00 \uc0ad\uc81c\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
+            "nodeRemoved_other": "\ud314\ub81b\ud2b8\uc5d0\uc11c \ub178\ub4dc\uac00 \uc0ad\uc81c\ub418\uc5c8\uc2b5\ub2c8\ub2e4:",
             "nodeUpgraded": "__module__ \ub178\ub4dc\ubaa8\ub4c8\uc774 __version__\uc73c\ub85c \uc5c5\uadf8\ub808\uc774\ub4dc \ub418\uc5c8\uc2b5\ub2c8\ub2e4",
             "unknownNodeRegistered": "Error loading node: <ul><li>__type__<br>__error__</li></ul>"
         },
@@ -719,8 +777,10 @@
             "storage": "\uc800\uc7a5",
             "subflows": "\uc11c\ube0c \ud50c\ub85c\uc6b0"
         },
+        "loadingSuggestions": "Loading suggestions...",
         "noInfo": "\uc815\ubcf4 \uc5c6\uc74c",
-        "search": "\ubaa8\ub4c8 \uac80\uc0c9"
+        "search": "\ubaa8\ub4c8 \uac80\uc0c9",
+        "searchByType": "Search for this node type"
     },
     "projects": {
         "clone-project": {
@@ -897,12 +957,14 @@
             "configNodes": "\uc124\uc815 \ub178\ub4dc",
             "hiddenFlows": "\uc228\uaca8\uc9c4 \ud50c\ub85c\uc6b0",
             "invalidNodes": "\uc798\ubabb\ub41c \ub178\ub4dc",
+            "label": "Search options",
             "modifiedNodes": "\uc218\uc815\ub41c \ub178\ub4dc \ubc0f \ud50c\ub85c\uc6b0",
             "thisFlow": "\ud604\uc7ac \ud50c\ub85c\uc6b0",
             "uknownNodes": "\uc54c \uc218 \uc5c6\ub294 \ub178\ub4dc",
             "unusedConfigNodes": "\uc0ac\uc6a9\ub418\uc9c0 \uc54a\ub294 \uc124\uc815 \ub178\ub4dc",
             "unusedSubflows": "\uc0ac\uc6a9\ub418\uc9c0 \uc54a\ub294 \uc11c\ube0c \ud50c\ub85c\uc6b0"
-        }
+        },
+        "showInOutline": "Show results in outline"
     },
     "sidebar": {
         "config": {
@@ -932,6 +994,10 @@
             "refresh": "\uc0c8\ub85c\uace0\uce68",
             "refrsh": "\uc0c8\ub85c\uace0\uce68"
         },
+        "explorer": {
+            "label": "Explorer",
+            "name": "Explorer"
+        },
         "help": {
             "changeLog": "\ub9b4\ub9ac\uc988 \uc815\ubcf4",
             "hideTopics": "Hide topics",
@@ -959,12 +1025,14 @@
             "globalConfig": "\uc804\uc5ed \uc124\uc815 \ub178\ub4dc",
             "group": "Group",
             "hideFlow": "Hide",
+            "hideTips": "Hide tips",
             "id": "ID",
             "info": "\uc815\ubcf4",
             "instances": "\uc778\uc2a4\ud134\uc2a4",
             "label": "\uc815\ubcf4",
             "module": "\ubaa8\ub4c8",
             "name": "\ub178\ub4dc\uc815\ubcf4",
+            "nextTip": "Show next tip",
             "node": "\ub178\ub4dc",
             "nodeHelp": "\ub178\ub4dc \ub3c4\uc6c0\ub9d0",
             "nodes": "__count__ \uac1c\uc758 \ub178\ub4dc",
@@ -984,6 +1052,7 @@
             "triggerAction": "\ud2b8\ub9ac\uac70 \uc791\uc5c5",
             "type": "\ud0c0\uc785"
         },
+        "moreTabs": "More sidebar tabs",
         "palette": {
             "label": "\ud314\ub808\ud2b8",
             "name": "\ud314\ub808\ud2b8 \uad00\ub9ac"
@@ -1085,31 +1154,31 @@
                 "commitPlaceholder": "\ucee4\ubc0b \uba54\uc2dc\uc9c0\ub97c \uc785\ub825\ud558\uc138\uc694",
                 "commitsAhead": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 __count__ \ucee4\ubc0b\uc744 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4. \uc774\uc81c \ucee4\ubc0b \ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
                 "commitsAheadAndBehind1": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 __count__ \ucee4\ubc0b\uc774 \ub2a6\uace0, ",
-                "commitsAheadAndBehind1_plural": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 __count__ \ucee4\ubc0b\uc774 \ub2a6\uace0 ",
+                "commitsAheadAndBehind1_other": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 __count__ \ucee4\ubc0b\uc774 \ub2a6\uace0 ",
                 "commitsAheadAndBehind2": "__count__ \ucee4\ubc0b\uc774 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4. ",
-                "commitsAheadAndBehind2_plural": "__count__ \ucee4\ubc0b\uc774 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4.",
+                "commitsAheadAndBehind2_other": "__count__ \ucee4\ubc0b\uc774 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4.",
                 "commitsAheadAndBehind3": "push\ud558\uae30\uc804\uc5d0 \ub9ac\ubaa8\ud2b8 \uc800\uc7a5\uc18c\uc5d0\uc11c pull\uc744 \uba3c\uc800 \uc218\ud589\ud558\uc138\uc694.",
-                "commitsAheadAndBehind3_plural": "push\ud558\uae30\uc804\uc5d0 \ub9ac\ubaa8\ud2b8 \uc800\uc7a5\uc18c\uc5d0\uc11c pull\uc744 \uba3c\uc800 \uc218\ud589\ud558\uc138\uc694.",
-                "commitsAhead_plural": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4  __count__ \ucee4\ubc0b\uc744 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4. \uc9c0\uae08 \ucee4\ubc0b\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+                "commitsAheadAndBehind3_other": "push\ud558\uae30\uc804\uc5d0 \ub9ac\ubaa8\ud2b8 \uc800\uc7a5\uc18c\uc5d0\uc11c pull\uc744 \uba3c\uc800 \uc218\ud589\ud558\uc138\uc694.",
+                "commitsAhead_other": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4  __count__ \ucee4\ubc0b\uc744 \uc55e\uc11c \uc788\uc2b5\ub2c8\ub2e4. \uc9c0\uae08 \ucee4\ubc0b\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
                 "commitsBehind": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 __count__ \ucee4\ubc0b\uc774 \ub2a6\uc2b5\ub2c8\ub2e4. \uc774\uc81c pull \ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
-                "commitsBehind_plural": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 __count__ \ucee4\ubc0b\uc774 \ub2a6\uc2b5\ub2c8\ub2e4. \uc774\uc81c pull \ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+                "commitsBehind_other": "\ub2f9\uc2e0\uc758 \uc800\uc7a5\uc18c\uac00 \uc6d0\uaca9\uc9c0\ubcf4\ub2e4 __count__ \ucee4\ubc0b\uc774 \ub2a6\uc2b5\ub2c8\ub2e4. \uc774\uc81c pull \ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
                 "conflictResolve": "\ubaa8\ub4e0 \ucda9\ub3cc\uc774 \ud574\uacb0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \ubcc0\uacbd\uc0ac\ud56d\uc744 \uc801\uc6a9\ud558\uc5ec \ubcd1\ud569\uc744 \uc644\ub8cc\ud558\uc138\uc694",
                 "connectionFailed": "\uc6d0\uaca9\uc800\uc7a5\uc18c \uc5f0\uacb0 \ubd88\uac00 : ",
                 "createBranchPlaceholder": "\ube0c\ub80c\uce58 \ucc3e\uae30/\uc0dd\uc131",
                 "createRemoteBranchPlaceholder": "\ub9ac\ubaa8\ub4dc \ube0c\ub79c\uce58 \ucc3e\uae30/\uc0dd\uc131",
                 "daysAgo": "__count__\uc77c \uc804",
-                "daysAgo_plural": "__count__\uc77c \uc804",
+                "daysAgo_other": "__count__\uc77c \uc804",
                 "head": "HEAD",
                 "history": "\uc774\ub825",
                 "hoursAgo": "__count__\uc2dc\uac04 \uc804",
-                "hoursAgo_plural": "__count__\uc2dc\uac04 \uc804",
+                "hoursAgo_other": "__count__\uc2dc\uac04 \uc804",
                 "local": "\ub85c\uceec",
                 "localChanges": "\ub85c\uceec \ubcc0\uacbd\uc0ac\ud56d",
                 "localFiles": "\ub85c\uceec \ud30c\uc77c",
                 "localOverwrite": "\ube0c\ub79c\uce58\uc5d0 \ubc18\uc601\ud560 \ubcc0\uacbd\uc0ac\ud56d\uc774 \uc788\uc2b5\ub2c8\ub2e4. \ubcc0\uacbd\uc0ac\ud56d\uc744 \ucee4\ubc0b\ud558\uac70\ub098, \ubcc0\uacbd\ub0b4\uc5ed\uc744 \ucde8\uc18c\ud574\uc57c \ud569\ub2c8\ub2e4",
                 "manageRemoteBranch": "\uc6d0\uaca9 \ube0c\ub79c\uce58 \uad00\ub9ac",
                 "minsAgo": "__count__\ubd84 \uc804",
-                "minsAgo_plural": "__count__\ubd84 \uc804",
+                "minsAgo_other": "__count__\ubd84 \uc804",
                 "moreCommits": "\ucee4\ubc0b \ub354\ubcf4\uae30",
                 "none": "\uc5c6\uc74c",
                 "notTracking": "\ub2f9\uc2e0\uc758 \ub85c\uceec \ube0c\ub79c\uce58\ub294 \uc6d0\uaca9\ube0c\ub79c\uce58\ub97c \ud2b8\ub798\ud0b9\ud558\uace0 \uc788\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4",
@@ -1149,6 +1218,7 @@
         }
     },
     "subflow": {
+        "addOutput": "Add output",
         "author": "\uc774\ub984",
         "authorPlaceholder": "\uc774\ub984 \ub610\ub294 \uc774\uba54\uc77c\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694",
         "category": "\uce74\ud14c\uace0\ub9ac",
@@ -1177,12 +1247,23 @@
         "licenseOther": "Other",
         "module": "\ubaa8\ub4c8",
         "output": "\ucd9c\ub825:",
+        "removeOutput": "Remove output",
         "status": "\uc0c1\ud0dc \ub178\ub4dc",
         "subflowInstances": "\uc11c\ube0c \ud50c\ub85c\uc6b0 \ud15c\ud50c\ub9bf\uc5d0 __count__\uac1c\uc758 \uc778\uc2a4\ud134\uc2a4\uac00 \uc788\uc2b5\ub2c8\ub2e4",
-        "subflowInstances_plural": "\uc11c\ube0c \ud50c\ub85c\uc6b0 \ud15c\ud50c\ub9bf\uc5d0 __count__\uac1c\uc758 \uc778\uc2a4\ud134\uc2a4\uac00 \uc788\uc2b5\ub2c8\ub2e4",
+        "subflowInstances_other": "\uc11c\ube0c \ud50c\ub85c\uc6b0 \ud15c\ud50c\ub9bf\uc5d0 __count__\uac1c\uc758 \uc778\uc2a4\ud134\uc2a4\uac00 \uc788\uc2b5\ub2c8\ub2e4",
         "type": "\ub178\ub4dc",
         "version": "\ubc84\uc804",
         "versionPlaceholder": "x.y.z"
+    },
+    "telemetry": {
+        "disableLabel": "No, do not enable notifications",
+        "enableLabel": "Yes, enable notifications",
+        "label": "Update Notifications",
+        "settingsDescription": "<p>Node-RED can notify you when there is a new version available. This ensures you keep up to date with the latest features and fixes.</p><p>This requires sending anonymised data back to the Node-RED team. It does not include any details of your flows or users.</p><p>For full information on what information is collected and how it is used, please see the <a href=\"https://nodered.org/docs/telemetry\" target=\"_blank\">documentation</a>.</p>",
+        "settingsDescription2": "<p>You can change this setting at any time in the User Settings.</p>",
+        "settingsTitle": "Enable Update Notifications",
+        "updateAvailable": "Update available",
+        "updateAvailableDesc": "Node-RED __version__ is now available"
     },
     "textEditor": {
         "title": "\ud14d\uc2a4\ud2b8 \uc5d0\ub514\ud130"
@@ -1200,8 +1281,10 @@
                 "timestamp": "milliseconds since epoch"
             }
         },
+        "editPassword": "Edit password",
+        "passwordToggle": "Toggle password visibility",
         "selected": "__count__ selected",
-        "selected_plural": "__count__ selected",
+        "selected_other": "__count__ selected",
         "type": {
             "bin": "buffer",
             "bool": "boolean",
@@ -1254,12 +1337,11 @@
         "disableFlow": "Disable flow",
         "disabled": "\uc0ac\uc6a9\ubd88\uac00\ub2a5",
         "dropFlowHere": "\ud50c\ub85c\uc6b0\ub97c \uc774\uacf3\uc5d0 \uac00\uc838\uc624\uc138\uc694",
-        "dropImageHere": "Drop the image here",
         "editFlow": "\ud50c\ub85c\uc6b0 \uc218\uc815 : __name__",
         "enableFlow": "Enable flow",
         "enabled": "\uc0ac\uc6a9\uac00\ub2a5",
         "hiddenFlows": "__count__\uac1c\uc758 \uc228\uaca8\uc9c4 \ud50c\ub85c\uc6b0 \ubcf4\uae30",
-        "hiddenFlows_plural": "__count__\uac1c\uc758 \uc228\uaca8\uc9c4 \ud50c\ub85c\uc6b0 \ubcf4\uae30",
+        "hiddenFlows_other": "__count__\uac1c\uc758 \uc228\uaca8\uc9c4 \ud50c\ub85c\uc6b0 \ubcf4\uae30",
         "hideAllFlows": "\ubaa8\ub4e0 \ud50c\ub85c\uc6b0 \uc228\uae30\uae30",
         "hideFlow": "\ud50c\ub85c\uc6b0 \uc228\uae30\uae30",
         "hideOtherFlows": "\ub2e4\ub978 \ud50c\ub85c\uc6b0 \uc228\uae30\uae30",

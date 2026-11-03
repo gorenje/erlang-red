@@ -1,10 +1,12 @@
 {
     "actions": {
-        "search-counter": "\"__term__\" __result__ of __count__",
+        "open-event-log": "Open event log",
+        "search-counter": "__result__ of __count__",
         "search-flows": "Procura fluxos",
         "search-next": "Pr\u00f3ximo",
         "search-prev": "Anterior",
         "toggle-navigator": "Alternar navegador",
+        "zoom-fit": "Zoom to fit",
         "zoom-in": "Aumentar zoom",
         "zoom-out": "Diminuir zoom ",
         "zoom-reset": "Reiniciar zoom"
@@ -18,7 +20,7 @@
     "clipboard": {
         "clipboard": "\u00c1rea de transfer\u00eancia",
         "configNode": "__count__ n\u00f3 de configura\u00e7\u00e3o",
-        "configNode_plural": "__count__ n\u00f3s de configura\u00e7\u00e3o",
+        "configNode_other": "__count__ n\u00f3s de configura\u00e7\u00e3o",
         "copyMessagePath": "Caminho copiado",
         "copyMessageValue": "Valor copiado",
         "copyMessageValue_truncated": "Valor truncado copiado",
@@ -37,12 +39,12 @@
         },
         "exportNodes": "Exportar n\u00f3s",
         "flow": "__count__ fluxo",
-        "flow_plural": "__count__ fluxos",
+        "flow_other": "__count__ fluxos",
         "group": "__count__ grupo",
         "groupCopied": "__count__ grupo copiado",
-        "groupCopied_plural": "__count__ grupos copiados",
+        "groupCopied_other": "__count__ grupos copiados",
         "groupStyleCopied": "Estilo de grupo copiado",
-        "group_plural": "__count__ grupos",
+        "group_other": "__count__ grupos",
         "import": {
             "alreadyExists": "This node already exists",
             "conflictNotification1": "Alguns dos n\u00f3s que voc\u00ea est\u00e1 importando j\u00e1 existem em sua \u00e1rea de trabalho.",
@@ -61,15 +63,17 @@
             "viewNodes": "Ver n\u00f3s..."
         },
         "importDuplicate": "N\u00f3 duplicado importado:",
-        "importDuplicate_plural": "N\u00f3s duplicados importados:",
+        "importDuplicate_other": "N\u00f3s duplicados importados:",
         "importNodes": "Importar n\u00f3s",
         "importUnrecognised": "Tipo n\u00e3o reconhecido importado:",
-        "importUnrecognised_plural": "Tipos n\u00e3o reconhecidos importados:",
+        "importUnrecognised_other": "Tipos n\u00e3o reconhecidos importados:",
+        "importWithModuleInfo": "Required modules missing",
+        "importWithModuleInfoDesc": "These nodes are not currently installed in your palette and are required for the imported flow:",
         "invalidFlow": "Fluxo inv\u00e1lido: __message__",
         "node": "__count__ n\u00f3",
         "nodeCopied": "__count__ n\u00f3 copiado",
-        "nodeCopied_plural": "__count__ n\u00f3s copiados",
-        "node_plural": "__count__ n\u00f3s",
+        "nodeCopied_other": "__count__ n\u00f3s copiados",
+        "node_other": "__count__ n\u00f3s",
         "nodes": "N\u00f3s",
         "nodesExported": "N\u00f3s exportados para a \u00e1rea de transfer\u00eancia",
         "nodesImported": "Importado:",
@@ -78,10 +82,10 @@
         "recoveredNodesInfo": "Os n\u00f3s neste fluxo n\u00e3o tinham um ID de fluxo v\u00e1lido quando foram importados. Eles foram adicionados a este fluxo para que voc\u00ea possa restaur\u00e1-los ou exclu\u00ed-los.",
         "recoveredNodesNotification": "<p>N\u00f3s importados sem um ID de fluxo v\u00e1lido </p> <p> Eles foram adicionados a um novo fluxo chamado '__flowName__'.</p>",
         "replacedNodes": "__count__ n\u00f3 substitu\u00eddo",
-        "replacedNodes_plural": "__count__ n\u00f3s substitu\u00eddos",
+        "replacedNodes_other": "__count__ n\u00f3s substitu\u00eddos",
         "selectFile": "selecione um arquivo para importar",
         "subflow": "__count__ subfluxo",
-        "subflow_plural": "__count__ subfluxos"
+        "subflow_other": "__count__ subfluxos"
     },
     "common": {
         "label": {
@@ -94,6 +98,7 @@
             "delete": "Deletar",
             "disable": "Desabilitado",
             "done": "Feito",
+            "edit": "Edit",
             "enable": "Habilitado",
             "export": "Exportar",
             "fill": "Preenchido",
@@ -113,6 +118,12 @@
             "unlock": "Unlock",
             "unlocked": "Unlocked",
             "upload": "Subir"
+        },
+        "tabs": {
+            "menu": "Tab menu",
+            "scrollLeft": "Scroll tabs left",
+            "scrollRight": "Scroll tabs right",
+            "selectTab": "Select tab"
         },
         "type": {
             "array": "matriz",
@@ -167,6 +178,7 @@
         "modifiedFlowsDesc": "Implantar apenas fluxos que cont\u00eam n\u00f3s alterados",
         "modifiedNodes": "N\u00f3s Modificados",
         "modifiedNodesDesc": "Implantar apenas n\u00f3s que mudaram",
+        "options": "Deploy options",
         "restartFlows": "Reiniciar Fluxos",
         "restartFlowsDesc": "Reinicia os fluxos atuais implantados",
         "startFlows": "Iniciar",
@@ -194,7 +206,7 @@
         "newVersionError": "A nova vers\u00e3o n\u00e3o cont\u00e9m JSON v\u00e1lido: ",
         "noBinaryFileShowed": "N\u00e3o \u00e9 poss\u00edvel mostrar o conte\u00fado do arquivo bin\u00e1rio ",
         "nodeCount": "__count__ n\u00f3",
-        "nodeCount_plural": "__count__ n\u00f3s",
+        "nodeCount_other": "__count__ n\u00f3s",
         "oldVersionError": "A vers\u00e3o antiga n\u00e3o cont\u00e9m JSON v\u00e1lido: ",
         "remote": "Mudan\u00e7as remotas ",
         "remoteChanges": "Remote Changes",
@@ -215,7 +227,7 @@
             "wires": "wires"
         },
         "unresolvedCount": "__count__ conflito n\u00e3o resolvido ",
-        "unresolvedCount_plural": "__count__ conflitos n\u00e3o resolvidos ",
+        "unresolvedCount_other": "__count__ conflitos n\u00e3o resolvidos ",
         "useLocalChanges": "use local changes",
         "useRemoteChanges": "use remote changes",
         "viewCommitDiff": "Ver altera\u00e7\u00f5es de confirma\u00e7\u00e3o "
@@ -237,6 +249,9 @@
         "description": "Descri\u00e7\u00e3o",
         "editConfig": "Editar __type__ configura\u00e7\u00e3o de n\u00f3",
         "editNode": "Editar __type__ n\u00f3",
+        "envVar": {
+            "expandEdit": "Edit environment variable"
+        },
         "errors": {
             "credentialLoadFailed": "Falha ao carregar credenciais de n\u00f3",
             "invalidProperties": "Propriedades inv\u00e1lidas:",
@@ -268,7 +283,7 @@
         "noDefaultLabel": "nenhum",
         "nodeProperties": "propriedades do n\u00f3",
         "nodesUse": "__count__ o n\u00f3 usa esta configura\u00e7\u00e3o",
-        "nodesUse_plural": "__count__ os n\u00f3s usam esta configura\u00e7\u00e3o",
+        "nodesUse_other": "__count__ os n\u00f3s usam esta configura\u00e7\u00e3o",
         "portLabels": "R\u00f3tulo da porta",
         "searchIcons": "Procurar \u00edcones",
         "select": {
@@ -392,6 +407,7 @@
         "pasteGroupStyle": "Colar estilo de grupo",
         "pasteNode": "Colar n\u00f3s",
         "redoChange": "Refazer",
+        "revertEdit": "Revert shortcut",
         "scope": "escopo",
         "searchBox": "Abrir caixa de pesquisa",
         "selectAll": "Selecionar todos",
@@ -400,6 +416,7 @@
         "shortcut": "atalho",
         "splitWireWithLinks": "Separa a sele\u00e7\u00e3o com os n\u00f3s de liga\u00e7\u00e3o",
         "title": "Atalhos do teclado",
+        "toggleLeftSidebar": "Toggle left sidebar",
         "togglePalette": "Alternar paleta",
         "toggleSidebar": "Alternar barra lateral",
         "unassigned": "N\u00e3o atribu\u00eddo",
@@ -439,6 +456,14 @@
         "unnamedType": "Sem nome __tipo__"
     },
     "markdownEditor": {
+        "alert": {
+            "caution": "Caution",
+            "important": "Important",
+            "note": "Note",
+            "tip": "Tip",
+            "warning": "Warning"
+        },
+        "alert-tooltip": "Alert",
         "bold": "Negrito",
         "code": "C\u00f3digo",
         "expand": "Expandir",
@@ -473,6 +498,7 @@
             "delete": "Apagar",
             "disableSelectedNodes": "Disable selected nodes",
             "displayConfig": "Configura\u00e7\u00e3o dos n\u00f3s",
+            "displayInfoIcon": "Show node information icon",
             "displayStatus": "Mostrar estados do n\u00f3",
             "distributeHorizontally": "Distribuir horizontalmente",
             "distributeVertically": "Distribuir verticalmente",
@@ -492,6 +518,7 @@
             "keyboardShortcuts": "Atalhos do teclado",
             "login": "Ingressar",
             "logout": "Sair",
+            "mainMenu": "Main menu",
             "moveBackwards": "Volta",
             "moveForwards": "Avan\u00e7a",
             "moveToBack": "Mover para detr\u00e1s",
@@ -515,14 +542,20 @@
             "showTips": "Mostre as dicas",
             "showWelcomeTours": "Mostrar excurs\u00e3o guiada para novas vers\u00f5es",
             "sidebar": {
-                "show": "Mostrar barra lateral"
+                "show": "Mostrar barra lateral",
+                "showLeft": "Show left sidebar"
             },
             "subflows": "subfluxos",
             "ungroupSelection": "Desagrupar sele\u00e7\u00e3o",
             "userSettings": "Configura\u00e7\u00f5es do usu\u00e1rio",
             "view": {
+                "appearance": "Appearance",
                 "auto": "Contextual",
                 "browserDefault": "Padr\u00e3o do navegador",
+                "darkThemeAuto": "Auto",
+                "darkThemeDark": "Dark",
+                "darkThemeLabel": "Theme",
+                "darkThemeLight": "Light",
                 "defaultDir": "Padr\u00e3o",
                 "grid": "Grade",
                 "gridSize": "Tamanho da grade",
@@ -576,6 +609,7 @@
             "setupProjectFiles": "Configurar arquivos de projeto",
             "updated": "Projeto '__project__' atualizado"
         },
+        "showNotifications": "Show notifications",
         "state": {
             "flowsStarted": "Fluxos iniciados",
             "flowsStopped": "Fluxos parados"
@@ -604,6 +638,20 @@
             "expand-all": "Expandir todas as categorias"
         },
         "addCategory": "Adicionar novo...",
+        "description": {
+            "advanced": "Less commonly used nodes for more specialised tasks.",
+            "analysis": "Nodes for analysing message content.",
+            "common": "General purpose nodes used for common operations.",
+            "function": "Nodes for processing and transforming messages as they pass through a flow.",
+            "input": "Nodes that produce messages from external sources or triggers.",
+            "network": "Nodes for sending and receiving messages over network protocols.",
+            "output": "Nodes that send messages out to external systems or services.",
+            "parser": "Nodes for converting messages between different data formats.",
+            "sequence": "Nodes for working with sequences of messages, such as splitting, joining and sorting.",
+            "social": "Nodes for interacting with social media and communication platforms.",
+            "storage": "Nodes for reading from and writing to files, databases and other storage systems.",
+            "subflows": "Reusable flows that can be added to other flows as a single node."
+        },
         "editor": {
             "allCatalogs": "All Catalogs",
             "confirm": {
@@ -635,6 +683,8 @@
             },
             "conflict": "conflito",
             "conflictTip": "<p> Este m\u00f3dulo n\u00e3o pode ser instalado porque inclui um <br/> tipo de n\u00f3 que j\u00e1 foi instalado </p> <p> Conflitos com <code>__module__</code> </p>",
+            "deprecated": "deprecated",
+            "deprecatedTip": "This module has been deprecated",
             "disable": "desabilitar",
             "disableall": "desabilitar todos",
             "enable": "habilitar",
@@ -649,58 +699,66 @@
                 "updateFailed": "<p> Falha ao atualizar: __module__ </p> <p> __message__ </p> <p> Verifique o log para obter mais informa\u00e7\u00f5es </p>"
             },
             "install": "instalar",
+            "installAll": "Install all",
             "installed": "instalado",
+            "installing": "Module installation in progress: __module__",
             "inuse": "em uso",
             "loading": "Carregando cat\u00e1logos ...",
+            "majorVersion": "<p>This is a major version update of the node. Check the documentation for details of the update.</p>",
+            "manageModules": "Manage modules",
             "moduleCount": "m\u00f3dulo __count__ dispon\u00edvel",
-            "moduleCount_plural": "__count__ m\u00f3dulos dispon\u00edveis",
+            "moduleCount_other": "__count__ m\u00f3dulos dispon\u00edveis",
+            "moduleDocumentation": "Module documentation",
             "more": "+ __count__ mais",
             "nodeCount": "__label__ node",
-            "nodeCount_plural": "__label__ nodes",
+            "nodeCount_other": "__label__ nodes",
             "palette": "Paleta",
             "pluginCount": "__count__ plugin",
-            "pluginCount_plural": "__count__ plugins",
+            "pluginCount_other": "__count__ plugins",
             "refresh": "Atualizar lista de m\u00f3dulos",
             "remove": "remover",
             "sort": "ordenar:",
             "sortAZ": "a-z",
             "sortRecent": "recente",
             "sortRelevance": "relevance",
+            "successfulInstall": "Successfully installed modules",
             "tab-install": "Instalar",
             "tab-nodes": "N\u00f3s",
             "times": {
                 "daysV": "__count__ dia atr\u00e1s",
-                "daysV_plural": "__count__ dias atr\u00e1s",
+                "daysV_other": "__count__ dias atr\u00e1s",
                 "hoursV": "__count__ hora atr\u00e1s",
-                "hoursV_plural": "__count__ horas atr\u00e1s",
+                "hoursV_other": "__count__ horas atr\u00e1s",
                 "minutes": "minutos atr\u00e1s",
                 "minutesV": "__count__ minutos atr\u00e1s",
                 "monthsV": "__count__ m\u00eas atr\u00e1s",
-                "monthsV_plural": "__count__ meses atr\u00e1s",
+                "monthsV_other": "__count__ meses atr\u00e1s",
                 "seconds": "segundos atr\u00e1s",
                 "weeksV": "__count__ semana atr\u00e1s",
-                "weeksV_plural": "__count__ semanas atr\u00e1s",
+                "weeksV_other": "__count__ semanas atr\u00e1s",
                 "yearMonthsV": "__y__ ano, __count__ m\u00eas atr\u00e1s",
-                "yearMonthsV_plural": "__y__ ano, __count__ meses atr\u00e1s",
+                "yearMonthsV_other": "__y__ ano, __count__ meses atr\u00e1s",
                 "yearsMonthsV": "__y__ anos, __count__ m\u00eas atr\u00e1s",
-                "yearsMonthsV_plural": "__y__ anos, __count__ meses atr\u00e1s",
+                "yearsMonthsV_other": "__y__ anos, __count__ meses atr\u00e1s",
                 "yearsV": "__count__ ano atr\u00e1s",
-                "yearsV_plural": "__count__ anos atr\u00e1s"
+                "yearsV_other": "__count__ anos atr\u00e1s"
             },
             "title": "Gerenciar paleta",
             "update": "atualizar para __version__",
+            "updateCount": "__count__ update available",
+            "updateCount_other": "__count__ updates available",
             "updated": "atualizado",
             "upload": "Carregar arquivo tgz do m\u00f3dulo"
         },
         "event": {
             "nodeAdded": "N\u00f3 adicionado \u00e0 paleta:",
-            "nodeAdded_plural": "N\u00f3s adicionados \u00e0 paleta:",
+            "nodeAdded_other": "N\u00f3s adicionados \u00e0 paleta:",
             "nodeDisabled": "N\u00f3 desativado:",
-            "nodeDisabled_plural": "N\u00f3s desativados:",
+            "nodeDisabled_other": "N\u00f3s desativados:",
             "nodeEnabled": "N\u00f3 habilitado:",
-            "nodeEnabled_plural": "N\u00f3s habilitados:",
+            "nodeEnabled_other": "N\u00f3s habilitados:",
             "nodeRemoved": "N\u00f3 removido da paleta:",
-            "nodeRemoved_plural": "N\u00f3s removidos da paleta:",
+            "nodeRemoved_other": "N\u00f3s removidos da paleta:",
             "nodeUpgraded": "M\u00f3dulo de n\u00f3 __module__ atualizado para a vers\u00e3o __version__",
             "unknownNodeRegistered": "Erro carregando o n\u00f3: <ul><li>__type__<br>__error__</li></ul>"
         },
@@ -719,8 +777,10 @@
             "storage": "armazenar",
             "subflows": "subfluxos"
         },
+        "loadingSuggestions": "Loading suggestions...",
         "noInfo": "sem informa\u00e7\u00e3o dispon\u00edvel",
-        "search": "procurar m\u00f3dulos"
+        "search": "procurar m\u00f3dulos",
+        "searchByType": "Search for this node type"
     },
     "projects": {
         "clone-project": {
@@ -897,12 +957,14 @@
             "configNodes": "Configura\u00e7\u00e3o de n\u00f3s",
             "hiddenFlows": "Flux escondidos",
             "invalidNodes": "N\u00f3s inv\u00e1lidos",
+            "label": "Search options",
             "modifiedNodes": "N\u00f3s e Fluxos Modificados",
             "thisFlow": "Fluxo atual",
             "uknownNodes": "N\u00f3s desconhecidos",
             "unusedConfigNodes": "Configura\u00e7\u00e3o de n\u00f3s n\u00e3o utilizadas",
             "unusedSubflows": "Subfluxos n\u00e3o utilizados"
-        }
+        },
+        "showInOutline": "Show results in outline"
     },
     "sidebar": {
         "config": {
@@ -932,6 +994,10 @@
             "refresh": "atualize para carregar",
             "refrsh": "Atualizar"
         },
+        "explorer": {
+            "label": "Explorer",
+            "name": "Explorer"
+        },
         "help": {
             "changeLog": "Log de altera\u00e7\u00e3o",
             "hideTopics": "Hide topics",
@@ -959,12 +1025,14 @@
             "globalConfig": "N\u00f3s de configura\u00e7\u00e3o global",
             "group": "Grupo",
             "hideFlow": "Hide",
+            "hideTips": "Hide tips",
             "id": "ID",
             "info": "Informa\u00e7\u00e3o",
             "instances": "Inst\u00e2ncias",
             "label": "informa\u00e7\u00f5es",
             "module": "M\u00f3dulo",
             "name": "Informa\u00e7\u00e3o",
+            "nextTip": "Show next tip",
             "node": "N\u00f3",
             "nodeHelp": "Ajuda do N\u00f3",
             "nodes": "__count__ n\u00f3s",
@@ -984,6 +1052,7 @@
             "triggerAction": "A\u00e7\u00e3o de gatilho",
             "type": "Tipo"
         },
+        "moreTabs": "More sidebar tabs",
         "palette": {
             "label": "paleta",
             "name": "Gerenciamento de paleta"
@@ -1085,31 +1154,31 @@
                 "commitPlaceholder": "Digite sua mensagem de cometimento",
                 "commitsAhead": "Seu reposit\u00f3rio est\u00e1 __count__ cometimento \u00e0 frente do remoto. Voc\u00ea pode empurrar este cometimento agora.",
                 "commitsAheadAndBehind1": "Seu reposit\u00f3rio est\u00e1 __count__ cometimento atr\u00e1s e",
-                "commitsAheadAndBehind1_plural": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos atr\u00e1s e",
+                "commitsAheadAndBehind1_other": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos atr\u00e1s e",
                 "commitsAheadAndBehind2": "__count__ cometimento \u00e0 frente do remoto.",
-                "commitsAheadAndBehind2_plural": "__count__ cometimentos \u00e0 frente do remoto.",
+                "commitsAheadAndBehind2_other": "__count__ cometimentos \u00e0 frente do remoto.",
                 "commitsAheadAndBehind3": "Voc\u00ea deve baixar o cometimento remoto antes de empurrar.",
-                "commitsAheadAndBehind3_plural": "Voc\u00ea deve baixar os cometimentos remotos antes de empurrar.",
-                "commitsAhead_plural": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos \u00e0 frente do remoto. Voc\u00ea pode empurrar estes cometimentos agora.",
+                "commitsAheadAndBehind3_other": "Voc\u00ea deve baixar os cometimentos remotos antes de empurrar.",
+                "commitsAhead_other": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos \u00e0 frente do remoto. Voc\u00ea pode empurrar estes cometimentos agora.",
                 "commitsBehind": "Seu reposit\u00f3rio est\u00e1 __count__ cometimento atr\u00e1s do remoto. Voc\u00ea pode puxar este cometimento agora.",
-                "commitsBehind_plural": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos atr\u00e1s do remoto. Voc\u00ea pode puxar esses cometimentos agora.",
+                "commitsBehind_other": "Seu reposit\u00f3rio est\u00e1 __count__ cometimentos atr\u00e1s do remoto. Voc\u00ea pode puxar esses cometimentos agora.",
                 "conflictResolve": "Todos os conflitos resolvidos. Cometa as altera\u00e7\u00f5es para concluir a mesclagem.",
                 "connectionFailed": "N\u00e3o foi poss\u00edvel conectar ao reposit\u00f3rio remoto:",
                 "createBranchPlaceholder": "Encontrar ou criar um ramo",
                 "createRemoteBranchPlaceholder": "Encontrar ou criar um ramo remoto",
                 "daysAgo": "__count__ dia atr\u00e1s",
-                "daysAgo_plural": "__count__ dias atr\u00e1s",
+                "daysAgo_other": "__count__ dias atr\u00e1s",
                 "head": "CABE\u00c7A",
                 "history": "hist\u00f3rico",
                 "hoursAgo": "__count__ hora atr\u00e1s",
-                "hoursAgo_plural": "__count__ horas atr\u00e1s",
+                "hoursAgo_other": "__count__ horas atr\u00e1s",
                 "local": "Local",
                 "localChanges": "Mudan\u00e7as locais",
                 "localFiles": "Arquivos locais",
                 "localOverwrite": "Voc\u00ea tem altera\u00e7\u00f5es locais que seriam sobrescritas alterando o ramo. Voc\u00ea deve cometer ou desfazer essas altera\u00e7\u00f5es primeiro.",
                 "manageRemoteBranch": "Gerenciar ramo remoto",
                 "minsAgo": "__count__ min ago",
-                "minsAgo_plural": "__count__ minutos atr\u00e1s",
+                "minsAgo_other": "__count__ minutos atr\u00e1s",
                 "moreCommits": "mais cometimentos",
                 "none": "Nenhum",
                 "notTracking": "Seu ramo local n\u00e3o est\u00e1 atualmente rastreando um ramo remoto.",
@@ -1149,6 +1218,7 @@
         }
     },
     "subflow": {
+        "addOutput": "Add output",
         "author": "Autor",
         "authorPlaceholder": "Seu nome <email@example.com>",
         "category": "Categoria",
@@ -1177,12 +1247,23 @@
         "licenseOther": "Outro",
         "module": "M\u00f3dulo",
         "output": "sa\u00eddas:",
+        "removeOutput": "Remove output",
         "status": "estados do n\u00f3",
         "subflowInstances": "Existe uma inst\u00e2ncia __count__ deste modelo de subfluxo",
-        "subflowInstances_plural": "Existem __count__ inst\u00e2ncias deste modelo de subfluxo",
+        "subflowInstances_other": "Existem __count__ inst\u00e2ncias deste modelo de subfluxo",
         "type": "Tipo de n\u00f3",
         "version": "Vers\u00e3o",
         "versionPlaceholder": "x.y.z"
+    },
+    "telemetry": {
+        "disableLabel": "No, do not enable notifications",
+        "enableLabel": "Yes, enable notifications",
+        "label": "Update Notifications",
+        "settingsDescription": "<p>Node-RED can notify you when there is a new version available. This ensures you keep up to date with the latest features and fixes.</p><p>This requires sending anonymised data back to the Node-RED team. It does not include any details of your flows or users.</p><p>For full information on what information is collected and how it is used, please see the <a href=\"https://nodered.org/docs/telemetry\" target=\"_blank\">documentation</a>.</p>",
+        "settingsDescription2": "<p>You can change this setting at any time in the User Settings.</p>",
+        "settingsTitle": "Enable Update Notifications",
+        "updateAvailable": "Update available",
+        "updateAvailableDesc": "Node-RED __version__ is now available"
     },
     "textEditor": {
         "title": "Editor de texto"
@@ -1200,8 +1281,10 @@
                 "timestamp": "milliseconds since epoch"
             }
         },
+        "editPassword": "Edit password",
+        "passwordToggle": "Toggle password visibility",
         "selected": "__count__ selected",
-        "selected_plural": "__count__ selected",
+        "selected_other": "__count__ selected",
         "type": {
             "bin": "armazenamento tempor\u00e1rio",
             "bool": "booliano",
@@ -1254,12 +1337,11 @@
         "disableFlow": "Disable flow",
         "disabled": "Desabilitar",
         "dropFlowHere": "Solte o fluxo aqui",
-        "dropImageHere": "Drop the image here",
         "editFlow": "Editar Fluxo: __name__",
         "enableFlow": "Enable flow",
         "enabled": "Habilitar",
         "hiddenFlows": "Listar __count__ fluxo escondido",
-        "hiddenFlows_plural": "Listar __count__ fluxos escondidos",
+        "hiddenFlows_other": "Listar __count__ fluxos escondidos",
         "hideAllFlows": "Esconder todos os fluxos",
         "hideFlow": "Esconder fluxo",
         "hideOtherFlows": "Esconder outros fluxos",

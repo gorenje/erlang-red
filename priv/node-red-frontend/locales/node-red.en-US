@@ -200,6 +200,7 @@
             "all": "all",
             "clearFilteredLog": "Clear filtered messages",
             "clearLog": "Clear messages",
+            "clearLogOptions": "Clear messages options",
             "copyPath": "Copy path",
             "copyPayload": "Copy value",
             "debugNodes": "Debug nodes",
@@ -209,9 +210,14 @@
             "filterSelected": "selected nodes",
             "filtered": "filtered",
             "label": "debug",
+            "messagesDropped": "__count__ message dropped",
+            "messagesDropped_other": "__count__ messages dropped",
             "name": "Debug messages",
             "openWindow": "Open in new window",
+            "pause": "pause",
+            "paused": "Paused",
             "pinPath": "Pin open",
+            "resume": "resume",
             "selectAll": "select all",
             "selectNone": "select none"
         },
@@ -246,6 +252,7 @@
         "hour": "Hour",
         "hours": "Hours",
         "label": {
+            "burst": "burst",
             "delay": "delay",
             "limit": "limit",
             "limitTopic": "limit topic",
@@ -273,7 +280,8 @@
             },
             "variable": "variable"
         },
-        "limitall": "All messages",
+        "limitall": "All messages - even spacing",
+        "limitburst": "All messages - burst mode",
         "limitrate": "Rate Limit",
         "limittopic": "For each msg.topic",
         "milisecs": "Milliseconds",
@@ -347,7 +355,7 @@
             "addnewline": "Add newline (\\n) to each payload?",
             "allProps": "include all existing properties in each msg",
             "binaryBuffer": "binary buffer",
-            "binaryBuffer_plural": "binary buffers",
+            "binaryBuffer_other": "binary buffers",
             "breakchunks": "Break into chunks",
             "breaklines": "Break into lines",
             "createdir": "Create directory if it doesn't exist?",
@@ -359,7 +367,7 @@
             "read": "read file",
             "sendError": "Send message on error (legacy mode)",
             "utf8String": "UTF8 string",
-            "utf8String_plural": "UTF8 strings",
+            "utf8String_other": "UTF8 strings",
             "write": "write file"
         },
         "output": {
@@ -381,6 +389,9 @@
             "externalModuleNotAllowed": "Function node not allowed to load external modules",
             "inputListener": "Cannot add listener to 'input' event within Function",
             "invalid-js": "Error in JavaScript code",
+            "linkcallMsgInvalid": "Error link call msg parameter is not valid, expected an object",
+            "linkcallTargetInvalid": "Error link call target parameter is not valid, expected a string",
+            "linkcallTargetNotFound": "Error target 'link in' node not found",
             "missing-module": "Module __module__ missing",
             "moduleLoadError": "Failed to load module __module__: __error__",
             "moduleNameError": "Invalid module variable name: __name__",
@@ -448,6 +459,7 @@
             "no-response": "No response object",
             "no-url": "No url specified",
             "not-created": "Cannot create http-in node when httpNodeRoot set to false",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized should be a boolean",
             "timeout-isnan": "Timeout value is not a valid number, ignoring",
             "timeout-isnegative": "Timeout value is negative, ignoring"
         },
@@ -463,6 +475,7 @@
             "jsonObject": "parsed JSON object",
             "method": "Method",
             "other": "other",
+            "parsing": "Do not parse request body",
             "paytoqs": {
                 "body": "Send as request body",
                 "ignore": "Ignore",
@@ -470,7 +483,7 @@
             },
             "return": "Return",
             "status": "Status code",
-            "upload": "Accept file uploads?",
+            "upload": "Accept file uploads",
             "url": "URL",
             "utf8String": "UTF8 string"
         },
@@ -490,7 +503,7 @@
         "tls-config": "TLS Configuration",
         "use-proxy": "Use proxy",
         "use-proxyauth": "Use proxy authentication",
-        "use-tls": "Enable secure (SSL/TLS) connection",
+        "use-tls": "Use custom SSL/TLS configuration",
         "utf8": "a UTF-8 string"
     },
     "inject": {
@@ -630,6 +643,8 @@
         "dynamicLinkCall": "Dynamic target (msg.target)",
         "dynamicLinkLabel": "Dynamic",
         "errors": {
+            "linkCallMultipleTargetsFound": "Multiple 'link in' nodes named '__target__' found",
+            "linkCallTargetNotFound": "Target 'link in' node '__target__' not found",
             "linkUndefined": "link undefined",
             "missingReturn": "Missing return node information"
         },
@@ -826,7 +841,7 @@
         "objectSend": "Send a message for each key/value pair",
         "split": "split",
         "splitLength": "Fixed length of",
-        "splitThe": "Split the",
+        "splitThe": "Split property",
         "splitUsing": "Split using",
         "strBuff": "<b>String</b> / <b>Buffer</b>",
         "stream": "Handle as a stream of messages"
@@ -933,7 +948,7 @@
             "connection-closed": "connection closed from __host__:__port__",
             "connection-from": "connection from __host__:__port__",
             "connections": "__count__ connection",
-            "connections_plural": "__count__ connections",
+            "connections_other": "__count__ connections",
             "listening-port": "listening on port __port__",
             "stopped-listening": "stopped listening on port"
         },
@@ -964,14 +979,20 @@
         "error": {
             "invalid-cert": "Certificate not specified",
             "invalid-key": "Private key not specified",
+            "invalid-p12": "pfx/p12 not specified",
             "missing-file": "No certificate/key file provided"
         },
         "label": {
             "alpnprotocol": "ALPN Protocol",
             "ca": "CA Certificate",
             "cert": "Certificate",
+            "certtype": "Cert Type",
+            "env": "Environment Variable",
+            "files": "Individual files",
             "key": "Private Key",
+            "p12": "pfx or p12",
             "passphrase": "Passphrase",
+            "pfx": "pfx or p12 file",
             "servername": "Server Name",
             "upload": "Upload",
             "use-local-files": "Use key and certificates from local files",
@@ -982,7 +1003,8 @@
             "ca": "path to CA certificate (PEM format)",
             "cert": "path to certificate (PEM format)",
             "key": "path to private key (PEM format)",
-            "passphrase": "private key passphrase (optional)",
+            "p12": "path to .pfx or .p12 (PKCS12 format)",
+            "passphrase": "password or passphrase (optional)",
             "servername": "for use with SNI"
         },
         "tls": "TLS configuration"
@@ -1093,6 +1115,7 @@
         "label": {
             "unknown": "unknown"
         },
+        "manageModules": "Manage modules",
         "tip": "<p>This node is a type unknown to your installation of Node-RED.</p><p><i>If you deploy with the node in this state, it's configuration will be preserved, but the flow will not start until the missing type is installed.</i></p><p>See the Info side bar for more help</p>"
     },
     "watch": {
@@ -1129,7 +1152,7 @@
         "sendrec": "Send/Receive",
         "status": {
             "connected": "connected __count__",
-            "connected_plural": "connected __count__"
+            "connected_other": "connected __count__"
         },
         "tip": {
             "headers": "Headers are only submitted during the Protocol upgrade mechanism, from HTTP to the WS/WSS Protocol.",

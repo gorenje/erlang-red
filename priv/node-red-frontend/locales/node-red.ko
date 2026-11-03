@@ -200,6 +200,7 @@
             "all": "\ubaa8\ub4e0",
             "clearFilteredLog": "\uc120\ud0dd\ub41c \ub85c\uadf8\ub97c \uc0ad\uc81c",
             "clearLog": "\ub85c\uadf8\ub97c \uc0ad\uc81c",
+            "clearLogOptions": "Clear messages options",
             "copyPath": "Copy path",
             "copyPayload": "Copy value",
             "debugNodes": "\ub514\ubc84\uadf8 \ub178\ub4dc",
@@ -209,9 +210,14 @@
             "filterSelected": "\uc120\ud0dd\ub41c \ud50c\ub85c\uc6b0",
             "filtered": "\uc120\ud0dd",
             "label": "\ub514\ubc84\uadf8",
+            "messagesDropped": "__count__ message dropped",
+            "messagesDropped_other": "__count__ messages dropped",
             "name": "\ub514\ubc84\uadf8 \uba54\uc138\uc9c0",
             "openWindow": "\uc0c8 \ucc3d\uc5d0\uc11c \uc5f4\uae30",
+            "pause": "pause",
+            "paused": "Paused",
             "pinPath": "Pin open",
+            "resume": "resume",
             "selectAll": "\ubaa8\ub450 \uc120\ud0dd\ud558\uae30",
             "selectNone": "\ubaa8\ub450 \ud574\uc81c\ud558\uae30"
         },
@@ -246,6 +252,7 @@
         "hour": "\uc2dc\uac04",
         "hours": "\uc2dc\uac04",
         "label": {
+            "burst": "burst",
             "delay": "delay",
             "limit": "limit",
             "limitTopic": "limit topic",
@@ -274,6 +281,7 @@
             "variable": "variable"
         },
         "limitall": "\ubaa8\ub4e0 \uba54\uc138\uc9c0",
+        "limitburst": "All messages - burst mode",
         "limitrate": "\uba54\uc138\uc9c0\uc758 \uc720\ub7c9\uc81c\ud55c",
         "limittopic": "msg.topic \ub9c8\ub2e4",
         "milisecs": "\ubc00\ub9ac\ucd08",
@@ -347,7 +355,7 @@
             "addnewline": "\uba54\uc138\uc9c0\uc758 \uc785\ub825\ub9c8\ub2e4 \uc904\ubc14\uafc8\uc744 \ucd94\uac00",
             "allProps": "include all existing properties in each msg",
             "binaryBuffer": "\ubc14\uc774\ub108\ub9ac \ubc84\ud37c",
-            "binaryBuffer_plural": "binary buffers",
+            "binaryBuffer_other": "binary buffers",
             "breakchunks": "\uccad\ud06c\ub85c \ubd84\ud560",
             "breaklines": "\ud589\uc73c\ub85c \ubd84\ud560",
             "createdir": "\ub514\ub809\ud1a0\ub9ac\uac00 \uc874\uc7ac\ud558\uc9c0 \uc54a\ub294 \uacbd\uc6b0\uc5d0 \uc791\uc131",
@@ -359,7 +367,7 @@
             "read": "read file",
             "sendError": "\uc5d0\ub7ec\uba54\uc138\uc9c0\ub97c \uc1a1\uc2e0(\ud638\ud658\ubaa8\ub4dc)",
             "utf8String": "UTF8\ubb38\uc790\uc5f4",
-            "utf8String_plural": "UTF8 strings",
+            "utf8String_other": "UTF8 strings",
             "write": "write file"
         },
         "output": {
@@ -381,6 +389,9 @@
             "externalModuleNotAllowed": "Function node not allowed to load external modules",
             "inputListener": "\ucf54\ub4dc \ub0b4\uc5d0\uc11c'input'\uc774\ubca4\ud2b8\uc758 \ub9ac\uc2a4\ud130\ub97c \uc124\uc815\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
             "invalid-js": "Error in JavaScript code",
+            "linkcallMsgInvalid": "Error link call msg parameter is not valid, expected an object",
+            "linkcallTargetInvalid": "Error link call target parameter is not valid, expected a string",
+            "linkcallTargetNotFound": "Error target 'link in' node not found",
             "missing-module": "Module __module__ missing",
             "moduleLoadError": "Failed to load module __module__: __error__",
             "moduleNameError": "Invalid module variable name: __name__",
@@ -448,6 +459,7 @@
             "no-response": "\uc751\ub2f5\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
             "no-url": "URL\uac00 \uc124\uc815\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4",
             "not-created": "httpNodeRoot\uc5d0 false\uac00\uc124\uc815\ub418\uc5c8\uc744 \ub54c\uc5d0\ub294,http-in\ub178\ub4dc\ub97c \uc791\uc131\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
+            "rejectunauthorized-invalid": "msg.rejectUnauthorized should be a boolean",
             "timeout-isnan": "\ud0c0\uc784\uc544\uc6c3\uac12\uc774 \uc218\uce58\uac00 \uc544\ub2c8\uae30 \ub54c\ubb38\uc5d0 \ubb34\uc2dc\ud569\ub2c8\ub2e4",
             "timeout-isnegative": "\ud0c0\uc784\uc544\uc6c3\uac12\uc774 \uc74c\uc218\uc774\uae30 \ub54c\ubb38\uc5d0 \ubb34\uc2dc\ud569\ub2c8\ub2e4"
         },
@@ -463,6 +475,7 @@
             "jsonObject": "JSON\uc624\ube0c\uc81d\ud2b8",
             "method": "\uba54\uc18c\ub4dc",
             "other": "\uadf8 \uc678",
+            "parsing": "Do not parse request body",
             "paytoqs": "msg.payload\ub97c \ucffc\ub9ac \ud30c\ub77c\ubbf8\ud130\uc5d0 \ucd94\uac00",
             "return": "\ucd9c\ub825\ud615\uc2dd",
             "status": "\uc0c1\ud0dc\ucf54\ub4dc",
@@ -627,6 +640,8 @@
         "dynamicLinkCall": "Dynamic target (msg.target)",
         "dynamicLinkLabel": "Dynamic",
         "errors": {
+            "linkCallMultipleTargetsFound": "Multiple 'link in' nodes named '__target__' found",
+            "linkCallTargetNotFound": "Target 'link in' node '__target__' not found",
             "linkUndefined": "link undefined",
             "missingReturn": "Missing return node information"
         },
@@ -823,7 +838,7 @@
         "objectSend": "\uac01 key/value\uc30d\uc758 \uba54\uc138\uc9c0\ub97c \uc1a1\uc2e0",
         "split": "split",
         "splitLength": "\uace0\uc815\uc7a5",
-        "splitThe": "Split the",
+        "splitThe": "Split property",
         "splitUsing": "\ubd84\ud560",
         "strBuff": "<b>\ubb38\uc790\uc5f4</b> / <b>\ubc84\ud37c</b>",
         "stream": "\uba54\uc138\uc9c0\uc758 \uc2a4\ud2b8\ub9bc\ub85c\uc368 \ucc98\ub9ac"
@@ -930,7 +945,7 @@
             "connection-closed": "__host__:__port__ \uc5d0\uc11c\uc758 \uc811\uc18d\uc774 \uc808\ub2e8\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
             "connection-from": "__host__:__port__ \uc5d0\uc11c \uc811\uc18d\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
             "connections": "\uc811\uc18d \uc218 __count__",
-            "connections_plural": "\uc811\uc18d \uc218 __count__",
+            "connections_other": "\uc811\uc18d \uc218 __count__",
             "listening-port": "\ud3ec\ud2b8 __port__ \uc5d0\uc11c \uc811\uc18d\uc744 \uae30\ub2e4\ub9ac\uace0 \uc788\uc2b5\ub2c8\ub2e4",
             "stopped-listening": "\ud3ec\ud2b8\uc758 \ub300\uae30\ub97c \uc815\uc9c0\ud588\uc2b5\ub2c8\ub2e4"
         },
@@ -960,14 +975,20 @@
         "error": {
             "invalid-cert": "Certificate not specified",
             "invalid-key": "Private key not specified",
+            "invalid-p12": "pfx/p12 not specified",
             "missing-file": "\uc778\uc99d\uc11c\uc640 \ube44\ubc00\ud0a4 \ud30c\uc77c\uc774 \uc124\uc815\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4"
         },
         "label": {
             "alpnprotocol": "ALPN Protocol",
             "ca": "CA\uc778\uc99d\uc11c",
             "cert": "\uc778\uc99d\uc11c",
+            "certtype": "Cert Type",
+            "env": "Environment Variable",
+            "files": "Individual files",
             "key": "\ube44\ubc00\ud0a4",
+            "p12": "pfx or p12",
             "passphrase": "\ud328\uc2a4 \ud504\ub808\uc774\uc988",
+            "pfx": "pfx or p12 file",
             "servername": "\uc11c\ubc84\uba85",
             "upload": "\ud30c\uc77c",
             "use-local-files": "\ub85c\uceec\ud30c\uc77c\uc758 \ube44\ubc00\ud0a4\uc640 \uc778\uc99d\uc11c\ub97c \uc0ac\uc6a9",
@@ -978,6 +999,7 @@
             "ca": "CA\uc778\uc99d\uc11c(PEM\ud615\uc2dd) \ud328\uc2a4",
             "cert": "\uc778\uc99d\uc11c(PEM\ud615\uc2dd) \ud328\uc2a4",
             "key": "\ube44\ubc00\ud0a4(PEM\ud615\uc2dd) \ud328\uc2a4",
+            "p12": "path to .pfx or .p12 (PKCS12 format)",
             "passphrase": "\ube44\ubc00\ud0a4 \ud328\uc2a4\ud504\ub808\uc774\uc988 (\uc784\uc758)",
             "servername": "SNI\ub85c \uc0ac\uc6a9"
         },
@@ -1089,6 +1111,7 @@
         "label": {
             "unknown": "unknown"
         },
+        "manageModules": "Manage modules",
         "tip": "<p>\ud604\uc7ac\uc758 Node-RED\ud658\uacbd\uc5d0\uc11c\ub294 \uc774 \ub178\ub4dc\uc758 \ud0c0\uc785\uc744 \uc54c \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.</p><p><i>\ud604\uc7ac\uc758 \uc0c1\ud0dc\uc5d0\uc11c \uc774 \ub178\ub4dc\ub97c \ubc30\ud3ec\ud558\uba74 \uc124\uc815\uc740 \ubcf4\uc874\ub418\uc9c0\ub9cc, \ud574\ub2f9 \ub178\ub4dc\uac00 \uc124\uce58\ub420 \ub54c \uae4c\uc9c0 \ud50c\ub85c\uc6b0\ub294 \uc2e4\ud589\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.</i></p><p>\uc790\uc138\ud55c \uc0ac\ud56d\uc740 \ub178\ub4dc\uc758 '\uc815\ubcf4'\ub97c \ucc38\uc870\ud574 \uc8fc\uc138\uc694.</p>"
     },
     "watch": {
@@ -1125,7 +1148,7 @@
         "sendrec": "\uc1a1\uc2e0/\uc218\uc2e0",
         "status": {
             "connected": "\uc811\uc18d \uc218 __count__",
-            "connected_plural": "\uc811\uc18d \uc218 __count__"
+            "connected_other": "\uc811\uc18d \uc218 __count__"
         },
         "tip": {
             "headers": "\ud5e4\ub354\ub294 HTTP\uc5d0\uc11c WS/WSS \ud504\ub85c\ud1a0\ucf5c\ub85c \ud504\ub85c\ud1a0\ucf5c \uc5c5\uadf8\ub808\uc774\ub4dc \uba54\ucee4\ub2c8\uc998 \uc911\uc5d0\ub9cc \uc81c\ucd9c\ub429\ub2c8\ub2e4.",
