@@ -38,6 +38,8 @@ content_types_accepted(Req, State) ->
 
 handle_get_response(Req, State) ->
     case maps:find(path, Req) of
+        {ok, <<"/library/examples/flows/">>} ->
+            {<<"[]">>, Req, State};
         {ok, <<"/library/local/flows/">>} ->
             {<<"[]">>, Req, State};
         _ ->

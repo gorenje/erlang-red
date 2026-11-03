@@ -268,6 +268,7 @@ flow_editor_routes() ->
 
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
+        {"/library/examples/flows/", ered_http_nodered_empty_json, []},
         {"/context/[...]", ered_http_nodered_empty_json, []},
 
         {"/erlang-reddebug/view/view.html", ered_http_redirect,
