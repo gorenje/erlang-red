@@ -218,9 +218,82 @@ window.ErlangRED = (function(){
         }
     }
 
+    function capturePreFlightAjaxCalls() {
+
+        function hostForToken(token) {
+            if (token && token.startsWith("local://")) {
+                return token.replace(/^local:\/\//, "").split("?")[0]
+            } else {
+                return "https://api.flowhub.org/"
+            }
+        }
+
+        $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+            let mth = undefined;
+
+            // Encode the original flow data into a base64 string. Why?
+            // To preserve object key ordering in the backend. Erlangs json:decode
+            // has the feature of ordering keys alphabetically, JS does not
+            // and unfortunately neither does the backend of FlowHub.
+            // So to maintain the original key ordering as found here, we
+            // avoid decoding the JSON until it reaches the FlowHub backend.
+            mth = options.url.match(/^FlowHubPush/i)
+            let isDiff = options.url.match(/^FlowHubDiff$/i)
+            if (mth || isDiff) {
+                // https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+                function bytesToBase64(bytes) {
+                    const binString = String.fromCodePoint(...bytes);
+                    return btoa(binString);
+                }
+
+                let dd = JSON.parse(options.data)
+                dd.c64fd = bytesToBase64(new TextEncoder().encode(
+                    JSON.stringify(dd.flowdata)
+                ))
+                options.data = JSON.stringify(dd)
+            }
+
+            // handle the FlowCompare functionality locally since we store
+            // the flow data on deploy - extract what is being compared from there.
+            mth = options.url.match(/^FlowCompareCfg/i)
+            if ( mth ) {
+                var data = JSON.parse( options.data )
+                var lcl = JSON.parse( RED.settings.getLocal("flowdata"))
+
+                var lclnodes = []
+                lcl.flows.forEach( nde => {
+                    if ( nde.id == data.flowid || nde.z == data.flowid ) {
+                        lclnodes.push(nde)
+                    }
+                })
+
+                options.success({
+                    "status": "ok",
+                    "flowid": data.flowid,
+                    "nodes": lclnodes,
+                    "changes": compareFlows({
+                        payload: lclnodes,
+                        new_flowdata: data.flowdata
+                    })
+                })
+
+                jqXHR.abort();
+            }
+
+            // Message tracer add websocket name to the request
+            mth = options.url.match(/^MsgTracer/i)
+            if ( mth ) {
+               let hsh = JSON.parse(options.data)
+               hsh["wsname"] = document.cookie.split("=")[1]
+               options.data = JSON.stringify(hsh)
+            }
+        })
+    }
+
     return {
         init: () => {
             defineCustomDropHandler()
+            capturePreFlightAjaxCalls()
 
             RED.events.on( 'markdown:rendered', () => {
                 setTimeout( () => {
