@@ -25,3 +25,4 @@ diameter_gen_access_rfc7155.erl
 diameter_gen_access_rfc7155.hrl
 .DS_Store
 config/sys.config
+priv/testflows/user.json

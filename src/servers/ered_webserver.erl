@@ -207,7 +207,7 @@ flow_editor_routes() ->
 
         %%
         %% these APIS are required by Node-RED
-        {"/settings/user", ered_http_nodered_empty_json, []},
+        {"/settings/user", ered_http_user_settings, []},
         {"/nodes", ered_http_nodered_empty_json, []},
         {"/flows", ered_http_nodered_flow_deploy_handler, []},
         {"/inject/:nodeid", ered_http_nodered_inject_node_button_handler, []},
@@ -251,6 +251,8 @@ flow_editor_routes() ->
             {priv_file, erlang_red, "vendor/elkjs"}},
         {"/auto_layout_config/lib/dagrejs", cowboy_static,
             {priv_file, erlang_red, "vendor/dagrejs"}},
+
+        {"/settings/user.json", ered_http_user_settings, []},
 
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
