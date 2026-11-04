@@ -1,7 +1,33 @@
 Milestones
 ---
 
-*Milestone Eleven- m11*
+*Milestone Twelve - m12*
+
+1. NLnet funding
+
+    Thanks to the encouraging support of the visionary folks at [NLnet](https://nlnet.nl), Erlang-Red is now funded through [NGI0 Commons Fund](https://nlnet.nl/commonsfund). Along with the financial support, NLnet has recognised the potential of a visionary project with uncertain application or usage but belief is nine-tenth of getting there in the end!
+    
+    Initially the funding will cover the development of a visual version control (or visual version management). This will allow the comparison of visual flow code and simpler change management of flow code. [FlowHub.org](https://FlowHub.org) is a GitHub based solution, [FlowHubⓁ](https://flows.nodered.org/node/@gregoriusrippenstein/node-red-contrib-flowhub-server) is the local first implementation that uses git locally. FlowHubⓁ is currently available for Node-RED, the initial project aim is to develop an Erlang-Red version of the FlowHubⓁ server.
+    
+2. Flow editor version bumped
+
+    Upgrading the flow editor from Node-RED 4.0.9 to Node-RED 5.0.8 is an initial step to an improved general development environment. Node-RED v5 makes better use of the browser real estate, allowing for resizable and hide’able side panels and four configurable side bar panels as opposed to just one configurable sidebar panel.
+
+3. Backend implementation of FlowHubⓁ
+
+    Implemented is a working version of the FlowHub nodes inside the editor. This now allows for better versioning of flow code and also better *visual* comparison of code changes made to the visual code. These changes represent a client implementation of the [FlowHubⓁ](https://discourse.nodered.org/t/flowhub-flowhub-local-local-visual-change-management/101811) server.
+    
+4. New project home at erlang-red.org
+
+    [Red-erik.org](https://red-erik.org/) will remain as an example of using Erlang-Red as an CMS. Erlang-red.org is more marketable - unfortunately! I will post updates to Updates on the NLnet funded project will be posted there. The initial project update is [available](https://erlang-red.org/update-one) and describes  project planning 
+
+5. New docker release 0.5.0
+
+    To warm up the fingers, I also released a new version to coincide with the Node-RED editor version of 5 - Erlang-Red 0.5.0 available at [docker hub](https://hub.docker.com/r/gorenje/erlang-red).
+    
+---
+
+*Milestone Eleven - m11*
 
 1. TADSummit Interviews
 
@@ -22,6 +48,8 @@ Milestones
 5. RabbitMQ/AMQP client node and Kafka nodes
 
     Initial support for [AMQP](src/nodes/ered_node_amqp_in.erl) and [Kafka consumer](src/nodes/ered_node_kafka_consumer.erl) and [Kafka producer](src/nodes/ered_node_kafka_producer.erl).
+
+---
 
 *Milestone Ten - m10*
 
