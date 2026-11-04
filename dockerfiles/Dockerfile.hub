@@ -1,5 +1,5 @@
 ## build the base image
-FROM erlang:27.3.0.0 as builder
+FROM erlang:27.3.0.0 AS builder
 
 RUN apt-get update && apt-get -y install \
     git \
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get -y install \
     mosquitto
 
 ## get the dependencies and build them
-FROM builder as builder2
+FROM builder AS builder2
 
 WORKDIR /builder
 
@@ -18,12 +18,13 @@ COPY rebar.lock .
 ## needed for Elixir
 ENV LANG=C.UTF-8
 ENV ELIXIR_ERL_OPTIONS="+fnu"
+ENV DIAGNOSTIC=1
 
 RUN rebar3 get-deps
 RUN rebar3 compile
 
 ## build the source code and create a release
-FROM builder2 as builder3
+FROM builder2 AS builder3
 
 WORKDIR /builder
 
