@@ -3,12 +3,12 @@ Erlang-Red - BEAM/Erlang backend for Node-RED
 
 [![Erlang CI](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml/badge.svg)](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml)
 
-Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatibility with existing Node-RED flow code.
+Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatibility with existing Node-RED flow code[^1].
 
 <p align="center">
 <img width="128px" src=".images/logo.png" alt="Tooling that even HAL uses"/>
 <p align="center">
-<i>Tooling that even HAL uses.[^1]</i>
+<i>Tooling that even HAL uses.</i>
 </p>
 </p>
 
