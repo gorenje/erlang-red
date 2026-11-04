@@ -401,4 +401,4 @@ AI contributions can be made according to the rules defined in [.aiignore](.aiig
 
 <a href="https://www.buymeacoffee.com/gorenje" target="_blank">Coffee</a> | [Deployment](Deployment.md)
 
-[1]: Which doubly ironic since HAL is [IBM minus 1](https://en.wikipedia.org/wiki/HAL_9000#Origin_of_name) and Node-RED was originally [developed at IBM](https://nodered.org/about/#history).
+[^1]: Which doubly ironic since HAL is [IBM minus 1](https://en.wikipedia.org/wiki/HAL_9000#Origin_of_name) and Node-RED was originally [developed at IBM](https://nodered.org/about/#history).
