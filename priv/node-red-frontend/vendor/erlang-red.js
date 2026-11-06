@@ -345,10 +345,76 @@ window.ErlangRED = (function(){
         })
     }
 
+
+    function addErlangToMonaco() {
+        function add_erlang_to_monaco() {
+            // add Erlang support to monaco
+            monaco.languages.register({id: 'erlang'})
+
+            // this code is taken from
+            //  ==> https://github.com/brijeshb42/monaco-ace-tokenizer/blob/06c32f4f1aa0938a965813937aed83c91453860f/src/languages.js#L5-L53
+            // and updated for monaco 0.55.1
+            let tokenizer = new MonacoAceTokenizer.Tokenizer(
+                (new MonacoAceTokenizer.erlangDefinition.default)["$rules"]
+            )
+
+            class State {
+                constructor(state) {
+                    this.state = state;
+                }
+
+                equals(other) {
+                    return (other === this || other.state === this.state);
+                }
+
+                clone() {
+                    return new State(this.state);
+                }
+            }
+
+            monaco.languages.setTokensProvider("erlang", {
+                getInitialState() {
+                    return new State('');
+                },
+                tokenize(line, startState) {
+                    const { tokens, state } = tokenizer.getLineTokens(line, startState.state);
+
+                    let offset = 0;
+
+                    const monacoTokens = tokens.map((token) => {
+                        const tok = {
+                            startIndex: offset,
+                            scopes: token.type,
+                        };
+
+                        offset += token.value.length;
+
+                        return tok;
+                    });
+
+                    return {
+                        endState: new State(state),
+                        tokens: monacoTokens,
+                    };
+                }
+            });
+        }
+
+        let waitForMonaco = () => {
+            if (typeof(window.monaco) == undefined) {
+                setTimeout(waitForMonaco, 300)
+            } else {
+                add_erlang_to_monaco()
+            }
+        }
+        setTimeout(waitForMonaco, 300)
+    }
+
     return {
         init: () => {
             defineCustomDropHandler()
             capturePreFlightAjaxCalls()
+            addErlangToMonaco()
 
             RED.events.on( 'markdown:rendered', () => {
                 setTimeout( () => {

@@ -1159,13 +1159,6 @@ var RED = (function() {
             RED.events.emit("sidebar:resize")
 
             setTimeout( () => {
-                // add Erlang support to monaco
-                monaco.languages.register({id: 'erlang'})
-
-                //let rules = new MonacoAceTokenizer.erlangDefinition.default;
-
-                //MonacoAceTokenizer.registerRulesForLanguage('erlang', rules);
-
                 /* deploy and loaded test or flow to the server */
                 RED.actions.invoke("core:deploy-flows")
             },1500);
