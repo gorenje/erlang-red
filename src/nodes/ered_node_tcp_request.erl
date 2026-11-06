@@ -233,7 +233,7 @@ handle_event(_Event, NodeDef) ->
 %%
 %% --> send & forget --> immediately close connection after sending data
 handle_msg(
-    {incoming, #{?GetWsName, ?GetPayload} = Msg},
+    {incoming, #{?_GetWsName, ?GetPayload} = Msg},
     #{
         <<"out">> := <<"sit">>,
         socket := Socket

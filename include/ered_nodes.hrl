@@ -8,6 +8,7 @@ end#{
     '_ws' => WsName
 }).
 -define(GetWsName, '_ws' := WsName).
+-define(_GetWsName, '_ws' := _WsName).
 -define(SetWsName, '_ws' => WsName).
 -define(WsNameIsSet, '_ws' := _WsName).
 
