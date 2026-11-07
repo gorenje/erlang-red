@@ -1,0 +1,1 @@
+[{"fn":"01 - Set payload value"},{"fn":"02 - Set any property value"},{"fn":"03 - Set value using JSONata"},{"fn":"04 - Set value from env var"},{"fn":"05 - Set flow context"},{"fn":"06 - Delete message property"},{"fn":"07 - Move message property"}]

@@ -1,0 +1,76 @@
+[
+    {
+        "id": "214f1986d70db2a6",
+        "type": "tab",
+        "label": "DrawSVG Example",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "be970616115487ae",
+        "type": "http request",
+        "z": "214f1986d70db2a6",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://cdn.openmindmap.org/content/open_mind.svg",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 367,
+        "y": 932,
+        "wires": [
+            [
+                "1eb4bf477ee7ccf6"
+            ]
+        ]
+    },
+    {
+        "id": "e6c50e3da88baae0",
+        "type": "inject",
+        "z": "214f1986d70db2a6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 211,
+        "y": 867,
+        "wires": [
+            [
+                "be970616115487ae"
+            ]
+        ]
+    },
+    {
+        "id": "1eb4bf477ee7ccf6",
+        "type": "ClientCode",
+        "z": "214f1986d70db2a6",
+        "name": "",
+        "clientcode": "var version = RED.settings.version.split(\".\");\n\nconsole.log( _msg.payload )\n\nif (version[0] == \"3\" && version[1] == \"0\") {\n    $($($('svg')[0]).find('> g > g > g')[2]).append(\n        _msg.payload\n    );\n}\n\nif (version[0] == \"3\" && version[1] == \"1\") {\n    $($($('svg[width=8000]')[0]).find('> g > g > g')[2]).append(\n        _msg.payload\n    );\n}",
+        "format": "javascript",
+        "x": 531,
+        "y": 1015,
+        "wires": [
+            []
+        ]
+    }
+]

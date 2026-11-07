@@ -1,0 +1,220 @@
+[
+    {
+        "id": "dd3254cb6eb86b9d",
+        "type": "group",
+        "z": "2401c255b056e0e1",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "82ab9691a6fa6305",
+            "b2fe6ad173a282cb",
+            "eeb2a86e885d8950",
+            "c89e89af7dc45512",
+            "f7d24a797738488c",
+            "2a5f7e2419fa5854",
+            "ea61e4074523f3b7",
+            "9dc3fdbc98812282"
+        ],
+        "x": 253,
+        "y": 231.5,
+        "w": 635,
+        "h": 349
+    },
+    {
+        "id": "82ab9691a6fa6305",
+        "type": "function",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "function 1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 339,
+        "y": 292.5,
+        "wires": [
+            [
+                "ea61e4074523f3b7",
+                "b2fe6ad173a282cb"
+            ]
+        ]
+    },
+    {
+        "id": "b2fe6ad173a282cb",
+        "type": "switch",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 371,
+        "y": 378.5,
+        "wires": [
+            [
+                "f7d24a797738488c",
+                "2a5f7e2419fa5854"
+            ]
+        ]
+    },
+    {
+        "id": "eeb2a86e885d8950",
+        "type": "change",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 572,
+        "y": 457.5,
+        "wires": [
+            [
+                "f7d24a797738488c",
+                "82ab9691a6fa6305",
+                "b2fe6ad173a282cb"
+            ]
+        ]
+    },
+    {
+        "id": "c89e89af7dc45512",
+        "type": "range",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "minin": "1",
+        "maxin": "1",
+        "minout": "1",
+        "maxout": "1",
+        "action": "scale",
+        "round": false,
+        "property": "payload",
+        "name": "",
+        "x": 687,
+        "y": 539.5,
+        "wires": [
+            [
+                "f7d24a797738488c"
+            ]
+        ]
+    },
+    {
+        "id": "f7d24a797738488c",
+        "type": "template",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 599,
+        "y": 272.5,
+        "wires": [
+            [
+                "eeb2a86e885d8950",
+                "ea61e4074523f3b7"
+            ]
+        ]
+    },
+    {
+        "id": "2a5f7e2419fa5854",
+        "type": "delay",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 702,
+        "y": 337.5,
+        "wires": [
+            [
+                "b2fe6ad173a282cb"
+            ]
+        ]
+    },
+    {
+        "id": "ea61e4074523f3b7",
+        "type": "exec",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "command": "",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 812,
+        "y": 404.5,
+        "wires": [
+            [],
+            [
+                "82ab9691a6fa6305"
+            ],
+            [
+                "c89e89af7dc45512"
+            ]
+        ]
+    },
+    {
+        "id": "9dc3fdbc98812282",
+        "type": "rbe",
+        "z": "2401c255b056e0e1",
+        "g": "dd3254cb6eb86b9d",
+        "name": "filter",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 574,
+        "y": 378.5,
+        "wires": [
+            []
+        ]
+    }
+]

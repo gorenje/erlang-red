@@ -1,0 +1,516 @@
+[
+    {
+        "id": "c0bd9dd2d55e41ac",
+        "type": "group",
+        "z": "0b1bfbf6e540be66",
+        "name": "basic usage",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8b84f7f866c48532",
+            "db4d722d40dcaa8b",
+            "b984213932b55c95"
+        ],
+        "x": 196,
+        "y": 79,
+        "w": 702,
+        "h": 149
+    },
+    {
+        "id": "8b84f7f866c48532",
+        "type": "GetFlows",
+        "z": "0b1bfbf6e540be66",
+        "g": "c0bd9dd2d55e41ac",
+        "name": "",
+        "flowVersion": "v1",
+        "useAuthentication": false,
+        "apiUsername": "",
+        "apiUsernameType": "env",
+        "apiPassword": "",
+        "apiPasswordType": "env",
+        "x": 513,
+        "y": 187,
+        "wires": [
+            [
+                "b984213932b55c95"
+            ]
+        ]
+    },
+    {
+        "id": "db4d722d40dcaa8b",
+        "type": "inject",
+        "z": "0b1bfbf6e540be66",
+        "g": "c0bd9dd2d55e41ac",
+        "name": "trigger",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 292,
+        "y": 120,
+        "wires": [
+            [
+                "8b84f7f866c48532"
+            ]
+        ]
+    },
+    {
+        "id": "b984213932b55c95",
+        "type": "debug",
+        "z": "0b1bfbf6e540be66",
+        "g": "c0bd9dd2d55e41ac",
+        "name": "debug 40",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 792,
+        "y": 187,
+        "wires": []
+    },
+    {
+        "id": "e72cbb5c6dcc75be",
+        "type": "group",
+        "z": "0b1bfbf6e540be66",
+        "name": "Backup flow",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "394ed3490fddc914",
+            "2489efac7f075c1f",
+            "78093def4cb38dfa",
+            "0b57e926350b9c34",
+            "029ac133e20bb374",
+            "1c0a11ad9ff50aa5",
+            "c619f252f806865a",
+            "5189ba04ae064278"
+        ],
+        "x": 198,
+        "y": 273,
+        "w": 1165,
+        "h": 279
+    },
+    {
+        "id": "394ed3490fddc914",
+        "type": "cronplus",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "Every 4 hours",
+        "outputField": "payload",
+        "timeZone": "",
+        "storeName": "",
+        "commandResponseMsgOutput": "output1",
+        "defaultLocation": "",
+        "defaultLocationType": "default",
+        "outputs": 1,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "topic1",
+                "payloadType": "default",
+                "payload": "",
+                "expressionType": "cron",
+                "expression": "0 * */4 * * * *",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 324,
+        "y": 386,
+        "wires": [
+            [
+                "2489efac7f075c1f"
+            ]
+        ]
+    },
+    {
+        "id": "2489efac7f075c1f",
+        "type": "GetFlows",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "",
+        "flowVersion": "v1",
+        "useAuthentication": false,
+        "apiUsername": "",
+        "apiUsernameType": "env",
+        "apiPassword": "",
+        "apiPasswordType": "env",
+        "x": 569,
+        "y": 386,
+        "wires": [
+            [
+                "0b57e926350b9c34"
+            ]
+        ]
+    },
+    {
+        "id": "78093def4cb38dfa",
+        "type": "zip",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "",
+        "mode": "compress",
+        "filename": "",
+        "compressionlevel": "9",
+        "outasstring": false,
+        "x": 880,
+        "y": 387,
+        "wires": [
+            [
+                "1c0a11ad9ff50aa5",
+                "c619f252f806865a"
+            ]
+        ]
+    },
+    {
+        "id": "0b57e926350b9c34",
+        "type": "change",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "flows.json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 697,
+        "y": 491,
+        "wires": [
+            [
+                "78093def4cb38dfa"
+            ]
+        ]
+    },
+    {
+        "id": "029ac133e20bb374",
+        "type": "debug",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "debug 41",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1257,
+        "y": 511,
+        "wires": []
+    },
+    {
+        "id": "1c0a11ad9ff50aa5",
+        "type": "function",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "send email",
+        "func": "/* placeholder function */\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1103,
+        "y": 314,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c619f252f806865a",
+        "type": "zip",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "",
+        "mode": "decompress",
+        "filename": "",
+        "compressionlevel": "9",
+        "outasstring": true,
+        "x": 1020,
+        "y": 511,
+        "wires": [
+            [
+                "029ac133e20bb374",
+                "5189ba04ae064278"
+            ]
+        ]
+    },
+    {
+        "id": "5189ba04ae064278",
+        "type": "http request",
+        "z": "0b1bfbf6e540be66",
+        "g": "e72cbb5c6dcc75be",
+        "name": "backup server",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/_backup/_server",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1241,
+        "y": 409,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8f847dc12c15c2de",
+        "type": "group",
+        "z": "0b1bfbf6e540be66",
+        "name": "find all nodes on this flow",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4d67f57277011dce",
+            "31e1dded3c20487b",
+            "f1a40ab0d0a1343e",
+            "2bc6587fdbbe2cbc",
+            "d89ccf54e06f6400"
+        ],
+        "x": 192,
+        "y": 833,
+        "w": 1043,
+        "h": 158
+    },
+    {
+        "id": "4d67f57277011dce",
+        "type": "GetFlows",
+        "z": "0b1bfbf6e540be66",
+        "g": "8f847dc12c15c2de",
+        "name": "",
+        "flowVersion": "v1",
+        "useAuthentication": false,
+        "apiUsername": "",
+        "apiUsernameType": "env",
+        "apiPassword": "",
+        "apiPasswordType": "env",
+        "x": 484,
+        "y": 875,
+        "wires": [
+            [
+                "f1a40ab0d0a1343e"
+            ]
+        ]
+    },
+    {
+        "id": "31e1dded3c20487b",
+        "type": "inject",
+        "z": "0b1bfbf6e540be66",
+        "g": "8f847dc12c15c2de",
+        "name": "trigger",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 288,
+        "y": 909,
+        "wires": [
+            [
+                "4d67f57277011dce"
+            ]
+        ]
+    },
+    {
+        "id": "f1a40ab0d0a1343e",
+        "type": "json",
+        "z": "0b1bfbf6e540be66",
+        "g": "8f847dc12c15c2de",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 637,
+        "y": 950,
+        "wires": [
+            [
+                "2bc6587fdbbe2cbc"
+            ]
+        ]
+    },
+    {
+        "id": "2bc6587fdbbe2cbc",
+        "type": "function",
+        "z": "0b1bfbf6e540be66",
+        "g": "8f847dc12c15c2de",
+        "name": "only nodes from this flow tab",
+        "func": "msg.flid = msg.flid || path.dirname(node.path);\n\nmsg.payload = msg.payload.filter(function (obj) {\n    return (obj.id == msg.flid || obj.z == msg.flid )\n});\n\nvar flow_node = msg.payload.filter( (obj) => {\n    return obj.id == msg.flid \n})[0];\n\nmsg.payload = msg.payload.map((nde) => {\n    return {\n        flow: flow_node.name || flow_node.label,\n        name: nde.name || nde.label,\n        type: nde.type,\n        id:   nde.id\n    }\n})\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 856,
+        "y": 874,
+        "wires": [
+            [
+                "d89ccf54e06f6400"
+            ]
+        ]
+    },
+    {
+        "id": "d89ccf54e06f6400",
+        "type": "debug",
+        "z": "0b1bfbf6e540be66",
+        "g": "8f847dc12c15c2de",
+        "name": "debug 42",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1129,
+        "y": 874,
+        "wires": []
+    },
+    {
+        "id": "263cdabcbbbd5045",
+        "type": "group",
+        "z": "0b1bfbf6e540be66",
+        "name": "backup server endpoint",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8d3a631088e1f1aa",
+            "b1cba365a93417cd",
+            "14dff9849fab824a",
+            "29098d2d0630671c",
+            "3cf3bc72e145a3a5"
+        ],
+        "x": 197,
+        "y": 621,
+        "w": 910,
+        "h": 174
+    },
+    {
+        "id": "8d3a631088e1f1aa",
+        "type": "http in",
+        "z": "0b1bfbf6e540be66",
+        "g": "263cdabcbbbd5045",
+        "name": "",
+        "url": "/_backup/_server",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 323,
+        "y": 718,
+        "wires": [
+            [
+                "b1cba365a93417cd",
+                "14dff9849fab824a"
+            ]
+        ]
+    },
+    {
+        "id": "b1cba365a93417cd",
+        "type": "http response",
+        "z": "0b1bfbf6e540be66",
+        "g": "263cdabcbbbd5045",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 600,
+        "y": 662,
+        "wires": []
+    },
+    {
+        "id": "14dff9849fab824a",
+        "type": "change",
+        "z": "0b1bfbf6e540be66",
+        "g": "263cdabcbbbd5045",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload[0].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 566,
+        "y": 754,
+        "wires": [
+            [
+                "29098d2d0630671c"
+            ]
+        ]
+    },
+    {
+        "id": "29098d2d0630671c",
+        "type": "json",
+        "z": "0b1bfbf6e540be66",
+        "g": "263cdabcbbbd5045",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 793,
+        "y": 725,
+        "wires": [
+            [
+                "3cf3bc72e145a3a5"
+            ]
+        ]
+    },
+    {
+        "id": "3cf3bc72e145a3a5",
+        "type": "debug",
+        "z": "0b1bfbf6e540be66",
+        "g": "263cdabcbbbd5045",
+        "name": "debug 43",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1001,
+        "y": 665,
+        "wires": []
+    }
+]

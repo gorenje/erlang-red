@@ -1,0 +1,443 @@
+[
+    {
+        "id": "0c35d269ca7178c6",
+        "type": "tab",
+        "label": "[function] supports complete node",
+        "disabled": false,
+        "info": "## Function node and message completion\n\nWhen has a function node completed with a message?\n\nIf that message was successfully handled, no timeout or illegal exit.\n\n",
+        "env": [
+            {
+                "name": "ERED_TIMEOUT",
+                "value": "8",
+                "type": "num"
+            }
+        ]
+    },
+    {
+        "id": "f20328830b376b23",
+        "type": "group",
+        "z": "0c35d269ca7178c6",
+        "name": "successfully handled message",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "e854140ab6f0d21c",
+            "731d488b92cd68f1",
+            "b93f2509fb2a5bcc",
+            "55336fe53a868e93",
+            "6e9d36928e0ca025"
+        ],
+        "x": 207,
+        "y": 223.5,
+        "w": 740,
+        "h": 176.75
+    },
+    {
+        "id": "c165d28f8005d7c4",
+        "type": "group",
+        "z": "0c35d269ca7178c6",
+        "name": "time out - no complete notification",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "0cdc8b8fcada2b64",
+            "084ee5f93fe80d0a",
+            "381a28ec2492ce63",
+            "1b7b76e14556c769",
+            "4b361478f333e8e2",
+            "7279588ae6534fea",
+            "8cdc14e2a037f875"
+        ],
+        "x": 207,
+        "y": 479.875,
+        "w": 879,
+        "h": 228.875
+    },
+    {
+        "id": "db361fcb415409b2",
+        "type": "group",
+        "z": "0c35d269ca7178c6",
+        "name": "bad arith exception - no complete",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "f5af604e178c08c0",
+            "4a8146bae13b5087",
+            "67c13f891a224fef",
+            "e1e0adb799026724",
+            "c6a558ec0e5e8ec9",
+            "8fe0860f8fce23a5",
+            "4494c48d22cc3e4e"
+        ],
+        "x": 208,
+        "y": 763.5,
+        "w": 792,
+        "h": 247.5
+    },
+    {
+        "id": "e854140ab6f0d21c",
+        "type": "function",
+        "z": "0c35d269ca7178c6",
+        "g": "f20328830b376b23",
+        "name": "function 2",
+        "func": "return msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 577,
+        "y": 359.25,
+        "wires": [
+            [
+                "6e9d36928e0ca025"
+            ]
+        ]
+    },
+    {
+        "id": "731d488b92cd68f1",
+        "type": "complete",
+        "z": "0c35d269ca7178c6",
+        "g": "f20328830b376b23",
+        "name": "",
+        "scope": [
+            "e854140ab6f0d21c"
+        ],
+        "uncaught": false,
+        "x": 584,
+        "y": 264.5,
+        "wires": [
+            [
+                "55336fe53a868e93"
+            ]
+        ]
+    },
+    {
+        "id": "b93f2509fb2a5bcc",
+        "type": "inject",
+        "z": "0c35d269ca7178c6",
+        "g": "f20328830b376b23",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 313,
+        "y": 359.25,
+        "wires": [
+            [
+                "e854140ab6f0d21c"
+            ]
+        ]
+    },
+    {
+        "id": "55336fe53a868e93",
+        "type": "ut-assert-success",
+        "z": "0c35d269ca7178c6",
+        "g": "f20328830b376b23",
+        "name": "",
+        "count": 1,
+        "x": 848,
+        "y": 264.5,
+        "wires": []
+    },
+    {
+        "id": "6e9d36928e0ca025",
+        "type": "ut-assert-success",
+        "z": "0c35d269ca7178c6",
+        "g": "f20328830b376b23",
+        "name": "",
+        "count": 1,
+        "x": 851,
+        "y": 359.25,
+        "wires": []
+    },
+    {
+        "id": "0cdc8b8fcada2b64",
+        "type": "function",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "1 second timeout - no complete generated",
+        "func": "while (true) {\n    for( var idx = 0 ; idx < 1000; idx++){\n        idx+=5\n    }\n}",
+        "outputs": 1,
+        "timeout": "1",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 687,
+        "y": 616.75,
+        "wires": [
+            [
+                "1b7b76e14556c769"
+            ]
+        ]
+    },
+    {
+        "id": "084ee5f93fe80d0a",
+        "type": "complete",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "scope": [
+            "0cdc8b8fcada2b64"
+        ],
+        "uncaught": false,
+        "x": 584,
+        "y": 520.875,
+        "wires": [
+            [
+                "7279588ae6534fea"
+            ]
+        ]
+    },
+    {
+        "id": "381a28ec2492ce63",
+        "type": "inject",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 313,
+        "y": 616.75,
+        "wires": [
+            [
+                "0cdc8b8fcada2b64"
+            ]
+        ]
+    },
+    {
+        "id": "1b7b76e14556c769",
+        "type": "ut-assert-failure",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "x": 970,
+        "y": 616.75,
+        "wires": []
+    },
+    {
+        "id": "f5af604e178c08c0",
+        "type": "function",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "exception",
+        "func": "msg.doesntexist()\n\nreturn msg",
+        "outputs": 1,
+        "timeout": "0",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 578,
+        "y": 894.5,
+        "wires": [
+            [
+                "c6a558ec0e5e8ec9"
+            ]
+        ]
+    },
+    {
+        "id": "4a8146bae13b5087",
+        "type": "complete",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "scope": [
+            "f5af604e178c08c0"
+        ],
+        "uncaught": false,
+        "x": 585,
+        "y": 804.5,
+        "wires": [
+            [
+                "e1e0adb799026724"
+            ]
+        ]
+    },
+    {
+        "id": "67c13f891a224fef",
+        "type": "inject",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 314,
+        "y": 894.5,
+        "wires": [
+            [
+                "f5af604e178c08c0"
+            ]
+        ]
+    },
+    {
+        "id": "e1e0adb799026724",
+        "type": "ut-assert-failure",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "x": 884,
+        "y": 804.5,
+        "wires": []
+    },
+    {
+        "id": "c6a558ec0e5e8ec9",
+        "type": "ut-assert-failure",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "x": 884,
+        "y": 894.5,
+        "wires": []
+    },
+    {
+        "id": "4b361478f333e8e2",
+        "type": "ut-assert-values",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "error.message",
+                "pt": "msg",
+                "to": "Error: Script execution timed out after 1000ms",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "error.source.id",
+                "pt": "msg",
+                "to": "0cdc8b8fcada2b64",
+                "tot": "str"
+            }
+        ],
+        "x": 980,
+        "y": 667.75,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7279588ae6534fea",
+        "type": "ut-assert-failure",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "x": 970,
+        "y": 520.875,
+        "wires": []
+    },
+    {
+        "id": "8cdc14e2a037f875",
+        "type": "catch",
+        "z": "0c35d269ca7178c6",
+        "g": "c165d28f8005d7c4",
+        "name": "",
+        "scope": [
+            "0cdc8b8fcada2b64"
+        ],
+        "uncaught": false,
+        "x": 640,
+        "y": 667.75,
+        "wires": [
+            [
+                "4b361478f333e8e2"
+            ]
+        ]
+    },
+    {
+        "id": "8fe0860f8fce23a5",
+        "type": "catch",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "scope": [
+            "f5af604e178c08c0"
+        ],
+        "uncaught": false,
+        "x": 570,
+        "y": 970,
+        "wires": [
+            [
+                "4494c48d22cc3e4e"
+            ]
+        ]
+    },
+    {
+        "id": "4494c48d22cc3e4e",
+        "type": "ut-assert-values",
+        "z": "0c35d269ca7178c6",
+        "g": "db361fcb415409b2",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "error.message",
+                "pt": "msg",
+                "to": "TypeError: msg.doesntexist is not a function",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "error.source.id",
+                "pt": "msg",
+                "to": "f5af604e178c08c0",
+                "tot": "str"
+            }
+        ],
+        "x": 894,
+        "y": 970,
+        "wires": [
+            []
+        ]
+    }
+]

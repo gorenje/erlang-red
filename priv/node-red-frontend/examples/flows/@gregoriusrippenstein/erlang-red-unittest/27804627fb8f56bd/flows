@@ -1,0 +1,178 @@
+[
+    {
+        "id": "27804627fb8f56bd",
+        "type": "tab",
+        "label": "[http] nodes should be able to handle requests",
+        "disabled": false,
+        "info": "The http in node setups an endpoint and from the same flow, i.e. this one, the http request node makes a request to obtain the data that is stored in the template node.",
+        "env": [
+            {
+                "name": "ERED_PENDING",
+                "value": "false",
+                "type": "bool"
+            },
+            {
+                "name": "ERED_NOT_EUNIT",
+                "value": "true",
+                "type": "bool"
+            },
+            {
+                "name": "ERED_TIMEOUT",
+                "value": "3",
+                "type": "num"
+            }
+        ]
+    },
+    {
+        "id": "fc6d2a8652ac0a13",
+        "type": "http in",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "url": "/t27804627fb8f56bd/test/url",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 185,
+        "y": 316,
+        "wires": [
+            [
+                "1e3a49fdb9c9a6a1"
+            ]
+        ]
+    },
+    {
+        "id": "b35819f95cd15265",
+        "type": "http response",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 762,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "12559851e8165837",
+        "type": "inject",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 189,
+        "y": 163.5,
+        "wires": [
+            [
+                "2b8834d322efe359"
+            ]
+        ]
+    },
+    {
+        "id": "1e3a49fdb9c9a6a1",
+        "type": "template",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "plain",
+        "template": "Hello world.\n\nAnd one more thing.\n\nThis is a test.\n\nBut should work.\n\n",
+        "output": "str",
+        "x": 506,
+        "y": 498,
+        "wires": [
+            [
+                "b35819f95cd15265"
+            ]
+        ]
+    },
+    {
+        "id": "93a68f36da4a0c36",
+        "type": "http request",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/t27804627fb8f56bd/test/url",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 594.3333333333334,
+        "y": 163.5,
+        "wires": [
+            [
+                "732ff0f8a0cdb2c9"
+            ]
+        ]
+    },
+    {
+        "id": "2b8834d322efe359",
+        "type": "delay",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "250",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 386.6666666666667,
+        "y": 163.5,
+        "wires": [
+            [
+                "93a68f36da4a0c36"
+            ]
+        ]
+    },
+    {
+        "id": "732ff0f8a0cdb2c9",
+        "type": "ut-assert-values",
+        "z": "27804627fb8f56bd",
+        "name": "",
+        "rules": [
+            {
+                "p": "statusCode",
+                "pt": "msg",
+                "t": "eql",
+                "to": "200",
+                "tot": "num"
+            },
+            {
+                "p": "payload",
+                "pt": "msg",
+                "t": "eql",
+                "to": "\"Hello world.\\n\\nAnd one more thing.\\n\\nThis is a test.\\n\\nBut should work.\\n\\n\"",
+                "tot": "json"
+            }
+        ],
+        "x": 812,
+        "y": 163.5,
+        "wires": [
+            []
+        ]
+    }
+]

@@ -1,0 +1,200 @@
+[
+    {
+        "id": "34f859d75b76d03c",
+        "type": "tab",
+        "label": "[debug] ensure debug messages are generated",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2b76bf763f582018",
+        "type": "ut-assert-debug",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "scope": [
+            "622df56860effec3"
+        ],
+        "nodeid": "",
+        "msgtype": "normal",
+        "inverse": false,
+        "x": 718,
+        "y": 499,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eabb7d02fd623806",
+        "type": "inject",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 249,
+        "y": 372,
+        "wires": [
+            [
+                "622df56860effec3"
+            ]
+        ]
+    },
+    {
+        "id": "622df56860effec3",
+        "type": "debug",
+        "z": "34f859d75b76d03c",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 628,
+        "y": 457,
+        "wires": []
+    },
+    {
+        "id": "73c3460b00529cad",
+        "type": "ut-assert-debug",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "scope": [
+            "d6140fc723c1c3bd"
+        ],
+        "nodeid": "",
+        "msgtype": "error",
+        "inverse": false,
+        "x": 796,
+        "y": 634,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5beca0e0f8232ad5",
+        "type": "inject",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 252,
+        "y": 470,
+        "wires": [
+            [
+                "d6140fc723c1c3bd"
+            ]
+        ]
+    },
+    {
+        "id": "d6140fc723c1c3bd",
+        "type": "function",
+        "z": "34f859d75b76d03c",
+        "name": "function 1",
+        "func": "node.wran(\"ddd\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 704,
+        "y": 597,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c1f94cfa4ba96cf7",
+        "type": "inject",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 243,
+        "y": 275,
+        "wires": [
+            [
+                "b89ab5a5ce54ec12"
+            ]
+        ]
+    },
+    {
+        "id": "b89ab5a5ce54ec12",
+        "type": "function",
+        "z": "34f859d75b76d03c",
+        "name": "generate warning message",
+        "func": "node.warn(\"ddd\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 658,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e3f8a1668bc2fb07",
+        "type": "ut-assert-debug",
+        "z": "34f859d75b76d03c",
+        "name": "",
+        "scope": [
+            "b89ab5a5ce54ec12"
+        ],
+        "nodeid": "",
+        "msgtype": "warning",
+        "inverse": false,
+        "x": 767,
+        "y": 350,
+        "wires": [
+            []
+        ]
+    }
+]

@@ -1,0 +1,1 @@
+[{"fn":"01 - Select output port"},{"fn":"02 - Check all rules"},{"fn":"03 - Stop after first match"},{"fn":"04 - Select output port by type"},{"fn":"05 - Use JSONata for switch rule"},{"fn":"06 - Use JSONata for switch value"},{"fn":"07 - Recreate message sequence"},{"fn":"08 - Route message based on properties"},{"fn":"09 - Route message based on context value"}]

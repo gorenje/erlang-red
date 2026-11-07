@@ -1,0 +1,188 @@
+[
+    {
+        "id": "59da63b5adb460db",
+        "type": "tab",
+        "label": "[split] Array type",
+        "disabled": false,
+        "info": "## Split lists\n\nLists are the Erlang array types and these can either be strings or lists of things - so what the split node does is differentiate between array lenghts:\n\n- fixed length of 0 - array is treated as a string and is split using the char marker, e.g., `\\n`.\n\n- fixed length of 1 - array is assumed to be an array of arrays and is split by element,\n\n- fixed length > 1 - array is assumed to be a string and is split by the fixed value.\n\nNegative lengths aren't allowed, else they would also have a meaning.",
+        "env": [
+            {
+                "name": "ERED_PENDING",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "b07513bbfad6bc38",
+        "type": "group",
+        "z": "59da63b5adb460db",
+        "name": "fixed length of 1 - assuming array of stuff",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ea5e9a365508b17e",
+            "b7ddc3a81658a6df",
+            "8ba4046182f4845a",
+            "8e02a31c1b942af4",
+            "4fbf3810d57c339f",
+            "35a9a32a9a60ce92",
+            "3fb8007959121f34"
+        ],
+        "x": 500.0000305175781,
+        "y": 163.8333282470703,
+        "w": 699.5,
+        "h": 309
+    },
+    {
+        "id": "ea5e9a365508b17e",
+        "type": "inject",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[1,2,3,4,5,6,7,8,9,0]",
+        "payloadType": "json",
+        "x": 636.0000305175781,
+        "y": 379.3333282470703,
+        "wires": [
+            [
+                "b7ddc3a81658a6df"
+            ]
+        ]
+    },
+    {
+        "id": "b7ddc3a81658a6df",
+        "type": "split",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": "1",
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 818.5000305175781,
+        "y": 255.8333282470703,
+        "wires": [
+            [
+                "8ba4046182f4845a",
+                "8e02a31c1b942af4",
+                "4fbf3810d57c339f",
+                "35a9a32a9a60ce92",
+                "3fb8007959121f34"
+            ]
+        ]
+    },
+    {
+        "id": "8ba4046182f4845a",
+        "type": "ut-assert-success",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "count": "10",
+        "x": 1053.5000305175781,
+        "y": 204.8333282470703,
+        "wires": []
+    },
+    {
+        "id": "8e02a31c1b942af4",
+        "type": "ut-assert-values",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "ignore_failure_if_succeed": true,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "payload",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "x": 1063.5000305175781,
+        "y": 261.5833282470703,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4fbf3810d57c339f",
+        "type": "ut-assert-values",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "ignore_failure_if_succeed": true,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "payload",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            }
+        ],
+        "x": 1063.5000305175781,
+        "y": 318.3333282470703,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "35a9a32a9a60ce92",
+        "type": "ut-assert-values",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "ignore_failure_if_succeed": true,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "payload",
+                "pt": "msg",
+                "to": "3",
+                "tot": "num"
+            }
+        ],
+        "x": 1063.5000305175781,
+        "y": 375.0833282470703,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3fb8007959121f34",
+        "type": "ut-assert-values",
+        "z": "59da63b5adb460db",
+        "g": "b07513bbfad6bc38",
+        "name": "",
+        "ignore_failure_if_succeed": true,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "payload",
+                "pt": "msg",
+                "to": "4",
+                "tot": "num"
+            }
+        ],
+        "x": 1063.5000305175781,
+        "y": 431.8333282470703,
+        "wires": [
+            []
+        ]
+    }
+]

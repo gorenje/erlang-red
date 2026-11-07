@@ -1,0 +1,2346 @@
+[
+    {
+        "id": "9942fa1aeb1b2428",
+        "type": "tab",
+        "label": "[switch] JSONata undefined value & exceptions",
+        "disabled": false,
+        "info": "## What happens with JSONata result is undefined?\n\nThe only value that matches is `is null` for an undefined value in JSONata.\n\nWhat happens if the JSONata stanza is in error but at runtime?",
+        "env": [
+            {
+                "name": "NODE_RED_DIVERGENT",
+                "value": "true",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "199386de1f8d0b26",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "invalid JSONata stanza as property to check against",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b77637f8d2cf275e",
+            "e0d79226c256fba7",
+            "639bfb064cb9a1b0",
+            "1aac37181e9199c1",
+            "5a777e9e4671f290",
+            "bea644861571de7c",
+            "eaaf5126503dee9f",
+            "e6f7ea380e167f62",
+            "57b76009ceaf2f44",
+            "0545a24dd6a9bed7",
+            "6f9d22eef60f83c0",
+            "89ee3bf2d339e20b"
+        ],
+        "x": 1000,
+        "y": 124,
+        "w": 797,
+        "h": 654.5
+    },
+    {
+        "id": "095fb4627c140119",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "invalid JSONata stanza as property to check against",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "00c047659d5dbc95",
+            "7b9c699e33a65d39",
+            "a87613d1a8562a64",
+            "a1d2d70259b74abf",
+            "fe92a602e3813db8",
+            "7345143768c0a247",
+            "160de08859c4a5e3",
+            "feafd3649014bfab",
+            "947d682562ee8c40",
+            "7a529fb88b614b74",
+            "c62b20a4d4905b49",
+            "8b5de98aa7b40dd3"
+        ],
+        "x": 1002.5,
+        "y": 1352.5,
+        "w": 797,
+        "h": 676.25
+    },
+    {
+        "id": "d25fadc270655483",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata as field type",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "1b86e50802681fd8",
+            "2a1e1e18b1bdc778"
+        ],
+        "x": 1834,
+        "y": 572,
+        "w": 1724,
+        "h": 474.00002034505223
+    },
+    {
+        "id": "c4690892cc9015ad",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata as rule operator",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "2471e07080841ae7",
+            "53300cc6a277013b"
+        ],
+        "x": 1836.4287109375,
+        "y": 61.428565979003906,
+        "w": 1724,
+        "h": 474.0000203450521
+    },
+    {
+        "id": "124bc1ad94cb23e5",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata as rule operator",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "556156e102e73804",
+            "8293d2234fecbed8"
+        ],
+        "x": 1883.5,
+        "y": 1291,
+        "w": 1752,
+        "h": 413
+    },
+    {
+        "id": "c66766891e9c9701",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata as field type",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "004ba979caee84d8",
+            "e4c37bace09b5a4b"
+        ],
+        "x": 1882.285888671875,
+        "y": 1750.71435546875,
+        "w": 1772,
+        "h": 413
+    },
+    {
+        "id": "1f20f08de37f7131",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata produces an undefined value",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "2c867a9d03379f5a",
+            "ecba7c047b16c199",
+            "13e3ac4d41044a4f",
+            "f425ab69290c3f35",
+            "5548c0aea846610c",
+            "ebf2a754a54c2879",
+            "8a46b76b4bdb907c",
+            "3fec0a85b5ebe591",
+            "15ca188eebbded5c",
+            "bfeb35a2b25b13ec",
+            "388d526d8b5bc65f",
+            "b74874da3cc77fe5"
+        ],
+        "x": 112,
+        "y": 124,
+        "w": 828,
+        "h": 565
+    },
+    {
+        "id": "b31b246f6078a7fa",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "name": "JSONata produces an undefined value",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "d312c33b49855c32",
+            "11d72e400487bab0",
+            "a8c8c15a45430e5f",
+            "3b3eb3dd3938871a",
+            "06d8610bc474af1a",
+            "c36a634373dec16c",
+            "14a0e8512a9393e4",
+            "69ba2357e97a16e6",
+            "60881c68cf92f227",
+            "05fbce3f65e95def",
+            "e5527783b9bcd9e1",
+            "651ce4cd24a96813"
+        ],
+        "x": 112,
+        "y": 1431.9999593098958,
+        "w": 825,
+        "h": 540.8571898142498
+    },
+    {
+        "id": "2471e07080841ae7",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "c4690892cc9015ad",
+        "name": "invalid JSONata stanza as rule value - before match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "dffbdccb4839b1b2",
+            "050353ded7981963",
+            "eb5b381efed62930",
+            "555535b72a413553",
+            "9afb6e63cb5604cb",
+            "3461c3ef26234ac8",
+            "6e9e325f4664e4eb",
+            "d121dc1afd638c66"
+        ],
+        "x": 1862.4287109375,
+        "y": 87.4285659790039,
+        "w": 814,
+        "h": 410
+    },
+    {
+        "id": "53300cc6a277013b",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "c4690892cc9015ad",
+        "name": "invalid JSONata stanza as rule value - after match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "dfc0c4b73ba963aa",
+            "6735c45edbb34c8b",
+            "1b7d81e38e3d5141",
+            "99e0d84f124ea910",
+            "5555564f777e5fdd",
+            "aabab4db0bd44f2a",
+            "9cdf0af0c29dcbc2",
+            "3d5d37acb0826bb1"
+        ],
+        "x": 2720.4287109375,
+        "y": 92.428586324056,
+        "w": 814,
+        "h": 417
+    },
+    {
+        "id": "556156e102e73804",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "124bc1ad94cb23e5",
+        "name": "invalid JSONata stanza as rule value - after match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "423e0bde8dded2cd",
+            "89ef46ed5db8127a",
+            "1bcf8390328e5b16",
+            "8a46f8ca2822cad2",
+            "39521ca6f0582e9e",
+            "0c0adfed2b928cd6",
+            "1a361cb294fd717f",
+            "e4267133256b2fa9"
+        ],
+        "x": 2795.5,
+        "y": 1317,
+        "w": 814,
+        "h": 357
+    },
+    {
+        "id": "8293d2234fecbed8",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "124bc1ad94cb23e5",
+        "name": "invalid JSONata stanza as rule value - before match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "fa4d9c24770444b3",
+            "edb3595a348ab634",
+            "6c7cc9a6ca7cd4f3",
+            "4ad5eab07763e233",
+            "1d85976b4b0e687c",
+            "4be742290f829cc5",
+            "c424cd1b9ee2a594",
+            "f9104297e8353b18"
+        ],
+        "x": 1909.5,
+        "y": 1321,
+        "w": 814,
+        "h": 357
+    },
+    {
+        "id": "1b86e50802681fd8",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "d25fadc270655483",
+        "name": "invalid JSONata stanza as rule value - before match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b16b105563ef1765",
+            "be4884d1ef8c9327",
+            "b711fd378e663278",
+            "2a533aeb5cd07897",
+            "db505fb0b0997fb3",
+            "5b68102fe81fe789",
+            "c700b88cea604319",
+            "90c2a8bc38331dae"
+        ],
+        "x": 1860,
+        "y": 598,
+        "w": 814,
+        "h": 417
+    },
+    {
+        "id": "2a1e1e18b1bdc778",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "d25fadc270655483",
+        "name": "invalid JSONata stanza as rule value - after match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "0cd730c8ce078dfa",
+            "5c0214cf09248149",
+            "b7619d367f6362ac",
+            "f43af69646ed8372",
+            "8f0fcbc0ddf91a18",
+            "e8931d22befdbdfb",
+            "d067e5695140c3f5",
+            "fc0d032359f10c7e"
+        ],
+        "x": 2718,
+        "y": 603.0000203450521,
+        "w": 814,
+        "h": 417
+    },
+    {
+        "id": "004ba979caee84d8",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "c66766891e9c9701",
+        "name": "invalid JSONata stanza as field type - after match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "85e62996aecce136",
+            "64f7f0f05384dd8f",
+            "2abc796939081ff2",
+            "35a13e7f0f9fad1d",
+            "b6c05e8822a98be7",
+            "0a48f56a9fc05666",
+            "db7504914c7f096a",
+            "61837ad6a12064f4"
+        ],
+        "x": 2794.285888671875,
+        "y": 1776.71435546875,
+        "w": 834,
+        "h": 357
+    },
+    {
+        "id": "e4c37bace09b5a4b",
+        "type": "group",
+        "z": "9942fa1aeb1b2428",
+        "g": "c66766891e9c9701",
+        "name": "invalid JSONata stanza as field type - before match",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "1958d237b3d1f43f",
+            "fea71c0eb266ec97",
+            "e63fa7e2ca1762ea",
+            "7ddb97124682abbd",
+            "4e05f68a4f62fc0a",
+            "986a3a304382c511",
+            "60b072c35d4771da",
+            "8f3b143dd63ade9d"
+        ],
+        "x": 1908.285888671875,
+        "y": 1780.71435546875,
+        "w": 834,
+        "h": 357
+    },
+    {
+        "id": "2c867a9d03379f5a",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "check all tests",
+        "property": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            },
+            {
+                "t": "null"
+            },
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 8,
+        "x": 502,
+        "y": 378,
+        "wires": [
+            [
+                "f425ab69290c3f35"
+            ],
+            [
+                "5548c0aea846610c"
+            ],
+            [
+                "ebf2a754a54c2879"
+            ],
+            [
+                "13e3ac4d41044a4f"
+            ],
+            [
+                "8a46b76b4bdb907c"
+            ],
+            [
+                "3fec0a85b5ebe591"
+            ],
+            [
+                "15ca188eebbded5c"
+            ],
+            [
+                "bfeb35a2b25b13ec"
+            ]
+        ]
+    },
+    {
+        "id": "ecba7c047b16c199",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 208,
+        "y": 165,
+        "wires": [
+            [
+                "2c867a9d03379f5a"
+            ]
+        ]
+    },
+    {
+        "id": "13e3ac4d41044a4f",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "count": 1,
+        "x": 824,
+        "y": 372,
+        "wires": []
+    },
+    {
+        "id": "f425ab69290c3f35",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 165,
+        "wires": []
+    },
+    {
+        "id": "5548c0aea846610c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 234,
+        "wires": []
+    },
+    {
+        "id": "ebf2a754a54c2879",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 303,
+        "wires": []
+    },
+    {
+        "id": "8a46b76b4bdb907c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 441,
+        "wires": []
+    },
+    {
+        "id": "3fec0a85b5ebe591",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 510,
+        "wires": []
+    },
+    {
+        "id": "15ca188eebbded5c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 579,
+        "wires": []
+    },
+    {
+        "id": "d312c33b49855c32",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "stop after first match",
+        "property": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            },
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "null"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 8,
+        "x": 519,
+        "y": 1670,
+        "wires": [
+            [
+                "3b3eb3dd3938871a"
+            ],
+            [
+                "06d8610bc474af1a"
+            ],
+            [
+                "c36a634373dec16c"
+            ],
+            [
+                "14a0e8512a9393e4"
+            ],
+            [
+                "69ba2357e97a16e6"
+            ],
+            [
+                "60881c68cf92f227"
+            ],
+            [
+                "05fbce3f65e95def"
+            ],
+            [
+                "a8c8c15a45430e5f"
+            ]
+        ]
+    },
+    {
+        "id": "11d72e400487bab0",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 208,
+        "y": 1472.9999593098958,
+        "wires": [
+            [
+                "d312c33b49855c32"
+            ]
+        ]
+    },
+    {
+        "id": "a8c8c15a45430e5f",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "count": 1,
+        "x": 821,
+        "y": 1931.8571491241455,
+        "wires": []
+    },
+    {
+        "id": "3b3eb3dd3938871a",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1472.9999593098958,
+        "wires": []
+    },
+    {
+        "id": "06d8610bc474af1a",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1538.5509864262172,
+        "wires": []
+    },
+    {
+        "id": "c36a634373dec16c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1604.1020135425385,
+        "wires": []
+    },
+    {
+        "id": "14a0e8512a9393e4",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1669.65304065886,
+        "wires": []
+    },
+    {
+        "id": "69ba2357e97a16e6",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1735.2040677751813,
+        "wires": []
+    },
+    {
+        "id": "60881c68cf92f227",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1800.7550948915027,
+        "wires": []
+    },
+    {
+        "id": "bfeb35a2b25b13ec",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 824,
+        "y": 648,
+        "wires": []
+    },
+    {
+        "id": "05fbce3f65e95def",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 821,
+        "y": 1866.3061220078241,
+        "wires": []
+    },
+    {
+        "id": "b77637f8d2cf275e",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "check all tests",
+        "property": "$match($$.payload, /./,-1)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            },
+            {
+                "t": "null"
+            },
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 8,
+        "x": 1385,
+        "y": 438,
+        "wires": [
+            [
+                "639bfb064cb9a1b0"
+            ],
+            [
+                "1aac37181e9199c1"
+            ],
+            [
+                "5a777e9e4671f290"
+            ],
+            [
+                "0545a24dd6a9bed7"
+            ],
+            [
+                "bea644861571de7c"
+            ],
+            [
+                "eaaf5126503dee9f"
+            ],
+            [
+                "e6f7ea380e167f62"
+            ],
+            [
+                "57b76009ceaf2f44"
+            ]
+        ]
+    },
+    {
+        "id": "e0d79226c256fba7",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 1096,
+        "y": 165,
+        "wires": [
+            [
+                "b77637f8d2cf275e"
+            ]
+        ]
+    },
+    {
+        "id": "639bfb064cb9a1b0",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 165,
+        "wires": []
+    },
+    {
+        "id": "1aac37181e9199c1",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 234,
+        "wires": []
+    },
+    {
+        "id": "5a777e9e4671f290",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 303,
+        "wires": []
+    },
+    {
+        "id": "bea644861571de7c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 441,
+        "wires": []
+    },
+    {
+        "id": "eaaf5126503dee9f",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 510,
+        "wires": []
+    },
+    {
+        "id": "e6f7ea380e167f62",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 579,
+        "wires": []
+    },
+    {
+        "id": "57b76009ceaf2f44",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 648,
+        "wires": []
+    },
+    {
+        "id": "0545a24dd6a9bed7",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1701,
+        "y": 375,
+        "wires": []
+    },
+    {
+        "id": "6f9d22eef60f83c0",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "scope": [
+            "b77637f8d2cf275e"
+        ],
+        "uncaught": false,
+        "x": 1104,
+        "y": 737.5,
+        "wires": [
+            [
+                "89ee3bf2d339e20b"
+            ]
+        ]
+    },
+    {
+        "id": "dffbdccb4839b1b2",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "check all tests",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 2247.4287109375,
+        "y": 241.4285659790039,
+        "wires": [
+            [
+                "eb5b381efed62930"
+            ],
+            [
+                "555535b72a413553"
+            ],
+            [
+                "d121dc1afd638c66"
+            ],
+            [
+                "9afb6e63cb5604cb"
+            ]
+        ]
+    },
+    {
+        "id": "050353ded7981963",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 1958.4287109375,
+        "y": 128.4285659790039,
+        "wires": [
+            [
+                "dffbdccb4839b1b2"
+            ]
+        ]
+    },
+    {
+        "id": "eb5b381efed62930",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "x": 2560.4287109375,
+        "y": 146.4285659790039,
+        "wires": []
+    },
+    {
+        "id": "555535b72a413553",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "x": 2560.4287109375,
+        "y": 200.09523264567056,
+        "wires": []
+    },
+    {
+        "id": "9afb6e63cb5604cb",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "x": 2560.4287109375,
+        "y": 360.4285659790039,
+        "wires": []
+    },
+    {
+        "id": "3461c3ef26234ac8",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "scope": [
+            "dffbdccb4839b1b2"
+        ],
+        "uncaught": false,
+        "x": 1958.4287109375,
+        "y": 456.4285659790039,
+        "wires": [
+            [
+                "6e9e325f4664e4eb"
+            ]
+        ]
+    },
+    {
+        "id": "dfc0c4b73ba963aa",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "check all tests",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 3105.4287109375,
+        "y": 242.4285888671875,
+        "wires": [
+            [
+                "1b7d81e38e3d5141"
+            ],
+            [
+                "3d5d37acb0826bb1"
+            ],
+            [
+                "5555564f777e5fdd"
+            ],
+            [
+                "aabab4db0bd44f2a"
+            ]
+        ]
+    },
+    {
+        "id": "6735c45edbb34c8b",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2816.4287109375,
+        "y": 133.428586324056,
+        "wires": [
+            [
+                "dfc0c4b73ba963aa"
+            ]
+        ]
+    },
+    {
+        "id": "1b7d81e38e3d5141",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "x": 3418.4287109375,
+        "y": 151.428586324056,
+        "wires": []
+    },
+    {
+        "id": "99e0d84f124ea910",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "scope": [
+            "dfc0c4b73ba963aa"
+        ],
+        "uncaught": false,
+        "x": 2816.4287109375,
+        "y": 468.428586324056,
+        "wires": [
+            [
+                "9cdf0af0c29dcbc2"
+            ]
+        ]
+    },
+    {
+        "id": "423e0bde8dded2cd",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "stop after first match",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 3200.5,
+        "y": 1471,
+        "wires": [
+            [
+                "1bcf8390328e5b16"
+            ],
+            [
+                "e4267133256b2fa9"
+            ],
+            [
+                "8a46f8ca2822cad2"
+            ],
+            [
+                "39521ca6f0582e9e"
+            ]
+        ]
+    },
+    {
+        "id": "89ef46ed5db8127a",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2891.5,
+        "y": 1358,
+        "wires": [
+            [
+                "423e0bde8dded2cd"
+            ]
+        ]
+    },
+    {
+        "id": "1bcf8390328e5b16",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "x": 3493.5,
+        "y": 1376,
+        "wires": []
+    },
+    {
+        "id": "8a46f8ca2822cad2",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "x": 3493.5,
+        "y": 1483.3333333333335,
+        "wires": []
+    },
+    {
+        "id": "39521ca6f0582e9e",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "x": 3493.5,
+        "y": 1537,
+        "wires": []
+    },
+    {
+        "id": "0c0adfed2b928cd6",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "scope": [
+            "423e0bde8dded2cd"
+        ],
+        "uncaught": false,
+        "x": 3179.5,
+        "y": 1633,
+        "wires": [
+            [
+                "1a361cb294fd717f"
+            ]
+        ]
+    },
+    {
+        "id": "1a361cb294fd717f",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "x": 3493.5,
+        "y": 1633,
+        "wires": []
+    },
+    {
+        "id": "fa4d9c24770444b3",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "stop after first match",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 2314.5,
+        "y": 1481,
+        "wires": [
+            [
+                "6c7cc9a6ca7cd4f3"
+            ],
+            [
+                "4ad5eab07763e233"
+            ],
+            [
+                "4be742290f829cc5"
+            ],
+            [
+                "1d85976b4b0e687c"
+            ]
+        ]
+    },
+    {
+        "id": "edb3595a348ab634",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2005.5,
+        "y": 1362,
+        "wires": [
+            [
+                "fa4d9c24770444b3"
+            ]
+        ]
+    },
+    {
+        "id": "6c7cc9a6ca7cd4f3",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "x": 2607.5,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "4ad5eab07763e233",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "x": 2607.5,
+        "y": 1433.6666666666665,
+        "wires": []
+    },
+    {
+        "id": "1d85976b4b0e687c",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "x": 2607.5,
+        "y": 1541,
+        "wires": []
+    },
+    {
+        "id": "4be742290f829cc5",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "x": 2607.5,
+        "y": 1487.3333333333333,
+        "wires": []
+    },
+    {
+        "id": "c424cd1b9ee2a594",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "scope": [
+            "fa4d9c24770444b3"
+        ],
+        "uncaught": false,
+        "x": 2270.5,
+        "y": 1637,
+        "wires": [
+            [
+                "f9104297e8353b18"
+            ]
+        ]
+    },
+    {
+        "id": "00c047659d5dbc95",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "stop after first match",
+        "property": "$match($$.payload, /./,-1)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            },
+            {
+                "t": "null"
+            },
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "jsonata_exp",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 8,
+        "x": 1407.5,
+        "y": 1662.5,
+        "wires": [
+            [
+                "a87613d1a8562a64"
+            ],
+            [
+                "a1d2d70259b74abf"
+            ],
+            [
+                "fe92a602e3813db8"
+            ],
+            [
+                "7a529fb88b614b74"
+            ],
+            [
+                "7345143768c0a247"
+            ],
+            [
+                "160de08859c4a5e3"
+            ],
+            [
+                "feafd3649014bfab"
+            ],
+            [
+                "947d682562ee8c40"
+            ]
+        ]
+    },
+    {
+        "id": "7b9c699e33a65d39",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 1098.5,
+        "y": 1393.5,
+        "wires": [
+            [
+                "00c047659d5dbc95"
+            ]
+        ]
+    },
+    {
+        "id": "a87613d1a8562a64",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1393.5,
+        "wires": []
+    },
+    {
+        "id": "a1d2d70259b74abf",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1462.5,
+        "wires": []
+    },
+    {
+        "id": "fe92a602e3813db8",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1531.5,
+        "wires": []
+    },
+    {
+        "id": "7345143768c0a247",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1669.5,
+        "wires": []
+    },
+    {
+        "id": "160de08859c4a5e3",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1738.5,
+        "wires": []
+    },
+    {
+        "id": "feafd3649014bfab",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1807.5,
+        "wires": []
+    },
+    {
+        "id": "947d682562ee8c40",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1876.5,
+        "wires": []
+    },
+    {
+        "id": "7a529fb88b614b74",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1703.5,
+        "y": 1603.5,
+        "wires": []
+    },
+    {
+        "id": "c62b20a4d4905b49",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "scope": [
+            "00c047659d5dbc95"
+        ],
+        "uncaught": false,
+        "x": 1086.5,
+        "y": 1987.75,
+        "wires": [
+            [
+                "8b5de98aa7b40dd3"
+            ]
+        ]
+    },
+    {
+        "id": "f9104297e8353b18",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "8293d2234fecbed8",
+        "name": "",
+        "count": 1,
+        "x": 2607.5,
+        "y": 1637,
+        "wires": []
+    },
+    {
+        "id": "e4267133256b2fa9",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "556156e102e73804",
+        "name": "",
+        "count": 1,
+        "x": 3493.5,
+        "y": 1429.6666666666667,
+        "wires": []
+    },
+    {
+        "id": "6e9e325f4664e4eb",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "count": 1,
+        "x": 2560.4287109375,
+        "y": 456.4285659790039,
+        "wires": []
+    },
+    {
+        "id": "b16b105563ef1765",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "check all tests",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 2247,
+        "y": 761,
+        "wires": [
+            [
+                "b711fd378e663278"
+            ],
+            [
+                "2a533aeb5cd07897"
+            ],
+            [
+                "90c2a8bc38331dae"
+            ],
+            [
+                "db505fb0b0997fb3"
+            ]
+        ]
+    },
+    {
+        "id": "be4884d1ef8c9327",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 1956,
+        "y": 639,
+        "wires": [
+            [
+                "b16b105563ef1765"
+            ]
+        ]
+    },
+    {
+        "id": "b711fd378e663278",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "x": 2558,
+        "y": 657,
+        "wires": []
+    },
+    {
+        "id": "2a533aeb5cd07897",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "x": 2558,
+        "y": 710.6666666666666,
+        "wires": []
+    },
+    {
+        "id": "db505fb0b0997fb3",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "x": 2558,
+        "y": 878,
+        "wires": []
+    },
+    {
+        "id": "5b68102fe81fe789",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "scope": [
+            "b16b105563ef1765"
+        ],
+        "uncaught": false,
+        "x": 2244,
+        "y": 974,
+        "wires": [
+            [
+                "c700b88cea604319"
+            ]
+        ]
+    },
+    {
+        "id": "c700b88cea604319",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "count": 1,
+        "x": 2558,
+        "y": 974,
+        "wires": []
+    },
+    {
+        "id": "0cd730c8ce078dfa",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "check all tests",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 3103,
+        "y": 757.0000203450521,
+        "wires": [
+            [
+                "b7619d367f6362ac"
+            ],
+            [
+                "fc0d032359f10c7e"
+            ],
+            [
+                "f43af69646ed8372"
+            ],
+            [
+                "8f0fcbc0ddf91a18"
+            ]
+        ]
+    },
+    {
+        "id": "5c0214cf09248149",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2814,
+        "y": 644.0000203450521,
+        "wires": [
+            [
+                "0cd730c8ce078dfa"
+            ]
+        ]
+    },
+    {
+        "id": "b7619d367f6362ac",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "x": 3416,
+        "y": 662.0000203450521,
+        "wires": []
+    },
+    {
+        "id": "f43af69646ed8372",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "x": 3416,
+        "y": 829.3333536783855,
+        "wires": []
+    },
+    {
+        "id": "8f0fcbc0ddf91a18",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "x": 3416,
+        "y": 883.0000203450521,
+        "wires": []
+    },
+    {
+        "id": "e8931d22befdbdfb",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "scope": [
+            "0cd730c8ce078dfa"
+        ],
+        "uncaught": false,
+        "x": 2814,
+        "y": 979.0000203450521,
+        "wires": [
+            [
+                "d067e5695140c3f5"
+            ]
+        ]
+    },
+    {
+        "id": "d067e5695140c3f5",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "count": 1,
+        "x": 3416,
+        "y": 979.0000203450521,
+        "wires": []
+    },
+    {
+        "id": "85e62996aecce136",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "stop after first match",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 3249.285888671875,
+        "y": 1930.71435546875,
+        "wires": [
+            [
+                "2abc796939081ff2"
+            ],
+            [
+                "61837ad6a12064f4"
+            ],
+            [
+                "35a13e7f0f9fad1d"
+            ],
+            [
+                "b6c05e8822a98be7"
+            ]
+        ]
+    },
+    {
+        "id": "64f7f0f05384dd8f",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2890.285888671875,
+        "y": 1817.71435546875,
+        "wires": [
+            [
+                "85e62996aecce136"
+            ]
+        ]
+    },
+    {
+        "id": "2abc796939081ff2",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "x": 3512.285888671875,
+        "y": 1835.71435546875,
+        "wires": []
+    },
+    {
+        "id": "35a13e7f0f9fad1d",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "x": 3512.285888671875,
+        "y": 1943.0476888020835,
+        "wires": []
+    },
+    {
+        "id": "b6c05e8822a98be7",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "x": 3512.285888671875,
+        "y": 1996.71435546875,
+        "wires": []
+    },
+    {
+        "id": "0a48f56a9fc05666",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "scope": [
+            "85e62996aecce136"
+        ],
+        "uncaught": false,
+        "x": 3178.285888671875,
+        "y": 2092.71435546875,
+        "wires": [
+            [
+                "db7504914c7f096a"
+            ]
+        ]
+    },
+    {
+        "id": "db7504914c7f096a",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "x": 3512.285888671875,
+        "y": 2092.71435546875,
+        "wires": []
+    },
+    {
+        "id": "61837ad6a12064f4",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "004ba979caee84d8",
+        "name": "",
+        "count": 1,
+        "x": 3512.285888671875,
+        "y": 1889.3810221354167,
+        "wires": []
+    },
+    {
+        "id": "1958d237b3d1f43f",
+        "type": "switch",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "stop after first match",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /./,-1)",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "111",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "$match($$.payload, /([0-9]+)([a-z]+)([0-9]+)([a-z]+)/,0)",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 2343.285888671875,
+        "y": 1940.71435546875,
+        "wires": [
+            [
+                "e63fa7e2ca1762ea"
+            ],
+            [
+                "7ddb97124682abbd"
+            ],
+            [
+                "986a3a304382c511"
+            ],
+            [
+                "4e05f68a4f62fc0a"
+            ]
+        ]
+    },
+    {
+        "id": "fea71c0eb266ec97",
+        "type": "inject",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "111",
+        "payloadType": "str",
+        "x": 2004.285888671875,
+        "y": 1821.71435546875,
+        "wires": [
+            [
+                "1958d237b3d1f43f"
+            ]
+        ]
+    },
+    {
+        "id": "e63fa7e2ca1762ea",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "x": 2626.285888671875,
+        "y": 1839.71435546875,
+        "wires": []
+    },
+    {
+        "id": "7ddb97124682abbd",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "x": 2626.285888671875,
+        "y": 1893.3810221354165,
+        "wires": []
+    },
+    {
+        "id": "4e05f68a4f62fc0a",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "x": 2626.285888671875,
+        "y": 2000.71435546875,
+        "wires": []
+    },
+    {
+        "id": "986a3a304382c511",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "x": 2626.285888671875,
+        "y": 1947.0476888020833,
+        "wires": []
+    },
+    {
+        "id": "60b072c35d4771da",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "scope": [
+            "1958d237b3d1f43f"
+        ],
+        "uncaught": false,
+        "x": 2292.285888671875,
+        "y": 2096.71435546875,
+        "wires": [
+            [
+                "8f3b143dd63ade9d"
+            ]
+        ]
+    },
+    {
+        "id": "8f3b143dd63ade9d",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "e4c37bace09b5a4b",
+        "name": "",
+        "count": 1,
+        "x": 2626.285888671875,
+        "y": 2096.71435546875,
+        "wires": []
+    },
+    {
+        "id": "5555564f777e5fdd",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "x": 3418.4287109375,
+        "y": 318.76191965738934,
+        "wires": []
+    },
+    {
+        "id": "aabab4db0bd44f2a",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "x": 3418.4287109375,
+        "y": 372.428586324056,
+        "wires": []
+    },
+    {
+        "id": "9cdf0af0c29dcbc2",
+        "type": "ut-assert-success",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "count": 1,
+        "x": 3418.4287109375,
+        "y": 468.428586324056,
+        "wires": []
+    },
+    {
+        "id": "388d526d8b5bc65f",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "scope": [
+            "2c867a9d03379f5a"
+        ],
+        "uncaught": false,
+        "x": 208,
+        "y": 648,
+        "wires": [
+            [
+                "b74874da3cc77fe5"
+            ]
+        ]
+    },
+    {
+        "id": "b74874da3cc77fe5",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1f20f08de37f7131",
+        "name": "",
+        "x": 522,
+        "y": 648,
+        "wires": []
+    },
+    {
+        "id": "e5527783b9bcd9e1",
+        "type": "catch",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "scope": [
+            "d312c33b49855c32"
+        ],
+        "uncaught": false,
+        "x": 208,
+        "y": 1931.8571491241455,
+        "wires": [
+            [
+                "651ce4cd24a96813"
+            ]
+        ]
+    },
+    {
+        "id": "651ce4cd24a96813",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "b31b246f6078a7fa",
+        "name": "",
+        "x": 522,
+        "y": 1931.8571491241455,
+        "wires": []
+    },
+    {
+        "id": "89ee3bf2d339e20b",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "199386de1f8d0b26",
+        "name": "",
+        "x": 1416,
+        "y": 737.5,
+        "wires": []
+    },
+    {
+        "id": "90c2a8bc38331dae",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "1b86e50802681fd8",
+        "name": "",
+        "x": 2559,
+        "y": 790,
+        "wires": []
+    },
+    {
+        "id": "8b5de98aa7b40dd3",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "095fb4627c140119",
+        "name": "",
+        "x": 1624,
+        "y": 1987.75,
+        "wires": []
+    },
+    {
+        "id": "3d5d37acb0826bb1",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "53300cc6a277013b",
+        "name": "",
+        "x": 3417,
+        "y": 224,
+        "wires": []
+    },
+    {
+        "id": "fc0d032359f10c7e",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2a1e1e18b1bdc778",
+        "name": "",
+        "x": 3414,
+        "y": 745,
+        "wires": []
+    },
+    {
+        "id": "d121dc1afd638c66",
+        "type": "ut-assert-failure",
+        "z": "9942fa1aeb1b2428",
+        "g": "2471e07080841ae7",
+        "name": "",
+        "x": 2561,
+        "y": 271,
+        "wires": []
+    }
+]

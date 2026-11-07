@@ -1,0 +1,671 @@
+[
+    {
+        "id": "7b2b4035188017d2",
+        "type": "group",
+        "z": "139a816449acd89f",
+        "name": "don't execute this flow it contains a loop",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "7a12d1bd632f72da",
+            "489b7ede750a407d",
+            "a2e7e963d4fa1c2b",
+            "82bcb32e163a6456",
+            "37a6ae8572a3c549",
+            "f1e2d5fedcf8f5b2",
+            "a40bc0a91661f47a",
+            "6a085dbc390852c3",
+            "a8e0e319494b8ee3",
+            "6106ae78b76189cb"
+        ],
+        "x": 136,
+        "y": 673,
+        "w": 1186,
+        "h": 413
+    },
+    {
+        "id": "7a12d1bd632f72da",
+        "type": "Seeker",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "x": 212,
+        "y": 750,
+        "wires": [
+            [
+                "a2e7e963d4fa1c2b"
+            ]
+        ]
+    },
+    {
+        "id": "489b7ede750a407d",
+        "type": "Sink",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "x": 1246,
+        "y": 899,
+        "wires": []
+    },
+    {
+        "id": "a2e7e963d4fa1c2b",
+        "type": "split",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 504,
+        "y": 746,
+        "wires": [
+            [
+                "f1e2d5fedcf8f5b2",
+                "6106ae78b76189cb"
+            ]
+        ]
+    },
+    {
+        "id": "82bcb32e163a6456",
+        "type": "join",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 849,
+        "y": 919,
+        "wires": [
+            [
+                "489b7ede750a407d"
+            ]
+        ]
+    },
+    {
+        "id": "37a6ae8572a3c549",
+        "type": "sort",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "order": "ascending",
+        "as_num": false,
+        "target": "payload",
+        "targetType": "msg",
+        "msgKey": "payload",
+        "msgKeyType": "elem",
+        "seqKey": "payload",
+        "seqKeyType": "msg",
+        "x": 541,
+        "y": 836,
+        "wires": [
+            [
+                "f1e2d5fedcf8f5b2",
+                "a40bc0a91661f47a"
+            ]
+        ]
+    },
+    {
+        "id": "f1e2d5fedcf8f5b2",
+        "type": "batch",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "mode": "count",
+        "count": 10,
+        "overlap": 0,
+        "interval": 10,
+        "allowEmptySequence": false,
+        "topics": [
+            {
+                "topic": ""
+            }
+        ],
+        "x": 698,
+        "y": 800,
+        "wires": [
+            [
+                "37a6ae8572a3c549"
+            ]
+        ]
+    },
+    {
+        "id": "a40bc0a91661f47a",
+        "type": "csv",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 633,
+        "y": 912,
+        "wires": [
+            [
+                "82bcb32e163a6456"
+            ]
+        ]
+    },
+    {
+        "id": "6a085dbc390852c3",
+        "type": "csv",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 693,
+        "y": 1008,
+        "wires": [
+            [
+                "82bcb32e163a6456"
+            ]
+        ]
+    },
+    {
+        "id": "a8e0e319494b8ee3",
+        "type": "link in",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "link in 1",
+        "links": [
+            "6106ae78b76189cb"
+        ],
+        "x": 487,
+        "y": 1045,
+        "wires": [
+            [
+                "6a085dbc390852c3"
+            ]
+        ]
+    },
+    {
+        "id": "6106ae78b76189cb",
+        "type": "link out",
+        "z": "139a816449acd89f",
+        "g": "7b2b4035188017d2",
+        "name": "link out 92",
+        "mode": "link",
+        "links": [
+            "a8e0e319494b8ee3"
+        ],
+        "x": 753,
+        "y": 714,
+        "wires": []
+    },
+    {
+        "id": "644d61288c671091",
+        "type": "group",
+        "z": "139a816449acd89f",
+        "name": "this flow needs refactoring",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "a9f18b308a918307",
+            "24cd5ce1ca3f52d7",
+            "c108d845246cf5d8",
+            "73729a40176391b6",
+            "2330ef30ca42509f",
+            "b559bb547b6a7efc",
+            "7ba5ec934b306519",
+            "49b6268a2ba413cf",
+            "e8adf1e30363b84c",
+            "afaa8ef8c8aa0746",
+            "b2264dd04c98a2cc"
+        ],
+        "x": 136,
+        "y": 91,
+        "w": 1208,
+        "h": 541
+    },
+    {
+        "id": "a9f18b308a918307",
+        "type": "Seeker",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "x": 212,
+        "y": 251,
+        "wires": [
+            [
+                "2330ef30ca42509f",
+                "c108d845246cf5d8"
+            ]
+        ]
+    },
+    {
+        "id": "24cd5ce1ca3f52d7",
+        "type": "Sink",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "x": 1268,
+        "y": 384,
+        "wires": []
+    },
+    {
+        "id": "c108d845246cf5d8",
+        "type": "switch",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 426,
+        "y": 132,
+        "wires": [
+            [
+                "73729a40176391b6",
+                "e8adf1e30363b84c"
+            ]
+        ]
+    },
+    {
+        "id": "73729a40176391b6",
+        "type": "change",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 527,
+        "y": 188,
+        "wires": [
+            [
+                "2330ef30ca42509f",
+                "afaa8ef8c8aa0746"
+            ]
+        ]
+    },
+    {
+        "id": "2330ef30ca42509f",
+        "type": "template",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 630,
+        "y": 249,
+        "wires": [
+            [
+                "b559bb547b6a7efc",
+                "49b6268a2ba413cf"
+            ]
+        ]
+    },
+    {
+        "id": "b559bb547b6a7efc",
+        "type": "delay",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 734,
+        "y": 301,
+        "wires": [
+            [
+                "7ba5ec934b306519"
+            ]
+        ]
+    },
+    {
+        "id": "7ba5ec934b306519",
+        "type": "trigger",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "op1": "1",
+        "op2": "0",
+        "op1type": "val",
+        "op2type": "val",
+        "duration": "250",
+        "extend": "false",
+        "overrideDelay": "false",
+        "units": "ms",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 806,
+        "y": 351,
+        "wires": [
+            [
+                "e8adf1e30363b84c"
+            ]
+        ]
+    },
+    {
+        "id": "49b6268a2ba413cf",
+        "type": "exec",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "command": "",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 555,
+        "y": 418,
+        "wires": [
+            [
+                "e8adf1e30363b84c",
+                "b559bb547b6a7efc"
+            ],
+            [
+                "afaa8ef8c8aa0746"
+            ],
+            [
+                "afaa8ef8c8aa0746"
+            ]
+        ]
+    },
+    {
+        "id": "e8adf1e30363b84c",
+        "type": "rbe",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 650,
+        "y": 483,
+        "wires": [
+            [
+                "b2264dd04c98a2cc"
+            ]
+        ]
+    },
+    {
+        "id": "afaa8ef8c8aa0746",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "outputs": 1,
+        "x": 754,
+        "y": 514,
+        "wires": [
+            [
+                "49b6268a2ba413cf",
+                "24cd5ce1ca3f52d7",
+                "7ba5ec934b306519"
+            ]
+        ]
+    },
+    {
+        "id": "b2264dd04c98a2cc",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "644d61288c671091",
+        "name": "",
+        "outputs": 1,
+        "x": 865,
+        "y": 591,
+        "wires": [
+            [
+                "afaa8ef8c8aa0746",
+                "b559bb547b6a7efc"
+            ]
+        ]
+    },
+    {
+        "id": "1f6f6592356849fd",
+        "type": "group",
+        "z": "139a816449acd89f",
+        "name": "the special case of the link-call node",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c0cbed3bf1c2bb62",
+            "027ee35fdd4245eb",
+            "9797d34ff57eb027",
+            "7501d78d7b3ab70a",
+            "a9cd472850d17541",
+            "51175e409c29f55e",
+            "0c60e87d67835ccd",
+            "75e7a58fb39dc7d5",
+            "9327e0f2f332bbdb",
+            "f49f34f8c6c7aa42"
+        ],
+        "x": 293,
+        "y": 1169,
+        "w": 1035,
+        "h": 372
+    },
+    {
+        "id": "c0cbed3bf1c2bb62",
+        "type": "link out",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "link out 116",
+        "mode": "return",
+        "links": [],
+        "x": 1023,
+        "y": 1398,
+        "wires": []
+    },
+    {
+        "id": "027ee35fdd4245eb",
+        "type": "link in",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "call with return",
+        "links": [],
+        "x": 665,
+        "y": 1236,
+        "wires": [
+            [
+                "7501d78d7b3ab70a"
+            ]
+        ]
+    },
+    {
+        "id": "9797d34ff57eb027",
+        "type": "link call",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "",
+        "links": [
+            "027ee35fdd4245eb"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 809,
+        "y": 1500,
+        "wires": [
+            [
+                "0c60e87d67835ccd"
+            ]
+        ]
+    },
+    {
+        "id": "7501d78d7b3ab70a",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "function 31",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 837,
+        "y": 1210,
+        "wires": [
+            [
+                "a9cd472850d17541"
+            ]
+        ]
+    },
+    {
+        "id": "a9cd472850d17541",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "function 32",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 877,
+        "y": 1292,
+        "wires": [
+            [
+                "c0cbed3bf1c2bb62",
+                "f49f34f8c6c7aa42"
+            ]
+        ]
+    },
+    {
+        "id": "51175e409c29f55e",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "function 33",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 582,
+        "y": 1381,
+        "wires": [
+            [
+                "9797d34ff57eb027"
+            ]
+        ]
+    },
+    {
+        "id": "0c60e87d67835ccd",
+        "type": "function",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "function 34",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 1458,
+        "wires": [
+            [
+                "75e7a58fb39dc7d5"
+            ]
+        ]
+    },
+    {
+        "id": "75e7a58fb39dc7d5",
+        "type": "Sink",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "",
+        "x": 1252,
+        "y": 1486,
+        "wires": []
+    },
+    {
+        "id": "9327e0f2f332bbdb",
+        "type": "Seeker",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "",
+        "x": 369,
+        "y": 1313,
+        "wires": [
+            [
+                "51175e409c29f55e"
+            ]
+        ]
+    },
+    {
+        "id": "f49f34f8c6c7aa42",
+        "type": "Sink",
+        "z": "139a816449acd89f",
+        "g": "1f6f6592356849fd",
+        "name": "",
+        "x": 1182,
+        "y": 1283,
+        "wires": []
+    }
+]

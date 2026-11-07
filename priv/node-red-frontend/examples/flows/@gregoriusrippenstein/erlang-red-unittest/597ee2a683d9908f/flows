@@ -1,0 +1,129 @@
+[
+    {
+        "id": "597ee2a683d9908f",
+        "type": "tab",
+        "label": "[json] raise exception if content not valid",
+        "disabled": false,
+        "info": "In this case the json node raises and exception and does not propogate the message further.\n\nError message isn't defined so use a bit of imagination to make it sound useful!",
+        "env": [
+            {
+                "name": "ERED_PENDING",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "4dbd0f7712eb9163",
+        "type": "group",
+        "z": "597ee2a683d9908f",
+        "name": "with catch node",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "9129e7b9383dead9",
+            "a1f180d31364499f",
+            "0e7c595d0385aab1",
+            "88ab83684f23950e",
+            "ad3753c4445fd0f5"
+        ],
+        "x": 197,
+        "y": 220,
+        "w": 876,
+        "h": 187.5
+    },
+    {
+        "id": "9129e7b9383dead9",
+        "type": "inject",
+        "z": "597ee2a683d9908f",
+        "g": "4dbd0f7712eb9163",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "invalid json stanza",
+        "payloadType": "str",
+        "x": 333,
+        "y": 261,
+        "wires": [
+            [
+                "a1f180d31364499f"
+            ]
+        ]
+    },
+    {
+        "id": "a1f180d31364499f",
+        "type": "json",
+        "z": "597ee2a683d9908f",
+        "g": "4dbd0f7712eb9163",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 605,
+        "y": 366.5,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0e7c595d0385aab1",
+        "type": "catch",
+        "z": "597ee2a683d9908f",
+        "g": "4dbd0f7712eb9163",
+        "name": "",
+        "scope": [
+            "a1f180d31364499f"
+        ],
+        "uncaught": false,
+        "x": 593,
+        "y": 270,
+        "wires": [
+            [
+                "88ab83684f23950e",
+                "ad3753c4445fd0f5"
+            ]
+        ]
+    },
+    {
+        "id": "88ab83684f23950e",
+        "type": "ut-assert-success",
+        "z": "597ee2a683d9908f",
+        "g": "4dbd0f7712eb9163",
+        "name": "",
+        "count": 1,
+        "x": 923,
+        "y": 270,
+        "wires": []
+    },
+    {
+        "id": "ad3753c4445fd0f5",
+        "type": "ut-assert-values",
+        "z": "597ee2a683d9908f",
+        "g": "4dbd0f7712eb9163",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "error.source.id",
+                "pt": "msg",
+                "to": "a1f180d31364499f",
+                "tot": "str"
+            }
+        ],
+        "x": 937,
+        "y": 327,
+        "wires": [
+            []
+        ]
+    }
+]

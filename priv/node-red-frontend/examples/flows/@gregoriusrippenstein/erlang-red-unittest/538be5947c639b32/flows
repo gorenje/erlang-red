@@ -1,0 +1,75 @@
+[
+    {
+        "id": "538be5947c639b32",
+        "type": "tab",
+        "label": "[file in] basic functionality of being able to read a file",
+        "disabled": false,
+        "info": "Read the contents of a file into the msg object setting the payload attribute.",
+        "env": []
+    },
+    {
+        "id": "9d31c507908f85b7",
+        "type": "inject",
+        "z": "538be5947c639b32",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 191,
+        "y": 387,
+        "wires": [
+            [
+                "d057038e3093d5ae"
+            ]
+        ]
+    },
+    {
+        "id": "d057038e3093d5ae",
+        "type": "file in",
+        "z": "538be5947c639b32",
+        "name": "",
+        "filename": "/data/package.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 387,
+        "y": 468,
+        "wires": [
+            [
+                "24f5da2bf8e77acc"
+            ]
+        ]
+    },
+    {
+        "id": "24f5da2bf8e77acc",
+        "type": "ut-assert-values",
+        "z": "538be5947c639b32",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "eql",
+                "p": "filename",
+                "pt": "msg",
+                "to": "/data/package.json",
+                "tot": "str"
+            }
+        ],
+        "x": 701,
+        "y": 402,
+        "wires": [
+            []
+        ]
+    }
+]

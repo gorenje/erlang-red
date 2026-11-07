@@ -191,6 +191,9 @@ flow_editor_routes() ->
         {"/FlowHubToken", ered_http_flowhub_token, []},
         {"/FlowHubCreateBranch", ered_http_flowhub_create_branch, []},
 
+        %% Install nodes isn't support, tell the frontend that.
+        {"/node-install-not-supported.json", ered_http_nodered_no_node_install, []},
+
         %% Binary node backend for converting patterns
         {"/BinaryToErlang", ered_http_binary_node, []},
 
@@ -268,7 +271,7 @@ flow_editor_routes() ->
 
         %% flow editor stuff that isn't supported yet
         {"/library/local/flows/", ered_http_nodered_empty_json, []},
-        {"/library/examples/flows/", ered_http_nodered_empty_json, []},
+
         {"/context/[...]", ered_http_nodered_empty_json, []},
 
         {"/erlang-reddebug/view/view.html", ered_http_redirect,
@@ -297,6 +300,12 @@ flow_editor_routes() ->
             {priv_dir, erlang_red, "node-red-frontend", [
                 {mimetypes, ered_http_nodered_mimetypes, mt}
             ]}},
+
+        {"/library/examples/flows/[...]", cowboy_static,
+            {priv_dir, erlang_red, "node-red-frontend/examples/flows", [
+                {mimetypes, ered_http_nodered_mimetypes, mt}
+            ]}},
+
         {"/[...]", cowboy_static,
             {priv_dir, erlang_red, "node-red-frontend", [
                 {mimetypes, ered_http_nodered_mimetypes, mt}

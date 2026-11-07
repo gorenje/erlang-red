@@ -1,0 +1,113 @@
+[
+    {
+        "id": "94afd585fb41a438",
+        "type": "tab",
+        "label": "client code loop",
+        "disabled": false,
+        "info": "Using the client code default values feature, create a loop counter.\n\nCreating a max loop counter for loop through data or whatever.",
+        "env": []
+    },
+    {
+        "id": "e0c808876e8685bd",
+        "type": "ClientCode",
+        "z": "94afd585fb41a438",
+        "name": "",
+        "clientcode": "if (msg.MAXLOOP > msg.loopcounter) {\n    node.send(msg)\n}",
+        "format": "javascript",
+        "rules": [
+            {
+                "t": "default",
+                "p": "MAXLOOP",
+                "pt": "msg",
+                "to": "12",
+                "tot": "num"
+            },
+            {
+                "t": "fixed",
+                "p": "loopcounter",
+                "pt": "msg",
+                "to": "$filter([$$.loopcounter,0,0], function ($v) { $exists($v) })[0] + 1",
+                "tot": "jsonata"
+            }
+        ],
+        "x": 691,
+        "y": 357,
+        "wires": [
+            [
+                "893c3ec0bf9d100a",
+                "0fc98024bdd207cb"
+            ]
+        ]
+    },
+    {
+        "id": "523c5f1c268546ed",
+        "type": "inject",
+        "z": "94afd585fb41a438",
+        "name": "",
+        "props": [
+            {
+                "p": "MAXLOOP",
+                "v": "24",
+                "vt": "num"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 513,
+        "y": 481,
+        "wires": [
+            [
+                "e0c808876e8685bd"
+            ]
+        ]
+    },
+    {
+        "id": "893c3ec0bf9d100a",
+        "type": "debug",
+        "z": "94afd585fb41a438",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 917,
+        "y": 273,
+        "wires": []
+    },
+    {
+        "id": "0fc98024bdd207cb",
+        "type": "delay",
+        "z": "94afd585fb41a438",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "500",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 915,
+        "y": 358,
+        "wires": [
+            [
+                "e0c808876e8685bd"
+            ]
+        ]
+    }
+]

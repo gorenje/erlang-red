@@ -1,0 +1,93 @@
+[
+    {
+        "id": "9e7ccc97f80d9afb",
+        "type": "tab",
+        "label": "[file in] will accept file name from msg obj",
+        "disabled": false,
+        "info": "A file name can also be dynamic and be taken from the msg object passed to the file in node.\n\nWARNING: Need to have a test file and access that.",
+        "env": [
+            {
+                "name": "NRED_PENDING",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "3de9bd2926669640",
+        "type": "inject",
+        "z": "9e7ccc97f80d9afb",
+        "name": "",
+        "props": [
+            {
+                "p": "filename",
+                "v": "/data/package.json",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 145.1428985595703,
+        "y": 147.14284896850586,
+        "wires": [
+            [
+                "e89d0c894d08b485"
+            ]
+        ]
+    },
+    {
+        "id": "e89d0c894d08b485",
+        "type": "file in",
+        "z": "9e7ccc97f80d9afb",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 342.1428985595703,
+        "y": 245.64284896850586,
+        "wires": [
+            [
+                "e0f13216032f1fe6",
+                "05c8dee92f3f6768"
+            ]
+        ]
+    },
+    {
+        "id": "e0f13216032f1fe6",
+        "type": "ut-assert-values",
+        "z": "9e7ccc97f80d9afb",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "mth",
+                "p": "payload",
+                "pt": "msg",
+                "to": "node-red-project",
+                "tot": "str"
+            }
+        ],
+        "x": 594.1428985595703,
+        "y": 143.14284896850586,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "05c8dee92f3f6768",
+        "type": "ut-assert-success",
+        "z": "9e7ccc97f80d9afb",
+        "name": "",
+        "count": 1,
+        "x": 636,
+        "y": 245.64284896850586,
+        "wires": []
+    }
+]

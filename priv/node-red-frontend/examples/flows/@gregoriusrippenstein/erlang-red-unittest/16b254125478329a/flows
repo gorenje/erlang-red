@@ -1,0 +1,114 @@
+[
+    {
+        "id": "16b254125478329a",
+        "type": "tab",
+        "label": "[catch] don't catch if the node isn't selected",
+        "disabled": false,
+        "info": "",
+        "env": [
+            {
+                "name": "ERED_PENDING",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "82f3f6b3ff681682",
+        "type": "catch",
+        "z": "16b254125478329a",
+        "name": "",
+        "scope": [
+            "c970c0e90333caef"
+        ],
+        "uncaught": false,
+        "x": 153,
+        "y": 322,
+        "wires": [
+            [
+                "a3e89a14b26e7684"
+            ]
+        ]
+    },
+    {
+        "id": "c970c0e90333caef",
+        "type": "inject",
+        "z": "16b254125478329a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 171,
+        "y": 373,
+        "wires": [
+            [
+                "06c87a703facf99b"
+            ]
+        ]
+    },
+    {
+        "id": "06c87a703facf99b",
+        "type": "file in",
+        "z": "16b254125478329a",
+        "name": "",
+        "filename": "dfsafsdf",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 413,
+        "y": 545,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a3e89a14b26e7684",
+        "type": "ut-assert-failure",
+        "z": "16b254125478329a",
+        "name": "",
+        "x": 582,
+        "y": 197.5,
+        "wires": []
+    },
+    {
+        "id": "ad5cce09c58f0436",
+        "type": "catch",
+        "z": "16b254125478329a",
+        "name": "",
+        "scope": null,
+        "uncaught": true,
+        "x": 429,
+        "y": 701,
+        "wires": [
+            [
+                "634917b91a59ed42"
+            ]
+        ]
+    },
+    {
+        "id": "634917b91a59ed42",
+        "type": "ut-assert-success",
+        "z": "16b254125478329a",
+        "name": "",
+        "count": 1,
+        "x": 724,
+        "y": 701,
+        "wires": []
+    }
+]

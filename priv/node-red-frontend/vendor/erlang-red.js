@@ -286,6 +286,21 @@ window.ErlangRED = (function(){
         $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
             let mth = undefined;
 
+            // tnis is a request to install new nodes, let it hit the backend
+            // even though it wil fail.
+            if (options.url == "nodes/nodes.json" && options.type == "POST") {
+                options.url = "node-install-not-supported.json"
+            }
+
+            // this alters the example flows so that they can be handled
+            // by the webserver via a static collection.
+            if (options.url == "library/examples/flows/") {
+               options.url += "index.json"
+            } else if (options.url.startsWith("library/examples/flows") &&
+                       options.url.endsWith("/")) {
+               options.url += "index.json"
+            }
+
             // Encode the original flow data into a base64 string. Why?
             // To preserve object key ordering in the backend. Erlangs json:decode
             // has the feature of ordering keys alphabetically, JS does not

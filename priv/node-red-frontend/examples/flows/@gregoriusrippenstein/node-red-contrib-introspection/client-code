@@ -1,0 +1,926 @@
+[
+    {
+        "id": "6862158f3d80a473",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "hello world",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "d648fd685e2efd72",
+            "3176194cbb4abcf5"
+        ],
+        "x": 166.2856788635254,
+        "y": 49,
+        "w": 630,
+        "h": 151
+    },
+    {
+        "id": "d648fd685e2efd72",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "6862158f3d80a473",
+        "name": "Hello World example",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "hello world",
+        "payloadType": "str",
+        "x": 302.2856788635254,
+        "y": 90,
+        "wires": [
+            [
+                "3176194cbb4abcf5"
+            ]
+        ]
+    },
+    {
+        "id": "3176194cbb4abcf5",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "6862158f3d80a473",
+        "name": "open alert window",
+        "clientcode": "alert(payload);\n",
+        "format": "javascript",
+        "x": 680.2856788635254,
+        "y": 159,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e6f43d21f8ccfad6",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "create dynamic flow using RSS as input",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "f3bdcd54a0aa8585",
+            "c2d4ce3e6e7c2e31",
+            "f210b63040eeb212",
+            "e7289b9433d25283",
+            "3d604af7f2cb8912",
+            "77a3c9b5811260e2",
+            "9de0d672c6fbccb8",
+            "875ef0b0799bb044",
+            "5bf2de0885c59307"
+        ],
+        "x": 166.2856788635254,
+        "y": 471,
+        "w": 1597.7499046325684,
+        "h": 522
+    },
+    {
+        "id": "f3bdcd54a0aa8585",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "set RSS url",
+        "props": [
+            {
+                "p": "url",
+                "v": "https://flows.flowhub.org/feed.xml",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 272.2856788635254,
+        "y": 512,
+        "wires": [
+            [
+                "c2d4ce3e6e7c2e31"
+            ]
+        ]
+    },
+    {
+        "id": "c2d4ce3e6e7c2e31",
+        "type": "http request",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "",
+        "persist": false,
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 427.2856788635254,
+        "y": 595,
+        "wires": [
+            [
+                "f210b63040eeb212"
+            ]
+        ]
+    },
+    {
+        "id": "f210b63040eeb212",
+        "type": "xml",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "parse feed.xml",
+        "property": "payload",
+        "attr": "",
+        "chr": "",
+        "x": 595.2856788635254,
+        "y": 670,
+        "wires": [
+            [
+                "3d604af7f2cb8912"
+            ]
+        ]
+    },
+    {
+        "id": "e7289b9433d25283",
+        "type": "split",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1104.2856788635254,
+        "y": 779,
+        "wires": [
+            [
+                "77a3c9b5811260e2"
+            ]
+        ]
+    },
+    {
+        "id": "3d604af7f2cb8912",
+        "type": "change",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "set payload and define fake tab Z id",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.feed.entry",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 862.2856788635254,
+        "y": 730,
+        "wires": [
+            [
+                "e7289b9433d25283"
+            ]
+        ]
+    },
+    {
+        "id": "77a3c9b5811260e2",
+        "type": "function",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "convert xml object to flow object",
+        "func": "msg.payload = {\n    \"id\": msg.payload.id[0].match(/.{16}$/)[0],\n    \"type\": \"comment\",\n    \"name\": msg.payload.title[0][\"_\"],\n    \"info\": msg.payload.id[0],\n    \"x\": 801 * Math.random(),\n    \"y\": 699 * Math.random(),\n    \"wires\": [\n    ]\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1131.2856788635254,
+        "y": 866,
+        "wires": [
+            [
+                "9de0d672c6fbccb8"
+            ]
+        ]
+    },
+    {
+        "id": "9de0d672c6fbccb8",
+        "type": "join",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1128.2856788635254,
+        "y": 952,
+        "wires": [
+            [
+                "875ef0b0799bb044"
+            ]
+        ]
+    },
+    {
+        "id": "875ef0b0799bb044",
+        "type": "function",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "prepend the subflow to the nodes array",
+        "func": "msg.payload = {\n    flowContent: msg.payload,\n    removeduplicates: true,\n    autoimport: false\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1395.2856788635254,
+        "y": 952,
+        "wires": [
+            [
+                "5bf2de0885c59307"
+            ]
+        ]
+    },
+    {
+        "id": "5bf2de0885c59307",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "e6f43d21f8ccfad6",
+        "name": "Open import dialog",
+        "clientcode": "function doIt() {\n  var content = payload.flowContent;\n\n  if (payload.removeduplicates) {\n    content = content.filter((elem) => {\n      return RED.nodes.node(elem.id) == undefined\n    });\n  }\n\n  if (content.length == 0) {\n    RED.notify(\"No new content\", {\n      type: \"ok\",\n      id: \"TriggerImport\",\n      timeout: 2000\n    });\n    return;\n  }\n  RED.clipboard.import();\n\n  setTimeout(() => {\n    $('#red-ui-clipboard-dialog-import-text').val(\n      JSON.stringify(content)\n    ).trigger(\"paste\");\n\n    if (payload.autoimport) {\n      setTimeout(() => {\n        $('#red-ui-clipboard-dialog-ok').trigger('click');\n      }, 435);\n    }\n  }, 300);\n};\n\ndoIt();\n",
+        "format": "javascript",
+        "x": 1648.0355834960938,
+        "y": 821.2084875106812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fdc3fd787c126eb3",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "align all connected nodes",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c482389d05470096",
+            "2798c3c8c33abd09",
+            "c4df7559e046aac8"
+        ],
+        "x": 1062.2857666015625,
+        "y": 54.71428298950195,
+        "w": 699.9999389648438,
+        "h": 328.00003147125244
+    },
+    {
+        "id": "c482389d05470096",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "fdc3fd787c126eb3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1168.2857666015625,
+        "y": 95.71428298950195,
+        "wires": [
+            [
+                "2798c3c8c33abd09"
+            ]
+        ]
+    },
+    {
+        "id": "2798c3c8c33abd09",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "fdc3fd787c126eb3",
+        "name": "Align Nodes",
+        "clientcode": "var thisNode = RED.nodes.node(nodeid);\n\nconsole.log( thisNode)\nvar connectedNodes = [thisNode];\n\nRED.nodes.eachNode( (nde) => {\n    RED.nodes.getNodeLinks(nde).forEach(function (l) {\n        if ( l.target.id == nodeid) {\n            connectedNodes.push(nde)\n        }\n    });\n})\n\nRED.nodes.getNodeLinks(thisNode).forEach(function (l) {\n    connectedNodes.push(l.target)\n});\n\nRED.view.select({ nodes: connectedNodes })\nsetTimeout(() => {\n    RED.actions.invoke(\"core:align-selection-to-middle\")\n    node.send({\n        payload: \"done\"\n    })\n}, 1000);\n\n",
+        "format": "javascript",
+        "x": 1400.2857666015625,
+        "y": 211.71428298950195,
+        "wires": [
+            [
+                "c4df7559e046aac8"
+            ]
+        ]
+    },
+    {
+        "id": "c4df7559e046aac8",
+        "type": "debug",
+        "z": "e02ba6e534f7a0f4",
+        "g": "fdc3fd787c126eb3",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1656.2857055664062,
+        "y": 341.7143144607544,
+        "wires": []
+    },
+    {
+        "id": "576eb2790b07f530",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "move node",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "d06cce0db2eb2cf8",
+            "516fc0b2023ebe87"
+        ],
+        "x": 166.2856788635254,
+        "y": 274,
+        "w": 494,
+        "h": 147
+    },
+    {
+        "id": "d06cce0db2eb2cf8",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "576eb2790b07f530",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 272.2856788635254,
+        "y": 315,
+        "wires": [
+            [
+                "516fc0b2023ebe87"
+            ]
+        ]
+    },
+    {
+        "id": "516fc0b2023ebe87",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "576eb2790b07f530",
+        "name": "Move node up",
+        "clientcode": "var nde = RED.nodes.node(nodeid);\n\nnde.y -= 20;\n\nnde.dirty = true;\n\nRED.view.redraw(true)\n\nnode.send({\n    payload: \"done\"\n})",
+        "format": "javascript",
+        "x": 554.2856788635254,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f3c9039641e8c2e9",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "display user agent",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "f264cd20b53c537c",
+            "71f605053c3902b8",
+            "d41834f0310a9f66",
+            "f8dc6845645740ca"
+        ],
+        "x": 166.2856788635254,
+        "y": 1082.0001220703125,
+        "w": 810,
+        "h": 157
+    },
+    {
+        "id": "f264cd20b53c537c",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f3c9039641e8c2e9",
+        "name": "get userAgent",
+        "clientcode": "node.send({\n    payload: navigator.userAgent \n});\n",
+        "format": "javascript",
+        "x": 529.2856788635254,
+        "y": 1198.0001220703125,
+        "wires": [
+            [
+                "d41834f0310a9f66",
+                "f8dc6845645740ca"
+            ]
+        ]
+    },
+    {
+        "id": "71f605053c3902b8",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f3c9039641e8c2e9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 272.2856788635254,
+        "y": 1197.0001220703125,
+        "wires": [
+            [
+                "f264cd20b53c537c"
+            ]
+        ]
+    },
+    {
+        "id": "d41834f0310a9f66",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f3c9039641e8c2e9",
+        "name": "Open notify popup",
+        "clientcode": "RED.notify(\"Your navigator: \" + payload, {\n    id: nodeid,\n    type: \"ok\",\n    timeout: 2000\n})",
+        "format": "javascript",
+        "x": 860.2856788635254,
+        "y": 1195.0001220703125,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f8dc6845645740ca",
+        "type": "debug",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f3c9039641e8c2e9",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 794.2856788635254,
+        "y": 1123.0001220703125,
+        "wires": []
+    },
+    {
+        "id": "b74369273536bfab",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "connect nodes",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "87ecedcda805b9fc",
+            "ae105ff2ffd71fea",
+            "85926682e41d7e3e",
+            "d396d46edc750dd7"
+        ],
+        "x": 1053.71435546875,
+        "y": 1082.0001220703125,
+        "w": 710,
+        "h": 211
+    },
+    {
+        "id": "87ecedcda805b9fc",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "b74369273536bfab",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1159.71435546875,
+        "y": 1123.0001220703125,
+        "wires": [
+            [
+                "ae105ff2ffd71fea"
+            ]
+        ]
+    },
+    {
+        "id": "ae105ff2ffd71fea",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "b74369273536bfab",
+        "name": "connect nodes",
+        "clientcode": "\nvar dgbNode = RED.nodes.node(\"85926682e41d7e3e\");\nvar injNode = RED.nodes.node(\"d396d46edc750dd7\");\nvar thisNode = RED.nodes.node(nodeid);\n\nRED.nodes.addLink({ source: thisNode, sourcePort: 0, target: dgbNode });\nRED.nodes.addLink({ target: thisNode, sourcePort: 0, source: injNode });\n\nRED.view.select([dgbNode, thisNode, injNode]);\n",
+        "format": "javascript",
+        "x": 1468.71435546875,
+        "y": 1124.0001220703125,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "85926682e41d7e3e",
+        "type": "debug",
+        "z": "e02ba6e534f7a0f4",
+        "g": "b74369273536bfab",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1657.71435546875,
+        "y": 1252.0001220703125,
+        "wires": []
+    },
+    {
+        "id": "d396d46edc750dd7",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "b74369273536bfab",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1194.71435546875,
+        "y": 1247.0001220703125,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3c1cf76ad7583ad9",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "auto layout",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "99f9a8cb95305f73",
+            "bfe4ae73c71c351b",
+            "c8be32434361dcb9",
+            "1e0af30a2001c5e3",
+            "11ce6f9d18c3733b",
+            "9cdf0f2efddd09bb",
+            "f9ae281ee823f254",
+            "f1af381c0ddab811",
+            "cdccfead01d41984",
+            "1059a876dae0d79c"
+        ],
+        "x": 166.2856788635254,
+        "y": 1323.8569560050964,
+        "w": 660.857234954834,
+        "h": 335.14304399490356
+    },
+    {
+        "id": "99f9a8cb95305f73",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "1. select me!",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 299.9999485015869,
+        "y": 1433.4284377098083,
+        "wires": [
+            [
+                "1e0af30a2001c5e3"
+            ]
+        ]
+    },
+    {
+        "id": "bfe4ae73c71c351b",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "layout selection - https://github.com/node-red/node-red/pull/2267/files",
+        "clientcode": "function layoutFlow() {\n\n    var selection = RED.view.selection();\n    console.log(selection)\n    if (!selection.nodes || selection.nodes.length !== 1) {\n        RED.notify(\"Select exactly one node\");\n        return;\n    }\n    var ns = RED.nodes.getAllFlowNodes(selection.nodes[0]);\n\n    // Find Input node\n\n    var nodes = {};\n    var minRank = 0;\n    var stack = [];\n    var candidateInputs = {};\n    var candidateOutputs = {};\n    ns.forEach(function (n) {\n        candidateInputs[n.id] = n;\n        candidateOutputs[n.id] = n;\n        nodes[n.id] = {\n            n: n,\n            i: [],\n            o: [],\n            d: -1, // depth from start\n            r: -1, // rank order at that depth\n            downstream: 0\n        }\n    });\n    RED.nodes.eachLink(function (link) {\n        if (nodes[link.source.id] || nodes[link.target.id]) {\n            nodes[link.source.id].o.push(link.target.id);\n            nodes[link.target.id].i.push(link.source.id);\n            delete candidateInputs[link.target.id]\n            delete candidateOutputs[link.source.id]\n        }\n    })\n\n    var inputs = Object.keys(candidateInputs);\n    var outputs = Object.keys(candidateOutputs);\n\n    console.log(inputs);\n\n    if (inputs.length > 1) {\n        RED.notify(\"Multiple start points - bailing\")\n        return;\n    }\n\n    if (outputs.length === 0) {\n        RED.notify(\"No outputs - is this a big loop? Bailing\");\n        return;\n    }\n\n    function applyDepth(id, d) {\n        if (nodes[id].d < d) {\n            nodes[id].d = d;\n            nodes[id].o.forEach(function (nid) {\n                applyDepth(nid, d + 1);\n            })\n        }\n    }\n    applyDepth(inputs[0], 0)\n\n    function calculateDownstream(id, downstream) {\n        nodes[id].downstream += downstream;\n        nodes[id].i.forEach(function (nid) {\n            calculateDownstream(nid, nodes[id].downstream + 1);\n        })\n    }\n    outputs.forEach(function (id) {\n        calculateDownstream(id, 0)\n    })\n\n    var ranks = {};\n    function rankNodes(node) {\n        if (node.r === -1) {\n            ranks[node.d] = ranks[node.d] || [];\n            node.r = ranks[node.d].length;\n            ranks[node.d].push(node);\n            node.o.sort(function (a, b) {\n                return nodes[b].downstream - nodes[a].downstream\n            })\n            node.o.forEach(function (nid) {\n                rankNodes(nodes[nid])\n            })\n        }\n    }\n    rankNodes(nodes[inputs[0]]);\n    function shuffleRanks(node) {\n        var pushed = false;\n        if (node.o.length > 1) {\n            var outputs = node.o.slice(0);\n            outputs.sort(function (a, b) {\n                if (nodes[a].d === nodes[b].d) {\n                    return nodes[a].r - nodes[b].r;\n                } else {\n                    return nodes[b].d - nodes[a].d;\n                }\n            })\n            // outputs.forEach(function(o,i) { console.log(\" \",i,\" + \"+nodes[o].n.type,\" d:\",nodes[o].d,\" r:\",nodes[o].r)});\n            var rank = nodes[outputs[0]].r;\n            var depth = nodes[outputs[0]].d;\n            for (var i = 1; i < outputs.length; i++) {\n                // console.log(outputs[i]);\n                var n = nodes[outputs[i]];\n                if (n.d !== depth && n.r === rank) {\n                    // need to move n down one.\n                    var r = n.r;\n                    ns.forEach(function (_n) {\n                        var nn = nodes[_n.id];\n                        if (nn.d >= n.d && nn.d < depth && nn.r >= r) {\n                            pushed = true;\n                            nn.r++;\n                        }\n                    })\n                }\n                depth = n.d;\n                rank = n.r;\n            }\n        }\n        node.o.forEach(function (n) {\n            pushed = pushed || shuffleRanks(nodes[n])\n        })\n        return pushed;\n    }\n    var shuffle = function () {\n        if (shuffleRanks(nodes[inputs[0]])) {\n            shuffle();\n        }\n    }\n    shuffle();\n\n\n    var x = nodes[inputs[0]].n.x;\n    var y = nodes[inputs[0]].n.y;\n    var changedNodes = [];\n    ns.forEach(function (n) {\n        var d = nodes[n.id].d;\n        var r = nodes[n.id].r;\n\n        changedNodes.push({\n            n: n,\n            ox: n.x,\n            oy: n.y,\n            moved: n.moved\n        });\n\n        n.x = x + d * 200;\n        n.y = y + r * 50;\n        n.dirty = true;\n        // n.dirtyStatus = true;\n        // n.status = {\n        //     text:\"d\"+d+\" : r\"+r+\" : ds\"+nodes[n.id].downstream\n        // }\n    });\n\n    if (changedNodes.length > 0) {\n        RED.history.push({ t: \"move\", nodes: changedNodes, dirty: RED.nodes.dirty() });\n        RED.nodes.dirty(true);\n        RED.view.redraw(true);\n    }\n\n}\n\nlayoutFlow();",
+        "format": "javascript",
+        "x": 551.1429138183594,
+        "y": 1618,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c8be32434361dcb9",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "2. press me",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 282.2856788635254,
+        "y": 1549.714183330536,
+        "wires": [
+            [
+                "bfe4ae73c71c351b"
+            ]
+        ]
+    },
+    {
+        "id": "1e0af30a2001c5e3",
+        "type": "switch",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 422.8570747375488,
+        "y": 1394.8570265769958,
+        "wires": [
+            [
+                "11ce6f9d18c3733b",
+                "9cdf0f2efddd09bb",
+                "f1af381c0ddab811"
+            ]
+        ]
+    },
+    {
+        "id": "11ce6f9d18c3733b",
+        "type": "change",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 495.7142562866211,
+        "y": 1456.2856335639954,
+        "wires": [
+            [
+                "f9ae281ee823f254",
+                "cdccfead01d41984"
+            ]
+        ]
+    },
+    {
+        "id": "9cdf0f2efddd09bb",
+        "type": "debug",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "debug 23",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 457.14278411865234,
+        "y": 1364.8569560050964,
+        "wires": []
+    },
+    {
+        "id": "f9ae281ee823f254",
+        "type": "switch",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 505.71420669555664,
+        "y": 1409.142741203308,
+        "wires": [
+            [
+                "1059a876dae0d79c"
+            ]
+        ]
+    },
+    {
+        "id": "f1af381c0ddab811",
+        "type": "link out",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [],
+        "x": 549.9999332427979,
+        "y": 1407.7141327857971,
+        "wires": []
+    },
+    {
+        "id": "cdccfead01d41984",
+        "type": "debug",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 502.8571014404297,
+        "y": 1457.7141680717468,
+        "wires": []
+    },
+    {
+        "id": "1059a876dae0d79c",
+        "type": "template",
+        "z": "e02ba6e534f7a0f4",
+        "g": "3c1cf76ad7583ad9",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 478.5713653564453,
+        "y": 1381.9999012947083,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f6cc34400422b572",
+        "type": "group",
+        "z": "e02ba6e534f7a0f4",
+        "name": "copy to clipboard",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "5c6cd958df67f6a6",
+            "786ad93c0ecb9be5"
+        ],
+        "x": 1193.71435546875,
+        "y": 1467,
+        "w": 570,
+        "h": 192
+    },
+    {
+        "id": "5c6cd958df67f6a6",
+        "type": "ClientCode",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f6cc34400422b572",
+        "name": "copy to clipboard",
+        "clientcode": "(function(pload) {\n    function fallbackCopyTextToClipboard(text, cb) {\n        var textArea = document.createElement(\"textarea\");\n        textArea.value = text;\n\n        // Avoid scrolling to bottom\n        textArea.style.top = \"0\";\n        textArea.style.left = \"0\";\n        textArea.style.position = \"fixed\";\n\n        document.body.appendChild(textArea);\n        textArea.focus();\n        textArea.select();\n\n        try {\n            var successful = document.execCommand('copy');\n            var msg = successful ? 'successful' : 'unsuccessful';\n\n            if (successful && cb && typeof cb == \"function\") { cb(); }\n\n            console.log('Fallback: Copying text command was ' + msg);\n        } catch (err) {\n            console.error('Fallback: Oops, unable to copy', err);\n        }\n\n        document.body.removeChild(textArea);\n    }\n\n    function copyTextToClipboard(text, cb) {\n        if (!navigator.clipboard) {\n            fallbackCopyTextToClipboard(text,cb);\n            return;\n        }\n\n        navigator.clipboard.writeText(text).then(\n            function () {\n                if (cb && typeof cb == \"function\") { cb(); }\n                console.log('Async: Copying to clipboard was successful!');\n            }, function (err) {\n                console.error('Async: Could not copy text: ', err);\n            }\n        );\n    }\n\n    function copyToClipboard(msg) {\n        copyTextToClipboard(msg.payload, () => {\n            alert('Payload copied to clipboard')\n        });\n    }\n\n    copyToClipboard({\n        payload: pload\n    });\n})(payload);\n\nnode.send({ payload: payload })",
+        "format": "javascript",
+        "x": 1647.71435546875,
+        "y": 1618,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "786ad93c0ecb9be5",
+        "type": "inject",
+        "z": "e02ba6e534f7a0f4",
+        "g": "f6cc34400422b572",
+        "name": "copy payload to clipboard",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "hello world - copied to clipboard",
+        "payloadType": "str",
+        "x": 1349.71435546875,
+        "y": 1508,
+        "wires": [
+            [
+                "5c6cd958df67f6a6"
+            ]
+        ]
+    }
+]

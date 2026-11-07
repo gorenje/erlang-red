@@ -1,0 +1,163 @@
+[
+    {
+        "id": "36846ad6698e1bc0",
+        "type": "tab",
+        "label": "[switch] post debug on JSONata exception",
+        "disabled": false,
+        "info": "",
+        "env": [
+            {
+                "name": "NODE_RED_DIVERGENT",
+                "type": "bool",
+                "value": "true"
+            }
+        ]
+    },
+    {
+        "id": "68fc7da02e4ce9da",
+        "type": "group",
+        "z": "36846ad6698e1bc0",
+        "name": "catch captures exception",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "83ab1354d90466f0",
+            "e9aa1d82d093db52",
+            "8d0e6a588bc579ce",
+            "1466e3dcc32f09f6",
+            "5756ca28703729dc",
+            "c639ee32c5106898",
+            "87b4d5e19fe69852"
+        ],
+        "x": 109.66665649414062,
+        "y": 118.00003814697266,
+        "w": 901,
+        "h": 284.99996185302734
+    },
+    {
+        "id": "83ab1354d90466f0",
+        "type": "inject",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "hello world",
+        "payloadType": "str",
+        "x": 215.66665649414062,
+        "y": 234.00003814697266,
+        "wires": [
+            [
+                "e9aa1d82d093db52"
+            ]
+        ]
+    },
+    {
+        "id": "e9aa1d82d093db52",
+        "type": "switch",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "broken property jsonata",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "$fromMillis()",
+                "vt": "jsonata"
+            },
+            {
+                "t": "else"
+            },
+            {
+                "t": "eq",
+                "v": "hello world",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 494.6666564941406,
+        "y": 286.00003814697266,
+        "wires": [
+            [
+                "8d0e6a588bc579ce"
+            ],
+            [
+                "c639ee32c5106898"
+            ],
+            [
+                "87b4d5e19fe69852"
+            ]
+        ]
+    },
+    {
+        "id": "8d0e6a588bc579ce",
+        "type": "ut-assert-failure",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "x": 893.6666564941406,
+        "y": 236.50003814697266,
+        "wires": []
+    },
+    {
+        "id": "1466e3dcc32f09f6",
+        "type": "catch",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "scope": [
+            "e9aa1d82d093db52"
+        ],
+        "uncaught": false,
+        "x": 485.6666564941406,
+        "y": 216.00003814697266,
+        "wires": [
+            [
+                "5756ca28703729dc"
+            ]
+        ]
+    },
+    {
+        "id": "5756ca28703729dc",
+        "type": "ut-assert-success",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "count": 1,
+        "x": 894.6666564941406,
+        "y": 159.00003814697266,
+        "wires": []
+    },
+    {
+        "id": "c639ee32c5106898",
+        "type": "ut-assert-failure",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "x": 902,
+        "y": 288,
+        "wires": []
+    },
+    {
+        "id": "87b4d5e19fe69852",
+        "type": "ut-assert-failure",
+        "z": "36846ad6698e1bc0",
+        "g": "68fc7da02e4ce9da",
+        "name": "",
+        "x": 893,
+        "y": 362,
+        "wires": []
+    }
+]

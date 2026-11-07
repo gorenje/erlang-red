@@ -1,0 +1,215 @@
+[
+    {
+        "id": "80655e5d4035fa71",
+        "type": "tab",
+        "label": "[.jsonata] $type operator",
+        "disabled": false,
+        "info": "## $type is an operator ...\n\n... that isn't the same as `typeof` in javascript.\n\nTaken from [JSONata Docu](https://docs.jsonata.org/object-functions#type):\n\n```\n$type()\n\nSignature:$type(value)\n\nEvaluates the type of value and returns one of the following strings:\n\n    \"null\"\n    \"number\"\n    \"string\"\n    \"boolean\"\n    \"array\"\n    \"object\"\n    \"function\" Returns (non-string) undefined when value is undefined.\n```\n\n",
+        "env": [
+            {
+                "name": "ERED_ONLY",
+                "value": "true",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "99452d269902e5c7",
+        "type": "inject",
+        "z": "80655e5d4035fa71",
+        "name": "",
+        "props": [
+            {
+                "p": "string",
+                "v": "this is a string",
+                "vt": "str"
+            },
+            {
+                "p": "number",
+                "v": "42",
+                "vt": "num"
+            },
+            {
+                "p": "buffer",
+                "v": "[1,2,3,4,5,6]",
+                "vt": "bin"
+            },
+            {
+                "p": "array",
+                "v": "[1,2,3,4]",
+                "vt": "json"
+            },
+            {
+                "p": "boolean",
+                "v": "true",
+                "vt": "bool"
+            },
+            {
+                "p": "timestamp",
+                "v": "",
+                "vt": "date"
+            },
+            {
+                "p": "nullv",
+                "v": "null",
+                "vt": "jsonata"
+            },
+            {
+                "p": "function",
+                "v": "function($v) { $v }",
+                "vt": "jsonata"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 355,
+        "y": 250.75,
+        "wires": [
+            [
+                "5ceb925f015003ea"
+            ]
+        ]
+    },
+    {
+        "id": "5ceb925f015003ea",
+        "type": "change",
+        "z": "80655e5d4035fa71",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "type_string",
+                "pt": "msg",
+                "to": "$type($$.string)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_number",
+                "pt": "msg",
+                "to": "$type($$.number)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_buffer",
+                "pt": "msg",
+                "to": "$type($$.buffer)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_timestamp",
+                "pt": "msg",
+                "to": "$type($$.timestamp)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_array",
+                "pt": "msg",
+                "to": "$type($$.array)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_boolean",
+                "pt": "msg",
+                "to": "$type($$.boolean)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_null",
+                "pt": "msg",
+                "to": "$type($$.nullv)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "type_function",
+                "pt": "msg",
+                "to": "$type($$.function)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 605.5,
+        "y": 250.75,
+        "wires": [
+            [
+                "7da24a68cb0f794d"
+            ]
+        ]
+    },
+    {
+        "id": "7da24a68cb0f794d",
+        "type": "ut-assert-values",
+        "z": "80655e5d4035fa71",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "type_string",
+                "pt": "msg",
+                "to": "string",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_number",
+                "pt": "msg",
+                "to": "number",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_timestamp",
+                "pt": "msg",
+                "to": "number",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_array",
+                "pt": "msg",
+                "to": "array",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_boolean",
+                "pt": "msg",
+                "to": "boolean",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_null",
+                "pt": "msg",
+                "to": "null",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "type_function",
+                "pt": "msg",
+                "to": "function",
+                "tot": "str"
+            }
+        ],
+        "x": 904,
+        "y": 185.75,
+        "wires": [
+            []
+        ]
+    }
+]

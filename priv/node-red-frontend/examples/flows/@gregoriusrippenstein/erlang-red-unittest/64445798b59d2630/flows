@@ -1,0 +1,257 @@
+[
+    {
+        "id": "64445798b59d2630",
+        "type": "tab",
+        "label": "[http] have params in the path",
+        "disabled": false,
+        "info": "Http in nodes should be able to define paths that contain placeholder for parameters.",
+        "env": [
+            {
+                "name": "ERED_NOT_EUNIT",
+                "value": "true",
+                "type": "bool"
+            },
+            {
+                "name": "ERED_TIMEOUT",
+                "value": "5",
+                "type": "num"
+            }
+        ]
+    },
+    {
+        "id": "636e832e3c16a9e6",
+        "type": "http in",
+        "z": "64445798b59d2630",
+        "name": "",
+        "url": "/t64445798b59d2630/testtwo/:param1/:param2",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 208,
+        "y": 530,
+        "wires": [
+            [
+                "7288f0fd22652e25",
+                "58de6c031b4d0618",
+                "2b0918bcb0b55c53",
+                "c2a29d7fc0ebe85e",
+                "2ca24d1ddbfe2454"
+            ]
+        ]
+    },
+    {
+        "id": "568af6bcb1c5cf73",
+        "type": "http response",
+        "z": "64445798b59d2630",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 743,
+        "y": 852,
+        "wires": []
+    },
+    {
+        "id": "a7e3dcf48b15929a",
+        "type": "inject",
+        "z": "64445798b59d2630",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 222.5,
+        "y": 200,
+        "wires": [
+            [
+                "4311564baa38d4f0"
+            ]
+        ]
+    },
+    {
+        "id": "7288f0fd22652e25",
+        "type": "template",
+        "z": "64445798b59d2630",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "plain",
+        "template": "Hello world.\n\nAnd one more thing.\n\nThis is a test.\n\nBut should work.\n\n",
+        "output": "str",
+        "x": 511,
+        "y": 744,
+        "wires": [
+            [
+                "568af6bcb1c5cf73"
+            ]
+        ]
+    },
+    {
+        "id": "2ed1a71543381782",
+        "type": "http request",
+        "z": "64445798b59d2630",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/t64445798b59d2630/testtwo/val1/val2?query1=val3&query1=val4",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 589.5,
+        "y": 213,
+        "wires": [
+            [
+                "ebafe26f5b73eff6"
+            ]
+        ]
+    },
+    {
+        "id": "4311564baa38d4f0",
+        "type": "delay",
+        "z": "64445798b59d2630",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "250",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "2ed1a71543381782"
+            ]
+        ]
+    },
+    {
+        "id": "ebafe26f5b73eff6",
+        "type": "ut-assert-values",
+        "z": "64445798b59d2630",
+        "name": "",
+        "rules": [
+            {
+                "p": "statusCode",
+                "pt": "msg",
+                "t": "eql",
+                "to": "200",
+                "tot": "num"
+            },
+            {
+                "p": "payload",
+                "pt": "msg",
+                "t": "eql",
+                "to": "\"Hello world.\\n\\nAnd one more thing.\\n\\nThis is a test.\\n\\nBut should work.\\n\\n\"",
+                "tot": "json"
+            }
+        ],
+        "x": 845.5,
+        "y": 213.5,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "58de6c031b4d0618",
+        "type": "ut-assert-values",
+        "z": "64445798b59d2630",
+        "name": "",
+        "rules": [
+            {
+                "p": "req.params.param1",
+                "pt": "msg",
+                "t": "eql",
+                "to": "val1",
+                "tot": "str"
+            }
+        ],
+        "x": 613,
+        "y": 638,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b0918bcb0b55c53",
+        "type": "ut-assert-values",
+        "z": "64445798b59d2630",
+        "name": "",
+        "rules": [
+            {
+                "p": "req.params.param2",
+                "pt": "msg",
+                "t": "eql",
+                "to": "val2",
+                "tot": "str"
+            }
+        ],
+        "x": 661,
+        "y": 579,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c2a29d7fc0ebe85e",
+        "type": "ut-assert-values",
+        "z": "64445798b59d2630",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "set",
+                "p": "req.query",
+                "pt": "msg"
+            }
+        ],
+        "x": 734,
+        "y": 471,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2ca24d1ddbfe2454",
+        "type": "ut-assert-values",
+        "z": "64445798b59d2630",
+        "name": "",
+        "ignore_failure_if_succeed": false,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "req.query",
+                "pt": "msg",
+                "to": "{ \"query1\": [\"val3\",\"val4\"]}",
+                "tot": "json"
+            }
+        ],
+        "x": 695,
+        "y": 530,
+        "wires": [
+            []
+        ]
+    }
+]

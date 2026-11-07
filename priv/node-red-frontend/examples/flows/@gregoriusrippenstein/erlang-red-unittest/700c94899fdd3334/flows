@@ -1,0 +1,107 @@
+[
+    {
+        "id": "700c94899fdd3334",
+        "type": "tab",
+        "label": "[debug] status message counter",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ec5287fe2b0f255b",
+        "type": "inject",
+        "z": "700c94899fdd3334",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 298,
+        "y": 185,
+        "wires": [
+            [
+                "d5f4066d0a2c803f"
+            ]
+        ]
+    },
+    {
+        "id": "d5f4066d0a2c803f",
+        "type": "debug",
+        "z": "700c94899fdd3334",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 573,
+        "y": 333,
+        "wires": []
+    },
+    {
+        "id": "4927f71cda6374a0",
+        "type": "status",
+        "z": "700c94899fdd3334",
+        "name": "",
+        "scope": [
+            "d5f4066d0a2c803f"
+        ],
+        "x": 642.2222595214844,
+        "y": 285.5555782318115,
+        "wires": [
+            [
+                "7de62755d4938b79"
+            ]
+        ]
+    },
+    {
+        "id": "7de62755d4938b79",
+        "type": "ut-assert-values",
+        "z": "700c94899fdd3334",
+        "name": "one counter",
+        "ignore_failure_if_succeed": true,
+        "rules": [
+            {
+                "t": "eql",
+                "p": "status.fill",
+                "pt": "msg",
+                "to": "blue",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "status.shape",
+                "pt": "msg",
+                "to": "ring",
+                "tot": "str"
+            },
+            {
+                "t": "eql",
+                "p": "status.text",
+                "pt": "msg",
+                "to": "1",
+                "tot": "str"
+            }
+        ],
+        "x": 833.3333740234375,
+        "y": 347.6666259765625,
+        "wires": [
+            []
+        ]
+    }
+]

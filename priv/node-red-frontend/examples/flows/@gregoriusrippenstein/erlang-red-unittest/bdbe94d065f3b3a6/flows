@@ -1,0 +1,143 @@
+[
+    {
+        "id": "bdbe94d065f3b3a6",
+        "type": "tab",
+        "label": "[function] support not returning a message",
+        "disabled": false,
+        "info": "## Function no return\n\nFunction nodes can return a message object or not, there is no requirement to return a valid message object.\n\nIn Node-RED this is done by leaving off the \"return msg\" in the function definition.\n\nErlang-Red has made the assumption that the function always returns a value.\n\nTherefore there should be a `undefined` token for doing just that.\n\nWe use undefined as token because that is the same as Javascript and Node-RED - using undefined in an array will result in no message being sent on the corresponding output port.\n\n",
+        "env": [
+            {
+                "name": "ERED_PENDING",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "b737c6397ee47bf0",
+        "type": "function",
+        "z": "bdbe94d065f3b3a6",
+        "name": "function 1",
+        "func": "",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 565,
+        "y": 320.5,
+        "wires": [
+            [
+                "a56ad2920885ace0"
+            ]
+        ]
+    },
+    {
+        "id": "ba81fe83307f83c1",
+        "type": "inject",
+        "z": "bdbe94d065f3b3a6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 387,
+        "y": 208,
+        "wires": [
+            [
+                "b737c6397ee47bf0"
+            ]
+        ]
+    },
+    {
+        "id": "a56ad2920885ace0",
+        "type": "ut-assert-failure",
+        "z": "bdbe94d065f3b3a6",
+        "name": "",
+        "x": 783,
+        "y": 319,
+        "wires": []
+    },
+    {
+        "id": "5d65809aaf8ec259",
+        "type": "function",
+        "z": "bdbe94d065f3b3a6",
+        "name": "function 2",
+        "func": "msg.payload = \"hello\"\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 432,
+        "y": 563,
+        "wires": [
+            [
+                "e5432e698e4b402f"
+            ]
+        ]
+    },
+    {
+        "id": "0f593e2bf460815c",
+        "type": "inject",
+        "z": "bdbe94d065f3b3a6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 254,
+        "y": 450.5,
+        "wires": [
+            [
+                "5d65809aaf8ec259"
+            ]
+        ]
+    },
+    {
+        "id": "e5432e698e4b402f",
+        "type": "ut-assert-values",
+        "z": "bdbe94d065f3b3a6",
+        "name": "",
+        "rules": [
+            {
+                "p": "payload",
+                "pt": "msg",
+                "t": "eql",
+                "to": "hello",
+                "tot": "str"
+            }
+        ],
+        "x": 671,
+        "y": 631.5,
+        "wires": [
+            []
+        ]
+    }
+]
