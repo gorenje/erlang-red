@@ -1840,7 +1840,7 @@ ${flowSource}
       return globalYourConfigNode
    }
 
-   function frontendHostUrlForToken(e){return e&&e.startsWith("local://")?e.replace(/local:\/\//,"").split("?")[0]:"https://flowhub.org"}function flowHubPullUpdateFlows(o=null,e=null){$.ajax({url:"FlowHubCatalogue",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({token:e}),success:function(e){(t=>{if($("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),"failed"==t.status)return RED.notify(t.msg,{type:"error",id:"FlowHubPull",timeout:4e3});let i=[],r={},n=[];Object.keys(t.data).forEach(function(e){var o=t.data[e].name.match(/^(\[.+\])/);o?r[o[0]]?r[o[0]].push(t.data[e]):r[o[0]]=[t.data[e]]:n.push(t.data[e])}),Object.keys(r).sort((e,o)=>e<o?-1:1).forEach(e=>{var o=r[e].map(e=>({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0}));i.push({label:e,icon:"",flowid:"",sublabel:"",selected:!1,checkbox:!1,children:o.sort((e,o)=>e.label<o.label?-1:1)})}),n.sort((e,o)=>e.name<o.name?-1:1).forEach(e=>{i.push({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0})}),o&&o(i)})(e)},error:function(e,o,t){$("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),console.log(e),console.log(t),console.log("Error",o),e&&418==e.status?RED.notify("<p>Failed to retrieve git catalogue, request returned empty response.</p><p>Please request the admin of the gitstore to have a look at the gitstore cache.</p>",{type:"warning",id:"FlowHubPull",timeout:4e3}):RED.notify("<p>Failed to retrieve FlowHub catalogue, request blocked.</p><p>FlowHub.org server might be down or GitHub might be down, please be patient.</p>",{type:"error",id:"FlowHubPull",timeout:4e3})}})}function obtainConfigNode(){let o=[];return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&o.push(e)}),o[0]}function tokenToUrl(e){if(!e.startsWith("local://")){e=e.substring(4);var o="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".split("");let t=Object.fromEntries(o.map((e,o)=>[e,o])),i=Object.fromEntries(o.map((e,o)=>[o,e]));return e.replaceAll(/./gi,(e,o)=>i[(t[e]+o+1)%64])}encodeURIComponent(e)}function obtainFhbToken(e,i){$.ajax({url:"FlowHubToken",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({cfgnode:e}),success:function(e){i(e.token)},error:function(e,o,t){i("")}})}function doFlowImportForSidebar(i,e){var o=$("#node-input-flowhubpull-flowid").val().trim();RED.nodes.workspace(o)?(RED.notify("Remove existing flow tab to re-import",{type:"warning"}),RED.view.reveal(o)):(RED.notify("Pull triggered",{type:"warning",timeout:3e3}),$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return""!=$("#node-input-flowhubpull-flowrevision").val()&&$("#node-input-flowhubpull-flowrevision").animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300),RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||((t=ensureYourConfigNodeExists()).flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision&&(t.flowrevisions[o.flowid]=o.revision)),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);i&&(e=e.filter(function(e){return"tab"!=e.type})),$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})}))}function doFlowImportForPullNode(e,o){RED.notify("Pull triggered",{type:"warning",timeout:3e3});$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":o,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:o,flowid:$("#node-input-flowid").val().trim(),revision:$("#node-input-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||(t=(()=>{let o=void 0;return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&(o=e)}),o})())&&(t.flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision)&&(t.flowrevisions[o.flowid]=o.revision),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})})}function checkForDuplication(e){$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((e,o)=>{try{if(!e||!e.flowdata||!Array.isArray(JSON.parse(e.flowdata))){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}}catch(e){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}if(e.status&&"ok"!=e.status){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Failed duplication check: "+e.msg,"error")}e=JSON.parse(e.flowdata);let t=[];if(!Array.isArray(e))return RED.notify("Access denied or revision not found.","error");if(e.forEach((e,o)=>{"tab"==e.type?RED.nodes.workspace(e.id)&&t.push(e):"junction"==e.type?RED.nodes.junction(e.id)&&t.push(e):"group"==e.type?RED.nodes.group(e.id)&&t.push(e):"subflow"==e.type?RED.nodes.subflow(e.id)&&t.push(e):RED.nodes.node(e.id)&&t.push(e)}),0==t.length){RED.notify("Found no duplication.","success");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}}else{RED.notify("Found "+t.length+" items of duplication","warning");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){$("#node-input-flowhubpull-sb-duplication-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,o){}).on("treelistitemmouseout",function(e,o){}).on("treelistselect",function(e,o){o.node&&(RED.workspaces.show(o.node.z,!1,!1,!0),RED.view.reveal(o.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,o){var t;o.node&&(t=o.node.id,setTimeout(()=>{var e=RED.nodes.node(t);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),t==RED.workspaces.active()&&RED.workspaces.edit()},50))})}t=t.map(e=>({node:e,label:e.id,sublabel:e.type,selected:!1,checkbox:!1})),$("#node-input-flowhubpull-sb-duplication-container-div").treeList("data",t)}})}
+   function frontendHostUrlForToken(e){return e&&e.startsWith("local://")?e.replace(/local:\/\//,"").split("?")[0]:"https://flowhub.org"}function flowHubPullUpdateFlows(o=null,e=null){$.ajax({url:"FlowHubCatalogue",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({token:e}),success:function(e){(t=>{if($("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),"failed"==t.status)return RED.notify(t.msg,{type:"error",id:"FlowHubPull",timeout:4e3});let i=[],r={},n=[];Object.keys(t.data).forEach(function(e){var o=t.data[e].name.match(/^(\[.+\])/);o?r[o[0]]?r[o[0]].push(t.data[e]):r[o[0]]=[t.data[e]]:n.push(t.data[e])}),Object.keys(r).sort((e,o)=>e<o?-1:1).forEach(e=>{var o=r[e].map(e=>({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0}));i.push({label:e,icon:"",flowid:"",sublabel:"",selected:!1,checkbox:!1,children:o.sort((e,o)=>e.label<o.label?-1:1)})}),n.sort((e,o)=>e.name<o.name?-1:1).forEach(e=>{i.push({label:e.name,url:e.url,icon:"fa "+(RED.nodes.workspace(e.id)?"fa-check-circle-o":""),flowid:e.id,sublabel:e.id,selected:$("#node-input-flowhubpull-flowid").val()==e.id,checkbox:!1,children:void 0})}),o&&(o(i),setTimeout(()=>{RED.events.emit("flowhub:refreshed-flow-list"),$("#node-input-flowhubpull-sb-target-container-div").find("li").prop("draggable",!0),$("#node-input-flowhubpull-sb-target-container-div").find("li").off("dragstart"),$("#node-input-flowhubpull-sb-target-container-div").find("li").on("dragstart",e=>{e.originalEvent.dataTransfer.setData("text/x-flowhub-json",JSON.stringify({type:"flowhubpull",id:$(e.target).find(".red-ui-treeList-sublabel-text").map((e,o)=>$(o).text()),name:$(e.target).find(".red-ui-treeList-label-text").map((e,o)=>$(o).text())}))})},500))})(e)},error:function(e,o,t){$("#func-sidebar-flowhub-pull-spinner").hide(),$("#node-input-flowhub-pull-spinner").hide(),console.log(e),console.log(t),console.log("Error",o),e&&418==e.status?RED.notify("<p>Failed to retrieve git catalogue, request returned empty response.</p><p>Please request the admin of the gitstore to have a look at the gitstore cache.</p>",{type:"warning",id:"FlowHubPull",timeout:4e3}):RED.notify("<p>Failed to retrieve FlowHub catalogue, request blocked.</p><p>FlowHub.org server might be down or GitHub might be down, please be patient.</p>",{type:"error",id:"FlowHubPull",timeout:4e3})}})}function obtainConfigNode(){let o=[];return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&o.push(e)}),o[0]}function tokenToUrl(e){if(e.startsWith("local://"))return encodeURIComponent(e);{e=e.substring(4);var o="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_".split("");let t=Object.fromEntries(o.map((e,o)=>[e,o])),i=Object.fromEntries(o.map((e,o)=>[o,e]));return e.replaceAll(/./gi,(e,o)=>i[(t[e]+o+1)%64])}}function obtainFhbToken(e,i){$.ajax({url:"FlowHubToken",type:"POST",contentType:"application/json; charset=utf-8",data:JSON.stringify({cfgnode:e}),success:function(e){i(e.token)},error:function(e,o,t){i("")}})}function doFlowImportForSidebar(i,e){var o=$("#node-input-flowhubpull-flowid").val().trim();RED.nodes.workspace(o)?(RED.notify("Remove existing flow tab to re-import",{type:"warning"}),RED.view.reveal(o)):(RED.notify("Pull triggered",{type:"warning",timeout:3e3}),$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return""!=$("#node-input-flowhubpull-flowrevision").val()&&$("#node-input-flowhubpull-flowrevision").animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300).animate({"background-color":"#ccc"},300).animate({"background-color":"white"},300),RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||((t=ensureYourConfigNodeExists()).flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision&&(t.flowrevisions[o.flowid]=o.revision)),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);i&&(e=e.filter(function(e){return"tab"!=e.type})),$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})}))}function doFlowImportForPullNode(e,o){var t=$("#node-input-flowid").val().trim();if(RED.nodes.workspace(t))RED.notify("Remove existing flow tab to re-import",{type:"warning"}),RED.view.reveal(t);else{RED.notify("Pull triggered",{type:"warning",timeout:3e3});$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":o,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:o,flowid:$("#node-input-flowid").val().trim(),revision:$("#node-input-flowrevision").val().trim()})}).done((o,e)=>{try{if(!o||!o.flowdata||!Array.isArray(JSON.parse(o.flowdata)))return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}catch(e){return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}var t;RED.nodes.workspace(o.flowid)||(t=(()=>{let o=void 0;return RED.nodes.eachConfig(function(e){"FlowHubCfg"===e.type&&(o=e)}),o})())&&(t.flowrevisions||={},t.flowrevisions[o.flowid]!=o.revision)&&(t.flowrevisions[o.flowid]=o.revision),RED.clipboard.import(),setTimeout(()=>{var e=JSON.parse(o.flowdata);$("#red-ui-clipboard-dialog-import-text").val(JSON.stringify(e)).trigger("paste")},300)}).fail(e=>{var o="<p>Failed to retrieve flow data from FlowHub, request blocked.</p><p>Request: https://api.flowhub.org/v3/flows/"+$("#node-input-flowhubpull-flowid").val().trim()+"</p><p>AdBlocker or uBlock might have prevented request.</p><p>Please check browser console for more details.</p>";RED.notify(o,{type:"error",id:"FlowHubPull",timeout:4e3})})}}function checkForDuplication(e){$.ajax({url:"FlowHubPull",type:"POST",contentType:"application/json; charset=utf-8",headers:{"X-FHB-TOKEN":e,"User-Agent":"FlowHub.org Sidebar"},data:JSON.stringify({token:e,flowid:$("#node-input-flowhubpull-flowid").val().trim(),revision:$("#node-input-flowhubpull-flowrevision").val().trim()})}).done((e,o)=>{try{if(!e||!e.flowdata||!Array.isArray(JSON.parse(e.flowdata))){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access denied or revision not found.",{type:"error",timeout:3e3})}}catch(e){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Access Denied, parse error.",{type:"error",timeout:3e3})}if(e.status&&"ok"!=e.status){try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}return RED.notify("Failed duplication check: "+e.msg,"error")}e=JSON.parse(e.flowdata);let t=[];if(!Array.isArray(e))return RED.notify("Access denied or revision not found.","error");if(e.forEach((e,o)=>{"tab"==e.type?RED.nodes.workspace(e.id)&&t.push(e):"junction"==e.type?RED.nodes.junction(e.id)&&t.push(e):"group"==e.type?RED.nodes.group(e.id)&&t.push(e):"subflow"==e.type?RED.nodes.subflow(e.id)&&t.push(e):RED.nodes.node(e.id)&&t.push(e)}),0==t.length){RED.notify("Found no duplication.","success");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){}}else{RED.notify("Found "+t.length+" items of duplication","warning");try{$("#node-input-flowhubpull-sb-duplication-container-div").treeList("empty")}catch(e){$("#node-input-flowhubpull-sb-duplication-container-div").css({width:"100%",height:"calc(100%)"}).treeList({multi:!1}).on("treelistitemmouseover",function(e,o){}).on("treelistitemmouseout",function(e,o){}).on("treelistselect",function(e,o){o.node&&(RED.workspaces.show(o.node.z,!1,!1,!0),RED.view.reveal(o.node.id,!0),RED.view.redraw())}).on("treelistconfirm",function(e,o){var t;o.node&&(t=o.node.id,setTimeout(()=>{var e=RED.nodes.node(t);e&&(RED.view.reveal(e.id),RED.view.select(e.id),RED.editor.edit(e)),t==RED.workspaces.active()&&RED.workspaces.edit()},50))})}t=t.map(e=>({node:e,label:e.id,sublabel:e.type,selected:!1,checkbox:!1})),$("#node-input-flowhubpull-sb-duplication-container-div").treeList("data",t)}})}
    
    // Add your plugin as a new tabsheet in the right sidebar AFTER the flow editor is completely started
 var initSidebarComparePullPush = () => {
@@ -2085,11 +2085,12 @@ var initSidebarComparePullPush = () => {
                 $('#flowhubpull-sb-view-flow-link').attr('href', item.url).show();
             } else {
                 obtainFhbToken(globalYourConfigNode, (token) => {
+                    let oToken = token
                     if (token !== "" && token) {
                         token = "?t=" + tokenToUrl(token)
                     }
                     $('#flowhubpull-sb-view-flow-link').attr(
-                        'href', `${frontendHostUrlForToken(token)}/f/${item.flowid}${token}`
+                        'href', `${frontendHostUrlForToken(oToken)}/f/${item.flowid}${token}`
                     ).show();
                 })
             }
@@ -2108,12 +2109,13 @@ var initSidebarComparePullPush = () => {
                 $('#flowhubpull-sb-view-flow-link').attr('href', item.url).show();
             } else {
                 obtainFhbToken(globalYourConfigNode, (token) => {
+                    let oToken = token
                     if (token !== "" && token) {
                         token = "?t=" + tokenToUrl(token)
                     }
 
                     $('#flowhubpull-sb-view-flow-link').attr(
-                        'href', `${frontendHostUrlForToken(token)}/f/${item.flowid}${token}`
+                        'href', `${frontendHostUrlForToken(oToken)}/f/${item.flowid}${token}`
                     ).show();
                 })
             }
@@ -2384,11 +2386,12 @@ var initSidebarComparePullPush = () => {
             $('#node-input-flowhubpull-flowid').val(globalYourConfigNode.flowid);
 
             obtainFhbToken(globalYourConfigNode, (token) => {
+                let oToken = token
                 if (token !== "" && token) {
                     token = "?t=" + tokenToUrl(token)
                 }
                 $('#flowhubpull-sb-view-flow-link').attr(
-                    'href', `${frontendHostUrlForToken(token)}/f/${globalYourConfigNode.flowid}${token}`
+                    'href', `${frontendHostUrlForToken(oToken)}/f/${globalYourConfigNode.flowid}${token}`
                 ).show();
             })
         } else {
@@ -2401,6 +2404,11 @@ var initSidebarComparePullPush = () => {
         })
     }
     RED.events.on('flows:loaded', fillSidebarForms);
+
+    // flowhub actions that can be bound to key shortcuts
+    RED.actions.add("flowhub:flowhub-push-current-flow", () => {
+        $('#node-input-flowhubpush-push-btn').trigger('click')
+    })
 };
 
 RED.plugins.registerPlugin("flowhub-major-sidebar-plugin", { onadd: initSidebarComparePullPush });
@@ -2430,7 +2438,7 @@ RED.plugins.registerPlugin("flowhub-major-sidebar-plugin", { onadd: initSidebarC
 
             <div class="form-row" style="margin-left: 10px; margin-top: 10px;">
                <button id="node-input-flowhubpull-sb-refresh-list-but"
-                        class="red-ui-button"><i class="fa fa-refresh"></i> Refresh Flow List</button>
+                        class="red-ui-button"><i class="fa fa-refresh"></i> Refresh</button>
 
                <img class='hide' id="func-sidebar-flowhub-pull-spinner" src='red/images/spin.svg'/>
 
@@ -5376,6 +5384,59 @@ function ensureYourConfigNodeExists() {
 })();
 
 
+         // Adds a "safe triangle" so that submenus don't disappear
+// See --> https://discourse.nodered.org/t/ux-safe-triangles-for-menus-interactions/102058
+// for more details
+(() => {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+
+ Object.assign( svg.style, {
+    position: "fixed",
+    inset: "0",
+    width: "100vw",
+    height: "100vh",
+    pointerEvents: "none",
+    zIndex: "1000",
+  });
+
+  const tri = document.createElementNS(ns, "polygon");
+  tri.setAttribute("fill", "red");
+  tri.setAttribute("fill-opacity", "0.01");
+  tri.style.pointerEvents = "auto";
+
+  svg.append(tri);
+
+  function clear() {
+    tri.removeAttribute("points");
+    svg.remove();
+  }
+
+  document.addEventListener("mousemove", (e) => {
+      if (e.target === tri) return;
+
+      const li = e.target.closest?.("li.red-ui-menu-dropdown-submenu");
+      if (!li) return clear();
+
+      const anchorId = li.querySelector(":scope > a")?.id;
+      const subMenu = anchorId && document.getElementById(anchorId + "-submenu");
+
+      if (!subMenu) return clear();
+      if (subMenu.contains(e.target)) return clear();
+
+      const r = subMenu.getBoundingClientRect();
+      if (!r.width || !r.height) return clear();
+
+      const x = e.clientX < r.left ? r.left : r.right;
+      tri.setAttribute("points", `${x},${r.top},${x},${r.bottom},${e.clientX},${e.clientY}`);
+
+      if (svg.parentElement !== li) li.append(svg);
+    },
+    true // capture events before passing on events.
+  );
+})();
+
+         
          RED.presenterMode ||= {
             add: (name, funct) => {
                if (typeof funct == "function") {

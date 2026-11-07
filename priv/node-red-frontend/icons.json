@@ -19,6 +19,7 @@
         "flowhubpull.svg",
         "flowhubpush.svg"
     ],
+    "@gregoriusrippenstein/node-red-contrib-flowhub-server": [],
     "@gregoriusrippenstein/node-red-contrib-introspection": [
         "introspesubflow.svg",
         "swap-inject-to-change.svg",
