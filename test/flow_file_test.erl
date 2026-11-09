@@ -216,6 +216,9 @@ foreach_testflow_test_() ->
     ered_capture_io_exchange:start_link(),
     ered_credentials_store:start_link(),
 
+    application:ensure_all_started(elixir),
+
+
     {_Cnt, FileNamesD} = filelib:fold_files(
         filename:join([code:priv_dir(erlang_red), "testflows"]),
         "flows.json",
