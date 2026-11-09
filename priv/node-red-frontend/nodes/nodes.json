@@ -904,18 +904,6 @@
     },
     {
         "enabled": true,
-        "id": "@bartbutenaers/node-red-autolayout-sidebar/auto_layout_config",
-        "local": true,
-        "module": "@bartbutenaers/node-red-autolayout-sidebar",
-        "name": "auto_layout_config",
-        "types": [
-            "auto_layout_config"
-        ],
-        "user": false,
-        "version": "0.4.1"
-    },
-    {
-        "enabled": true,
         "id": "@gorenje/node-red-contrib-binary/binary",
         "local": true,
         "module": "@gorenje/node-red-contrib-binary",
@@ -937,5 +925,17 @@
         ],
         "user": false,
         "version": "1.0.1"
+    },
+    {
+        "enabled": true,
+        "id": "@bartbutenaers/node-red-autolayout-sidebar/auto_layout_config",
+        "local": true,
+        "module": "@bartbutenaers/node-red-autolayout-sidebar",
+        "name": "auto_layout_config",
+        "types": [
+            "auto_layout_config"
+        ],
+        "user": false,
+        "version": "0.0.9"
     }
 ]

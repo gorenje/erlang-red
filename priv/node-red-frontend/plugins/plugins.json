@@ -74,18 +74,6 @@
     {
         "editor": true,
         "enabled": true,
-        "id": "@bartbutenaers/node-red-autolayout-sidebar/sidebar-plugin",
-        "local": true,
-        "module": "@bartbutenaers/node-red-autolayout-sidebar",
-        "name": "sidebar-plugin",
-        "plugins": [],
-        "runtime": false,
-        "user": false,
-        "version": "0.4.1"
-    },
-    {
-        "editor": true,
-        "enabled": true,
         "id": "@gregoriusrippenstein/node-red-contrib-flowcompare/sidebar-plugin",
         "local": true,
         "module": "@gregoriusrippenstein/node-red-contrib-flowcompare",
@@ -94,6 +82,30 @@
         "runtime": false,
         "user": false,
         "version": "1.0.1"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@bartbutenaers/node-red-autolayout-sidebar/sidebar-plugin",
+        "local": true,
+        "module": "@bartbutenaers/node-red-autolayout-sidebar",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.0.9"
+    },
+    {
+        "editor": true,
+        "enabled": true,
+        "id": "@gregoriusrippenstein/node-red-alias-nodes/sidebar-plugin",
+        "local": true,
+        "module": "@gregoriusrippenstein/node-red-alias-nodes",
+        "name": "sidebar-plugin",
+        "plugins": [],
+        "runtime": false,
+        "user": false,
+        "version": "0.0.1"
     },
     {
         "editor": true,

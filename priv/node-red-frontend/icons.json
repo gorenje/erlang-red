@@ -11,6 +11,7 @@
         "erlang.svg"
     ],
     "@gregoriusrippenstein/erlang-red-unittest": [],
+    "@gregoriusrippenstein/node-red-alias-nodes": [],
     "@gregoriusrippenstein/node-red-contrib-flow2uml": [],
     "@gregoriusrippenstein/node-red-contrib-flowcompare": [],
     "@gregoriusrippenstein/node-red-contrib-flowhub": [
