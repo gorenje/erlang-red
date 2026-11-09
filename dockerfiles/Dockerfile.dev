@@ -1,4 +1,4 @@
-FROM erlang:27.3.0.0
+FROM erlang:29.1.2
 
 ## this is required for erlexec
 ENV SHELL=/bin/bash
@@ -18,7 +18,9 @@ RUN apt-get update && apt-get -y install \
     netcat-traditional \
     sudo \
     net-tools \
-    i2c-tools
+    i2c-tools \
+    libnuma-dev \
+    libnuma1
 
 COPY ./priv/mosquitto.conf /etc/mosquitto/
 COPY ./priv/mosquitto.conf /tmp/

@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := compile
+
 ##
 ## Development docker image - used for local development.
 ## assumes codebase happens to be located at /mnt/github/erlang-red ...
@@ -14,6 +16,19 @@ start-docker-shell: build-docker-container
 		--publish 1883:1883 \
 		--network erlang-red-node-red-bridge \
 		--network mnmn \
+		-w /code --rm erlang-shell bash
+
+start-docker-shell-as-root: build-docker-container
+	docker network create erlang-red-node-red-bridge || true
+	docker run -it \
+		-v $(shell pwd):/code \
+		-v $(shell pwd)/data:/data \
+		--hostname erlang-red \
+		--publish 9191:8080 \
+		--publish 1883:1883 \
+		--network erlang-red-node-red-bridge \
+		--network mnmn \
+		--user root \
 		-w /code --rm erlang-shell bash
 
 start-docker-shell-raspberry: build-docker-container
@@ -91,6 +106,9 @@ tcp-bidirectional-beacon:
 ## The following are done inside the docker container - after running
 ## make enter-docker-shell
 ##
+get-deps:
+	rebar3 get-deps
+
 compile:
 	rebar3 compile
 
@@ -108,6 +126,12 @@ app-start-loop:
 
 eunit-test:
 	rebar3 eunit
+
+clean:
+	rm -fr _build
+
+clean-really: clean
+	rm -fr rebar.lock
 
 # This helps understanding dialyzser
 #  --> https://grantwinney.com/common-dialyzer-errors-and-solutions-in-erlang/

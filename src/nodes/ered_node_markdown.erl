@@ -41,7 +41,7 @@ handle_msg({incoming, #{?GetPayload} = Msg}, NodeDef) ->
 
     try
         case 'Elixir.ErlangRedHelpers':markdown_to_html(Bcontent) of
-            {ok, HtmlC, _} ->
+            {ok, HtmlC} ->
                 Msg2 = Msg#{?AddPayload(HtmlC)},
                 send_msg_to_connected_nodes(NodeDef, Msg2),
                 {handled, NodeDef, Msg2};

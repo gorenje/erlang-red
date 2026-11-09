@@ -24,17 +24,18 @@ jobs:
 
     strategy:
       matrix:
-        otp: ['27.3.3', '28.1.1']
-        rebar3: ['3.24.0', '3.25.1']
+        otp: ['28.1.1', '29.1.2']
+        rebar3: ['3.25.1', '3.27.0']
     steps:
       - uses: actions/checkout@v4
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: inotify-tools mosquitto netcat-traditional i2c-tools erlang-diameter
+          packages: inotify-tools mosquitto netcat-traditional i2c-tools erlang-diameter libnuma-dev libnuma1
           version: 1.0
       - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{matrix.otp}}
           rebar3-version: ${{matrix.rebar3}}
+      - run: rebar3 compile || true
       - run: rebar3 compile
       - run: rebar3 do eunit, ct
