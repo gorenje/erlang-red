@@ -30,7 +30,8 @@ content_types_accepted(Req, State) ->
 handle_post_request(Req, State) ->
     {ok, _Body, Req2} = ered_http_utils:read_body(Req, <<"">>),
 
-    Body = <<"{\"code\": \"unexpected_error\", \"message\": \"no install supported\"}">>,
+    Body =
+        <<"{\"code\": \"unexpected_error\", \"message\": \"no install supported\"}">>,
 
     {stop, cowboy_req:reply(400, #{}, Body, Req2), State}.
 

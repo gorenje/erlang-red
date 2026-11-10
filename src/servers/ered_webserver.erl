@@ -192,7 +192,8 @@ flow_editor_routes() ->
         {"/FlowHubCreateBranch", ered_http_flowhub_create_branch, []},
 
         %% Install nodes isn't support, tell the frontend that.
-        {"/node-install-not-supported.json", ered_http_nodered_no_node_install, []},
+        {"/node-install-not-supported.json", ered_http_nodered_no_node_install,
+            []},
 
         %% Binary node backend for converting patterns
         {"/BinaryToErlang", ered_http_binary_node, []},
