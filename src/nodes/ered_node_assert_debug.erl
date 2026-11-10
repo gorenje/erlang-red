@@ -111,7 +111,7 @@ handle_websocket({debug, WsName, NodeId, Type, Data}, NodeDef) ->
             <<"type">> => Type,
             <<"nodeid">> => NodeId
         },
-        <<"payload">> => Data
+        <<"data">> => Data
     }),
     NodeDef.
 
