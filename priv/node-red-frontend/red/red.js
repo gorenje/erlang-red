@@ -44972,7 +44972,9 @@ RED.editor.codeEditor = (function() {
                             "ERED_PENDING",
                             "ERED_ONLY",
                             "ERED_NOT_EUNIT",
-                            "ERED_KEEPRUNNING"
+                            "ERED_KEEPRUNNING",
+                            "NRED_PENDING",
+                            "NODE_RED_ONLY"
                         ]
 
                         nameField.typedInput({default:'str',types:['str',

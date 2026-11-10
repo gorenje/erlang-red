@@ -26,6 +26,7 @@
 -import(ered_flows, [
     compute_timeout/2,
     is_test_case_pending/1,
+    is_test_case_not_supported/1,
     parse_flow_file/1,
     should_keep_flow_running/1
 ]).
@@ -187,7 +188,12 @@ run_test_on_another_planet(FlowId, WsName, false, DefaultTimeout) ->
                 true ->
                     unittest_result(WsName, FlowId, pending);
                 false ->
-                    run_the_test(FlowId, WsName, Ary, DefaultTimeout)
+                    case is_test_case_not_supported(Ary) of
+                        true ->
+                            unittest_result(WsName, FlowId, not_supported);
+                        false ->
+                            run_the_test(FlowId, WsName, Ary, DefaultTimeout)
+                    end
             end
     end;
 %%

@@ -178,7 +178,10 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
                 end}
             };
         false ->
-            case ered_flows:ignore_as_eunit_test(Ary) of
+            case
+                ered_flows:ignore_as_eunit_test(Ary) or
+                    ered_flows:is_test_case_not_supported(Ary)
+            of
                 true ->
                     TestCase = {
                         list_to_binary(color:cyan(TestName)),
@@ -217,7 +220,6 @@ foreach_testflow_test_() ->
     ered_credentials_store:start_link(),
 
     application:ensure_all_started(elixir),
-
 
     {_Cnt, FileNamesD} = filelib:fold_files(
         filename:join([code:priv_dir(erlang_red), "testflows"]),

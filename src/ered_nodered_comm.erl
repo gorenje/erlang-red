@@ -97,6 +97,8 @@ unittest_result(WsName, FlowId, pending) ->
     send_on_if_ws(WsName, {unittest_results, FlowId, <<"pending">>});
 unittest_result(WsName, FlowId, unknown_testcase) ->
     send_on_if_ws(WsName, {unittest_results, FlowId, <<"unknown_testcase">>});
+unittest_result(WsName, FlowId, not_supported) ->
+    send_on_if_ws(WsName, {unittest_results, FlowId, <<"not-supported">>});
 unittest_result(WsName, FlowId, success) ->
     send_on_if_ws(WsName, {unittest_results, FlowId, <<"success">>}).
 

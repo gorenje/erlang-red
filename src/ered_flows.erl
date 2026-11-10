@@ -6,6 +6,7 @@
     compute_timeout/2,
     ignore_as_eunit_test/1,
     is_test_case_pending/1,
+    is_test_case_not_supported/1,
     parse_flow_file/1,
     should_keep_flow_running/1,
     tab_name_or_filename/2
@@ -123,6 +124,20 @@ get_pending_envvar([_H | T]) ->
 
 is_test_case_pending(Ary) ->
     get_pending_envvar(find_tab_env_ary(Ary)).
+
+%%
+%%
+get_node_red_only_envvar([]) ->
+    false;
+get_node_red_only_envvar(
+    [#{<<"value">> := V, <<"name">> := <<"NODE_RED_ONLY">>} | _T]
+) ->
+    is_true(V);
+get_node_red_only_envvar([_H | T]) ->
+    get_node_red_only_envvar(T).
+
+is_test_case_not_supported(Ary) ->
+    get_node_red_only_envvar(find_tab_env_ary(Ary)).
 
 %%
 %%
