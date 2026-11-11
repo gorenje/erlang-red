@@ -35,6 +35,21 @@ fi
 CBSTMP=$(date +%s)
 PyTHON=/usr/bin/python3
 
+## Retrieve the flow examples included in various node packages. Only need
+## to do this if these changes.
+if [ false ] ; then
+    echo "==> flow examples from the node packages"
+
+    rm -f flows-examples.tgz
+    if curl ${NODERED_URL}/examples/tgz/generate >/dev/null 2>&1 ; then
+        if curl ${NODERED_URL}/examples/tgz/retrieve --output flows-examples.tgz >/dev/null 2>&1 ; then
+            rm -fr examples
+            tar xfz flows-examples.tgz
+            rm -f flows-examples.tgz
+        fi
+    fi
+fi
+
 echo "==> html, javascript & css"
 
 mkdir -p settings nodes debug/view

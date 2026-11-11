@@ -1,0 +1,1 @@
+[{"fn":"catch all exceptions in a single group"},{"fn":"catch all in group except those handler elsewhere"},{"fn":"deal with it yourself"},{"fn":"don't catch if the node isn't selected"},{"fn":"ensure source is inside error map"},{"fn":"file not found exception"},{"fn":"multiple nodes in one flow is possible"},{"fn":"uncaught catch - part 2 - work"},{"fn":"uncaught catches"}]

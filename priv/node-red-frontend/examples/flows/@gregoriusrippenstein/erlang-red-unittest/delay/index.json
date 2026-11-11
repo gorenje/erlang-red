@@ -1,0 +1,1 @@
+[{"fn":"delay messages by 5 seconds"},{"fn":"delay multiple message for the same length of time"},{"fn":"ignore msg.delay if its not set"},{"fn":"need to provide a status message of queue size"},{"fn":"random between two values"},{"fn":"set delay via msg.delay"}]

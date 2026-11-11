@@ -1,0 +1,1 @@
+[{"fn":"contains plain text and no mustache content"},{"fn":"handle base64 encoded data"},{"fn":"support Json encoding"},{"fn":"support logic in logicless mustache template"},{"fn":"support mustache template"}]

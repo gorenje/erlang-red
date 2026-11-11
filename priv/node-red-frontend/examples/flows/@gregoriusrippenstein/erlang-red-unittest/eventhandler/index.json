@@ -1,0 +1,1 @@
+[{"fn":"handle kill exits"},{"fn":"handle normal exits"},{"fn":"multiple dynamic event handlers"},{"fn":"register and unregister handler"},{"fn":"static configuration"},{"fn":"static handler with arguments"},{"fn":"static handler: multiple instances"},{"fn":"used with a supervisor node"}]

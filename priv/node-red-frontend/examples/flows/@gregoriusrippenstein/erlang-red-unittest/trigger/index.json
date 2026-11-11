@@ -1,0 +1,1 @@
+[{"fn":"extend timer"},{"fn":"initial example"},{"fn":"loops of triggers"},{"fn":"msg.delay overrides the configured delay"},{"fn":"override via delay but no delay set"},{"fn":"send both messages on one pipe"},{"fn":"send first but not second message"},{"fn":"send second message only"},{"fn":"the noop trigger"},{"fn":"two outputs"}]

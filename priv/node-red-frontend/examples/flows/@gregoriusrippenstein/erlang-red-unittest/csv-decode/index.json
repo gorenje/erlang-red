@@ -1,0 +1,1 @@
+[{"fn":"comma separated, parse numbers & msg per row"},{"fn":"separators other than comma"},{"fn":"single message for entire CSV, comma, RFC4180"},{"fn":"single message per line"},{"fn":"skip line happens before parsing content"}]
