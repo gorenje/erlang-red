@@ -1,1 +1,1 @@
-["@gorenje/node-red-contrib-binary","@gregoriusrippenstein/node-red-contrib-introspection","@gregoriusrippenstein/node-red-contrib-flowhub-server","@greyorange/node-red-contrib-amqp","node-red-node-markdown","node-red","@gregoriusrippenstein/erlang-red-unittest"]
+["@gorenje/node-red-contrib-binary","@gregoriusrippenstein/erlang-red-unittest","@gregoriusrippenstein/node-red-contrib-flowhub-server","@gregoriusrippenstein/node-red-contrib-introspection","@greyorange/node-red-contrib-amqp","node-red","node-red-node-markdown"]
