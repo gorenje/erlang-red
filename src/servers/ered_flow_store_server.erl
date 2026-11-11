@@ -235,9 +235,9 @@ compile_file_list() ->
 
     TestFlowDir =
         filename:join(
-          code:priv_dir(erlang_red),
-          "node-red-frontend/examples/flows/"
-         ),
+            code:priv_dir(erlang_red),
+            "node-red-frontend/examples/flows/"
+        ),
 
     Fun =
         fun(Fname, Acc) ->

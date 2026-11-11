@@ -55,8 +55,8 @@ tab_name_or_filename([_NodeDef | MoreNodeDefs], FileName) ->
 flowid_from_flowdata([]) ->
     not_found;
 flowid_from_flowdata(
-  [#{<<"type">> := <<"tab">>, <<"id">> := FlowId} | _MoreNodeDefs]
- ) ->
+    [#{<<"type">> := <<"tab">>, <<"id">> := FlowId} | _MoreNodeDefs]
+) ->
     FlowId;
 flowid_from_flowdata([_NodeDef | MoreNodeDefs]) ->
     flowid_from_flowdata(MoreNodeDefs);
@@ -106,7 +106,7 @@ parse_flow_file(FileName) ->
 %%
 %%
 -spec maybe_parse_flow_file(FileName :: string() | binary()) ->
-          {ok, Data :: json:decode_value()} | {error, Reason :: atom()}.
+    {ok, Data :: json:decode_value()} | {error, Reason :: atom()}.
 maybe_parse_flow_file(FileName) ->
     case file:read_file(FileName) of
         {ok, Content} ->
