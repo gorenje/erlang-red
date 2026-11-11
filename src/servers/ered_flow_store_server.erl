@@ -23,12 +23,17 @@
 ]).
 
 %%
-%% Manage the collection of test flows in the priv/testflows directory.
-%% This manages the retrieval but not storage - which is an inconsistency.
-%% Storage is handled directlty in the http request.
+%% Manage the collection of test flows in the unitesting plugin. The plugin
+%% is installed in Erlang-Red and Node-RED and provides a list of test flows
+%% that maintain compatiability between the two. Test flows are now maintained
+%% in a read-only plugin. Meaning that once defined, they aren't modifible
+%% here but via an extra repository. This maintains the test flows in sync
+%% via the FlowHub local plugin.
 %%
 -import(ered_flows, [
     parse_flow_file/1,
+    maybe_parse_flow_file/1,
+    flowid_from_flowdata/1,
     compute_timeout/1,
     tab_name_or_filename/2
 ]).
@@ -226,25 +231,35 @@ remove_credentials([NodeDef | Rest], Store) ->
 
 %%
 compile_file_list() ->
-    {ok, MP} = re:compile("([A-Z0-9]{16})/flows.json", [caseless]),
+    {ok, MP} = re:compile("erlang-red-unittest/", [caseless]),
 
-    TestFlowDir = filename:join(code:priv_dir(erlang_red), "testflows"),
-    StoreFlowDir = ered_flow_store:store_flow(),
+    TestFlowDir =
+        filename:join(
+          code:priv_dir(erlang_red),
+          "node-red-frontend/examples/flows/"
+         ),
 
     Fun =
         fun(Fname, Acc) ->
             case re:run(Fname, MP) of
-                {match, [{_, _}, {S, L}]} ->
-                    [{string:substr(Fname, S + 1, L), Fname} | Acc];
+                {match, _} ->
+                    case maybe_parse_flow_file(Fname) of
+                        {ok, Ary} ->
+                            case flowid_from_flowdata(Ary) of
+                                not_found ->
+                                    Acc;
+                                FlowId ->
+                                    [{FlowId, Fname} | Acc]
+                            end;
+                        _ ->
+                            Acc
+                    end;
                 _ ->
                     Acc
             end
         end,
 
-    FileNames0 = filelib:fold_files(TestFlowDir, "flows.json", true, Fun, []),
-    FileNames1 = filelib:fold_files(StoreFlowDir, "flows.json", true, Fun, []),
-
-    FileNames0 ++ FileNames1.
+    filelib:fold_files(TestFlowDir, ".+", true, Fun, []).
 
 %% erlfmt:ignore lining stuff up
 compile_file_store([], FileStore) ->

@@ -9,7 +9,9 @@
     is_test_case_not_supported/1,
     parse_flow_file/1,
     should_keep_flow_running/1,
-    tab_name_or_filename/2
+    tab_name_or_filename/2,
+    flowid_from_flowdata/1,
+    maybe_parse_flow_file/1
 ]).
 
 %%
@@ -48,6 +50,21 @@ tab_name_or_filename([_NodeDef | MoreNodeDefs], FileName) ->
     tab_name_or_filename(MoreNodeDefs, FileName).
 
 %%
+%% Retreive flow id from the first tab node found, This should only be
+%% used on file data that contains a single flow.
+flowid_from_flowdata([]) ->
+    not_found;
+flowid_from_flowdata(
+  [#{<<"type">> := <<"tab">>, <<"id">> := FlowId} | _MoreNodeDefs]
+ ) ->
+    FlowId;
+flowid_from_flowdata([_NodeDef | MoreNodeDefs]) ->
+    flowid_from_flowdata(MoreNodeDefs);
+flowid_from_flowdata(_) ->
+    %% invalid json content gets a not found, e.g. a non-array JSON object.
+    not_found.
+
+%%
 %% Compute a timeout for the flow test, can be set in the flows.json file.
 %% Since flows have delays or even test the delay node, it must be possible
 %% to define a timeout per flow test. This is possible by using the ENV
@@ -81,9 +98,27 @@ compute_timeout(Ary, DefaultTimeout) ->
 
 %%
 %%
+-spec parse_flow_file(FileName :: file:name_all()) -> json:decode_value().
 parse_flow_file(FileName) ->
     {ok, Json} = file:read_file(FileName),
     decode_json(Json).
+
+%%
+%%
+-spec maybe_parse_flow_file(FileName :: string() | binary()) ->
+          {ok, Data :: json:decode_value()} | {error, Reason :: atom()}.
+maybe_parse_flow_file(FileName) ->
+    case file:read_file(FileName) of
+        {ok, Content} ->
+            try
+                {ok, decode_json(Content)}
+            catch
+                _ ->
+                    {error, not_valid_json}
+            end;
+        _ ->
+            {error, no_file_found}
+    end.
 
 %%
 %%

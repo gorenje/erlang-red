@@ -186,6 +186,7 @@ timestamp() ->
 
 %%
 %%
+-spec decode_json(Data :: list() | binary()) -> json:decode_value().
 decode_json(Val) when is_list(Val) ->
     decode_json(list_to_binary(Val));
 decode_json(Val) ->
