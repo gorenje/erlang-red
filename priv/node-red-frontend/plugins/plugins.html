@@ -434,9 +434,9 @@
     let treeListItems = [];
     let tags = {}
     let nonTag = []
-
+  
     Object.keys(resp.data).forEach(function (key) {
-      let mth = resp.data[key].name.match(/^(\[.+\])/)
+      let mth = resp.data[key].name.match(/^\[(.+)\]/)
       if (mth) {
         if (tags[mth[0]]) {
           tags[mth[0]].push(resp.data[key])
@@ -623,9 +623,15 @@ function highlightTestResult(dirList, flowid, status) {
       clr = "";
       shp = "fa-minus";
       break;
+    case "not-supported":
+      clr = "blue";
+      shp = "fa-ban";
+      break;
+
   }
 
   dirList.treeList('select', `flowid-treelist-${flowid}`);
+
   if ($($(dirList.treeList('selected').treeList.container).find('.red-ui-treeList-icon')).data("status") != status) {
     $($(dirList.treeList('selected').treeList.container).find('.red-ui-treeList-icon')).data("status", status)
     $($($(dirList.treeList('selected').treeList.container).find('.red-ui-treeList-icon')).find('i')).prop('class', "fa " + shp).css('color', clr)
@@ -738,7 +744,7 @@ function sendUnittestngHalt() {
 
 function resetTestResultsRow() {
   $('#node-input-unittestingpull-testresults-row').show();
-  [".todo", ".pending", ".total", ".success",".failed"].forEach( d => {
+  [".todo", ".pending", ".total", ".success", ".failed", ".not-supported"].forEach( d => {
     $('#node-input-unittestingpull-testresults-row').find(d).html("0")
   })
 }
@@ -804,39 +810,6 @@ RED.sidebar.addTab({
   visible: true
 });
 
-/*
-var tabs = RED.tabs.create({
-  id: 'func-unittesting-tabs',
-  onchange: function (tab) {
-    $('#func-unittesting-tabs-content').children().hide();
-    $('#' + tab.id).show();
-  }
-});
-
-// Add pull tab
-tabs.addTab({
-  id: 'func-unittesting-tab-pull',
-  iconClass: 'fa fa-arrow-down',
-  label: 'Tests'
-});
-
-// Add compare tab
-tabs.addTab({
-  id: 'func-unittesting-tab-compare',
-  iconClass: 'fa fa-clone',
-  label: 'TBD'
-});
-
-// Add push tab
-tabs.addTab({
-  id: 'func-unittesting-tab-push',
-  iconClass: 'fa fa-arrow-up',
-  label: 'TBD'
-});
-
-tabs.activateTab("func-unittesting-tab-pull");
-*/
-
 $('#func-unittesting-tab-pull').show();
 
 var dirList = $("#node-input-unittestingpull-sb-target-container-div").css({
@@ -848,7 +821,7 @@ var dirList = $("#node-input-unittestingpull-sb-target-container-div").css({
   }
 ).on('treelistselect', function (event, item) {
     if ( item.flowid) {
-      $('#unittesting-view-testflow-link').prop('href', `https://flows.red-erik.org/f/${item.flowid}`)
+      $('#unittesting-view-testflow-link').prop('href', `https://github.com/gorenje/erlang-red-flow-testsuite/tree/main/${item.flowid}`)
       $('#unittesting-view-testflow-link').fadeIn(300)
       $('#unittesting-helper-import-text').fadeIn(300)
     } else {
@@ -893,6 +866,10 @@ var search = $("#node-input-unittestingpull-sb-target-filter").searchBox({
         count = dirList.treeList("filter", function (item) {
           return !!$($(item.treeList.container).find('.red-ui-treeList-icon')).data("status")
         });        
+      } else if (val == "is:not-supported") {
+        count = dirList.treeList("filter", function (item) {
+          return $($(item.treeList.container).find('.red-ui-treeList-icon')).data("status") == "not-supported"
+        });
       } else { 
         count = dirList.treeList("filter", function (item) {
           return item.label.toLowerCase().indexOf(val) > -1 || item.sublabel.toLowerCase().indexOf(val) > -1
@@ -1153,11 +1130,12 @@ $('#node-input-unittestingselect-test-node').on('click', (e) => {
 
       <div id="node-input-unittestingpull-testresults-row" class="form-row" 
                 style="margin-left: 10px; margin-top: 15px; display: none;">
-         <span class='filtrg'data-filter="todo">Todo <span class="todo" style="color: purple">0</span></span>
-         / <span class='filtrg'data-filter="succeed">Succeed <span class="success" style="color: green">0</span></span>
-         / <span class='filtrg'data-filter="pending">Pending <span class="pending" style="color: orange">0</span></span>
-         / <span class='filtrg'data-filter="failed">Failed <span class="failed" style="color: red">0</span></span>
-         / <span class='filtrg'data-filter="tested">Done <span class='total'>0</span></span>
+         <span class='filtrg' data-filter="todo">Todo <span class="todo" style="color: purple">0</span></span>
+         / <span class='filtrg' data-filter="succeed">Succeed <span class="success" style="color: green">0</span></span>
+         / <span class='filtrg' data-filter="pending">Pending <span class="pending" style="color: orange">0</span></span>
+         / <span class='filtrg' data-filter="failed">Failed <span class="failed" style="color: red">0</span></span>
+         / <span class='filtrg' data-filter="not-supported">Not Supported <span class="not-supported" style="color: blue">0</span></span>
+         / <span class='filtrg' data-filter="tested">Done <span class='total'>0</span></span>
       </div>
 
       <div class="form-row" style="margin-left: 10px; margin-top: 30px;">
@@ -5931,6 +5909,17 @@ function ensureYourConfigNodeExists() {
 
          RED.actions.remove("presenter-mode:presenter-mode-reset")
          RED.actions.add("presenter-mode:presenter-mode-reset", RED.presenterMode.reset)
+
+         // add an action for delete the current tab, this is bound to ctrl-w to act
+         // as a close tab action.
+         let deleteCurrentWorkspace = () => {
+            RED.editor.editFlow(RED.nodes.workspace(RED.workspaces.active() ))
+            setTimeout( () => {
+               $('#node-dialog-delete').trigger('click')
+            },449) // allow the editor panel to slide into view
+         }
+         RED.actions.remove("presenter-mode:delete-current-workspace")
+         RED.actions.add("presenter-mode:delete-current-workspace", deleteCurrentWorkspace)
 
          setupClassicDefaultMode()
 
