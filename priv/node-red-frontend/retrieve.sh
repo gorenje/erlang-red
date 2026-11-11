@@ -37,7 +37,7 @@ PyTHON=/usr/bin/python3
 
 ## Retrieve the flow examples included in various node packages. Only need
 ## to do this if these changes.
-if [ false ] ; then
+if [ 0 -eq 1 ] ; then
     echo "==> flow examples from the node packages"
 
     rm -f flows-examples.tgz
