@@ -44968,13 +44968,15 @@ RED.editor.codeEditor = (function() {
                     if ( node.type == "tab" ) {
                         let nameTypes = [
                             "NODE_RED_DIVERGENT",
+                            "NRED_PENDING",
+                            "NRED_TIMEOUT",
+                            "NODE_RED_ONLY",
+
                             "ERED_TIMEOUT",
                             "ERED_PENDING",
                             "ERED_ONLY",
                             "ERED_NOT_EUNIT",
-                            "ERED_KEEPRUNNING",
-                            "NRED_PENDING",
-                            "NODE_RED_ONLY"
+                            "ERED_KEEPRUNNING"
                         ]
 
                         nameField.typedInput({default:'str',types:['str',
@@ -44997,7 +44999,7 @@ RED.editor.codeEditor = (function() {
                                 valueField.typedInput('type', 'str');
                             }
 
-                            if ( nameField.typedInput('type') == "ERED_TIMEOUT" ) {
+                            if ( nameField.typedInput('type').endsWith("_TIMEOUT" ) ){
                                 valueField.typedInput('type', 'num');
                             }
                         })
