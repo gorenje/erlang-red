@@ -54,7 +54,7 @@ handle_response(Req, State) ->
                         ered_flow_store_server:all_flow_ids()
                 end,
 
-            timer:apply_after(500, fun() ->
+            timer:apply_after(200, fun() ->
                 trigger_tests_in_groups_of(
                     FlowIdsToTest,
                     WsName,
