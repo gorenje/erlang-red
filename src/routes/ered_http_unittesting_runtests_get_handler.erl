@@ -46,11 +46,17 @@ handle_response(Req, State) ->
             %% close any dangling tcp listeners
             ered_tcp_manager ! stop,
 
-            AllFlowIds = ered_flow_store_server:all_flow_ids(),
+            FlowIdsToTest =
+                case lists:keyfind(<<"limit">>, 1, Query) of
+                    {<<"limit">>, CommaListOfFlowIds} ->
+                        string:split(CommaListOfFlowIds, ",", all);
+                    _ ->
+                        ered_flow_store_server:all_flow_ids()
+                end,
 
             timer:apply_after(500, fun() ->
                 trigger_tests_in_groups_of(
-                    AllFlowIds,
+                    FlowIdsToTest,
                     WsName,
                     AlsoTestPendingTests,
                     50
@@ -58,7 +64,7 @@ handle_response(Req, State) ->
             end),
 
             {
-                json:encode(#{status => ok, todo => length(AllFlowIds)}),
+                json:encode(#{status => ok, todo => length(FlowIdsToTest)}),
                 Req,
                 State
             };
