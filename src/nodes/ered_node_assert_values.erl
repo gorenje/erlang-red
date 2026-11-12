@@ -100,10 +100,10 @@ check_rule_against_msg(<<"noteql">>, <<"msg">>, Rule, Msg) ->
             case eql_msg_op(Prop, Val, ToType, ReqVal, Msg) of
                 true ->
                     {failed,
-                     jstr(
-                       "Prop '~p': Unequal but same. Exp: ~n '~p' ~n Was: ~n '~p' ~n",
-                       [Prop, ReqVal, Val]
-                      )};
+                        jstr(
+                            "Prop '~p': Unequal but same. Exp: ~n '~p' ~n Was: ~n '~p' ~n",
+                            [Prop, ReqVal, Val]
+                        )};
                 _ ->
                     true
             end;
