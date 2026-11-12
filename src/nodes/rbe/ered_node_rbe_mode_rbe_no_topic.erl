@@ -33,19 +33,61 @@ handle_event(_, NodeDef) ->
     NodeDef.
 
 %%
-%% Reset messages
+%% Reset messages.
+%%
+%% This has a number of nuances:
+%%
+%%   - reset and payload value that is the same as the initial value
+%%      --> _lastvalue set to payload and message sent
+%%   - reset and no payload value set
+%%      --> don't send reset message and set the lastvalue to undefined
+%%   - reset and payload set to something else than the initial value
+%%      --> _lastvalue is reset and the message isn't sent.
+%%
+%% Also the value of the reset is ignored, it's only important that the
+%% 'reset' property is set.
+
 handle_msg(
-    {incoming, #{<<"reset">> := Value} = Msg},
-    NodeDef
-) when Value =:= true; Value =:= <<"true">>; Value =:= 1 ->
-    send_msg_to_connected_nodes(NodeDef, Msg),
-    {handled, NodeDef#{'_lastvalue' => undefined}, Msg};
+    {incoming, #{<<"reset">> := _IsSet} = Msg},
+    #{
+        '_lastvalue' := undefined,
+        <<"property">> := PropName
+    } = NodeDef
+) ->
+    case get_prop(PropName, Msg) of
+        {ok, Value, _} ->
+            send_msg_to_connected_nodes(NodeDef, Msg),
+            {handled, NodeDef#{'_lastvalue' => Value}, Msg};
+        _ ->
+            {handled, NodeDef, dont_send_complete_msg}
+    end;
 handle_msg(
-    {incoming, #{<<"reset">> := _Value} = Msg},
+    {incoming, #{<<"reset">> := _IsSet} = Msg},
+    #{
+        '_lastvalue' := LastValue,
+        <<"property">> := PropName
+    } = NodeDef
+) ->
+    case get_prop(PropName, Msg) of
+        {ok, LastValue, _} ->
+            send_msg_to_connected_nodes(NodeDef, Msg),
+            {handled, NodeDef, Msg};
+        {ok, Payload, _} ->
+            send_msg_to_connected_nodes(NodeDef, Msg),
+            {handled, NodeDef#{'_lastvalue' => Payload}, Msg};
+        _ ->
+            {handled, NodeDef#{'_lastvalue' => undefined},
+                dont_send_complete_msg}
+    end;
+handle_msg(
+    {incoming, #{<<"reset">> := _IsSet} = Msg},
     NodeDef
 ) ->
+    %% this doesn't make sense and shouldn't happen. This is the case
+    %% that the node has not been configured with a message property that
+    %% should be checked - that is non-sensical.
     send_msg_to_connected_nodes(NodeDef, Msg),
-    {handled, NodeDef, dont_send_complete_msg};
+    {handled, NodeDef#{'_lastvalue' => undefined}, Msg};
 %%
 %%
 handle_msg(
@@ -66,12 +108,12 @@ handle_msg(
 handle_msg(
     {incoming, Msg},
     #{
-        '_lastvalue' := Value,
+        '_lastvalue' := LastValue,
         <<"property">> := PropName
     } = NodeDef
 ) ->
     case get_prop(PropName, Msg) of
-        {ok, Value, _} ->
+        {ok, LastValue, _} ->
             {handled, NodeDef, dont_send_complete_msg};
         {ok, Payload, _} ->
             send_msg_to_connected_nodes(NodeDef, Msg),
