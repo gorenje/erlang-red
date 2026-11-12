@@ -95,13 +95,15 @@ check_rule_against_msg(<<"noteql">>, <<"msg">>, Rule, Msg) ->
     case get_prop(maps:find(<<"p">>, Rule), Msg) of
         {ok, Val, Prop} ->
             {ok, ReqVal} = maps:find(<<"to">>, Rule),
-            case is_same(ReqVal, Val) of
+            {ok, ToType} = maps:find(<<"tot">>, Rule),
+
+            case eql_msg_op(Prop, Val, ToType, ReqVal, Msg) of
                 true ->
                     {failed,
-                        jstr(
-                            "Prop '~p': Unequal but same. Exp: ~n '~p' ~n Was: ~n '~p' ~n",
-                            [Prop, ReqVal, Val]
-                        )};
+                     jstr(
+                       "Prop '~p': Unequal but same. Exp: ~n '~p' ~n Was: ~n '~p' ~n",
+                       [Prop, ReqVal, Val]
+                      )};
                 _ ->
                     true
             end;
