@@ -146,5 +146,5 @@ debug_msg(NodeDef, Msg, {filename_type_not_supported, FileNameType}) ->
     ),
     send_out_debug_msg(NodeDef, Msg, ErrMsg, error);
 debug_msg(NodeDef, Msg, {no_file_specified}) ->
-    ErrMsg = jstr("No file specified"),
+    ErrMsg = jstr("No filename specified"),
     send_out_debug_msg(NodeDef, Msg, ErrMsg, warning).

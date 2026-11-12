@@ -135,7 +135,7 @@ send_out_debug_msg(NodeDef, Msg, ErrMsg, DebugType) ->
 send_out_debug_error(NodeDef, Msg) ->
     Data = ?ObtainFrom(NodeDef)#{
       <<"msg">>    => Msg,
-      <<"format">> => <<"object">>
+      <<"format">> => <<"error">>
      },
 
     debug(ws_from(Msg), Data, error).

@@ -148,7 +148,7 @@ handle_status_setting(
     #{?GetWsName} = Msg
 ) ->
     Status = jsonata_eval_or_error_msg(Jsonata, Msg),
-    node_status(WsName, NodeDef, Status, "blue", "ring");
+    node_status(WsName, NodeDef, Status, "grey", "dot");
 handle_status_setting(
     #{
         <<"tostatus">> := true,
