@@ -46,20 +46,46 @@ start(NodeDef, _WsName) ->
 %% complete node (nodes connected to those nodes, i.e. second or third degree
 %% nodes), we mark the messages we handle and ignore those that come
 %% back to us - like a bad boomarang ready to hit us in the head.
-mark_msg(NodeDef, Msg) ->
-    {ok, ThisId} = maps:find(<<"id">>, NodeDef),
+mark_msg(#{<<"id">> := ThisId} = _NodeDef, #{'_complete_list' := Ary} = Msg) ->
+    case lists:member(ThisId, Ary) of
+        true ->
+            {error, already_handled_msg};
+        false ->
+            {ok, Msg#{'_complete_list' => [ThisId | Ary]}}
+    end;
+mark_msg(#{<<"id">> := ThisId} = _NodeDef, Msg) ->
+    {ok, Msg#{'_complete_list' => [ThisId]}};
+mark_msg(_NodeDef, _Msg) ->
+    {error, no_node_id_found}.
 
-    case maps:find('_complete_list', Msg) of
-        {ok, Ary} ->
-            case lists:member(ThisId, Ary) of
-                true ->
-                    already_handled_msg;
-                false ->
-                    {ok, maps:put('_complete_list', [ThisId | Ary], Msg)}
-            end;
-        _ ->
-            {ok, maps:put('_complete_list', [ThisId], Msg)}
-    end.
+%%
+%%
+define_source_details(
+    #{<<"type">> := FromType, <<"id">> := FromId, <<"name">> := FromName}
+) ->
+    #{<<"id">> => FromId, <<"type">> => FromType, <<"name">> => FromName};
+define_source_details(
+    #{<<"type">> := FromType, <<"id">> := FromId}
+) ->
+    #{<<"id">> => FromId, <<"type">> => FromType, <<"name">> => <<"">>};
+define_source_details(
+    #{<<"id">> := FromId}
+) ->
+    #{<<"id">> => FromId, <<"type">> => <<"">>, <<"name">> => <<"">>};
+define_source_details(
+    _
+) ->
+    #{<<"id">> => <<"">>, <<"type">> => <<"">>, <<"name">> => <<"">>}.
+
+%%
+%%
+add_complete_attribute(FromDef, MarkedMsg) ->
+    MarkedMsg#{
+        <<"complete">> => #{
+            <<"source">> =>
+                define_source_details(FromDef)
+        }
+    }.
 
 %%
 %%
@@ -71,22 +97,27 @@ handle_event(_, NodeDef) ->
 
 %%
 %%
-handle_completed_msg(NodeDef, FromDef, Msg) ->
-    {ok, FromId} = maps:find(<<"id">>, FromDef),
-    {ok, Scope} = maps:find(<<"scope">>, NodeDef),
-
+handle_completed_msg(
+    #{<<"scope">> := Scope} = NodeDef,
+    #{<<"id">> := FromId} = FromDef,
+    Msg
+) ->
     case lists:member(FromId, Scope) of
         true ->
             case mark_msg(NodeDef, Msg) of
                 {ok, MarkedMsg} ->
-                    send_msg_to_connected_nodes(NodeDef, MarkedMsg),
-                    {NodeDef, MarkedMsg};
+                    CompletelyMarkedMsg =
+                        add_complete_attribute(FromDef, MarkedMsg),
+                    send_msg_to_connected_nodes(NodeDef, CompletelyMarkedMsg),
+                    {NodeDef, CompletelyMarkedMsg};
                 _ ->
                     {NodeDef, dont_send_complete_msg}
             end;
         _ ->
             {NodeDef, dont_send_complete_msg}
-    end.
+    end;
+handle_completed_msg(NodeDef, _FromDef, _Msg) ->
+    {NodeDef, dont_send_complete_msg}.
 
 %%
 %%
