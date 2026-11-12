@@ -93,6 +93,7 @@ end).
         <<"z">> => Zstr,
         <<"id">> => IdStr,
         <<"path">> => Zstr,
-        <<"name">> => Name
+        <<"name">> => Name,
+        <<"type">> => Type
     }
 end).
