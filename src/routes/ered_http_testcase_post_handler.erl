@@ -26,10 +26,10 @@ content_types_accepted(Req, State) ->
     ContentType = cowboy_req:header(<<"content-type">>, Req),
     {[{ContentType, handle_json_body}], Req, State}.
 
-handle_json_body(Req, State) ->
-    WorkspaceId = cowboy_req:binding(workspaceid, Req),
+handle_json_body(_Req, State) ->
+    %% WorkspaceId = cowboy_req:binding(workspaceid, Req),
 
-    {ok, Body, Req2} = ered_http_utils:read_body(Req, <<"">>),
+    %% {ok, Body, Req2} = ered_http_utils:read_body(Req, <<"">>),
 
     %%
     %% The relationship to workspace id and flow id is one-to-one, they

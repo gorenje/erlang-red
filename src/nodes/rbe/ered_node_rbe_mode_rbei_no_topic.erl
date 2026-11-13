@@ -78,7 +78,7 @@ handle_msg(
                 dont_send_complete_msg}
     end;
 handle_msg(
-    {incoming, #{<<"reset">> := _IsSet} = Msg},
+    {incoming, #{<<"reset">> := _IsSet}},
     NodeDef
 ) ->
     %% this doesn't make sense and shouldn't happen. This is the case
