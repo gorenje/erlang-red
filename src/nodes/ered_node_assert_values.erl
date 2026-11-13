@@ -329,7 +329,6 @@ check_rules(Rules, NodeDef, Msg) ->
 check_rules([], _NodeDef, Msg, 0, _Failures, SuccessCount) ->
     Msg#{
         <<"assert_succeed">> => true,
-        <<"assert_failures">> => [],
         <<"success_count">> => SuccessCount,
         <<"failure_count">> => 0
     };
@@ -432,7 +431,11 @@ handle_msg({incoming, Msg}, NodeDef) ->
                 },
                 Msg2};
         _ ->
-            #{<<"assert_failures">> := Failures} = Msg2,
+            Failures =
+                case Msg2 of
+                    #{<<"assert_failures">> := F} -> F;
+                    _ -> []
+                end,
             post_failures(Failures, NodeDef, Msg),
             set_node_status(
                 maps:get(<<"assert_succeed">>, Msg2), NodeDef, Msg2
