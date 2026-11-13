@@ -18,6 +18,7 @@
     get_filename/1,
     get_flow_data/0,
     retrieve_main_flow/0,
+    retrieve_test_filenames/0,
     update_all_flows/0,
     update_flow/2
 ]).
@@ -75,6 +76,18 @@ all_flow_ids() ->
 
 retrieve_main_flow() ->
     gen_server:call(?MODULE, {retrieve_main_flow}).
+
+%%
+%%
+retrieve_test_filenmes([], Result) ->
+    Result;
+retrieve_test_filenmes([FlowId | Rest], Result) ->
+    retrieve_test_filenmes(Rest, [get_filename(FlowId) | Result]).
+%%
+%%
+retrieve_test_filenames() ->
+    retrieve_test_filenmes(maps:keys(get_flow_data()), []).
+
 
 %%
 %% Specific implementation for the flow store
@@ -162,7 +175,7 @@ handle_info({store_main_flow, FlowData}, State) ->
     end,
 
     {noreply, State};
-handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
+handle_info({store_flow, _FlowId, _JsonText}, FlowStore) ->
     %%
     %% don't store flows to the testflows directory, this has now been replaced
     %% with direct access to the git repository for tests.

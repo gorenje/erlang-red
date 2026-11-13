@@ -211,35 +211,21 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
 foreach_testflow_test_() ->
     %% pg is required for the catch nodes
     pg:start_link(),
-    ered_config_store:start_link(),
-    ered_csv_parser_store:start(),
-    ered_msgtracer_manager:start_link(),
-    ered_erlmodule_exchange:start_link(),
-    ered_tcp_manager:start_link(),
     ered_capture_io_exchange:start_link(),
+    ered_config_store:start_link(),
     ered_credentials_store:start_link(),
+    ered_csv_parser_store:start(),
+    ered_erlmodule_exchange:start_link(),
+    ered_flow_store_server:start(),
+    ered_msgtracer_manager:start_link(),
+    ered_tcp_manager:start_link(),
 
     application:ensure_all_started(elixir),
 
-    {_Cnt, FileNamesD} = filelib:fold_files(
-        filename:join([code:priv_dir(erlang_red), "testflows"]),
-        "flows.json",
-        true,
-        fun(Fname, Acc) ->
-            {element(1, Acc) + 1, [Fname | element(2, Acc)]}
-        end,
+    ered_flow_store_server:update_all_flows(),
 
-        {0, []}
-    ),
+    FileNames = ered_flow_store_server:retrieve_test_filenames(),
 
-    %% remove the main flows.json file from the test cases.
-    FileNames =
-        FileNamesD --
-            [
-                filename:join([
-                    code:priv_dir(erlang_red), "testflows", "flows.json"
-                ])
-            ],
     TestList = create_test_for_flow_file(FileNames, []),
 
     %% Tests start failing when all are run in parallel.
