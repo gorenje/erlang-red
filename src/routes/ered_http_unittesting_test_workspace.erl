@@ -42,12 +42,12 @@ handle_post_request(Req, State) ->
 
     #{<<"flowdata">> := FlowData} = json:decode(Body),
 
-    case cowboy_req:binding(flowid, Req2) of
+    case cowboy_req:binding(flowid, Req2, not_set) of
+        not_set ->
+            ignore;
         FlowId ->
             ered_unittest_engine !
-                {start_workspace_test, FlowId, WsName, FlowData};
-        _ ->
-            ignore
+                {start_workspace_test, FlowId, WsName, FlowData}
     end,
 
     Resp = cowboy_req:set_resp_body(<<"{ \"status\": \"ok\" }">>, Req2),
