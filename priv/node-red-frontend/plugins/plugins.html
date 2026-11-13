@@ -670,7 +670,62 @@ function clearDebugPanel() {
   RED.actions.invoke("core:clear-debug-messages")
 }
 
-function runTestForFlowId(flowid,dirList=undefined) {
+function runWorkspaceAsTest(flowid) {
+  // this is an Erlang-Red special.
+
+  let getFlowDataFromCurrentWorkspace = (flowid) => {
+    /******
+     ** Code taken from Node-RED code base:
+     **
+     ** https://github.com/node-red/node-red/blob/e8ddee24a9944e57d186f02b081295c56a45b67c/packages/node_modules/%40node-red/editor-client/src/js/ui/clipboard.js#L710-L723
+     **
+     **/
+    var activeWorkspace = flowid || RED.workspaces.active();
+    var nodes = RED.nodes.groups(activeWorkspace);
+
+    nodes = nodes.concat(RED.nodes.junctions(activeWorkspace));
+    nodes = nodes.concat(RED.nodes.filterNodes({ z: activeWorkspace }));
+
+    RED.nodes.eachConfig(function (n) {
+      if (n.z === RED.workspaces.active() && n._def.hasUsers === false) {
+        // Grab any config nodes scoped to this flow that don't
+        // require any flow-nodes to use them
+        nodes.push(n);
+      }
+    });
+
+    var parentNode = RED.nodes.workspace(
+      activeWorkspace
+    ) || RED.nodes.subflow(activeWorkspace);
+
+    nodes.unshift(parentNode);
+
+    return RED.nodes.createExportableNodeSet(nodes);
+  }
+
+  if (flowid) {
+    $.ajax({
+      url: `UnitTesting/${flowid}/testworkspace`,
+      type: "POST",
+      contentType: "application/json; charset=utf-8",
+
+      data: JSON.stringify({
+        flowdata: getFlowDataFromCurrentWorkspace(flowid),
+      }),
+
+      success: function (resp) {
+        RED.notify(`Triggered test run for ${flowid}`, "info")
+        $('#node-input-unittestingpull-testresults-row').find(".todo").html(resp.todo)
+      },
+
+      error: function (jqXHR, textStatus, errorThrown) {
+        RED.notify("Failed to trigger test", "error")
+      }
+    })
+  }
+}
+
+function runTestForFlowId(flowid, dirList=undefined) {
   if (flowid) {
     if (dirList) {
       resetTestResultsForFlowId(dirList,flowid)
@@ -710,8 +765,9 @@ function testCurrentWorkspace() {
   if (RED.comms.isConnected && !RED.comms.isConnected()) {
     return RED.notify("Not connected to server, websocket down", "error")
   }
+
   if ( RED.isErlangRed ) {
-    runTestForFlowId(RED.workspaces.active())
+    runWorkspaceAsTest(RED.workspaces.active())
   } else {
     RED.notify("restarting flow", { type: "info" });
     RED.actions.invoke("core:restart-flows")
