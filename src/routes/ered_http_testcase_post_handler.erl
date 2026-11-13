@@ -40,16 +40,20 @@ handle_json_body(Req, State) ->
     %% created but the user things differently - but that's not important
     %% just yet (because this codebase will be hosted on a read-only server
     %% and should just be able to execute the tests - for the time being).
-    ered_flow_store_server ! {store_flow, WorkspaceId, Body},
 
-    FileName = io_lib:format("flow.~s.json", [WorkspaceId]),
+    %% Don't store the testcases any longer, testing is done differently
+    %% now - using the testcase git repository directly.
 
-    Resp = cowboy_req:set_resp_body(
-        json:encode(#{name => list_to_binary(lists:flatten(FileName))}),
-        Req2
-    ),
+    %% ered_flow_store_server ! {store_flow, WorkspaceId, Body},
 
-    {true, Resp, State}.
+    %% FileName = io_lib:format("flow.~s.json", [WorkspaceId]),
+
+    %% Resp = cowboy_req:set_resp_body(
+    %%     json:encode(#{name => list_to_binary(lists:flatten(FileName))}),
+    %%     Req2
+    %% ),
+
+    {true, #{<<"status">> => <<"ok">>}, State}.
 
 format_error(Reason, Req) ->
     {

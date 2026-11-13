@@ -954,6 +954,10 @@ var RED = (function() {
                 return
             }
 
+
+            // don't save testcases, this is now done differently by storing
+            // tests directly into the test testcase git repository.
+            if (false) {
             // replication of code found in the clipboard module:
             //     function sendOffToServerAsTestCase(data)
             $.ajax({
@@ -972,6 +976,7 @@ var RED = (function() {
                     RED.notify(`something went wrong creating testcase`, "error" )
                 }
             });
+            }
         }
 
         RED.events.on("deploy",
@@ -50108,6 +50113,10 @@ RED.clipboard = (function() {
     }
 
     function sendOffToServerAsTestCase(data) {
+        // don't save testcases, this is now done differently by storing
+        // tests directly into the test testcase git repository.
+        return
+
         $.ajax({
             headers: {
             },

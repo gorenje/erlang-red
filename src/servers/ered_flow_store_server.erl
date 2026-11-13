@@ -163,30 +163,36 @@ handle_info({store_main_flow, FlowData}, State) ->
 
     {noreply, State};
 handle_info({store_flow, FlowId, JsonText}, FlowStore) ->
-    FlowMap = json:decode(JsonText),
-    {ok, NodeAryWithCreds} = maps:find(<<"flow">>, FlowMap),
+    %%
+    %% don't store flows to the testflows directory, this has now been replaced
+    %% with direct access to the git repository for tests.
+    %%
 
-    %% remove any reference to <<"credentials">>
-    NodeAry = remove_credentials(json:decode(NodeAryWithCreds)),
+    %% FlowMap = json:decode(JsonText),
+    %% {ok, NodeAryWithCreds} = maps:find(<<"flow">>, FlowMap),
 
-    DestFileName = ered_flow_store:store_flow_id(FlowId),
+    %% %% remove any reference to <<"credentials">>
+    %% NodeAry = remove_credentials(json:decode(NodeAryWithCreds)),
 
-    filelib:ensure_dir(DestFileName),
-    case file:write_file(DestFileName, encode_json(NodeAry)) of
-        ok ->
-            ignore_all_went_well;
-        R ->
-            io:format(
-                "FILE SAVING FAILED: ~s --> ~p~n",
-                [DestFileName, R]
-            )
-    end,
+    %% DestFileName = ered_flow_store:store_flow_id(FlowId),
 
-    FlowDetails = compile_file_store(
-        [{binary_to_list(FlowId), lists:flatten(DestFileName)}], #{}
-    ),
+    %% filelib:ensure_dir(DestFileName),
+    %% case file:write_file(DestFileName, encode_json(NodeAry)) of
+    %%     ok ->
+    %%         ignore_all_went_well;
+    %%     R ->
+    %%         io:format(
+    %%             "FILE SAVING FAILED: ~s --> ~p~n",
+    %%             [DestFileName, R]
+    %%         )
+    %% end,
 
-    {noreply, maps:merge(FlowStore, FlowDetails)};
+    %% FlowDetails = compile_file_store(
+    %%     [{binary_to_list(FlowId), lists:flatten(DestFileName)}], #{}
+    %% ),
+    %% {noreply, maps:merge(FlowStore, FlowDetails)};
+
+    {noreply, FlowStore};
 handle_info({timeout, _From, initial_load_of_flow_files}, _FlowStore) ->
     {noreply, compile_file_store(compile_file_list(), #{})};
 handle_info(stop, FlowStore) ->
