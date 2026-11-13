@@ -88,7 +88,6 @@ retrieve_test_filenmes([FlowId | Rest], Result) ->
 retrieve_test_filenames() ->
     retrieve_test_filenmes(maps:keys(get_flow_data()), []).
 
-
 %%
 %% Specific implementation for the flow store
 %%
