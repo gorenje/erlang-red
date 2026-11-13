@@ -214,6 +214,8 @@ flow_editor_routes() ->
             []},
         {"/UnitTesting/:flowid/runtest",
             ered_http_unittesting_runtests_get_handler, []},
+        {"/UnitTesting/:flowid/testworkspace",
+            ered_http_unittesting_test_workspace, []},
         {"/UnitTesting/:flowid/retrieve",
             ered_http_unittesting_retrieve_flow_handler, []},
         {"/flows.test.json", ered_http_unittesting_retrieve_flow_handler, []},

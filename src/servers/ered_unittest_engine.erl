@@ -18,12 +18,14 @@
 %% These aren't exported to be used external, these are "internal" exports.
 -export([
     not_happen_loop/2,
-    run_test_on_another_planet/4
+    run_test_on_another_planet/4,
+    run_test_with_flowdata/3
 ]).
 
 %%
 %%
 -import(ered_flows, [
+    compute_timeout/1,
     compute_timeout/2,
     is_test_case_pending/1,
     is_test_case_not_supported/1,
@@ -89,6 +91,16 @@ handle_info(
         ?MODULE,
         run_test_on_another_planet,
         [FlowId, WsName, IgnPendingFlag, Timeout]
+    ),
+    {noreply, State};
+handle_info(
+    {start_workspace_test, FlowId, WsName, FlowAry},
+    State
+) ->
+    spawn(
+        ?MODULE,
+        run_test_with_flowdata,
+        [FlowId, WsName, FlowAry]
     ),
     {noreply, State};
 handle_info(stop, ErrorStore) ->
@@ -172,6 +184,18 @@ dump_errors_onto_nodered([], _FlowId, _WsName) ->
 dump_errors_onto_nodered([{NodeId, Msg} | T], FlowId, WsName) ->
     debug(WsName, debug_string(NodeId, FlowId, Msg), notice),
     dump_errors_onto_nodered(T, FlowId, WsName).
+
+%%
+%%
+run_test_with_flowdata(FlowId, WsName, FlowDataAry) ->
+    ered_error_store:reset_errors(FlowId),
+    case is_test_case_not_supported(FlowDataAry) of
+        true ->
+            unittest_result(WsName, FlowId, not_supported);
+        false ->
+            DefaultTimeout = compute_timeout(FlowDataAry),
+            run_the_test(FlowId, WsName, FlowDataAry, DefaultTimeout)
+    end.
 
 %%
 %% respect the pending flag on a flow test
