@@ -44972,7 +44972,6 @@ RED.editor.codeEditor = (function() {
 
                     if ( node.type == "tab" ) {
                         let nameTypes = [
-                            "NODE_RED_DIVERGENT",
                             "NRED_PENDING",
                             "NRED_TIMEOUT",
                             "NODE_RED_ONLY",
