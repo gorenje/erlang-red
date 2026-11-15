@@ -218,6 +218,27 @@ to_binary_keys([], NewList) ->
 to_binary_keys([H | T], Lst) ->
     to_binary_keys(T, [{atom_to_binary(element(1, H)), element(2, H)} | Lst]).
 
+%%
+%% This handles "?q=1&q=2" and returns <<q>> => [1,2].
+%% Cowboy cowboy_req:parse_qs returns [{<<q>>,1},{<<q>>,2}] and that is
+%% what is converted to a map here.
+% erlfmt:ignore - alignment
+-spec query_list_to_map(List :: list()) -> QueryMap :: map().
+query_list_to_map(List) ->
+    maps:groups_from_list(
+        fun
+            ({X, _}) -> X;
+            ({X}) -> X;
+            (X) -> X
+        end,
+        fun
+            ({_, V}) -> V;
+            ({V}) -> V;
+            (V) -> V
+        end,
+        List
+    ).
+
 % erlfmt:ignore - alignment
 push_out_msg(Req, HttpInPid, WsName) ->
     ContentType = cowboy_req:parse_header(<<"content-type">>, Req),
@@ -231,7 +252,7 @@ push_out_msg(Req, HttpInPid, WsName) ->
         <<"headers">>     => cowboy_req:headers(Req),
         <<"params">>      => to_binary_keys(cowboy_req:bindings(Req)),
         <<"cookies">>     => cowboy_req:parse_cookies(Req),
-        <<"query">>       => maps:from_list(cowboy_req:parse_qs(Req))
+        <<"query">>       => query_list_to_map(cowboy_req:parse_qs(Req))
     },
 
     AddDataFromBody =
