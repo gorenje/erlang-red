@@ -610,7 +610,7 @@
             "ut-assert-failure"
         ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,
@@ -622,7 +622,7 @@
             "ut-assert-values"
         ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,
@@ -634,7 +634,7 @@
             "ut-assert-success"
         ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,
@@ -646,7 +646,7 @@
             "ut-assert-status"
         ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,
@@ -658,21 +658,19 @@
             "ut-assert-debug"
         ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,
-        "err": {
-            "code": "ERR_MODULE_NOT_FOUND",
-            "url": "file:///data/node_modules/@gregoriusrippenstein/erlang-red-unittest/nodes/ut-config.js"
-        },
         "id": "@gregoriusrippenstein/erlang-red-unittest/ut-config",
         "local": true,
         "module": "@gregoriusrippenstein/erlang-red-unittest",
         "name": "ut-config",
-        "types": [],
+        "types": [
+            "ut-config"
+        ],
         "user": false,
-        "version": "0.21.4"
+        "version": "0.21.5"
     },
     {
         "enabled": true,

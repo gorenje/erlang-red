@@ -304,6 +304,17 @@
             }
         }
     },
+    "@gregoriusrippenstein/erlang-red-unittest/ut-config": {
+        "ut-config": {
+            "label": {
+                "statusset": "Status Set"
+            },
+            "status": {
+                "timeout": "No more time to waiting",
+                "waiting": "Waiting for Godot"
+            }
+        }
+    },
     "@gregoriusrippenstein/node-red-contrib-flow2uml/flowtomermaid": {},
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-flowchart": {
         "mermaid-flowchart": {

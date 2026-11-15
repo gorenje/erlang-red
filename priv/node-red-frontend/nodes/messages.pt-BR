@@ -18,6 +18,7 @@
     "@gregoriusrippenstein/erlang-red-unittest/ut-assert-status": {},
     "@gregoriusrippenstein/erlang-red-unittest/ut-assert-success": {},
     "@gregoriusrippenstein/erlang-red-unittest/ut-assert-values": {},
+    "@gregoriusrippenstein/erlang-red-unittest/ut-config": {},
     "@gregoriusrippenstein/node-red-contrib-flow2uml/flowtomermaid": {},
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-flowchart": {},
     "@gregoriusrippenstein/node-red-contrib-flow2uml/mermaid-state-end": {},
