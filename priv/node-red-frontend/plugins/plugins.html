@@ -530,16 +530,23 @@ function doFlowImportForSidebarUnittesting(flowid) {
         });
       }
 
-      RED.clipboard.import();
+      if ( RED.view.state() === RED.state.DEFAULT) {
+        RED.clipboard.import();
 
-      setTimeout(() => {
-        var content = e.flowdata;
+        setTimeout(() => {
+          var content = e.flowdata;
 
 
-        $('#red-ui-clipboard-dialog-import-text').val(
-          JSON.stringify(content)
-        ).trigger("paste");
-      }, 300);
+          $('#red-ui-clipboard-dialog-import-text').val(
+            JSON.stringify(content)
+          ).trigger("paste");
+        }, 300);
+      } else {
+        RED.notify("Close editor panel and retry, cannot open import dialog while editing nodes.", {
+          type: "warning",
+          timeout: 3000
+        });
+      }
     }).fail(e => {
       let msg = "<p>Failed to retrieve test flow data from server.</p>" +
         $('#node-input-unittestingpull-flowid').val().trim() + "</p>" +
@@ -766,8 +773,9 @@ function testCurrentWorkspace() {
     return RED.notify("Not connected to server, websocket down", "error")
   }
 
-  if ( RED.isErlangRed ) {
+//  if ( RED.isErlangRed ) {
     runWorkspaceAsTest(RED.workspaces.active())
+/*
   } else {
     RED.notify("restarting flow", { type: "info" });
     RED.actions.invoke("core:restart-flows")
@@ -777,6 +785,7 @@ function testCurrentWorkspace() {
       RED.search.search("type:inject flow:current").map(d => d.node).forEach(d => RED.view.clickNodeButton(d))
     }, 2000)    
   }
+*/
 }
 
 function triggerInjectsInWorkspace() {
@@ -1044,10 +1053,11 @@ RED.actions.add("unittesting:trigger-injects-in-workspace", triggerInjectsInWork
 
 $('#node-input-unittestingpull-testresults-row').on('click', 'span.filtrg', (e) => {
   e.preventDefault();
-  if ( $(e.target).data('filter') == "") {
+  let filtervalue = $(e.target).data('filter') || $($(e.target).parent()).data('filter')
+  if (!filtervalue) {
      $('#node-input-unittestingpull-sb-target-filter').val('').trigger('keyup', { keyCode: 13}) 
   } else {
-    let newVal = `is:${$(e.target).data('filter')}`
+    let newVal = `is:${filtervalue}`
     let currVal = $('#node-input-unittestingpull-sb-target-filter').val()
 
     if ( newVal == currVal) { newVal = "" }  // toggle between filter and all
@@ -1162,7 +1172,7 @@ $('#node-input-unittestingselect-test-node').on('click', (e) => {
 
             <div class="form-row" style="margin-left: 10px; margin-top: 30px;">
                <button id="node-input-unittestingpull-sb-refresh-list-but"
-                        class="red-ui-button"><i class="fa fa-refresh"></i> Refresh Test List</button>
+                        class="red-ui-button"><i class="fa fa-refresh"></i></button>
                 <a id="unittesting-view-testflow-link" 
                     style="color: blue; display: none; margin-left: 20px;" 
                     target="_blank" href="">Share Testcase <i class="fa fa-external-link"></i></a>            
