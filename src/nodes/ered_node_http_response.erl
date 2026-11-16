@@ -86,4 +86,16 @@ retrieve_headers(NodeDef, Msg) ->
             {{ok, MsgHdrs}, _}            -> MsgHdrs;
             {_, _}                        -> #{}
         end,
-    map_keys_to_binary(Hdrs).
+    %% This might well be removed in the future, header shouldn't be set.
+    Hdrs2 = Hdrs#{<<"x-resp-url">> => response_url(Msg)},
+    map_keys_to_binary(Hdrs2).
+
+%%
+%% ResponseUrl is set in Node-RED when the original request followed a
+%% redirect. It's the new URL and sent back to the client. This value is
+%% needed for a test ahd is here. Normally the httpe response (this node)
+%% would not set this header value.
+response_url(#{<<"req">> := #{<<"uri">> := Uri}}) ->
+    Uri;
+response_url(_) ->
+    <<"">>.

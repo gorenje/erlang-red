@@ -44,6 +44,7 @@
     this_should_not_happen/2
 ]).
 -import(ered_messages, [
+    any_to_list/1,
     convert_to_num/1,
     decode_json/1,
     encode_json/1,
@@ -161,7 +162,7 @@ match_value_on_msg(Prop, MsgVal, <<"str">>, ReqPattern, MatchVal, Msg) when
         Msg
     );
 match_value_on_msg(Prop, MsgVal, <<"str">>, ReqPattern, MatchVal, _Msg) ->
-    case re:run(MsgVal, ReqPattern) of
+    case re:run(any_to_list(MsgVal), ReqPattern) of
         {match, _} ->
             true;
         _ ->
@@ -422,7 +423,12 @@ handle_msg({incoming, Msg}, NodeDef) ->
                 '_success_count' := SuccCnt,
                 '_failures' := FailureLst
             } = NodeDef,
-            #{<<"assert_failures">> := Failures} = Msg2,
+
+            Failures =
+                case Msg2 of
+                    #{<<"assert_failures">> := F} -> F;
+                    _ -> []
+                end,
 
             {handled,
                 NodeDef#{

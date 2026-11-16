@@ -390,6 +390,8 @@ map_keys_to_binary(Map) ->
 
 %%
 %%
+any_to_list(V) when is_map(V) ->
+    any_to_list(json:encode(V));
 any_to_list(V) when is_binary(V) ->
     erlang:binary_to_list(V);
 any_to_list(V) when is_atom(V) ->
