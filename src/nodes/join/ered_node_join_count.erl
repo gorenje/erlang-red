@@ -45,7 +45,8 @@
     post_completed/2
 ]).
 -import(ered_messages, [
-    retrieve_prop_value/2
+    retrieve_prop_value/2,
+    set_prop_value/3
 ]).
 
 start(_, _) ->
@@ -119,6 +120,7 @@ send_out_collected_messages(
         NodeDef,
         maps:remove(<<"parts">>, Msg),
         Store,
+        <<"payload">>,
         Store
     );
 send_out_collected_messages(
@@ -132,16 +134,16 @@ send_out_collected_messages(
         NodeDef,
         maps:remove(<<"parts">>, Msg),
         Store,
+        PropName,
         Lst2
     ).
 
 %%
 send_out_collected_messages(
-    #{'_count' := Count} = NodeDef, Msg, AllMsgs, PayloadForNodes
+    #{'_count' := Count} = NodeDef, Msg, AllMsgs, MsgPropName, Payload
 ) ->
-    %% retrieve the latest message and use that as a basis for sending out
-    %% these messages - TODO perhaps this is wrong but will do for now.
-    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(PayloadForNodes)}),
+    Msg2 = set_prop_value(MsgPropName, Payload, Msg),
+    send_msg_to_connected_nodes(NodeDef, Msg2),
 
     %% now that we are ready to send out our message, we are completed
     %% with the message that make up that message (!!) so those
