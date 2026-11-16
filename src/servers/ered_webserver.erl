@@ -9,14 +9,23 @@
 
 -export([
     register_http_in/3,
-    unregister_http_in/3
+    unregister_http_in/3,
+    host_url/0,
+    start_for_testing/0
 ]).
 
 start() ->
     InitialState = handle_disable_floweditor(os:getenv("DISABLE_FLOWEDITOR")),
     State = maps:put(http_in_routes, [], InitialState),
-    herd_up_the_cattle(State),
-    gen_server:start_link({local, ?MODULE}, ?MODULE, State, []).
+    FinalState = herd_up_the_cattle(State),
+    gen_server:start_link({local, ?MODULE}, ?MODULE, FinalState, []).
+
+%%
+%% Because there is a ered_nodes:unhost(..) call that uses this server, it
+%% needs to be started for testing. But there is no need to configure it to be
+%% a working webserver. So state is empty and process is up.
+start_for_testing() ->
+    gen_server:start_link({local, ?MODULE}, ?MODULE, #{port => 8080}, []).
 
 init(State) ->
     {ok, State}.
@@ -28,6 +37,10 @@ register_http_in(Path, Method, {Pid, WsName}) ->
 
 unregister_http_in(Path, Method, WsName) ->
     gen_server:call(?MODULE, {del_route, Path, Method, WsName}).
+%%
+-spec host_url() -> HostNameAsUrl :: list().
+host_url() ->
+    gen_server:call(?MODULE, {internal_host_url}).
 
 %%
 %% remove a route for the http in handler
@@ -89,6 +102,12 @@ handle_call({add_route, Path, Method, {Pid, WsName}}, _From, State) ->
     {reply, ok, maps:put(http_in_routes, ExtraRoutes, State)};
 %%
 %%
+%%
+handle_call({internal_host_url}, _From, #{port := PortNum} = State) ->
+    RVal = io_lib:format("http://localhost:~p", [PortNum]),
+    {reply, RVal, State};
+%%
+%%
 handle_call(_Msg, _From, State) ->
     {reply, State, State}.
 
@@ -148,14 +167,15 @@ herd_up_the_cattle(State) ->
 
     persistent_term:put(my_app_dispatch, Dispatch),
 
-    {ok, _} = cowboy:start_clear(
+    {ok, CowBoyListener} = cowboy:start_clear(
         erlang_red_listener,
         [{port, Port}],
         #{
             env => #{dispatch => {persistent_term, my_app_dispatch}},
             middlewares => [ered_http_auth, cowboy_router, cowboy_handler]
         }
-    ).
+    ),
+    State#{port => Port, cowboy_pid => CowBoyListener}.
 
 %%
 %% Naming convention is that anything with 'nodered' in the name is part

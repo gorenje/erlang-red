@@ -220,6 +220,7 @@ foreach_testflow_test_() ->
     ered_msgtracer_manager:start_link(),
     ered_tcp_manager:start_link(),
 
+    ered_webserver:start_for_testing(),
     application:ensure_all_started(elixir),
 
     ered_flow_store_server:update_all_flows(),

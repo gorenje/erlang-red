@@ -26,6 +26,7 @@
     tabid_to_error_collector/1,
     this_should_not_happen/2,
     trigger_outgoing_messages/3,
+    unhost/1,
     unpriv/1,
 
     within_range/3
@@ -125,6 +126,16 @@ unpriv(FileName) when is_list(FileName) ->
 unpriv(FileName) ->
     %% Let it fail.
     FileName.
+
+%%
+%% Replace any reference to "${host}" with the current setup.
+unhost(FullUrl) when is_binary(FullUrl) ->
+    unhost(binary_to_list(FullUrl));
+unhost(FullUrl) when is_list(FullUrl) ->
+    jstr(string:replace(FullUrl, "${host}", ered_webserver:host_url(), all));
+unhost(FullUrl) ->
+    %% Let it fail.
+    FullUrl.
 
 %%
 %% Common functionality

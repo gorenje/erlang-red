@@ -12,6 +12,13 @@
 %% Node is responsible for making external http requests and feeding the
 %% results into the flow.
 %%
+%% TODO: this needs to be redone to properly support redirects, This is because
+%% TODO: on redirect, the message should contain the responseUrl attribute.
+%% TODO: unfortunately the httpc:request function does not return the
+%% TODO: redirected url in the header nor in the body, it just silently follows
+%% TODO: the redirect. Alternative is to set `autoredirect` to false and handle
+%% TODO: redirects here.
+%%
 -import(ered_nodes, [
     jstr/1,
     jstr/2,
@@ -84,7 +91,8 @@ handle_event(_, NodeDef) ->
 handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
     unsupported_headers_warnings(NodeDef, Msg),
 
-    Url = get_url(NodeDef, Msg),
+    Url = ered_nodes:unhost(get_url(NodeDef, Msg)),
+
     Method =
         case NodeMeth of
             <<"use">> ->
@@ -109,7 +117,8 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
                     Msg2 = Msg#{
                         ?AddPayload(convert_body(Body, NodeDef)),
                         <<"statusCode">> => StatusCode,
-                        <<"headers">> => headers_to_map(Headers)
+                        <<"headers">> => headers_to_map(Headers),
+                        <<"responseUrl">> => response_url(Headers)
                     },
                     send_msg_to_connected_nodes(NodeDef, Msg2),
                     {handled, NodeDef, Msg2};
@@ -125,6 +134,13 @@ handle_msg(_, NodeDef) ->
 %%
 %% -------------- helpers
 %%
+
+response_url([]) ->
+    <<>>;
+response_url([{"x-resp-url", Url} | _Rest]) ->
+    Url;
+response_url([_ | Rest]) ->
+    response_url(Rest).
 
 %%
 %% convert_body/2
