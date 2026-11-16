@@ -3,3 +3,6 @@ run-local:
 
 retrieve:
 	/bin/bash retrieve.sh
+
+retrieve-testcases:
+	/bin/bash retrieve.sh testcases-only

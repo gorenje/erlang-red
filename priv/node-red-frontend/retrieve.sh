@@ -1,14 +1,6 @@
 #!/bin/bash
 #
 # retrieve.sh
-#
-# Author: Gerrit Riessen, gerrit@openmindmap.org
-# Copyright (C) 2023-2025 Gerrit Riessen
-# This code is licensed under the GNU Public License.
-#
-# $Id$
-#
-
 # This script will retrieve certain configuration files from an existing
 # node red instance and copy these here. It retrieves:
 #
@@ -23,8 +15,10 @@
 NODERED_URL=http://localhost:1890/cfg
 
 ### TODO remove this also
-echo "Edit retrieve.sh before use"
-exit
+if [ "$1" == "" ] ; then
+   echo "Edit retrieve.sh before use"
+   exit
+fi
 
 ### Not ideal to run this when the template Node-RED server ISN'T running.
 if ! curl ${NODERED_URL} >/dev/null 2>&1; then
@@ -37,7 +31,7 @@ PyTHON=/usr/bin/python3
 
 ## Retrieve the flow examples included in various node packages. Only need
 ## to do this if these changes.
-if [ 0 -eq 1 ] ; then
+if [ "$1" == "testcases-only" ] ; then
     echo "==> flow examples from the node packages"
 
     rm -f flows-examples.tgz
@@ -48,6 +42,10 @@ if [ 0 -eq 1 ] ; then
             rm -f flows-examples.tgz
         fi
     fi
+    ## stop after retrieving the test cases, this convenient because of the
+    ## way the tests are encapsulated in a node package that gets updated to
+    ## only update the testcases.
+    exit
 fi
 
 echo "==> html, javascript & css"
