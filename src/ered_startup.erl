@@ -392,6 +392,8 @@ node_type_to_module(<<"ut-assert-failure">>) -> ered_node_assert_failure;
 node_type_to_module(<<"ut-assert-success">>) -> ered_node_assert_success;
 node_type_to_module(<<"ut-assert-status">>)  -> ered_node_assert_status;
 node_type_to_module(<<"ut-assert-debug">>)   -> ered_node_assert_debug;
+node_type_to_module(<<"ut-config">>)         -> ered_node_unittest_config;
+
 node_type_to_module(Unknown) ->
     case is_config_node(Unknown) of
         false ->
