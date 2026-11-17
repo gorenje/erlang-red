@@ -44970,7 +44970,7 @@ RED.editor.codeEditor = (function() {
                         placeholder: RED._("common.label.name")
                     }).attr("autocomplete","disable").appendTo(envRow);
 
-                    if ( node.type == "tab" ) {
+                    if ( node.type == "tab" || node.type == "group") {
                         let nameTypes = [
                             "NRED_PENDING",
                             "NRED_TIMEOUT",
@@ -44982,6 +44982,13 @@ RED.editor.codeEditor = (function() {
                             "ERED_NOT_EUNIT",
                             "ERED_KEEPRUNNING"
                         ]
+
+                        if ( node.type == "group" ) {
+                            nameTypes = [
+                              "NODE_RED_ONLY",
+                              "ERED_ONLY",
+                            ]
+                        }
 
                         nameField.typedInput({default:'str',types:['str',
                                    ...nameTypes.map( d => {
@@ -56212,6 +56219,21 @@ RED.group = (function() {
                     delete node.style[prop]
                 }
             })
+
+            setTimeout( () => {
+                if (!node.name) {
+                    if ((node.env || []).filter(
+                        d => (d.name == "NODE_RED_ONLY" &&
+                              (d.value == true || d.value == "true")))[0]) {
+                        node.name = "Node-RED Only"
+                    }
+                    if ((node.env || []).filter(
+                        d => d.name == "ERED_ONLY" &&
+                            (d.value == true ||d.value == "true"))[0]) {
+                        node.name = "Erlang-Red Only"
+                    }
+                }
+            },0)
 
             this.resize = true;
         },
