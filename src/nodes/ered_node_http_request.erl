@@ -91,7 +91,7 @@ handle_event(_, NodeDef) ->
 handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
     unsupported_headers_warnings(NodeDef, Msg),
 
-    Url = ered_nodes:unhost(get_url(NodeDef, Msg)),
+    Url = get_url(NodeDef, Msg),
 
     Method =
         case NodeMeth of
@@ -122,9 +122,18 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
                     },
                     send_msg_to_connected_nodes(NodeDef, Msg2),
                     {handled, NodeDef, Msg2};
-                {error, Reason} ->
+                {error, invalid_payload} ->
+                    post_exception_or_debug(
+                        NodeDef, Msg, <<"Invalid payload">>
+                    ),
+                    {handled, NodeDef, Msg};
+                {error, unsupported_method = Reason} ->
+                    unsupported(NodeDef, Msg, "unsupported method"),
                     ErrMsg = jstr("Http request failed: ~p", [Reason]),
                     post_exception_or_debug(NodeDef, Msg, ErrMsg),
+                    {handled, NodeDef, Msg};
+                {error, Error} ->
+                    post_exception_or_debug(NodeDef, Msg, Error),
                     {handled, NodeDef, Msg}
             end
     end;
@@ -190,6 +199,8 @@ unsupported_headers_warnings(NodeDef, Msg) ->
 mth_to_atom(Method) when is_binary(Method) ->
     binary_to_atom(string:lowercase(Method)).
 
+%%
+%%
 perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
     case maps:find(<<"payload">>, Msg) of
         {ok, Payload} ->
@@ -218,19 +229,19 @@ perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
 perform_request(
     <<"GET">> = _Method,
     _Url,
-    #{<<"paytoqs">> := <<"query">>} = NodeDef,
-    #{?GetPayload} = Msg
+    #{<<"paytoqs">> := <<"query">>} = _NodeDef,
+    #{?GetPayload} = _Msg
 ) when not is_map(Payload) ->
-    post_exception_or_debug(NodeDef, Msg, <<"Invalid payload">>);
+    {error, invalid_payload};
 perform_request(
     <<"GET">> = Method,
     Url,
-    #{<<"paytoqs">> := <<"query">>} = NodeDef,
-    #{?GetWsName, ?GetPayload} = Msg
+    #{<<"paytoqs">> := <<"query">>} = _NodeDef,
+    #{?GetWsName, ?GetPayload} = _Msg
 ) when is_map(Payload) ->
     case uri_string:compose_query(maps:to_list(Payload)) of
         {error, _} = Error ->
-            post_exception_or_debug(NodeDef, Msg, jstr("~p", [Error]));
+            {error, jstr("~p", [Error])};
         QueryString ->
             httpc:request(
                 mth_to_atom(Method),
@@ -250,6 +261,5 @@ perform_request(<<"GET">> = Method, Url, _NodeDef, #{?GetWsName} = _Msg) ->
         [],
         []
     );
-perform_request(_Method, _Url, NodeDef, Msg) ->
-    unsupported(NodeDef, Msg, "unsupported method"),
+perform_request(_Method, _Url, _NodeDef, _Msg) ->
     {error, unsupported_method}.

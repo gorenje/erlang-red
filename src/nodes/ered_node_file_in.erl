@@ -24,8 +24,7 @@
     jstr/1,
     jstr/2,
     send_msg_to_connected_nodes/2,
-    this_should_not_happen/2,
-    unpriv/1
+    this_should_not_happen/2
 ]).
 -import(ered_nodered_comm, [
     debug/3,
@@ -59,7 +58,7 @@ handle_incoming(NodeDef, Msg) ->
             debug_msg(NodeDef, Msg, {no_file_specified}),
             {NodeDef, Msg};
         {ok, FileName} ->
-            case file:read_file(unpriv(FileName)) of
+            case file:read_file(FileName) of
                 {ok, FileData} ->
                     Msg2 = Msg#{<<"payload">> => FileData},
                     send_msg_to_connected_nodes(NodeDef, Msg2),

@@ -26,8 +26,6 @@
     tabid_to_error_collector/1,
     this_should_not_happen/2,
     trigger_outgoing_messages/3,
-    unhost/1,
-    unpriv/1,
 
     within_range/3
 ]).
@@ -116,26 +114,6 @@ check_config(ParaName, OnlySupportedValue, NodeDef, WsName) ->
             unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             false
     end.
-
-%%
-%% Map priv directory in file names
-unpriv(FileName) when is_binary(FileName) ->
-    unpriv(binary_to_list(FileName));
-unpriv(FileName) when is_list(FileName) ->
-    string:replace(FileName, "${priv}", code:priv_dir(erlang_red), all);
-unpriv(FileName) ->
-    %% Let it fail.
-    FileName.
-
-%%
-%% Replace any reference to "${host}" with the current setup.
-unhost(FullUrl) when is_binary(FullUrl) ->
-    unhost(binary_to_list(FullUrl));
-unhost(FullUrl) when is_list(FullUrl) ->
-    jstr(string:replace(FullUrl, "${host}", ered_webserver:host_url(), all));
-unhost(FullUrl) ->
-    %% Let it fail.
-    FullUrl.
 
 %%
 %% Common functionality
