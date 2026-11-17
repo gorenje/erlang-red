@@ -36,7 +36,8 @@ handle_msg({incoming, Msg}, NodeDef) ->
     Msg2 = Msg#{
         <<"utcfg">> => #{
             <<"priv">> => jstr(code:priv_dir(erlang_red)),
-            <<"host">> => jstr(ered_webserver:host_url())
+            <<"host">> => jstr(ered_webserver:host_url()),
+            <<"isErlangRed">> => true
         }
     },
     send_msg_to_connected_nodes(NodeDef, Msg2),
