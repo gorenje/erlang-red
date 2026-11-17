@@ -3,6 +3,9 @@ Erlang-Red - BEAM/Erlang backend for Node-RED
 
 [![Erlang CI](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml/badge.svg)](https://github.com/gorenje/erlang-red/actions/workflows/erlang.yml)
 
+<a href="https://hackergit.org/r/gorenje/erlang-red"><img src="https://hackergit.org/badge/gorenje/erlang-red.svg" alt="Hacker News points via HackerGit" height="20"></a>
+
+
 Experimental Erlang backend to replace Node-REDs existing NodeJS backend, aiming for 100% compatibility with existing Node-RED flow code[^1].
 
 <p align="center">
