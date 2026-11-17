@@ -280,18 +280,13 @@ store_config_nodes(
 
 %%
 %% tab node usses 'disabled', everything else 'd'.
-disabled(NodeDef) ->
-    case maps:find(<<"d">>, NodeDef) of
-        {ok, V} ->
-            V;
-        _ ->
-            case maps:find(<<"disabled">>, NodeDef) of
-                {ok, V} ->
-                    V;
-                _ ->
-                    false
-            end
-    end.
+-spec disabled(NodeDef :: map()) -> true | false.
+disabled(#{<<"d">> := D}) when D =:= <<"true">>; D =:= true ->
+    true;
+disabled(#{<<"disabled">> := D}) when D =:= <<"true">>; D =:= true ->
+    true;
+disabled(_) ->
+    false.
 
 %%
 %% Lookup table for mapping node type to function. Also here we respect the
