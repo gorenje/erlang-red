@@ -116,8 +116,16 @@ not_happen_loop(TestName, ErrorStorePid) ->
 create_test_for_flow_file([], Acc) ->
     Acc;
 create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
-    Ary = ered_flows:parse_flow_file(FileName),
-    {TabId, TestName} = ered_flows:append_tab_name_to_filename(Ary, FileName),
+    FlowDefinition =
+        ered_unittest_engine:disable_nodes_not_for_erlang_red(
+            ered_flows:parse_flow_file(FileName)
+        ),
+
+    {TabId, TestName} =
+        ered_flows:append_tab_name_to_filename(
+            FlowDefinition,
+            FileName
+        ),
 
     TestFunc = fun() ->
         ErCo = start_this_should_not_happen_service(
@@ -134,18 +142,18 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
         WsName = eunit_test,
         ensure_websocket_listener_is_running(WsName),
 
-        Pids = ered_startup:create_pids_for_nodes(Ary, WsName),
+        Pids = ered_startup:create_pids_for_nodes(FlowDefinition, WsName),
 
         [
             ered_nodes:trigger_outgoing_messages(
                 maps:get(<<"type">>, ND), maps:get(<<"id">>, ND), WsName
             )
-         || ND <- Ary
+         || ND <- FlowDefinition
         ],
 
         %% give the messages time to propagate through the
         %% test flow
-        timer:sleep(ered_flows:compute_timeout(Ary)),
+        timer:sleep(ered_flows:compute_timeout(FlowDefinition)),
 
         %% stop all nodes. Probably better would be to check
         %% the message queues of the nodes and if all are empty
@@ -167,7 +175,7 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
 
     %% TODO should really move away from Eunit, it does not support
     %% TODO pending or skipping test cases, so this hack solution.
-    case ered_flows:is_test_case_pending(Ary) of
+    case ered_flows:is_test_case_pending(FlowDefinition) of
         true ->
             TestCase = {
                 list_to_binary(color:yellow(TestName)),
@@ -179,8 +187,8 @@ create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
             };
         false ->
             case
-                ered_flows:ignore_as_eunit_test(Ary) or
-                    ered_flows:is_test_case_not_supported(Ary)
+                ered_flows:ignore_as_eunit_test(FlowDefinition) or
+                    ered_flows:is_test_case_not_supported(FlowDefinition)
             of
                 true ->
                     TestCase = {

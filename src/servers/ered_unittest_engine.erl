@@ -19,7 +19,8 @@
 -export([
     not_happen_loop/2,
     run_test_on_another_planet/4,
-    run_test_with_flowdata/3
+    run_test_with_flowdata/3,
+    disable_nodes_not_for_erlang_red/1
 ]).
 
 %%
@@ -235,11 +236,50 @@ run_test_on_another_planet(FlowId, WsName, true, DefaultTimeout) ->
     end.
 
 %%
+%%
+disable_node_if_in_group([], ND) ->
+    ND;
+disable_node_if_in_group([GID | _Rest], #{<<"g">> := GID} = ND) ->
+    ND#{<<"d">> => <<"true">>};
+disable_node_if_in_group([_ | Rest], ND) ->
+    disable_node_if_in_group(Rest, ND).
+%%
+%% It is possible to define groups in tests that should only be executed
+%% for either Node-RED or Erlang-Red. The nodes inside these groups are
+%% then disabled before doing the test. This allows one test to define
+%% two different outcomes depending on the platfom on which the test is being
+%% executed. The alternative would be to duplicate tests and have separate
+%% tests, testing the same things but slightly differently.
+-spec disable_nodes_not_for_erlang_red(FlowDef :: [map()]) -> [map()].
+disable_nodes_not_for_erlang_red(FlowDef) ->
+    NodeRedOnlyGroups = [
+        Id
+     || #{
+            <<"id">> := Id,
+            <<"type">> := <<"group">>,
+            <<"env">> := [
+                #{
+                    <<"name">> := <<"NODE_RED_ONLY">>,
+                    <<"value">> := <<"true">>
+                }
+            ]
+        } <- FlowDef
+    ],
+    [disable_node_if_in_group(NodeRedOnlyGroups, ND) || ND <- FlowDef].
+%%
 %% Run the test disregarding the pending flag of the test flow.
-run_the_test(FlowId, WsName, Ary, DefaultTimeout) ->
-    case should_keep_flow_running(Ary) of
+-spec run_the_test(
+    FlowId :: binary(),
+    WsName :: atom(),
+    FlowDefinition :: [map()],
+    DefaultTimeout :: number()
+) -> any().
+run_the_test(FlowId, WsName, FlowDefinition, DefaultTimeout) ->
+    FlowDef = disable_nodes_not_for_erlang_red(FlowDefinition),
+
+    case should_keep_flow_running(FlowDef) of
         true ->
-            create_pids_for_nodes(Ary, WsName);
+            create_pids_for_nodes(FlowDef, WsName);
         false ->
             ErrColl = start_this_should_not_happen_service(
                 FlowId,
@@ -257,9 +297,9 @@ run_the_test(FlowId, WsName, Ary, DefaultTimeout) ->
                 {ok, NodeId} = maps:find(<<"id">>, NodeDef),
                 clear_exception_group(NodeId, WsName)
             end,
-            [Cleaner(NodeDef) || NodeDef <- Ary],
+            [Cleaner(NodeDef) || NodeDef <- FlowDef],
 
-            Pids = create_pids_for_nodes(Ary, WsName),
+            Pids = create_pids_for_nodes(FlowDef, WsName),
 
             [
                 trigger_outgoing_messages(
@@ -267,12 +307,12 @@ run_the_test(FlowId, WsName, Ary, DefaultTimeout) ->
                     maps:get(<<"id">>, ND),
                     WsName
                 )
-             || ND <- Ary
+             || ND <- FlowDef
             ],
 
             %% give the messages time to propagate through the
             %% test flow
-            timer:sleep(compute_timeout(Ary, DefaultTimeout)),
+            timer:sleep(compute_timeout(FlowDef, DefaultTimeout)),
 
             %% stop all nodes. Probably better would be to checking
             %% the message queues of the nodes and if all are empty
