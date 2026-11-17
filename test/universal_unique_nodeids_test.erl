@@ -48,17 +48,6 @@ duplicates([H | T], Acc) ->
     end.
 
 %%
-%%
-%% ignore the TLS configuration node that turns off ssl verification
-%% for self-signed certificates.
-ignore_nodes([], Acc) ->
-    Acc;
-ignore_nodes([{<<"83cd62fbf15a01f3">>, _} | Rest], Acc) ->
-    ignore_nodes(Rest, Acc);
-ignore_nodes([Hd | Rest], Acc) ->
-    ignore_nodes(Rest, [Hd | Acc]).
-
-%%
 %% Scan each file and collect all IDs. Each ID should only appear in one
 %% filename, if that is not the case, then this test fails.
 ensure_universally_unique_nodeids_test() ->
@@ -72,5 +61,4 @@ ensure_universally_unique_nodeids_test() ->
 
     List = duplicates(maps:to_list(MapOfNodeIds), []),
 
-    List2 = ignore_nodes(List, []),
-    ?assertEqual([], List2).
+    ?assertEqual([], List).
