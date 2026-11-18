@@ -135,10 +135,10 @@ append_tab_name_to_filename(
         #{<<"id">> := Id, <<"type">> := <<"tab">>, <<"label">> := V}
         | _MoreNodeDefs
     ],
-    FileName,
-    {ok, _TabId}
+    _FileName,
+    {ok, TabId}
 ) ->
-    {Id, binary_to_list(jstr("~s (~s)", [V, FileName]))};
+    {Id, binary_to_list(jstr("~s (~s)", [V, TabId]))};
 append_tab_name_to_filename(
     [_NodeDef | MoreNodeDefs],
     FileName,
