@@ -4135,10 +4135,9 @@ function ensureYourConfigNodeExists() {
          if (RED.view.selection().nodes) {
             RED.view.selection().nodes.forEach( nde => {
                let content = ""
+
                if (nde.type == "template" || nde.type == "PkgFile") {
                   content = nde.template
-               } else if (nde.type == "switch" || nde.type == "change") {
-                  content = JSON.stringify(RED.nodes.createExportableNodeSet([nde])[0],null,2)
                } else if (nde.type == "function") {
                   content = nde.func
                } else if (nde.type == "ClientCode") {
@@ -4148,8 +4147,9 @@ function ensureYourConfigNodeExists() {
                } else if (typeof nde._def.info === "function") {
                   content = nde._def.info.call(nde)
                } else {
-                  content = nde.info
+                  content = JSON.stringify(RED.nodes.createExportableNodeSet([nde])[0], null, 2)
                }
+               
                addScratch(content)
             })
          } else {
