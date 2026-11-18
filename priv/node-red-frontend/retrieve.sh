@@ -43,8 +43,8 @@ if [ "$1" == "testcases-only" ] ; then
         fi
     fi
     ## stop after retrieving the test cases, this convenient because of the
-    ## way the tests are encapsulated in a node package that gets updated to
-    ## only update the testcases.
+    ## way the tests are encapsulated in a node package. That package needs
+    ## not to be updated for the tests to be updated.
     exit
 fi
 
@@ -131,8 +131,10 @@ done
 
 #curl -s "${NODERED_URL}/debug/view/debug-utils.js?_=${CBSTMP}" -o debug/view/debug-utils.js
 
-#curl -s "${NODERED_URL}/nodes?_=${CBSTMP}" -H 'Accept: text/html' > nodes/nodes.html
-#curl -s "${NODERED_URL}/plugins?_=${CBSTMP}" -H 'Accept: text/html' > plugins/plugins.html
+if [ "$1" == "plugins-and-nodes" ] ; then
+    curl -s "${NODERED_URL}/nodes?_=${CBSTMP}" -H 'Accept: text/html' > nodes/nodes.html
+    curl -s "${NODERED_URL}/plugins?_=${CBSTMP}" -H 'Accept: text/html' > plugins/plugins.html
+fi
 
 LoCaLeS="en-US en-GB en de-DE de fr ja ko pt-BR ru zh-CN zh-TW"
 

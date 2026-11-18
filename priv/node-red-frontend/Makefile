@@ -6,3 +6,6 @@ retrieve:
 
 retrieve-testcases:
 	/bin/bash retrieve.sh testcases-only
+
+retrieve-plugins-and-nodes:
+	/bin/bash retrieve.sh plugins-and-nodes
