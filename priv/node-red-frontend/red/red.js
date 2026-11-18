@@ -11623,7 +11623,7 @@ RED.utils = (function() {
         } else if (format === 'Object' || /^(array|set|map)/.test(format) || format === 'boolean' || format === 'number' || listOfTypedArrays.includes(format)) {
             try { payload = JSON.parse(payload); } catch(e) {}
         } else if (/error/i.test(format)) {
-            payload = JSON.parse(payload);
+            try { payload = JSON.parse(payload); } catch (e) {}
         } else if (format === 'null') {
             payload = null;
         } else if (format === 'undefined') {
