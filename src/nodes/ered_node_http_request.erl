@@ -106,10 +106,18 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
             post_exception_or_debug(NodeDef, Msg, <<"url and method not set">>),
             {handled, NodeDef, Msg};
         {[], _} ->
-            post_exception_or_debug(NodeDef, Msg, <<"method not set">>),
-            {handled, NodeDef, Msg};
+            %% if no method is set, then send out a 400 error with no payload.
+            %% that is Node-RED behaviour.
+            Msg2 = Msg#{
+                        <<"payload">> => <<"">>,
+                        <<"statusCode">> => 400,
+                        <<"headers">> => #{<<"connection">> => <<"close">>},
+                        <<"responseUrl">> => Url
+                       },
+            send_msg_to_connected_nodes(NodeDef, Msg2),
+            {handled, NodeDef, Msg2};
         {_, []} ->
-            post_exception_or_debug(NodeDef, Msg, <<"url not set">>),
+            post_exception_or_debug(NodeDef, Msg, <<"No url specified">>),
             {handled, NodeDef, Msg};
         _ ->
             case perform_request(Method, Url, NodeDef, Msg) of
@@ -133,7 +141,8 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
                     post_exception_or_debug(NodeDef, Msg, ErrMsg),
                     {handled, NodeDef, Msg};
                 {error, Error} ->
-                    post_exception_or_debug(NodeDef, Msg, Error),
+                    ErrMsg = jstr("Http request failed: ~p", [Error]),
+                    post_exception_or_debug(NodeDef, Msg, ErrMsg),
                     {handled, NodeDef, Msg}
             end
     end;
