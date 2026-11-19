@@ -42,6 +42,25 @@ start-docker-shell-raspberry: build-docker-container
 enter-docker-shell:
 	docker exec -it $$(docker ps -f ancestor=erlang-shell -q) bash
 
+
+##
+## OTP 28.5.0
+build-docker-container-28:
+	docker build -f dockerfiles/Dockerfile.dev.28 -t erlang-shell-28 .
+
+start-docker-shell-28: build-docker-container-28
+	docker network create erlang-red-node-red-bridge || true
+	docker run -it \
+		-v $(shell pwd):/code \
+		-v $(shell pwd)/data:/data \
+		--hostname erlang-red \
+		--publish 9191:8080 \
+		--publish 1883:1883 \
+		--network erlang-red-node-red-bridge \
+		--network mnmn \
+		-w /code --rm erlang-shell-28 bash
+
+
 ##
 ## Heroku deployment:
 ##
@@ -85,16 +104,6 @@ elixir-build:
 	docker build -f dockerfiles/Dockerfile.elixir -t er-elixir .
 elixir-run: elixir-build
 	docker run -it -t er-elixir sh
-
-check-testflows:
-	@diff -qr priv/testflows ../erlang-red-flow-testsuite  | \
-       grep -v preview.svg | grep -v nodedetails.json | grep -v .DS_Store | \
-       grep -v README | grep -v .git | grep -v .image | \
-       grep -v 499288ab4007ac6a | grep -v b8e2ad1371ddb546 | \
-       grep -v c562c43e69bcf0af | grep -v f346d45c81f595e5 | \
-       grep -v 777bee1d06741240 | grep -v 9d3f5506aa810b22 | \
-	   grep -v 5a6943e6091753b6 | grep -v 05a47f94321ed67e | \
-	   grep -v 9e03cf744fc6f35f || true
 
 ## http://1194online.com/
 tcp-beacon:
