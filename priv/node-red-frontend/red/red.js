@@ -34038,15 +34038,41 @@ RED.view.tools = (function() {
             RED.actions.add("core:copy-item-edit-url", function (node) { copyItemUrl(node, true) })
 
             var handleDocuLink = (node) => {
-              var content = "<a class='' data-ids=''></a>";
-              if (node.type == "group" ) {
-                content = `<a class="ahl-group-only" data-ids="${node.id}">${RED.utils.getNodeLabel(node,node.id)}</a>`
-              } else {
-                content = `<a class="ahl-node-only" data-ids="${node.id}">${RED.utils.getNodeLabel(node,node.id)}</a>`
-              }
-              if (RED.clipboard.copyText(content)) {
-                 RED.notify("copied link to clipboard", { timeout: 2000 })
-              }
+                let toClip = (cont) => {
+                    if (RED.clipboard.copyText(cont)) {
+                        RED.notify("copied link to clipboard", { timeout: 2000 })
+                    }
+                    return true
+                }
+
+                // if there isn't an node/selectedObject, then use view
+                // selection - there is no single selected node, so node isn't
+                // set.
+                if (!node) {
+                    if (RED.view.selection().nodes.length > 0) {
+                        let nodes = RED.view.selection().nodes.filter(
+                            d => d.type != 'group');
+                        let grps = RED.view.selection().nodes.filter(
+                            d => d.type == 'group')
+
+                        if (nodes.length > 0){
+                            content = `<a class="ahl-node-only" data-ids="${nodes.map(d => d.id).join(',')}">Nodes</a>`
+                        }
+                        if (grps.length > 0) {
+                            content += `<a class="ahl-group-only" data-ids="${grps.map(d => d.id).join(',')}">Groups</a>`
+                        }
+                        return toClip(content)
+                    }
+                    return
+                }
+
+                var content = "<a class='' data-ids=''></a>";
+                if (node.type == "group" ) {
+                    content = `<a class="ahl-group-only" data-ids="${node.id}">${RED.utils.getNodeLabel(node,node.id)}</a>`
+                } else {
+                    content = `<a class="ahl-node-only" data-ids="${node.id}">${RED.utils.getNodeLabel(node,node.id)}</a>`
+                }
+                toClip(content)
             };
             RED.actions.add("core:copy-item-docu-href", handleDocuLink);
 
