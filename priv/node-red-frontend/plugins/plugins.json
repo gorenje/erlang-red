@@ -21,7 +21,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "0.21.9"
+        "version": "0.21.10"
     },
     {
         "editor": true,
@@ -45,7 +45,7 @@
         "plugins": [],
         "runtime": false,
         "user": false,
-        "version": "1.2.3"
+        "version": "1.2.5"
     },
     {
         "editor": true,
