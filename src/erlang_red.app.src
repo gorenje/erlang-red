@@ -7,7 +7,8 @@
         stdlib,
         cowboy,
         circuits_i2c,
-        erlang_red_parsers
+        erlang_red_parsers,
+        gun
     ]},
     {env, []},
     {mod, {erlang_red, []}},

@@ -136,6 +136,13 @@ init([]) ->
                     restart => permanent,
                     type => worker,
                     module => [ered_user_settings_store]
+                },
+                #{
+                    id => ered_ch17_ered_websocket_manager,
+                    start => {ered_websocket_manager, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    module => [ered_websocket_manager]
                 }
             ]
         }}.

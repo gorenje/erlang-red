@@ -357,6 +357,7 @@ node_type_to_module(<<"erlprocess">>)        -> ered_node_erlprocess;
 node_type_to_module(<<"erlcaptureio">>)      -> ered_node_erlcaptureio;
 node_type_to_module(<<"amqp-in">>)           -> ered_node_amqp_in;
 node_type_to_module(<<"elxmodule">>)         -> ered_node_elxmodule;
+node_type_to_module(<<"websocket in">>)      -> ered_node_websocket_in;
 
 %% TODO: don't do this again! The kafka nodes are based on an existing
 %% TODO: Node-RED node package --> @asinino/node-red-kafkajs that uses
@@ -413,6 +414,7 @@ is_config_node(<<"websocket-listener">>) -> true;
 is_config_node(<<"erlconfigCfg">>)       -> true;
 is_config_node(<<"ered-kafka-broker">>)  -> true;
 is_config_node(<<"auto_layout_config">>) -> true;
+is_config_node(<<"websocket-client">>)   -> true;
 is_config_node(_)                        -> false.
 
 %%
