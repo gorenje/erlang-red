@@ -184,6 +184,7 @@ This is a non-complete list of [nodes](src/nodes/) that partially or completely 
 | [tcp request](src/nodes/ered_node_tcp_request.erl) | Tcp request node for connecting and communicating with Tcp listners. | [Flow](https://flows.red-erik.org/f/84a5a362cafe703f) |
 | [template](src/nodes/ered_node_template.erl) | mustache templating is working but parsing into JSON or YAML isn't supported | [Flow](https://flows.red-erik.org/f/3ed472eab9503b4f) |
 | [trigger](src/nodes/ered_node_trigger.erl) | the default settings should work | [Flow](https://flows.red-erik.org/f/1566e453a88578a9) |
+| [websocket in](src/nodes/ered_node_websocket_in.erl) | no heartbeat, tls, subprotocol or headers support. no listen-on mode, only connect-to mode. | - |
 
 
 ### Erlang specific nodes
