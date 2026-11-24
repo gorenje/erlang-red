@@ -21,10 +21,6 @@ start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
-    %% tpcins nodes are TPC in nodes and the sessions are the session ids
-    %% with which a response can be sent. socks are is a mapping from
-    %% port to listening socket - once all tcpnodes and sessions for a port
-    %% are gone, close the listen socket.
     {ok, #{}}.
 
 %%
@@ -75,25 +71,38 @@ handle_cast(_Msg, State) ->
     {noreply, State}.
 
 %%
-%% Catch all.
+%%
 handle_info({websocket_connect, ConnPid}, State) ->
-    #{ConnPid := NodePid} = State,
-    NodePid ! {websocket, connected},
+    case State of
+        #{ConnPid := NodePid} -> NodePid ! {websocket, connected};
+        _ -> ignore
+    end,
     {noreply, State};
-handle_info({websocket_frame, ConnPid, {text, JsonText}}, State) ->
-    #{ConnPid := NodePid} = State,
-    NodePid ! {websocket, {frame, json:decode(JsonText)}},
+handle_info({websocket_disconnect, ConnPid}, State) ->
+    case State of
+        #{ConnPid := NodePid} -> NodePid ! {websocket, disconnected};
+        _ -> ignore
+    end,
     {noreply, State};
-handle_info({gun_up, _ConPid, _Protocol}, State) ->
+handle_info({websocket_frame, ConnPid, {text, Text}}, State) ->
+    #{ConnPid := NodePid} = State,
+    NodePid ! {websocket, {frame, Text}},
+    {noreply, State};
+handle_info({gun_up, ConnPid, _Protocol}, State) ->
     %% this is sent because the gun:open happens before the spawn in the
-    %% ered_websocket_listener:start call.
+    %% ered_websocket_listener:start call. The mapping is probably not set
+    %% yet but if it happens to be, then pass up the message.
+    case State of
+        #{ConnPid := NodePid} -> NodePid ! {websocket, connecting};
+        _ -> ignore
+    end,
+    {noreply, State};
+handle_info({gun_down, ConnPid, _Protocol, _Reason, _SomethingElse}, State) ->
+    case State of
+        #{ConnPid := NodePid} -> NodePid ! {websocket, disconnected};
+        _ -> ignore
+    end,
     {noreply, State};
 handle_info(E, State) ->
     io:format("Websocket Manager: Unhandled ~p~n", [E]),
     {noreply, State}.
-
-%% -----------------------------------------------------------------------------
-%%
-%% Helpers
-%%
-%% -----------------------------------------------------------------------------

@@ -12,7 +12,7 @@
 %% server.
 %%
 %% This implementation only supports the "connect to" version of the node.
-
+%%
 %% {
 %%     "id": "fdd625bfadca7ee0",
 %%     "type": "websocket in",
@@ -35,7 +35,8 @@
 %%     "type": "websocket-client",
 %%     "path": "ws://erlangred-nodered-template:1880/cfg/comms",
 %%     "tls": "", <--- set to another tls-config node for handling SSL
-%%     "wholemsg": "true",
+%%     "wholemsg": "true", <--- pass the message as JSON and create a complete
+%%                             message, when false, send out as text the frame.
 %%     "hb": "0", <--- send heartbeat interval in seconds, zero is no heartbeat
 %%     "subprotocol": "",
 %%     "headers": []
@@ -70,22 +71,27 @@ start(
     #{<<"client">> := CfgNodeId, <<"server">> := <<"">>} = NodeDef, WsName
 ) when CfgNodeId =/= <<"">> ->
     case ered_config_store:retrieve_config_node(CfgNodeId, WsName) of
-        {ok, #{<<"path">> := Path} = _Cfg} ->
-            case uri_string:parse(Path) of
-                {error, Reason} ->
-                    io:format(
-                        "Error Parsing Path : ~p ==> ~p~n",
-                        [Path, Reason]
-                    ),
-                    ered_node:start(NodeDef, ered_node_ignore);
-                UriMap ->
-                    ered_node:start(
-                        NodeDef#{'_listento' => UriMap, ?SetWsName},
-                        ?MODULE
-                    )
+        {ok, Cfg} ->
+            case
+                check_node_config(
+                    [
+                        {<<"hb">>, <<"0">>},
+                        {<<"headers">>, []},
+                        {<<"tls">>, <<"">>},
+                        {<<"subprotocol">>, <<"">>}
+                    ],
+                    Cfg,
+                    WsName
+                )
+            of
+                ok ->
+                    kick_start(Cfg, NodeDef, WsName);
+                _ ->
+                    ered_node:start(NodeDef, ered_node_ignore)
             end;
         {error, Error} ->
-            io:format("Error looking up config : ~p~n", [Error]),
+            ErrMsg = jstr("Error looking up config : ~p", [Error]),
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
             ered_node:start(NodeDef, ered_node_ignore)
     end;
 start(NodeDef, WsName) ->
@@ -103,17 +109,25 @@ handle_event(
     NodeDef;
 handle_event(
     {websocket, {frame, Frame}},
-    #{?GetWsName} = NodeDef
+    #{'_wholemsg' := <<"true">>} = NodeDef
+) ->
+    handle_frame_content(NodeDef, json:decode(Frame)),
+    NodeDef;
+handle_event(
+    {websocket, {frame, Frame}},
+    #{'_wholemsg' := <<"false">>, ?GetWsName} = NodeDef
 ) ->
     {outgoing, Msg} = create_outgoing_msg(WsName),
-    Msg2 = Msg#{
-        <<"payload">> => Frame
-    },
-    send_msg_to_connected_nodes(NodeDef, Msg2),
-
+    send_msg_to_connected_nodes(NodeDef, Msg#{?AddPayload(Frame)}),
     NodeDef;
 handle_event({websocket, connected}, #{?GetWsName} = NodeDef) ->
     ?NodeStatus("connected", "green", "dot"),
+    NodeDef;
+handle_event({websocket, connecting}, #{?GetWsName} = NodeDef) ->
+    ?NodeStatus("connecting", "blue", "ring"),
+    NodeDef;
+handle_event({websocket, disconnected}, #{?GetWsName} = NodeDef) ->
+    ?NodeStatus("disconnected", "red", "dot"),
     NodeDef;
 handle_event(_, NodeDef) ->
     NodeDef.
@@ -122,3 +136,46 @@ handle_event(_, NodeDef) ->
 %% Has no input port, handles no incoming messages.
 handle_msg(_, NodeDef) ->
     {unhandled, NodeDef}.
+
+%%
+%%
+%% Helpers
+%%
+%%
+handle_frame_content(NodeDef, Content) when is_list(Content) ->
+    [handle_frame_content(NodeDef, C) || C <- Content];
+handle_frame_content(#{?GetWsName} = NodeDef, Content) when is_map(Content) ->
+    {outgoing, Msg} = create_outgoing_msg(WsName),
+    send_msg_to_connected_nodes(NodeDef, maps:merge(Content, Msg));
+handle_frame_content(#{?GetWsName} = NodeDef, Content) ->
+    ErrMsg = jstr("unsupported content ~p", [Content]),
+    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+    ignore.
+
+%%
+%% Once the configuration has been checked, then parse the path and start the
+%% node ... unless parsing fails.
+kick_start(
+    #{<<"path">> := Path, <<"wholemsg">> := WholeMsg},
+    NodeDef,
+    WsName
+) ->
+    case uri_string:parse(Path) of
+        {error, Reason} ->
+            ErrMsg = jstr("Error Parsing Path : ~p ==> ~p", [Path, Reason]),
+            unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+            ered_node:start(NodeDef, ered_node_ignore);
+        UriMap ->
+            ered_node:start(
+                NodeDef#{
+                    '_wholemsg' => WholeMsg,
+                    '_listento' => UriMap,
+                    ?SetWsName
+                },
+                ?MODULE
+            )
+    end;
+kick_start(Cfg, NodeDef, WsName) ->
+    ErrMsg = jstr("missing path or wholemsg in ~p", [Cfg]),
+    unsupported(NodeDef, {websocket, WsName}, ErrMsg),
+    ered_node:start(NodeDef, ered_node_ignore).

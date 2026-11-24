@@ -48,18 +48,16 @@ handle_post_request(Req, State) ->
             case Body of
                 <<"">> ->
                     node_status_clear(WsName, #{<<"id">> => NodeId});
+                <<"{}">> ->
+                    node_status_clear(WsName, #{<<"id">> => NodeId});
                 _ ->
-                    #{
-                        <<"text">> := Txt,
-                        <<"fill">> := Clr,
-                        <<"shape">> := Shp
-                    } = json:decode(Body),
+                    Details = json:decode(Body),
                     node_status(
                         WsName,
                         #{<<"id">> => NodeId},
-                        Txt,
-                        Clr,
-                        Shp
+                        text(Details),
+                        colour(Details),
+                        shape(Details)
                     )
             end
     end,
@@ -76,3 +74,13 @@ format_error(Reason, Req) ->
         ],
         Req
     }.
+
+%%
+%% Helpers
+%%
+text(#{<<"text">> := T}) -> T;
+text(_) -> <<"">>.
+colour(#{<<"fill">> := C}) -> C;
+colour(_) -> <<"">>.
+shape(#{<<"shape">> := S}) -> S;
+shape(_) -> <<"">>.
