@@ -240,6 +240,8 @@ flow_editor_routes() ->
             ered_http_unittesting_retrieve_flow_handler, []},
         {"/flows.test.json", ered_http_unittesting_retrieve_flow_handler, []},
         {"/UnitTesting/halt", ered_http_unittesting_halt_handler, []},
+        {"/UnitTesting/:nodeid/showstatus",
+            ered_http_unittesting_status_update_handler, []},
 
         %%
         %% these APIS are required by Node-RED
