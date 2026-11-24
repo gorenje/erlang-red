@@ -109,11 +109,11 @@ handle_msg({incoming, Msg}, #{<<"method">> := NodeMeth} = NodeDef) ->
             %% if no method is set, then send out a 400 error with no payload.
             %% that is Node-RED behaviour.
             Msg2 = Msg#{
-                        <<"payload">> => <<"">>,
-                        <<"statusCode">> => 400,
-                        <<"headers">> => #{<<"connection">> => <<"close">>},
-                        <<"responseUrl">> => Url
-                       },
+                <<"payload">> => <<"">>,
+                <<"statusCode">> => 400,
+                <<"headers">> => #{<<"connection">> => <<"close">>},
+                <<"responseUrl">> => Url
+            },
             send_msg_to_connected_nodes(NodeDef, Msg2),
             {handled, NodeDef, Msg2};
         {_, []} ->
@@ -205,36 +205,63 @@ unsupported_headers_warnings(NodeDef, Msg) ->
             unsupported(NodeDef, Msg, "message: headers unsupported")
     end.
 
+%%
+%%
 mth_to_atom(Method) when is_binary(Method) ->
     binary_to_atom(string:lowercase(Method)).
 
 %%
 %%
-perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = Msg) ->
-    case maps:find(<<"payload">>, Msg) of
-        {ok, Payload} ->
-            httpc:request(
-                mth_to_atom(Method),
-                {Url,
-                    [
-                        {"Cookie", io_lib:format("wsname=~s", [WsName])}
-                    ],
-                    "application/json", Payload},
-                [],
-                []
-            );
-        _ ->
-            httpc:request(
-                mth_to_atom(Method),
-                {Url,
-                    [
-                        {"Cookie", io_lib:format("wsname=~s", [WsName])}
-                    ],
-                    "application/json", ""},
-                [],
-                []
-            )
-    end;
+perform_request(
+    <<"POST">> = Method,
+    Url,
+    _NodeDef,
+    #{?GetWsName, ?GetPayload} = _Msg
+) when is_binary(Payload) ->
+    httpc:request(
+        mth_to_atom(Method),
+        {Url,
+            [
+                {"Cookie", io_lib:format("wsname=~s", [WsName])}
+            ],
+            "application/json", Payload},
+        [],
+        []
+    );
+perform_request(
+    <<"POST">> = Method,
+    Url,
+    _NodeDef,
+    #{?GetWsName, ?GetPayload} = _Msg
+) when is_map(Payload) ->
+    httpc:request(
+        mth_to_atom(Method),
+        {Url,
+            [
+                {"Cookie", io_lib:format("wsname=~s", [WsName])}
+            ],
+            "application/json", json:encode(Payload)},
+        [],
+        []
+    );
+perform_request(
+    <<"POST">>,
+    _Url,
+    _NodeDef,
+    #{?WsNameIsSet, ?PayloadIsSet} = _Msg
+) ->
+    {error, payload_misformed};
+perform_request(<<"POST">> = Method, Url, _NodeDef, #{?GetWsName} = _Msg) ->
+    httpc:request(
+        mth_to_atom(Method),
+        {Url,
+            [
+                {"Cookie", io_lib:format("wsname=~s", [WsName])}
+            ],
+            "application/json", ""},
+        [],
+        []
+    );
 perform_request(
     <<"GET">> = _Method,
     _Url,
