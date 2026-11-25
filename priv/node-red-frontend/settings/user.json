@@ -43,6 +43,30 @@
       "core:show-export-dialog": {
         "scope": "red-ui-workspace",
         "key": "ctrl-e"
+      },
+      "presenter-mode:align-link-to-destination": {
+          "key": "alt-a d",
+          "scope": "red-ui-workspace"
+      },
+      "presenter-mode:align-link-to-source": {
+          "key": "alt-a s",
+          "scope": "red-ui-workspace"
+      },
+      "presenter-mode:presenter-mode-next": {
+          "key": "alt-p n",
+          "scope": "*"
+      },
+      "presenter-mode:presenter-mode-previous": {
+          "key": "alt-p p",
+          "scope": "*"
+      },
+      "presenter-mode:presenter-mode-reset": {
+          "key": "alt-p r",
+          "scope": "*"
+      },
+      "presenter-mode:presenter-mode-toggle": {
+          "key": "ctrl-p",
+          "scope": "*"
       }
     },
     "dialog": {

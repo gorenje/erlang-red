@@ -5927,6 +5927,62 @@ function ensureYourConfigNodeExists() {
 })();
 
          
+         (function(){
+    RED.actions.remove("presenter-mode:align-link-to-destination")
+    RED.actions.add("presenter-mode:align-link-to-destination", () => {
+        if (RED.view.selection().links?.length > 0) {
+            RED.view.selection().links.forEach( lnk => {
+                let diff = Math.abs(lnk.y1 - lnk.y2)
+                let hst = {
+                    dirty: false,
+                    t: "move",
+                    nodes: [{
+                        n: lnk.source,
+                        ox: lnk.source.x,
+                        oy: lnk.source.y,
+                        moved: false
+                    }]
+                }
+
+                // here we move the source to match the target, which means
+                // adding the diff or subtracting the diff from the source 
+                // y value
+                lnk.source.y += (lnk.y1 > lnk.y2 ? -diff : diff)
+                lnk.source.dirty = true
+                RED.history.push(hst)
+            })
+        }
+        RED.nodes.dirty(true);
+        RED.view.redraw();
+    })
+
+    RED.actions.remove("presenter-mode:align-link-to-source")
+    RED.actions.add("presenter-mode:align-link-to-source", () => {
+        if (RED.view.selection().links?.length > 0) {
+            RED.view.selection().links.forEach(lnk => {
+                let diff = Math.abs(lnk.y1 - lnk.y2)
+                let hst = {
+                    dirty: false,
+                    t: "move",
+                    nodes: [{
+                        n: lnk.target,
+                        ox: lnk.target.x,
+                        oy: lnk.target.y,
+                        moved: false
+                    }]
+                }
+
+                lnk.target.y += (lnk.y1 > lnk.y2 ? diff : -diff)
+                lnk.target.dirty = true
+                RED.history.push(hst)
+            })
+        }
+        RED.nodes.dirty(true);
+        RED.view.redraw();
+    })
+
+})();
+         
          RED.presenterMode ||= {
             add: (name, funct) => {
                if (typeof funct == "function") {
