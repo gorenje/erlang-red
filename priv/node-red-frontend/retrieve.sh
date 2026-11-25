@@ -124,12 +124,15 @@ done
 #curl -s "${NODERED_URL}/?_=${CBSTMP}" -H 'Accept: application/html' -o index.html
 #curl -s "${NODERED_URL}/red/red.js?_=${CBSTMP}" -o red/red.js
 #curl -s "${NODERED_URL}/red/style.min.css?_=${CBSTMP}" -o red/style.min.css
-#curl -s "${NODERED_URL}/settings/user?_=${CBSTMP}" -o settings/user.json
 #curl -s "${NODERED_URL}/theme?_=${CBSTMP}" -o theme
-#curl -s "${NODERED_URL}/red/keymap.json?_=${CBSTMP}" -o red/keymap.json
-#curl -s "${NODERED_URL}/settings?_=${CBSTMP}" -o settings.json
-
 #curl -s "${NODERED_URL}/debug/view/debug-utils.js?_=${CBSTMP}" -o debug/view/debug-utils.js
+
+if [ "$1" == "settings" ] ; then
+    curl -s "${NODERED_URL}/settings/user?_=${CBSTMP}" | $PyTHON .py/json_pretty.py > settings/user.json
+    curl -s "${NODERED_URL}/settings?_=${CBSTMP}" | $PyTHON .py/json_pretty.py > settings.json
+    curl -s "${NODERED_URL}/red/keymap.json?_=${CBSTMP}" -o red/keymap.json
+    exit
+fi
 
 if [ "$1" == "plugins-and-nodes" ] ; then
     curl -s "${NODERED_URL}/nodes?_=${CBSTMP}" -H 'Accept: text/html' > nodes/nodes.html

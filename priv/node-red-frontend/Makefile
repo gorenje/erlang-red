@@ -9,3 +9,6 @@ retrieve-testcases:
 
 retrieve-plugins-and-nodes:
 	/bin/bash retrieve.sh plugins-and-nodes
+
+retrieve-settings:
+	/bin/bash retrieve.sh settings
