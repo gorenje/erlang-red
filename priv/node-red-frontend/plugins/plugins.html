@@ -5928,59 +5928,75 @@ function ensureYourConfigNodeExists() {
 
          
          (function(){
+    let pushHistory = (ndes) => {
+        let hst = {
+            t: "move",
+            dirty: RED.nodes.dirty(),
+            nodes: ndes
+        }
+        RED.history.push(hst)
+    };
+
+    let nodeWillChange = (nde) => {
+        return {
+            n: nde,
+            ox: nde.x,
+            oy: nde.y,
+            moved: nde.moved
+        }
+    };
+
+    let redrawAndUpdateHistoryOnChange = (changes) => {
+        if (changes.length > 0) {
+            pushHistory(changes)
+            RED.nodes.dirty(true);
+            RED.view.redraw(true);
+        }
+    }
+
     RED.actions.remove("presenter-mode:align-link-to-destination")
     RED.actions.add("presenter-mode:align-link-to-destination", () => {
         if (RED.view.selection().links?.length > 0) {
+            let changedNodes = []
+
             RED.view.selection().links.forEach( lnk => {
+                // the difference between the beginning and end of the link
                 let diff = Math.abs(lnk.y1 - lnk.y2)
-                let hst = {
-                    dirty: false,
-                    t: "move",
-                    nodes: [{
-                        n: lnk.source,
-                        ox: lnk.source.x,
-                        oy: lnk.source.y,
-                        moved: false
-                    }]
-                }
+                if (diff == 0) return;
+
+                changedNodes.push(nodeWillChange(lnk.source))
 
                 // here we move the source to match the target, which means
                 // adding the diff or subtracting the diff from the source 
                 // y value
                 lnk.source.y += (lnk.y1 > lnk.y2 ? -diff : diff)
+                lnk.source.moved = true
                 lnk.source.dirty = true
-                RED.history.push(hst)
             })
+            
+            redrawAndUpdateHistoryOnChange(changedNodes);
         }
-        RED.nodes.dirty(true);
-        RED.view.redraw();
     })
 
     RED.actions.remove("presenter-mode:align-link-to-source")
     RED.actions.add("presenter-mode:align-link-to-source", () => {
         if (RED.view.selection().links?.length > 0) {
+            let changedNodes = []
+
             RED.view.selection().links.forEach(lnk => {
                 let diff = Math.abs(lnk.y1 - lnk.y2)
-                let hst = {
-                    dirty: false,
-                    t: "move",
-                    nodes: [{
-                        n: lnk.target,
-                        ox: lnk.target.x,
-                        oy: lnk.target.y,
-                        moved: false
-                    }]
-                }
+                if (diff == 0) return;
+
+                changedNodes.push(nodeWillChange(lnk.target))
 
                 lnk.target.y += (lnk.y1 > lnk.y2 ? diff : -diff)
+                lnk.target.moved = true
                 lnk.target.dirty = true
-                RED.history.push(hst)
             })
-        }
-        RED.nodes.dirty(true);
-        RED.view.redraw();
-    })
 
+            redrawAndUpdateHistoryOnChange(changedNodes);
+        }
+    })
 })();
          
          RED.presenterMode ||= {
