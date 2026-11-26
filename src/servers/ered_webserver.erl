@@ -209,6 +209,7 @@ flow_editor_routes() ->
         {"/FlowHubTokenCheck", ered_http_flowhub_token_check, []},
         {"/FlowHubTokens", ered_http_flowhub_tokens, []},
         {"/FlowHubToken", ered_http_flowhub_token, []},
+        {"/FlowHubTokenUpdate", ered_http_flowhub_token_update, []},
         {"/FlowHubCreateBranch", ered_http_flowhub_create_branch, []},
 
         %% Install nodes isn't support, tell the frontend that.
