@@ -48,6 +48,7 @@
     store/2,
     retrieve/1,
     retrieve/2,
+    retrieve_all/0,
     remove/1
 ]).
 
@@ -77,6 +78,10 @@ retrieve(NodeId, _WsName) ->
 retrieve(NodeId) ->
     gen_server:call(?MODULE, {retrieve, NodeId}).
 
+-spec retrieve_all() -> map().
+retrieve_all() ->
+    gen_server:call(?MODULE, {retrieve_all}).
+
 %%
 %%
 handle_call({remove, NodeId}, _From, #{store := Store} = State) ->
@@ -93,6 +98,11 @@ handle_call({retrieve, NodeId}, _From, #{store := Store} = State) ->
         _ ->
             {reply, none, State}
     end;
+%
+handle_call({retrieve_all}, _From, #{store := Store} = State) ->
+    {reply, Store, State};
+handle_call({retrieve_all}, _From, State) ->
+    {reply, #{}, State};
 %
 handle_call(_Msg, _From, State) ->
     {reply, ok, State}.
