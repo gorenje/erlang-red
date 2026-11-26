@@ -1,9 +1,13 @@
 -module(ered_http_utils).
 
 -export([
+    read_body/1,
     read_body/2,
     flowhub_hostname_from_token/1
 ]).
+
+read_body(Req) ->
+    read_body(Req, <<"">>).
 
 read_body(Req0, Acc) ->
     case cowboy_req:read_body(Req0) of
