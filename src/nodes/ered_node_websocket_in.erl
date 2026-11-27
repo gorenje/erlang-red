@@ -18,7 +18,7 @@
 %%     "type": "websocket in",
 %%     "z": "7a912b51f7a3b590",
 %%     "name": "",
-%%     "server": "", <--- listen to, if this is blank and client is set, then
+%%     "server": "", <--- "listen to", if this is blank and client is set, then
 %%     "client": "80ed3d41c0bd26f1", <--- its a "connect to" node.
 %%     "x": 1088.75,
 %%     "y": 883.75,
@@ -44,6 +44,10 @@
 %%
 %% the path configuration is a full URL with either 'ws://' or 'wss://' as
 %% protocol. If wss is used, then tls is also set.
+%%
+%% the 'server'/"listen to" configuration requires this instace setting up a
+%% websocket server for others to connect to. This will need to be implemented
+%% by the websocket manager.
 %%
 -import(ered_nodes, [
     check_node_config/3,
