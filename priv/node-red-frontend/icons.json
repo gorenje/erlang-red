@@ -82,6 +82,9 @@
         "white-globe.svg"
     ],
     "node-red-contrib-i2c": [],
+    "node-red-node-base64": [
+        "parser-base64.png"
+    ],
     "node-red-node-markdown": [
         "parser-markdown.png"
     ]

@@ -39,5 +39,6 @@
     "@greyorange/node-red-contrib-amqp/amqp-in-manual-ack": {},
     "@greyorange/node-red-contrib-amqp/amqp-out": {},
     "node-red-contrib-i2c/i2c": {},
+    "node-red-node-base64/base64": {},
     "node-red-node-markdown/markdown": {}
 }

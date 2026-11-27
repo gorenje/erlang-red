@@ -949,5 +949,17 @@
         ],
         "user": false,
         "version": "0.0.9"
+    },
+    {
+        "enabled": true,
+        "id": "node-red-node-base64/base64",
+        "local": true,
+        "module": "node-red-node-base64",
+        "name": "base64",
+        "types": [
+            "base64"
+        ],
+        "user": false,
+        "version": "1.0.0"
     }
 ]
