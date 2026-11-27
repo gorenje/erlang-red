@@ -11,6 +11,10 @@
     format_error/2
 ]).
 
+-export([
+    retrieve_flowdata/4
+]).
+
 init(Req, State) ->
     {cowboy_rest, Req, State}.
 
@@ -28,7 +32,7 @@ content_types_accepted(Req, State) ->
     }.
 
 handle_post_request(Req, State) ->
-    {ok, Body, Req2} = ered_http_utils:read_body(Req, <<"">>),
+    {ok, Body, Req2} = ered_http_utils:read_body(Req),
 
     TokenData = json:decode(Body),
 
@@ -52,37 +56,7 @@ handle_post_request(Req, State) ->
                 {unknown, unknown}
         end,
 
-    ResponseBody =
-        case
-            httpc:request(
-                get,
-                {
-                    list_to_binary(
-                        io_lib:format(
-                            "~s/v3/flows/~s?v=~s",
-                            [
-                                HostName,
-                                FlowId,
-                                uri_string:quote(Revision)
-                            ]
-                        )
-                    ),
-                    [
-                        {"FlowHub-API-Version", "Redeel"},
-                        {"X-FHB-TOKEN", Token}
-                    ]
-                },
-                [{timeout, 25000}, {ssl, [{verify, verify_none}]}],
-                []
-            )
-        of
-            {ok, {_StatusLine, _Hdrs, RespBody}} ->
-                RespBody;
-            Res ->
-                io:format("Error catalogue: ~p~n", [Res]),
-                <<"{ \"status\": \"error\", \"msg\": \"nope\" }">>
-        end,
-
+    ResponseBody = retrieve_flowdata(HostName, Token, FlowId, Revision),
     Resp = cowboy_req:set_resp_body(ResponseBody, Req2),
     {true, Resp, State}.
 
@@ -94,3 +68,67 @@ format_error(Reason, Req) ->
         ],
         Req
     }.
+
+%%
+%%
+%% Helpers
+-spec retrieve_flowdata(
+    HostName :: binary(),
+    Token :: binary(),
+    FlowId :: binary() | atom(),
+    Revision :: binary() | atom()
+) ->
+    FlowData :: binary().
+retrieve_flowdata(_HostName, _Token, unknown, unknown) ->
+    <<"{ \"status\": \"error\", \"msg\": \"nope\" }">>;
+retrieve_flowdata(HostName, Token, FlowId, unknown) ->
+    case
+        httpc:request(
+            get,
+            {
+                list_to_binary(
+                    io_lib:format("~s/v3/flows/~s", [HostName, FlowId])
+                ),
+                [
+                    {"FlowHub-API-Version", "Redeel"},
+                    {"X-FHB-TOKEN", Token}
+                ]
+            },
+            [{timeout, 25000}, {ssl, [{verify, verify_none}]}],
+            []
+        )
+    of
+        {ok, {_StatusLine, _Hdrs, RespBody}} ->
+            list_to_binary(RespBody);
+        _Res ->
+            <<"{ \"status\": \"error\", \"msg\": \"nope\" }">>
+    end;
+retrieve_flowdata(HostName, Token, FlowId, Revision) ->
+    case
+        httpc:request(
+            get,
+            {
+                list_to_binary(
+                    io_lib:format(
+                        "~s/v3/flows/~s?v=~s",
+                        [
+                            HostName,
+                            FlowId,
+                            uri_string:quote(Revision)
+                        ]
+                    )
+                ),
+                [
+                    {"FlowHub-API-Version", "Redeel"},
+                    {"X-FHB-TOKEN", Token}
+                ]
+            },
+            [{timeout, 25000}, {ssl, [{verify, verify_none}]}],
+            []
+        )
+    of
+        {ok, {_StatusLine, _Hdrs, RespBody}} ->
+            list_to_binary(RespBody);
+        _Res ->
+            <<"{ \"status\": \"error\", \"msg\": \"nope\" }">>
+    end.
