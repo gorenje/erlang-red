@@ -124,7 +124,8 @@ handle_call({deploy, JsonStr, WsName}, _From, State) ->
     FlowMap = decode_json(JsonStr),
     {ok, NodeAry} = maps:find(<<"flows">>, FlowMap),
 
-    create_pids_for_nodes(NodeAry, WsName),
+    ErlangOnlyNodes = ered_flows:disable_nodes_not_for_erlang_red(NodeAry),
+    create_pids_for_nodes(ErlangOnlyNodes, WsName),
 
     {reply, <<"{\"rev\":\"fed00d06\"}">>, State};
 handle_call(_Msg, _From, State) ->

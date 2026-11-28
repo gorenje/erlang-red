@@ -1,0 +1,461 @@
+[
+    {
+        "id": "dfd4063512227b81",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "006a7b39fd8ace77",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#767676"
+        },
+        "nodes": [
+            "c230f10818e0b4d5"
+        ],
+        "x": 637.0833740234375,
+        "y": 566.0833129882812,
+        "w": 192,
+        "h": 82
+    },
+    {
+        "id": "1de79f0ea3768abb",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Node-RED Only plus another env variable",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b01963befcd6edbb",
+            "0afd13b7370fb514"
+        ],
+        "env": [
+            {
+                "name": "NODE_RED_ONLY",
+                "value": "true",
+                "type": "bool"
+            },
+            {
+                "name": "DDD",
+                "value": "EEE",
+                "type": "str"
+            }
+        ],
+        "x": 652.0833740234375,
+        "y": 687.0833129882812,
+        "w": 377,
+        "h": 108
+    },
+    {
+        "id": "0dddbe90e25c6fbc",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Erlang-Red Only",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8d53132d364c415d",
+            "a6a083cd10e85dad"
+        ],
+        "env": [
+            {
+                "name": "ERED_ONLY",
+                "value": "true",
+                "type": "bool"
+            }
+        ],
+        "x": 666.0833740234375,
+        "y": 824.0833129882812,
+        "w": 380,
+        "h": 107
+    },
+    {
+        "id": "44e1e7ead18ad088",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Node-RED Only",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b5ed1d20a7f328ab",
+            "285c43eba7431b7a"
+        ],
+        "env": [
+            {
+                "name": "NODE_RED_ONLY",
+                "value": "true",
+                "type": "bool"
+            }
+        ],
+        "x": 706.0833740234375,
+        "y": 967.0833129882812,
+        "w": 392,
+        "h": 95
+    },
+    {
+        "id": "f1fe04730de0d5c1",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Node-RED Only **FALSE**",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "9f3f265453590696",
+            "e1d7ac402c903d8c"
+        ],
+        "env": [
+            {
+                "name": "NODE_RED_ONLY",
+                "value": "false",
+                "type": "bool"
+            }
+        ],
+        "x": 715.0833740234375,
+        "y": 1102.0833740234375,
+        "w": 313,
+        "h": 159
+    },
+    {
+        "id": "1288d3884f50c210",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Node-RED Only plus another env variable",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4ac77aee1c9ab477"
+        ],
+        "env": [
+            {
+                "name": "NODE_RED_ONLY",
+                "value": "true",
+                "type": "bool"
+            },
+            {
+                "name": "DDD",
+                "value": "EEE",
+                "type": "str"
+            }
+        ],
+        "x": 1269.0833740234375,
+        "y": 690.0833129882812,
+        "w": 268,
+        "h": 82
+    },
+    {
+        "id": "b66f909a733fc622",
+        "type": "group",
+        "z": "dfd4063512227b81",
+        "name": "Node-RED Only",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ca0b726034e981b9"
+        ],
+        "env": [
+            {
+                "name": "NODE_RED_ONLY",
+                "value": "true",
+                "type": "bool"
+            }
+        ],
+        "x": 1217.0833740234375,
+        "y": 946.0833129882812,
+        "w": 172,
+        "h": 82
+    },
+    {
+        "id": "578698cb56ddf410",
+        "type": "inject",
+        "z": "dfd4063512227b81",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 690.0833740234375,
+        "y": 512.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c230f10818e0b4d5",
+        "type": "debug",
+        "z": "dfd4063512227b81",
+        "g": "006a7b39fd8ace77",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 723.0833740234375,
+        "y": 607.0833129882812,
+        "wires": []
+    },
+    {
+        "id": "b01963befcd6edbb",
+        "type": "function",
+        "z": "dfd4063512227b81",
+        "g": "1de79f0ea3768abb",
+        "name": "function 1",
+        "func": "%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 738.0833740234375,
+        "y": 728.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8d53132d364c415d",
+        "type": "change",
+        "z": "dfd4063512227b81",
+        "g": "0dddbe90e25c6fbc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 772.0833740234375,
+        "y": 865.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5ed1d20a7f328ab",
+        "type": "function",
+        "z": "dfd4063512227b81",
+        "g": "44e1e7ead18ad088",
+        "name": "function 2",
+        "func": "%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 792.0833740234375,
+        "y": 1008.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9f3f265453590696",
+        "type": "function",
+        "z": "dfd4063512227b81",
+        "g": "f1fe04730de0d5c1",
+        "name": "function 3",
+        "func": "%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 801.0833740234375,
+        "y": 1143.0833740234375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0afd13b7370fb514",
+        "type": "inject",
+        "z": "dfd4063512227b81",
+        "g": "1de79f0ea3768abb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 943.0833740234375,
+        "y": 754.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a6a083cd10e85dad",
+        "type": "inject",
+        "z": "dfd4063512227b81",
+        "g": "0dddbe90e25c6fbc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 960.0833740234375,
+        "y": 890.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "285c43eba7431b7a",
+        "type": "inject",
+        "z": "dfd4063512227b81",
+        "g": "44e1e7ead18ad088",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1012.0833740234375,
+        "y": 1021.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e1d7ac402c903d8c",
+        "type": "inject",
+        "z": "dfd4063512227b81",
+        "g": "f1fe04730de0d5c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 942.0833740234375,
+        "y": 1220.0833740234375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4ac77aee1c9ab477",
+        "type": "function",
+        "z": "dfd4063512227b81",
+        "g": "1288d3884f50c210",
+        "name": "function 4",
+        "func": "%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1355.0833740234375,
+        "y": 731.0833129882812,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca0b726034e981b9",
+        "type": "function",
+        "z": "dfd4063512227b81",
+        "g": "b66f909a733fc622",
+        "name": "function 5",
+        "func": "%% Code here is wrapped in a fun (Msg) call\n%% fun (Msg) ->\n    #{ <<\"payload\">> := Payload } = Msg,\n    Msg\n%% end.\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1303.0833740234375,
+        "y": 987.0833129882812,
+        "wires": [
+            []
+        ]
+    }
+]

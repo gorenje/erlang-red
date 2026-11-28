@@ -11,7 +11,8 @@
     should_keep_flow_running/1,
     tab_name_or_filename/2,
     flowid_from_flowdata/1,
-    maybe_parse_flow_file/1
+    maybe_parse_flow_file/1,
+    disable_nodes_not_for_erlang_red/1
 ]).
 
 %%
@@ -209,3 +210,47 @@ ignore_as_eunit_test(Ary) ->
 is_true(<<"true">>) -> true;
 is_true(<<"TRUE">>) -> true;
 is_true(_) -> false.
+
+%%
+%%
+disable_node_if_in_group([], ND) ->
+    ND;
+disable_node_if_in_group([GID | _Rest], #{<<"g">> := GID} = ND) ->
+    ND#{<<"d">> => <<"true">>};
+disable_node_if_in_group([_ | Rest], ND) ->
+    disable_node_if_in_group(Rest, ND).
+
+%%
+%%
+is_node_red_only([]) ->
+    false;
+is_node_red_only([
+    #{
+        <<"name">> := <<"NODE_RED_ONLY">>,
+        <<"value">> := <<"true">>
+    }
+    | _Rest
+]) ->
+    true;
+is_node_red_only([_ | Rest]) ->
+    is_node_red_only(Rest).
+
+%%
+%% It is possible to define groups in tests that should only be executed
+%% for either Node-RED or Erlang-Red. The nodes inside these groups are
+%% then disabled before doing the test. This allows one test to define
+%% two different outcomes depending on the platfom on which the test is being
+%% executed. The alternative would be to duplicate tests and have separate
+%% tests, testing the same things but slightly differently.
+-spec disable_nodes_not_for_erlang_red(FlowDef :: [map()]) -> [map()].
+disable_nodes_not_for_erlang_red(FlowDef) ->
+    NodeRedOnlyGroups = [
+        Id
+     || #{
+            <<"id">> := Id,
+            <<"type">> := <<"group">>,
+            <<"env">> := Env
+        } <- FlowDef,
+        is_node_red_only(Env)
+    ],
+    [disable_node_if_in_group(NodeRedOnlyGroups, ND) || ND <- FlowDef].

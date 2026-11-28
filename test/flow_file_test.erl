@@ -117,7 +117,7 @@ create_test_for_flow_file([], Acc) ->
     Acc;
 create_test_for_flow_file([FileName | MoreFileNames], Acc) ->
     FlowDefinition =
-        ered_unittest_engine:disable_nodes_not_for_erlang_red(
+        ered_flows:disable_nodes_not_for_erlang_red(
             ered_flows:parse_flow_file(FileName)
         ),
 

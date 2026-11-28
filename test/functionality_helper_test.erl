@@ -13,6 +13,10 @@
     convert_to_num/1
 ]).
 
+-import(ered_flows, [
+    disable_nodes_not_for_erlang_red/1
+]).
+
 map_keys_to_list_recursion_test() ->
     Map = #{
         <<"one">> => #{
@@ -120,3 +124,34 @@ improper_list_test_() ->
     ],
 
     {inparallel, 100, [CreateTest(V) || V <- ImproperList]}.
+
+disable_node_red_only_nodes_test() ->
+    {ok, JsonFileContent} =
+        file:read_file(
+            filename:join([
+                code:priv_dir(erlang_red),
+                "testflows",
+                "testflow-node-red-only-env.json"
+            ])
+        ),
+
+    FlowDef = json:decode(JsonFileContent),
+
+    ErlangRedFlowDef = ered_flows:disable_nodes_not_for_erlang_red(FlowDef),
+
+    DisabledNodes = [
+        Id
+     || #{<<"d">> := <<"true">>, <<"id">> := Id} <- ErlangRedFlowDef
+    ],
+
+    ?assertEqual(
+        [
+            <<"b01963befcd6edbb">>,
+            <<"b5ed1d20a7f328ab">>,
+            <<"0afd13b7370fb514">>,
+            <<"285c43eba7431b7a">>,
+            <<"4ac77aee1c9ab477">>,
+            <<"ca0b726034e981b9">>
+        ],
+        DisabledNodes
+    ).
